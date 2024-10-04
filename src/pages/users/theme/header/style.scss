@@ -1,0 +1,32 @@
+// style.scss
+
+// Tùy chỉnh chung cho Navbar
+.navbar {
+  background-color: #343a40; // Đặt màu nền tối tùy chỉnh
+  padding: 1rem;             // Đặt khoảng cách cho nội dung bên trong Navbar
+}
+
+// Tùy chỉnh cho Navbar brand (tiêu đề trang)
+.navbar-brand {
+  font-size: 1.5rem;          // Tăng kích thước font của tiêu đề
+  color: #fff !important;     // Đặt màu chữ trắng cho tiêu đề
+}
+
+// Tùy chỉnh cho Nav links
+.nav-link {
+  color: #bbb !important;     // Màu chữ cho các liên kết
+  margin-right: 1rem;         // Khoảng cách giữa các liên kết
+  &:hover {
+    color: #fff !important;   // Khi hover, đổi màu liên kết thành trắng
+  }
+}
+
+// Tùy chỉnh Button
+.btn-primary {
+  background-color: #007bff;  // Màu nền của nút
+  border-color: #007bff;      // Màu viền của nút
+  &:hover {
+    background-color: #0056b3; // Màu nền khi hover
+    border-color: #0056b3;     // Màu viền khi hover
+  }
+}
