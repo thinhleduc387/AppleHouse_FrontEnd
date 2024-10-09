@@ -1,0 +1,45 @@
+.navbar{
+  margin-left: 160px ;
+  margin-right: 160px ;
+}
+  
+.search-field {
+  margin-right: 10px;
+  padding-left: 10px; 
+  flex-grow: 1;
+  max-width: 600px;
+}
+
+.nav-link {
+  padding: 5px;
+  border-radius: 10px;
+  font-weight: lighter;
+}
+
+.nav-link:hover {
+  background-color: #ddd;
+}
+
+.nav-link.active {
+  font-weight: bolder;
+}
+
+.nav-link.active .icon {
+  font-weight: bolder; 
+  font-size: 1.2em;
+}
+
+
+.icon {
+  font-size: 1em; 
+  padding: 5px; 
+  background-color: transparent; 
+  display: inline-flex; 
+  align-items: center; 
+}
+
+@media (max-width: 992px) {
+  .navbar-brand {
+    margin-left: 0;
+  }
+}

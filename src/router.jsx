@@ -1,18 +1,23 @@
 import { Route, Routes } from "react-router-dom";
-import HomePage from "./pages/users/homePage";
+import HomePage from "./pages/guest/homePage";
+import LoginPage from "./pages/guest/loginPage";
 import { ROUTERS } from "./utils/router";
-import MasterLayout from "./pages/users/theme/masterLayout";
-const renderUserRouter = () => {
-  const userRouters = [
+import MasterLayout from "./pages/guest/theme/masterLayout";
+const renderGuestRouter = () => {
+  const guestRouters = [
     {
-      path: ROUTERS.USER.HOME,
+      path: ROUTERS.GUEST.HOME,
       component: <HomePage />,
+    },
+    {
+      path: ROUTERS.GUEST.LOGIN, // Thêm đường dẫn cho LOGIN
+      component: <LoginPage />, // Thêm component cho LOGIN
     },
   ];
   return (  
     <MasterLayout>
       <Routes>
-        {userRouters.map((item, key) => (
+        {guestRouters.map((item, key) => (
           <Route key={key} path={item.path} element={item.component} />
         ))}
       </Routes>
@@ -21,7 +26,7 @@ const renderUserRouter = () => {
 };
 
 const RouterCustom = () => {
-  return renderUserRouter();
+  return renderGuestRouter();
 };
 
 export default RouterCustom;

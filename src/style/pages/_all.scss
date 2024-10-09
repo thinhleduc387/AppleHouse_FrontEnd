@@ -6,15 +6,33 @@ body {
   margin: 0;
 }
 
+body {
+  font-family: "SF Pro Display", sans-serif; // Thêm sans-serif như fallback
+}
+
 * {
-  font-family: 'SF Pro Display';
   padding: 0;
   margin: 0;
 }
 
-.container {
-  width: 100%;
-  padding-left: 15px;
-  padding-right: 15px;
+@font-face {
+  font-family: "SF Pro Display";
+  src: url(../../assets/font/SF-Pro-Display/SF-Pro-Display-Black.otf)
+    format("otf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.main_container {
+  width: calc(100% - 320px); // Chiều rộng 100% trừ đi margin
+  margin: 0 auto; // Căn giữa container
   background: map-get($theme-colors, "main");
+}
+
+// Media query cho màn hình nhỏ hơn 768px
+@media screen and (max-width: 992px) {
+  .main_container {
+    margin: 0; // Loại bỏ margin để làm cho nó đầy đủ chiều rộng
+    width: 100%; // Đảm bảo chiều rộng đầy đủ
+  }
 }
