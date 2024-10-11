@@ -3,9 +3,22 @@ import { memo } from "react";
 const HomePage = () => {
   return (
     <>
-      <h1>HeaderAdmin</h1>
-      <h1>Body</h1>
-      <h1>Footer</h1>
+      <div className="bg-slate-800 py-10 text-white text-9xl font-bold">
+        HomePage
+        <br />
+        HomePage
+        <br />
+        HomePage
+        <br />
+        HomePage
+        <br />
+        HomePage
+        <br />
+        HomePage
+        <br />
+        HomePage
+        
+      </div>
     </>
   );
 };

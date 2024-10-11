@@ -4,10 +4,13 @@ import Footer from "../footer";
 
 const MasterLayout = ({ children, ...props }) => {
   return (
-    <div {...props}>
-      <Header/>
-      {children}
-      <Footer/>
+    <div className="flex flex-col min-h-screen md:mx-28" {...props}>
+    <div></div>
+      <Header />
+      <main className="flex-grow"> {/* Để children chiếm không gian còn lại */}
+        {children}
+      </main>
+      <Footer />
     </div>
   );
 };
