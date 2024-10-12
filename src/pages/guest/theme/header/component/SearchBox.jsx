@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaSearch } from "react-icons/fa"; // Nhập biểu tượng tìm kiếm
 
 const Search = ({ className }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -10,13 +11,16 @@ const Search = ({ className }) => {
 
   return (
     <form className={`flex items-center w-full ${className}`} onSubmit={handleSearch}>
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        placeholder="Search..."
-        className="w-full px-4 py-2 border rounded-md focus:outline-none"
-      />
+      <div className="relative w-full">
+        <FaSearch className="absolute left-3 top-2.5 text-gray-500" /> {/* Biểu tượng tìm kiếm */}
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search..."
+          className="w-full pl-10 px-4 py-2 border rounded-md focus:outline-none" // Thêm padding-left để tránh chồng lên biểu tượng
+        />
+      </div>
     </form>
   );
 };

@@ -12,7 +12,7 @@ const Header = () => {
   const Links = [
     { name: "Home", link: "/" },
     { name: "About", link: "/" },
-    { name: "Contact Us", link: "/login" }, // Thêm liên kết cho trang yêu thích
+    { name: "Contact", link: "/login" }, // Thêm liên kết cho trang yêu thích
   ];
 
   const [isOpen, setIsOpen] = useState(false);
@@ -48,7 +48,7 @@ const Header = () => {
         </div>
 
         {/* Search input trong Navbar */}
-        <Search className="hidden md:flex md:ml-10 max-w-xs" />
+        <Search className="hidden md:flex md:ml-10 " />
 
         {/* Sidebar cho menu di động */}
         <div
