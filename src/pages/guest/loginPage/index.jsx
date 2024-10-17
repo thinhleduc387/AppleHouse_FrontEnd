@@ -1,51 +1,53 @@
 import { memo, useState } from "react";
-import axios from "axios"; // Đảm bảo bạn đã cài đặt axios
+import { useNavigate } from "react-router-dom"; // Thêm import cho useNavigate
 import "./style.scss"; // Import style nếu có
-
-const FloatingInput = ({ label, type, id, placeholder, required, value, onChange }) => {
-  return (
-    <div className="relative">
-      <input
-        type={type}
-        id={id}
-        value={value} // Sử dụng value từ props
-        onChange={onChange} // Gọi hàm onChange từ props
-        className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-        placeholder={placeholder}
-        required={required}
-      />
-      <label
-        htmlFor={id}
-        className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-      >
-        {label}
-      </label>
-    </div>
-  );
-};
+import { callLogin } from "../../../config/api";
+import SignUpDialog from "../../../component/Auth/SignUp";
+import FloatingInput from "../../../component/FloatingInput"
 
 const LoginPage = () => {
-  const [email, setEmail] = useState(""); // Trạng thái cho email
-  const [password, setPassword] = useState(""); // Trạng thái cho password
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSignUpDialogOpen, setSignUpDialogOpen] = useState(false);
+  const navigate = useNavigate(); // Khai báo useNavigate
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Ngăn chặn hành vi mặc định của form
 
     try {
-      const response = await axios.post("http://localhost:8000/api/v1/login", {
-        email,
-        password,
-      });
+      // Gọi hàm đăng nhập và chờ phản hồi
+      const response = await callLogin(email, password);
 
-      if (response.data.success) {
-        alert(`Chào bạn ${email}`);
-        // Có thể chuyển hướng hoặc thực hiện hành động khác sau khi đăng nhập thành công
+      // Kiểm tra xem phản hồi có thành công không
+      if (response && response.status === 200) {
+        // Kiểm tra mã trạng thái 200
+        console.log("Đăng nhập thành công:", response.message); // Log thông báo thành công
+        // Lưu thông tin người dùng và token vào localStorage hoặc state nếu cần
+
+        // Ví dụ: localStorage.setItem("user", JSON.stringify(user)); // Lưu thông tin người dùng
+        // Ví dụ: localStorage.setItem("token", tokens.access); // Lưu token
+
+        // Nếu đăng nhập thành công, điều hướng đến trang chính
+        navigate("/");
       } else {
-        alert("Đăng nhập không thành công");
+        // Nếu phản hồi không thành công (ví dụ: status khác 200)
+        console.error("Đăng nhập không thành công:", response);
+        alert("Tên đăng nhập hoặc mật khẩu không chính xác.");
       }
     } catch (error) {
-      console.error("Có lỗi xảy ra:", error);
-      alert("Có lỗi xảy ra. Vui lòng thử lại!");
+      // Kiểm tra lỗi từ Axios
+      if (error.response) {
+        // Nếu có phản hồi từ server
+        if (error.response.status === 401) {
+          alert("Tên đăng nhập hoặc mật khẩu không chính xác.");
+        } else {
+          alert("Có lỗi xảy ra: " + error.response.data.message);
+        }
+      } else {
+        // Nếu không có phản hồi từ server (chẳng hạn lỗi mạng)
+        console.error("Có lỗi xảy ra khi đăng nhập:", error);
+        alert("Có lỗi xảy ra. Vui lòng thử lại.");
+      }
     }
   };
 
@@ -66,8 +68,8 @@ const LoginPage = () => {
               id="email"
               placeholder=" "
               required={true}
-              value={email} // Truyền value vào FloatingInput
-              onChange={(e) => setEmail(e.target.value)} // Cập nhật giá trị email
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
 
             <FloatingInput
@@ -76,8 +78,8 @@ const LoginPage = () => {
               id="password"
               placeholder=" "
               required={true}
-              value={password} // Truyền value vào FloatingInput
-              onChange={(e) => setPassword(e.target.value)} // Cập nhật giá trị password
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
 
             <div className="flex items-center justify-between">
@@ -117,6 +119,7 @@ const LoginPage = () => {
                 Don’t have an account yet?{" "}
                 <a
                   href="#"
+                  onClick={() => setSignUpDialogOpen(true)} // Mở dialog khi nhấp
                   className="font-medium text-blue-400 hover:text-blue-500"
                 >
                   Sign up here
@@ -124,7 +127,11 @@ const LoginPage = () => {
               </p>
             </div>
           </form>
-
+          {/* Hiển thị dialog đăng ký */}
+          <SignUpDialog
+            isOpen={isSignUpDialogOpen}
+            onClose={() => setSignUpDialogOpen(false)}
+          />
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
