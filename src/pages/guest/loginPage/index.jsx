@@ -1,6 +1,5 @@
 import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Thêm import cho useNavigate
-import "./style.scss"; // Import style nếu có
 import { callLogin } from "../../../config/api";
 import SignUpDialog from "../../../component/Auth/SignUp";
 import FloatingInput from "../../../component/FloatingInput"

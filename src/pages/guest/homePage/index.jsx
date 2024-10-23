@@ -1,9 +1,19 @@
 import { memo } from "react";
-import ProductPage from "../../../component/Product/ProductPage"
+import Banner from "../../../component/Banner";
+import ProductCategory from "../../../component/Product/Category/ProductCategory";
+
 const HomePage = () => {
   return (
     <>
-      <ProductPage/>
+      {/* Banner */}
+      <div className="mb-8">
+        <Banner />
+      </div>
+
+      {/* ProductCategory */}
+      <div className="container">
+        <ProductCategory />
+      </div>
     </>
   );
 };

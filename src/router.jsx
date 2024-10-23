@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/guest/homePage";
 import LoginPage from "./pages/guest/loginPage";
 import { ROUTERS } from "./utils/router";
-import MasterLayout from "./pages/guest/theme/masterLayout";
+import MasterLayout from "./component/theme/masterLayout";
 const renderGuestRouter = () => {
   const guestRouters = [
     {
