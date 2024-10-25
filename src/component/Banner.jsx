@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import các icon
-import image1 from '../image/ip16-icon-sec1-mb-120924.png';
-import image2 from '../image/9.jpg';
+import image1 from "../image/ip16-icon-sec1-mb-120924.png";
+import image2 from "../image/9.jpg";
 
 const Banner = () => {
   // Danh sách hình ảnh
@@ -13,32 +13,38 @@ const Banner = () => {
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + images.length) % images.length
+    );
   };
 
   useEffect(() => {
     const interval = setInterval(nextSlide, 7000); // Thay đổi mỗi 7 giây
     return () => clearInterval(interval); // Dọn dẹp interval khi component unmount
-  }, []); // Chỉ cần một lần chạy khi component mount
+  }, [currentIndex]); // Chỉ cần một lần chạy khi component mount
 
   return (
-    <div id="default-carousel" className="relative w-full">
+    <div id="default-carousel" className="relative w-full h-auto">
       {/* Carousel wrapper */}
-      <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
+      <div className="relative h-56 overflow-hidden rounded-lg lg:h-96">
         {/* Hình ảnh */}
         {images.map((image, index) => (
           <div
             key={index}
             className={`absolute w-full h-full transition-transform duration-700 ease-in-out 
-            ${index === currentIndex ? "translate-x-0" : 
-              index === (currentIndex + 1) % images.length ? "translate-x-full" : 
-              index === (currentIndex - 1 + images.length) % images.length ? "-translate-x-full" : 
-              "hidden"
+            ${
+              index === currentIndex
+                ? "translate-x-0"
+                : index > currentIndex
+                ? "translate-x-full"
+                : index < currentIndex
+                ? "-translate-x-full"
+                : "hidden"
             }`}
           >
             <img
               src={image}
-              className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+              className="absolute block w-full h-full object-cover -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
               alt={`Slide ${index + 1}`}
             />
           </div>

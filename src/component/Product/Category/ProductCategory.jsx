@@ -6,7 +6,7 @@ const ProductCategory = () => {
     {
       id: 1,
       name: "iPhone",
-      imageSrc: "https://cdn2.fptshop.com.vn/unsafe/360x0/filters:quality(100)/iphone_16_f27848b783.png",
+      imageSrc: "https://cdnv2.tgdd.vn/webmwg/2024/tz/images/desktop/IP_Desk.png",
     },
     {
       id: 2,
@@ -16,12 +16,12 @@ const ProductCategory = () => {
     {
       id: 3,
       name: "iPad",
-      imageSrc: "https://cdn2.fptshop.com.vn/unsafe/360x0/filters:quality(100)/2024_5_10_638509511714852916_ipad-pro-13-inch-m4-2024-wifi-cellular-dd.jpg",
+      imageSrc: "https://cdnv2.tgdd.vn/webmwg/2024/tz/images/desktop/Ipad_Desk.png",
     },
     {
       id: 4,
       name: "Apple Watch",
-      imageSrc: "https://cdn2.fptshop.com.vn/unsafe/360x0/filters:quality(100)/apple_watch_se_gps_44mm_midnight_aluminium_case_ink_sport_loop_1_284e0aed88.png",
+      imageSrc: "https://cdnv2.tgdd.vn/webmwg/2024/tz/images/desktop/Watch_Desk.png",
     },
     {
       id: 5,
@@ -36,7 +36,7 @@ const ProductCategory = () => {
   ];
 
   return (
-    <div className="grid grid-cols-6 gap-4">
+    <div className="grid grid-cols-3 gap-4 lg:grid-cols-6">
       {/* Render danh sách các CategorySection */}
       {CategoryList.map((category) => (
         <CategorySection

@@ -6,12 +6,12 @@ const HomePage = () => {
   return (
     <>
       {/* Banner */}
-      <div className="mb-8">
+      <div className="overflow-hidden  mb-8">
         <Banner />
       </div>
 
       {/* ProductCategory */}
-      <div className="container">
+      <div >
         <ProductCategory />
       </div>
     </>
