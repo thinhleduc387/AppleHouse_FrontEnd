@@ -6,15 +6,17 @@ import {
 } from "react-icons/ai";
 import { FaTruck, FaTag } from "react-icons/fa";
 import { useState } from "react";
+import { ROUTERS } from "../../utils/router"; // Đảm bảo đường dẫn đúng
 
-const ProductItem = () => {
+const ProductItem = ({ productId }) => {
   const [showTooltipFavorites, setShowTooltipFavorites] = useState(false);
   const [showTooltipQuickLook, setShowTooltipQuickLook] = useState(false);
 
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm relative">
       <div className="h-56 w-full">
-        <a href="#">
+        {/* Sử dụng thẻ <a> với href để điều hướng */}
+        <a href={ROUTERS.GUEST.PRODUCT_DETAIL(productId)}>
           <img
             className="mx-auto h-full"
             src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/iphone-light.svg"
@@ -59,8 +61,9 @@ const ProductItem = () => {
           </div>
         </div>
 
+        {/* Sử dụng thẻ <a> với href để điều hướng */}
         <a
-          href="#"
+          href={ROUTERS.GUEST.PRODUCT_DETAIL(productId)}
           className="text-lg font-semibold leading-tight text-gray-900 hover:underline"
         >
           Apple iMac 27, 1TB HDD, Retina 5K Display, M3 Max
@@ -90,13 +93,16 @@ const ProductItem = () => {
 
         <div className="mt-4 mb-5">
           <p className="text-sm text-slate-900">
-            <span className="line-through">35.000.000</span> <span className="font-light underline">đ</span>  <span className="text-red-600">-44%</span>
+            <span className="line-through">35.000.000</span>{" "}
+            <span className="font-light underline">đ</span>{" "}
+            <span className="text-red-600">-44%</span>
           </p>
           <p className="text-2xl font-bold text-slate-900">
-            33.999.000 <span className="text-xl font-bold text-slate-900 underline">đ</span>
+            33.999.000{" "}
+            <span className="text-xl font-bold text-slate-900 underline">đ</span>
           </p>
         </div>
-        
+
         <div>
           <button
             type="button"
