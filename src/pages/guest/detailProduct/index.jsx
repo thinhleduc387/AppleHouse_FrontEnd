@@ -1,21 +1,27 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import ProductPrice from "../../../component/Product/ProductPrice"; // Import PromotionComponent
 import OptionsCard from "../../../component/Product/OptionsCard"; // Import OptionsCard
+import ProductInfo from "../../../component/Product/ProductInfo";
 
 const DetailProduct = ({ productId }) => {
   const [selectedCapacity, setSelectedCapacity] = useState("256 GB");
   const [selectedColor, setSelectedColor] = useState("256 GB");
 
+  const price = 28590000; // Giá gốc
+  const discountPrice = 28990000; // Giá giảm
+  const points = 7147; // Điểm thường
+  const installment = 2266778; // Trả góp
+
   return (
-    <div className="font-sans bg-white">
+    <div className="font-sans ">
       <div className="p-4 lg:max-w-7xl max-w-4xl mx-auto">
-        <div className="grid items-start grid-cols-1 lg:grid-cols-5 gap-12 p-6 rounded-lg">
-          <div className="lg:col-span-3 w-full lg:sticky top-0 text-center">
+        <div className="grid items-start grid-cols-1 lg:grid-cols-6 gap-12 p-6 rounded-lg bg-white">
+          <div className="lg:col-span-3 w-full lg:sticky top-0 text-center ">
             <div className="px-4 py-10 rounded-lg relative">
               <img
                 src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/iphone-light.svg"
                 alt="iPhone 16 Pro Max"
-                className="w-3/4 rounded object-cover mx-auto"
+                className="w-1/4 rounded object-cover mx-auto"
               />
               <button type="button" className="absolute top-4 right-4">
                 <svg
@@ -54,8 +60,8 @@ const DetailProduct = ({ productId }) => {
             </div>
           </div>
 
-          <div className="lg:col-span-2">
-            <div className="bg-red-600 text-white rounded-full w-12 h-6 flex items-center justify-center">
+          <div className="lg:col-span-3">
+            <div className="bg-mainColor text-white rounded-full w-12 h-6 flex items-center justify-center">
               Mới
             </div>
             <h2 className="text-2xl font-extrabold text-gray-800 mt-4">
@@ -97,28 +103,14 @@ const DetailProduct = ({ productId }) => {
               />
             </div>
 
+            {/* Khuyến mãi */}
             <div className="flex flex-wrap gap-4 mt-8">
-              <p className="text-gray-800 text-3xl font-bold">$1200</p>
-              <p className="text-gray-400 text-base">
-                <strike>$1500</strike>{" "}
-                <span className="text-sm ml-1">Tax included</span>
-              </p>
-            </div>
-            <div className="mt-8">
-              <h3 className="text-xl font-bold text-gray-800">
-                Choose a Color
-              </h3>
-              <div className="flex flex-wrap gap-3 mt-4">
-                {["black", "gray-300", "gray-100", "blue-400"].map(
-                  (color, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      className={`w-10 h-10 bg-${color} border-2 border-white hover:border-gray-800 rounded-full shrink-0 transition-all`}
-                    ></button>
-                  )
-                )}
-              </div>
+              <ProductPrice
+                price={price}
+                discountPrice={discountPrice}
+                points={points}
+                installment={installment}
+              />
             </div>
 
             <div className="flex flex-wrap gap-4 mt-8">
@@ -138,50 +130,13 @@ const DetailProduct = ({ productId }) => {
           </div>
         </div>
 
-        <div className="mt-16 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] p-6">
-          <h3 className="text-xl font-bold text-gray-800">
-            Product information
-          </h3>
-          <ul className="mt-4 space-y-6 text-gray-800">
-            <li className="text-sm">
-              TYPE <span className="ml-4 float-right">LAPTOP</span>
-            </li>
-            <li className="text-sm">
-              RAM <span className="ml-4 float-right">16 GB</span>
-            </li>
-            <li className="text-sm">
-              SSD <span className="ml-4 float-right">1000 GB</span>
-            </li>
-            <li className="text-sm">
-              PROCESSOR TYPE{" "}
-              <span className="ml-4 float-right">INTEL CORE I7-12700H</span>
-            </li>
-            <li className="text-sm">
-              PROCESSOR SPEED{" "}
-              <span className="ml-4 float-right">2.3 - 4.7 GHz</span>
-            </li>
-            <li className="text-sm">
-              DISPLAY SIZE INCH <span className="ml-4 float-right">16.0</span>
-            </li>
-            <li className="text-sm">
-              DISPLAY SIZE CM <span className="ml-4 float-right">40.64 cm</span>
-            </li>
-            <li className="text-sm">
-              DISPLAY TYPE{" "}
-              <span className="ml-4 float-right">
-                OLED, TOUCHSCREEN, 120 Hz
-              </span>
-            </li>
-            <li className="text-sm">
-              DISPLAY RESOLUTION{" "}
-              <span className="ml-4 float-right">2880x1620</span>
-            </li>
-          </ul>
+        <div className="mt-16">
+          <ProductInfo />
         </div>
 
         <div className="mt-16 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] p-6">
           <h3 className="text-xl font-bold text-gray-800">Reviews(10)</h3>
-          <div className="grid md:grid-cols-2 gap-12 mt-4">
+          <div className="flex flex-col mt-4">
             <div className="space-y-3">
               {[
                 { score: 5, percent: "66%" },

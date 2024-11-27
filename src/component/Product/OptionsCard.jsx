@@ -6,7 +6,7 @@ const OptionsCard = ({ options, selectedOption, onSelectOption }) => {
       {options.map((option, index) => (
         <a
           key={index}
-          className={`relative px-4 py-2 border rounded-lg cursor-pointer ${
+          className={`flex justify-center items-center relative px-4 py-2 border rounded-lg cursor-pointer ${
             selectedOption.label === option.label ? "border-mainColor" : "border-gray-300"
           }`}
           onClick={() => onSelectOption(option)}
@@ -15,7 +15,7 @@ const OptionsCard = ({ options, selectedOption, onSelectOption }) => {
             <img
               src={option.src}
               alt={option.label || "Option Image"}
-              className="w-16 h-16 mb-2"
+              className="w-10 h-10"
             />
           )}
           <span className="text-lg font-bold text-gray-800">{option.label}</span>
