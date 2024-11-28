@@ -5,6 +5,7 @@ import { ROUTERS } from "./utils/router";
 import MasterLayout from "./component/theme/masterLayout";
 import ProductPage from "./pages/guest/productPage";
 import DetailProduct from "./pages/guest/detailProduct";
+import CartPage from "./pages/guest/cartPage"
 const renderGuestRouter = () => {
   const guestRouters = [
     {
@@ -18,6 +19,10 @@ const renderGuestRouter = () => {
     {
       path: ROUTERS.GUEST.IPHONE,
       component: <ProductPage />,
+    },
+    {
+      path: ROUTERS.GUEST.CART,
+      component: <CartPage />,
     },
     {
       path: ROUTERS.GUEST.PRODUCT_DETAIL(":productId"), // Đường dẫn chi tiết sản phẩm với tham số productId

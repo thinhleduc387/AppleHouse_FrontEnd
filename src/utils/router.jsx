@@ -4,7 +4,8 @@ export const ROUTERS = {
     LOGIN: "/login",
     PRODUCTS: "/products", // Trang danh sách tất cả các sản phẩm
     PRODUCT_DETAIL: (productId = ":productId") => `/products/${productId}`, // Trang chi tiết sản phẩm
-
+    CART: "/cart", // Giỏ hàng
+    
     // Trang danh mục cho từng loại sản phẩm
     IPHONE: "/products/iphone", // Trang danh sách các sản phẩm iPhone
     MAC: "/products/mac", // Trang danh sách các sản phẩm Mac (bao gồm MacBook, iMac, v.v.)
