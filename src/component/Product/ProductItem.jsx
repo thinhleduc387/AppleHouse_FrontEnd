@@ -3,17 +3,18 @@ import {
   AiOutlineHeart,
   AiFillStar,
   AiOutlineShoppingCart,
+  AiOutlineEdit, // Thêm icon edit
 } from "react-icons/ai";
 import { FaTruck, FaTag } from "react-icons/fa";
 import { useState } from "react";
 import { ROUTERS } from "../../utils/router"; // Đảm bảo đường dẫn đúng
 
-const ProductItem = ({ productId }) => {
+const ProductItem = ({ productId, isEdit }) => {
   const [showTooltipFavorites, setShowTooltipFavorites] = useState(false);
   const [showTooltipQuickLook, setShowTooltipQuickLook] = useState(false);
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm relative">
+    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm relative flex flex-col">
       <div className="h-56 w-full">
         {/* Sử dụng thẻ <a> với href để điều hướng */}
         <a href={ROUTERS.GUEST.PRODUCT_DETAIL(productId)}>
@@ -24,7 +25,7 @@ const ProductItem = ({ productId }) => {
           />
         </a>
       </div>
-      <div className="pt-6">
+      <div className="pt-6 flex-grow">
         <div className="mb-4 flex items-center justify-end">
           <div className="flex items-center gap-2">
             <button
@@ -91,27 +92,42 @@ const ProductItem = ({ productId }) => {
           </li>
         </ul>
 
-        <div className="mt-4 mb-5">
-          <p className="text-sm text-slate-900">
-            <span className="line-through">35.000.000</span>{" "}
-            <span className="font-light underline">đ</span>{" "}
-            <span className="text-red-600">-44%</span>
-          </p>
-          <p className="text-2xl font-bold text-slate-900">
-            33.999.000{" "}
-            <span className="text-xl font-bold text-slate-900 underline">đ</span>
-          </p>
-        </div>
+        {/* Điều kiện để hiển thị giá và nút "Add to cart" hay nút "Edit" */}
+        {!isEdit && (
+          <div className="mt-4 mb-5">
+            <p className="text-sm text-slate-900">
+              <span className="line-through">35.000.000</span>{" "}
+              <span className="font-light underline">đ</span>{" "}
+              <span className="text-red-600">-44%</span>
+            </p>
+            <p className="text-2xl font-bold text-slate-900">
+              33.999.000{" "}
+              <span className="text-xl font-bold text-slate-900 underline">
+                đ
+              </span>
+            </p>
+          </div>
+        )}
+      </div>
 
-        <div>
-          <button
-            type="button"
-            className="inline-flex items-center rounded-lg bg-blue-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700"
-          >
-            <AiOutlineShoppingCart className="h-5 w-5 me-2" />
-            Add to cart
-          </button>
-        </div>
+      {/* Nút Add to Cart hoặc Edit */}
+      <div className="mt-4">
+        <button
+          type="button"
+          className="inline-flex items-center text-center justify-center rounded-lg bg-blue-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 min-w-36"
+        >
+          {isEdit ? (
+            <>
+              <AiOutlineEdit className="h-5 w-5 mr-2" />
+              Edit
+            </>
+          ) : (
+            <>
+              <AiOutlineShoppingCart className="h-5 w-5 mr-2" />
+              Add to cart
+            </>
+          )}
+        </button>
       </div>
     </div>
   );

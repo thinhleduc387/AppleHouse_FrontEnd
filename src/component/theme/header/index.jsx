@@ -1,7 +1,7 @@
 import { memo, useState, useEffect } from "react";
 import { Bars3BottomRightIcon } from "@heroicons/react/24/solid";
 import SideBar from "./component/SideBar";
-import Search from "./component/SearchBox";
+import Search from "../../SearchBox";
 import { AiOutlineHeart } from "react-icons/ai";
 import { IoCartOutline } from "react-icons/io5";
 import { AiOutlineUser } from "react-icons/ai";

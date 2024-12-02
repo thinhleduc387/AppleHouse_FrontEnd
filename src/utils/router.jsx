@@ -20,9 +20,11 @@ export const ROUTERS = {
     PROFILE: "/profile", // Trang hồ sơ người dùng
   },
   ADMIN: {
-    DASHBOARD: "/admin",
-    MANAGE_PRODUCTS: "/admin/products", // Quản lý sản phẩm
-    ADD_PRODUCT: "/admin/products/add", // Thêm sản phẩm mới
-    EDIT_PRODUCT: (productId = ":productId") => `/admin/products/edit/${productId}`, // Chỉnh sửa sản phẩm
+    DASHBOARD: "/admin/dashboard",
+    MANAGE_PRODUCTS: "/admin/products",
+    ADD_PRODUCT: "/admin/products/add",
+    STOCK: "/admin/stock",
+    ORDER: "/admin/order",
+    EDIT_PRODUCT: (productId = ":productId") => `/admin/products/edit/${productId}`,
   },
 };

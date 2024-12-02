@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import ProductPrice from "../../../component/Product/ProductPrice"; // Import PromotionComponent
 import OptionsCard from "../../../component/Product/OptionsCard"; // Import OptionsCard
 import ProductInfo from "../../../component/Product/ProductInfo";
@@ -13,6 +13,21 @@ const DetailProduct = ({ productId }) => {
   const discountPrice = 28990000; // Giá giảm
   const points = 7147; // Điểm thường
   const installment = 2266778; // Trả góp
+
+  const commentSectionRef = useRef(null);
+  const ratingStatRef = useRef(null);
+
+  const scrollToComments = () => {
+    if (commentSectionRef.current) {
+      commentSectionRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const scrollToRatingStat = () => {
+    if (ratingStatRef.current) {
+      ratingStatRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <div className="font-sans ">
@@ -73,9 +88,17 @@ const DetailProduct = ({ productId }) => {
             <div className="flex items-center space-x-2 mt-4">
               <span className="text-gray-600">No.00911049</span>
               <span className="text-gray-600">|</span>
-              <span className="text-mainColor cursor-pointer">2 đánh giá</span>
+              <span
+                className="text-mainColor cursor-pointer"
+                onClick={scrollToRatingStat}
+              >
+                2 đánh giá
+              </span>
               <span className="text-gray-600">|</span>
-              <span className="text-mainColor cursor-pointer">
+              <span
+                className="text-mainColor cursor-pointer"
+                onClick={scrollToComments}
+              >
                 193 bình luận
               </span>
             </div>
@@ -137,8 +160,12 @@ const DetailProduct = ({ productId }) => {
         </div>
 
         <div className="mt-16 bg-white border-2  rounded-lg p-6 space-y-10">
-          <RatingStat />
-          <CommentSection />
+          <div ref={ratingStatRef}>
+            <RatingStat />
+          </div>
+          <div ref={commentSectionRef}>
+            <CommentSection />
+          </div>
         </div>
       </div>
     </div>
