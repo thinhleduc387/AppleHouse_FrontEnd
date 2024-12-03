@@ -13,11 +13,22 @@ const ProductItem = ({ productId, isEdit }) => {
   const [showTooltipFavorites, setShowTooltipFavorites] = useState(false);
   const [showTooltipQuickLook, setShowTooltipQuickLook] = useState(false);
 
+  // Hàm xử lý khi cố gắng nhấn vào link khi ở chế độ edit
+  const handleLinkClick = (e) => {
+    if (isEdit) {
+      e.preventDefault(); // Ngừng hành động bấm link
+    }
+  };
+
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm relative flex flex-col">
       <div className="h-56 w-full">
-        {/* Sử dụng thẻ <a> với href để điều hướng */}
-        <a href={ROUTERS.GUEST.PRODUCT_DETAIL(productId)}>
+        {/* Sử dụng thẻ <a> với href để điều hướng, thêm điều kiện không cho bấm link khi isEdit */}
+        <a
+          href={ROUTERS.GUEST.PRODUCT_DETAIL(productId)}
+          onClick={handleLinkClick} // Ngăn việc bấm link khi ở trạng thái chỉnh sửa
+          className={isEdit ? "cursor-default" : ""}
+        >
           <img
             className="mx-auto h-full"
             src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/iphone-light.svg"
@@ -62,10 +73,11 @@ const ProductItem = ({ productId, isEdit }) => {
           </div>
         </div>
 
-        {/* Sử dụng thẻ <a> với href để điều hướng */}
+        {/* Sử dụng thẻ <a> với href để điều hướng, thêm điều kiện không cho bấm link khi isEdit */}
         <a
           href={ROUTERS.GUEST.PRODUCT_DETAIL(productId)}
-          className="text-lg font-semibold leading-tight text-gray-900 hover:underline"
+          onClick={handleLinkClick} // Ngăn việc bấm link khi ở trạng thái chỉnh sửa
+          className={`text-lg font-semibold leading-tight text-gray-900  ${isEdit ? "cursor-default h" : "hover:underline"}`}
         >
           Apple iMac 27, 1TB HDD, Retina 5K Display, M3 Max
         </a>
