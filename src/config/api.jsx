@@ -18,3 +18,7 @@ export const callLoginGG = () => {
 export const callAccount = async () => {
   return axios.get("/auth/account");
 };
+
+export const getAllCategory = async () => {
+  return axios.get("/category/all");
+};

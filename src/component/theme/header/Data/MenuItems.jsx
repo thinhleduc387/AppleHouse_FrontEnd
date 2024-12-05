@@ -1,4 +1,4 @@
-// dropdownData.js
+
 export const submenuItems = {
     Iphone: [
       "Iphone 13",

@@ -45,7 +45,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="w-full top-0 left-0 z-[40]">
+      <div className="w-full top-0 left-0 z-[40] sticky">
         <div className="lg:px-10 py-4 px-7 lg:flex justify-between items-center bg-[#f3f4f6] relative">
           {/* Logo và Menu */}
           <div className="flex items-center justify-between w-full lg:w-auto">

@@ -1,10 +1,11 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { MdArrowDropDown } from "react-icons/md";
-import { submenuItems, displayNames } from "../Data/MenuItems"; // Import dữ liệu
+import { getAllCategory } from "../../../../config/api"; // Đảm bảo đã import hàm getAllCategory
 
 const DropdownMenu = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [categoryList, setCategoryList] = useState([]);
   const dropdownRef = useRef(null);
 
   const handleMouseEnter = () => {
@@ -16,12 +17,41 @@ const DropdownMenu = () => {
   };
 
   const handleMouseLeaveSubmenu = () => {
-    setSelectedItem(null);
+    setSelectedItem(null); // Đóng submenu khi chuột rời khỏi
   };
 
-  // Tính chiều dài của menu
+  // Tính chiều cao của menu dựa trên số lượng mục
   const getMenuHeight = () => {
-    return Object.keys(submenuItems).length * 40; // Giả sử mỗi mục có chiều cao 40px
+    return categoryList.length * 40; // Giả sử mỗi mục có chiều cao 40px
+  };
+
+  // Gọi API lấy danh mục
+  useEffect(() => {
+    getCategory(); // Gọi hàm getCategory tại đây
+  }, []);
+
+  const getCategory = async () => {
+    try {
+      // Gọi API lấy danh mục
+      const response = await getAllCategory();
+      console.log(response.metadata);
+
+      // Kiểm tra nếu phản hồi thành công
+      if (response.status === 200 && response.metadata) {
+        // Cập nhật danh sách CategoryList với dữ liệu trả về từ API
+        const categories = response.metadata.map((category) => ({
+          id: category._id, // Hoặc _id, tùy theo cấu trúc của response
+          name: category.category_name,
+          link: `/products/${category.category_slug}`, // Giả sử slug là một thuộc tính trong API
+          subItems: category.children || [], // Lấy danh sách subItems từ API
+        }));
+
+        setCategoryList(categories);
+      }
+    
+    } catch (error) {
+      console.error("Get categories error:", error);
+    }
   };
 
   return (
@@ -41,17 +71,17 @@ const DropdownMenu = () => {
           style={{ height: getMenuHeight() }}
         >
           <ul className="py-1">
-            {Object.keys(submenuItems).map((item) => (
+            {categoryList.map((category) => (
               <li
-                key={item}
-                onMouseEnter={() => setSelectedItem(item)} // Giữ submenu mở khi di chuột vào mục
+                key={category.id}
+                onMouseEnter={() => setSelectedItem(category.id)} // Giữ submenu mở khi di chuột vào mục
                 className="relative"
               >
                 <a
-                  href="#"
+                  href={category.link} // Sử dụng link từ API
                   className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
                 >
-                  {displayNames[item]}
+                  {category.name} {/* Hiển thị tên danh mục */}
                 </a>
               </li>
             ))}
@@ -65,16 +95,19 @@ const DropdownMenu = () => {
               style={{ height: getMenuHeight() }} // Đặt chiều dài cho submenu
             >
               <ul className="py-1 grid grid-cols-4 gap-2">
-                {submenuItems[selectedItem].map((subItem) => (
-                  <li key={subItem}>
-                    <a
-                      href="#"
-                      className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
-                    >
-                      {subItem}
-                    </a>
-                  </li>
-                ))}
+                {/* Submenu chỉ hiển thị nếu có dữ liệu phụ */}
+                {categoryList
+                  .find((category) => category.id === selectedItem)
+                  ?.subItems?.map((subItem) => (
+                    <li key={subItem._id}>
+                      <a
+                        href={'/products/${category.category_slug}'} // Link sản phẩm trong submenu
+                        className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                      >
+                        {subItem.category_name}
+                      </a>
+                    </li>
+                  ))}
               </ul>
             </div>
           )}

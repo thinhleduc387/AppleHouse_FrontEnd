@@ -3,9 +3,9 @@ import CartItem from "../../../component/Product/Cart/CartItem";
 
 const CartPage = () => {
   return (
-    <div className="py-4">
-      <div className="grid md:grid-cols-3 gap-4 ">
-        <div className="md:col-span-2 p-4 bg-white rounded-md h-screen overflow-y-auto">
+    <div className="py-4 bg-slate-500 ">
+      <div className="grid md:grid-cols-3 gap-4 relative">
+        <div className="md:col-span-2 p-4 bg-white rounded-md  overflow-y-auto">
           <div className="space-y-4">
             <CartItem />
             <CartItem />
@@ -25,8 +25,7 @@ const CartPage = () => {
             <CartItem />
           </div>
         </div>
-
-        <div className="bg-white rounded-md p-4 md:self-start">
+        <div className="bg-white rounded-md p-4 md:self-start sticky top-0 right-0">
           <div className="flex border border-blue-600 overflow-hidden rounded-md">
             <input
               type="email"

@@ -1,9 +1,12 @@
-import { useState } from "react";
-import FilterSidebar from "../../../component/Product/FilterSidebar"; // Đường dẫn chính xác đến FilterSidebar.js
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom"; // Import useParams
+import FilterSidebar from "../../../component/Product/FilterSidebar";
 import ProductItem from "../../../component/Product/ProductItem";
 import { AiOutlineSortAscending, AiOutlineRight } from "react-icons/ai";
 
 const ProductPage = () => {
+  const { categoryType } = useParams(); // Lấy loại sản phẩm từ URL
+
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(50000000);
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
@@ -11,7 +14,7 @@ const ProductPage = () => {
   const toggleSortDropdown = () => {
     setIsSortDropdownOpen((prev) => !prev);
   };
-
+  console.log(categoryType);
   return (
     <section className="bg-[#f3f4f6] py-8 antialiased md:py-12">
       <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
@@ -27,7 +30,7 @@ const ProductPage = () => {
             {/* Sort Button */}
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">
-                Tìm thấy 117 kết quả
+                {categoryType}
               </h3>
               <div className="relative">
                 <button
@@ -65,6 +68,7 @@ const ProductPage = () => {
 
             {/* Product List */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-2">
+              {/* Hiển thị các sản phẩm dựa trên loại */}
               <ProductItem />
               <ProductItem />
               <ProductItem />

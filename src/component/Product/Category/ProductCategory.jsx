@@ -1,51 +1,42 @@
 import { Link } from "react-router-dom";
-import CategorySection from './CategorySection';
+import CategorySection from "./CategorySection";
+import { getAllCategory } from "../../../config/api";
+import { useEffect, useState } from "react";
 
 const ProductCategory = () => {
-  // Khởi tạo danh sách các danh mục (CategoryList)
-  const CategoryList = [
-    {
-      id: 1,
-      name: "iPhone",
-      imageSrc: "https://cdnv2.tgdd.vn/webmwg/2024/tz/images/desktop/IP_Desk.png",
-      link: "/products/iphone", // Đường dẫn cứng cho iPhone
-    },
-    {
-      id: 2,
-      name: "Mac",
-      imageSrc: "https://cdnv2.tgdd.vn/webmwg/2024/tz/images/desktop/Mac_Desk.png",
-      link: "/products/mac", // Đường dẫn cứng cho Mac
-    },
-    {
-      id: 3,
-      name: "iPad",
-      imageSrc: "https://cdnv2.tgdd.vn/webmwg/2024/tz/images/desktop/Ipad_Desk.png",
-      link: "/products/ipad", // Đường dẫn cứng cho iPad
-    },
-    {
-      id: 4,
-      name: "Apple Watch",
-      imageSrc: "https://cdnv2.tgdd.vn/webmwg/2024/tz/images/desktop/Watch_Desk.png",
-      link: "/products/apple-watch", // Đường dẫn cứng cho Apple Watch
-    },
-    {
-      id: 5,
-      name: "Tai nghe, loa",
-      imageSrc: "https://cdnv2.tgdd.vn/webmwg/2024/tz/images/desktop/Speaker_Desk.png",
-      link: "/products/audio", // Đường dẫn cứng cho Tai nghe và loa
-    },
-    {
-      id: 6,
-      name: "Phụ kiện",
-      imageSrc: "https://cdnv2.tgdd.vn/webmwg/2024/tz/images/desktop/Phukien_Desk.png",
-      link: "/products/accessories", // Đường dẫn cứng cho Phụ kiện
-    },
-  ];
+  // Khai báo state để lưu danh sách danh mục
+  const [categoryList, setCategoryList] = useState([]);
+
+  useEffect(() => {
+    getCategory(); // Gọi hàm getCategory tại đây
+  }, []);
+
+  const getCategory = async () => {
+    try {
+      // Gọi API lấy danh mục
+      const response = await getAllCategory();
+      console.log(response.metadata);
+      // Kiểm tra nếu phản hồi thành công
+      if (response.status === 200 && response.metadata) {
+        // Cập nhật danh sách CategoryList với dữ liệu trả về từ API
+        const categories = response.metadata.map((category) => ({
+          id: category._id, // Hoặc _id, tùy theo cấu trúc của response
+          name: category.category_name,
+          imageSrc: category.category_img, // Hoặc thuộc tính hình ảnh phù hợp
+          link: `/products/${category.category_slug}`, // Giả sử slug là một thuộc tính trong API
+        }));
+
+        setCategoryList(categories); // Cập nhật state categoryList
+      }
+    } catch (error) {
+      console.error("Get categories error:", error);
+    }
+  };
 
   return (
     <div className="grid grid-cols-3 gap-4 lg:grid-cols-6">
       {/* Render danh sách các CategorySection */}
-      {CategoryList.map((category) => (
+      {categoryList.map((category) => (
         <Link key={category.id} to={category.link}>
           <CategorySection
             categoryName={category.name}

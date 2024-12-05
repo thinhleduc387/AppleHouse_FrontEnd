@@ -10,7 +10,7 @@ const MasterLayout = ({...props }) => {
         className="flex flex-col min-h-screen mx-6 md:mx-12 lg:mx-28"
         {...props}
       >
-        <Header />
+        <Header/>
         <main className="flex-grow overflow-y-auto">
         <Outlet />
         </main>
