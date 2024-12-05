@@ -1,10 +1,20 @@
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import Banner from "../../../component/Banner";
 import ProductCategory from "../../../component/Product/Category/ProductCategory";
 import DiscountProduct from "../../../component/Product/DiscountProduct";
 import ProductSection from "../../../component/Product/ProductSection";
 
 const HomePage = () => {
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const userId = queryParams.get("user");
+    const accessToken = queryParams.get("token");
+
+    if (userId && accessToken) {
+      localStorage.setItem("access_token", accessToken);
+      localStorage.setItem("user_id", userId);
+    }
+  }, [location]);
   return (
     <div className="space-y-8">
       {/* Banner */}

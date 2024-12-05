@@ -25,7 +25,7 @@ const ProductItem = ({ productId, isEdit }) => {
       <div className="h-56 w-full">
         {/* Sử dụng thẻ <a> với href để điều hướng, thêm điều kiện không cho bấm link khi isEdit */}
         <a
-          href={ROUTERS.GUEST.PRODUCT_DETAIL(productId)}
+          href={ROUTERS.USER.PRODUCT_DETAIL(productId)}
           onClick={handleLinkClick} // Ngăn việc bấm link khi ở trạng thái chỉnh sửa
           className={isEdit ? "cursor-default" : ""}
         >
@@ -75,7 +75,7 @@ const ProductItem = ({ productId, isEdit }) => {
 
         {/* Sử dụng thẻ <a> với href để điều hướng, thêm điều kiện không cho bấm link khi isEdit */}
         <a
-          href={ROUTERS.GUEST.PRODUCT_DETAIL(productId)}
+          href={ROUTERS.USER.PRODUCT_DETAIL(productId)}
           onClick={handleLinkClick} // Ngăn việc bấm link khi ở trạng thái chỉnh sửa
           className={`text-lg font-semibold leading-tight text-gray-900  ${isEdit ? "cursor-default h" : "hover:underline"}`}
         >

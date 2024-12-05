@@ -1,8 +1,9 @@
 import { memo } from "react";
 import Header from "../../component/theme/header";
 import Footer from "../../component/theme/footer";
+import { Outlet } from "react-router-dom";
 
-const MasterLayout = ({ children, ...props }) => {
+const MasterLayout = ({...props }) => {
   return (
     <>
       <div
@@ -11,9 +12,7 @@ const MasterLayout = ({ children, ...props }) => {
       >
         <Header />
         <main className="flex-grow overflow-y-auto">
-          {" "}
-          {/* Để children chiếm không gian còn lại */}
-          {children}
+        <Outlet />
         </main>
       </div>
       <div className="mt-8">

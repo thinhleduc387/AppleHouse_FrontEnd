@@ -1,53 +1,46 @@
 import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Thêm import cho useNavigate
-import { callLogin } from "../../../config/api";
+import { callLogin, callLoginGG } from "../../../config/api";
 import SignUpDialog from "../../../component/Auth/SignUp";
-import FloatingInput from "../../../component/FloatingInput"
+import FloatingInput from "../../../component/FloatingInput";
+import { useDispatch } from "react-redux";
+import { setUserLoginInfo } from "../../../redux/slice/accountSlice";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSignUpDialogOpen, setSignUpDialogOpen] = useState(false);
   const navigate = useNavigate(); // Khai báo useNavigate
-
+  const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     e.preventDefault(); // Ngăn chặn hành vi mặc định của form
-
     try {
-      // Gọi hàm đăng nhập và chờ phản hồi
       const response = await callLogin(email, password);
 
-      // Kiểm tra xem phản hồi có thành công không
-      if (response && response.status === 200) {
-        // Kiểm tra mã trạng thái 200
-        console.log("Đăng nhập thành công:", response.message); // Log thông báo thành công
-        // Lưu thông tin người dùng và token vào localStorage hoặc state nếu cần
+      if (response.status === 200 && response.metadata) {
+        toast.success(response.message);
+        const user = response.metadata.user;
+        localStorage.setItem(
+          "access_token",
+          response.metadata.tokens.accessToken
+        );
+        localStorage.setItem("user_id", user._id);
 
-        // Ví dụ: localStorage.setItem("user", JSON.stringify(user)); // Lưu thông tin người dùng
-        // Ví dụ: localStorage.setItem("token", tokens.access); // Lưu token
+        dispatch(setUserLoginInfo(user));
 
-        // Nếu đăng nhập thành công, điều hướng đến trang chính
         navigate("/");
       } else {
-        // Nếu phản hồi không thành công (ví dụ: status khác 200)
-        console.error("Đăng nhập không thành công:", response);
-        alert("Tên đăng nhập hoặc mật khẩu không chính xác.");
+        toast.error(response.message);
       }
     } catch (error) {
-      // Kiểm tra lỗi từ Axios
-      if (error.response) {
-        // Nếu có phản hồi từ server
-        if (error.response.status === 401) {
-          alert("Tên đăng nhập hoặc mật khẩu không chính xác.");
-        } else {
-          alert("Có lỗi xảy ra: " + error.response.data.message);
-        }
-      } else {
-        // Nếu không có phản hồi từ server (chẳng hạn lỗi mạng)
-        console.error("Có lỗi xảy ra khi đăng nhập:", error);
-        alert("Có lỗi xảy ra. Vui lòng thử lại.");
-      }
+      // Bắt lỗi nếu có lỗi từ API hoặc kết nối mạng
+      toast.error("Đã xảy ra lỗi khi đăng nhập. Vui lòng thử lại sau.");
+      console.error("Login error:", error);
     }
+  };
+  const handleLoginGG = async () => {
+    window.location.href = "http://localhost:8000/api/v1/auth/google";
   };
 
   return (
@@ -145,8 +138,8 @@ const LoginPage = () => {
 
             <div className="mt-6 grid grid-cols-1 gap-3">
               <div>
-                <a
-                  href="#"
+                <button
+                  onClick={handleLoginGG}
                   className="w-full flex items-center justify-center py-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
                 >
                   <img
@@ -154,7 +147,7 @@ const LoginPage = () => {
                     src="https://www.svgrepo.com/show/303108/google-icon-logo.svg"
                     alt="Google"
                   />
-                </a>
+                </button>
               </div>
             </div>
           </div>

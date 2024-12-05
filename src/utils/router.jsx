@@ -1,10 +1,11 @@
 export const ROUTERS = {
-  GUEST: {
+  USER: {
     HOME: "",
     LOGIN: "/login",
     PRODUCTS: "/products", // Trang danh sách tất cả các sản phẩm
     PRODUCT_DETAIL: (productId = ":productId") => `/products/${productId}`, // Trang chi tiết sản phẩm
     CART: "/cart", // Giỏ hàng
+    PROFILE: "/profile",
     
     // Trang danh mục cho từng loại sản phẩm
     IPHONE: "/products/iphone", // Trang danh sách các sản phẩm iPhone
@@ -13,11 +14,6 @@ export const ROUTERS = {
     APPLE_WATCH: "/products/apple-watch", // Trang danh sách các sản phẩm Apple Watch
     AUDIO: "/products/audio", // Trang danh sách các sản phẩm Tai nghe và loa
     ACCESSORIES: "/products/accessories", // Trang danh sách các phụ kiện
-  },
-  USER: {
-    CART: "/cart", // Giỏ hàng
-    CHECKOUT: "/checkout", // Thanh toán
-    PROFILE: "/profile", // Trang hồ sơ người dùng
   },
   ADMIN: {
     DASHBOARD: "/admin/dashboard",

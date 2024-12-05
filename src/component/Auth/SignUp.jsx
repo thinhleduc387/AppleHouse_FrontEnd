@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { react, useState } from "react";
 import FloatingInput from "../FloatingInput";
 import { callSignUp } from "../../config/api";
 
@@ -6,35 +6,24 @@ const SignUpDialog = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Ngăn chặn hành vi mặc định của form (refresh trang)
-
+    e.preventDefault(); // Ngăn chặn hành vi mặc định của form
     try {
-      // Gọi hàm đăng ký và chờ phản hồi
       const response = await callSignUp(email);
 
-      // Kiểm tra xem phản hồi có thành công không
-      if (response && response.status === 200) {
-        console.log("Đăng ký thành công:", response.message); // Log thông báo thành công
-
-        // Nếu đăng ký thành công, có thể đóng modal
-        onClose();
+      if (response.status === 200 && response.metadata) {
+        console.log(response)
+        // toast.success(response.message);
+        // const user = response.metadata.user;
+        // localStorage.setItem(
+        //   "access_token",
+        //   response.metadata.tokens.accessToken
+        // );
+        // localStorage.setItem("user_id", user._id);
+        // dispatch(setUserLoginInfo(user));
+        // navigate("/");
       } else {
-        // Nếu phản hồi không thành công (ví dụ: status khác 200)
-        console.error("Đăng ký không thành công:", response);
-        alert("Đăng ký không thành công. Vui lòng thử lại.");
       }
-    } catch (error) {
-      // Kiểm tra lỗi từ Axios
-      if (error.response) {
-        // Nếu có phản hồi từ server
-        console.error("Có lỗi xảy ra khi đăng ký:", error);
-        alert("Có lỗi xảy ra. Vui lòng thử lại.");
-      } else {
-        // Nếu không có phản hồi từ server (chẳng hạn lỗi mạng)
-        console.error("Có lỗi xảy ra khi đăng ký:", error);
-        alert("Có lỗi xảy ra. Vui lòng thử lại.");
-      }
-    }
+    } catch (error) {}
   };
 
   if (!isOpen) return null;

@@ -1,6 +1,7 @@
 import { memo } from "react";
 import Header from "../../component/admin/header";
 import Sidebar from "../../component/admin/sideBar";
+import { Outlet } from "react-router-dom";
 
 const AdminLayout = ({ children }) => {
   return (
@@ -21,7 +22,7 @@ const AdminLayout = ({ children }) => {
 
         {/* ===== Main Content Start ===== */}
         <main className="p-4 md:p-6 2xl:p-10">
-        {children}
+          <Outlet />
         </main>
         {/* ===== Main Content End ===== */}
       </div>
