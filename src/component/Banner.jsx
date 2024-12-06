@@ -2,12 +2,16 @@ import { useState, useEffect } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import các icon
 import image1 from "../image/ip16-icon-sec1-mb-120924.png";
 import image2 from "../image/9.jpg";
+import useWindowSize from "../utils/useWindowSize";
 
 const Banner = () => {
   // Danh sách hình ảnh
-  const images = [image1, image2, image1, image2, image1];
+  const images = [
+    "https://cdn2.fptshop.com.vn/unsafe/750x0/filters:quality(100)/desk_header_c7ad8b92b8.png",
+    "https://cdn2.fptshop.com.vn/unsafe/2000x0/filters:quality(100)/desk_header_c7ad8b92b8.png",
+  ];
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const { height, width } = useWindowSize();
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
@@ -24,14 +28,21 @@ const Banner = () => {
   }, [currentIndex]); // Chỉ cần một lần chạy khi component mount
 
   return (
-    <div id="default-carousel" className="relative w-full h-auto">
+    <div
+      id="default-carousel"
+      className="relative px-10 w-full h-auto bg-[url('')]"
+    >
+      <img
+        src={`https://cdn2.fptshop.com.vn/unsafe/${width}x0/filters:quality(100)/mb_header_bg_44415b50e9.png`}
+        className="absolute w-full h-auto top-0 left-0 right-0"
+      ></img>
       {/* Carousel wrapper */}
       <div className="relative h-56 overflow-hidden rounded-lg lg:h-96">
         {/* Hình ảnh */}
         {images.map((image, index) => (
           <div
             key={index}
-            className={`absolute w-full h-full transition-transform duration-700 ease-in-out 
+            className={`absolute w-full h-full transition-transform duration-700 ease-in-out  
             ${
               index === currentIndex
                 ? "translate-x-0"

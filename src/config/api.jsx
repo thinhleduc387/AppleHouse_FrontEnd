@@ -25,8 +25,15 @@ export const getAllCategory = async () => {
 };
 
 /*Product*/
-export const getAllProduct = async (categoryId) => {
-  return axios.post("/product/publish/all", {
-    categoryId,
+export const getAllProductByCategory = async (categorySlug) => {
+  return axios.post("/product/published/all", {
+    categorySlug,
+  });
+};
+export const getProduct = async (spu_id) => {
+  return axios.get("/product/spu", {
+    params: {
+      spu_id,
+    },
   });
 };

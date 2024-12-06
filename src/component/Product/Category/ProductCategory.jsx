@@ -23,7 +23,7 @@ const ProductCategory = () => {
           id: category._id, // Hoặc _id, tùy theo cấu trúc của response
           name: category.category_name,
           imageSrc: category.category_img, // Hoặc thuộc tính hình ảnh phù hợp
-          link: `/products/${category.category_slug}`, // Giả sử slug là một thuộc tính trong API
+          link: `/${category.category_slug}`, // Giả sử slug là một thuộc tính trong API
         }));
 
         setCategoryList(categories); // Cập nhật state categoryList
@@ -34,7 +34,7 @@ const ProductCategory = () => {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-4 lg:grid-cols-6">
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-8 lg:flex lg:justify-around lg:gap-0">
       {/* Render danh sách các CategorySection */}
       {categoryList.map((category) => (
         <Link key={category.id} to={category.link}>

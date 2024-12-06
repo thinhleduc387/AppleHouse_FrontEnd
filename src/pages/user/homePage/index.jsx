@@ -18,7 +18,7 @@ const HomePage = () => {
   return (
     <div className="space-y-8">
       {/* Banner */}
-      <div className="overflow-hidden">
+      <div className="">
         <Banner />
       </div>
 
@@ -26,15 +26,30 @@ const HomePage = () => {
       <div>
         <ProductCategory />
       </div>
-
-      {/* DiscountProduct */}
       <div>
+        <ProductCategory />
+      </div>
+      <div>
+        <ProductCategory />
+      </div>
+      <div>
+        <ProductCategory />
+      </div>
+      <div>
+        <ProductCategory />
+      </div>
+      <div>
+        <ProductCategory />
+      </div>
+      
+
+      {/* <div>
         <DiscountProduct />
       </div>
 
-      {/* ProductSection */}
+
       <div>
-        <ProductSection title={"Điện thoại xịn - Công nghệ hàng đầu"} />
+        <ProductSection  title={"Điện thoại xịn - Công nghệ hàng đầu"} />
       </div>
       <div>
         <ProductSection title={"Macbook ngon - Hiệu suất vượt trội"} />
@@ -47,7 +62,7 @@ const HomePage = () => {
       </div>
       <div>
         <ProductSection title={"Tai nghe cao cấp - Âm thanh chất lượng"} />
-      </div>
+      </div> */}
     </div>
   );
 };

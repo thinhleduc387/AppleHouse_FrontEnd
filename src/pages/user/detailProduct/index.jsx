@@ -1,14 +1,18 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import ProductPrice from "../../../component/Product/ProductPrice"; // Import PromotionComponent
 import OptionsCard from "../../../component/Product/OptionsCard"; // Import OptionsCard
 import ProductInfo from "../../../component/Product/ProductInfo";
 import RatingStat from "../../../component/Product/Feedback/RatingStat";
 import CommentSection from "../../../component/Product/Feedback/CommentSection";
+import { getProduct } from "../../../config/api";
 
-const DetailProduct = ({ productId }) => {
+const DetailProduct = () => {
   const [selectedCapacity, setSelectedCapacity] = useState("256 GB");
   const [selectedColor, setSelectedColor] = useState("256 GB");
 
+  const [product, setProduct] = useState(null);
+  
   const price = 28590000; // Giá gốc
   const discountPrice = 28990000; // Giá giảm
   const points = 7147; // Điểm thường
@@ -28,6 +32,15 @@ const DetailProduct = ({ productId }) => {
       ratingStatRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+  const { productId } = useParams();
+  const handleGetProduct = async () => {
+    const response = await getProduct(productId);
+    console.log("🚀 ~ handleGetProduct ~ response:", response);
+    console.log("🚀 ~ handleGetProduct ~ productId:", productId);
+  };
+  useEffect(() => {
+    handleGetProduct();
+  }, []);
 
   return (
     <div className="font-sans ">

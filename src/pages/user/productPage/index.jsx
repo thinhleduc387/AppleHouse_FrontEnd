@@ -3,18 +3,41 @@ import { useParams } from "react-router-dom"; // Import useParams
 import FilterSidebar from "../../../component/Product/FilterSidebar";
 import ProductItem from "../../../component/Product/ProductItem";
 import { AiOutlineSortAscending, AiOutlineRight } from "react-icons/ai";
+import { getAllProductByCategory } from "../../../config/api";
 
 const ProductPage = () => {
-  const { categoryType } = useParams(); // Lấy loại sản phẩm từ URL
+  const { categorySlug } = useParams(); // Lấy loại sản phẩm từ URL
 
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(50000000);
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
+  const [productList, setProductList] = useState([]);
+  console.log("🚀 ~ ProductPage ~ productList:", productList);
+
+  const handleGetListProduct = async () => {
+    const response = await getAllProductByCategory(categorySlug);
+
+    if (response && response.status === 200) {
+      console.log(response.metadata);
+      const products = response.metadata.map((product) => ({
+        id: product._id, // Hoặc _id, tùy theo cấu trúc của response
+        name: product?.product_name,
+        imageSrc: product?.product_thumb,
+        productPrice: product?.product_price, // Hoặc thuộc tính hình ảnh phù hợp
+        link: `/products/${product?.product_slug}`, // Giả sử slug là một thuộc tính trong API
+      }));
+
+      setProductList(products); // Cập nhật state categoryList
+    }
+  };
+  useEffect(() => {
+    handleGetListProduct();
+  }, []);
 
   const toggleSortDropdown = () => {
     setIsSortDropdownOpen((prev) => !prev);
   };
-  console.log(categoryType);
+  console.log(categorySlug);
   return (
     <section className="bg-[#f3f4f6] py-8 antialiased md:py-12">
       <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
@@ -30,7 +53,7 @@ const ProductPage = () => {
             {/* Sort Button */}
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">
-                {categoryType}
+                {categorySlug}
               </h3>
               <div className="relative">
                 <button
@@ -69,12 +92,9 @@ const ProductPage = () => {
             {/* Product List */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-2">
               {/* Hiển thị các sản phẩm dựa trên loại */}
-              <ProductItem />
-              <ProductItem />
-              <ProductItem />
-              <ProductItem />
-              <ProductItem />
-              <ProductItem />
+              {productList.map((product) => (
+                <ProductItem product={product} isEdit={false} />
+              ))}
             </div>
           </div>
         </div>

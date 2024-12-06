@@ -7,6 +7,7 @@ import { IoCartOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { AiOutlineUser } from "react-icons/ai";
+import { PiBellSimpleRinging } from "react-icons/pi";
 import ProfileNavBar from "../../Profile/ProfileNav";
 import DropdownMenu from "./component/DropdownMenu";
 import { Link } from "react-router-dom";
@@ -86,6 +87,11 @@ const Header = () => {
               <Link href="/cart">
                 <IoCartOutline />
               </Link>
+            </li>
+            <li className="font-extrabold text-2xl my-7 lg:my-0">
+              <a href="/favorites">
+                <PiBellSimpleRinging />
+              </a>
             </li>
             {/* Profile Section with Dropdown */}
             <li className="my-7 lg:my-0 ">

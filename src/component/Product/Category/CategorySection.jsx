@@ -1,4 +1,4 @@
-const CategorySection = ({ categoryName, imageSrc }) => {
+const CategorySection = ({ categoryName, imageSrc}) => {
   return (
     <div className="border border-gray-300 pb-5 rounded-2xl drop-shadow-lg bg-white relative overflow-hidden">
       {/* Phần chứa tiêu đề (categoryName) */}
@@ -9,7 +9,9 @@ const CategorySection = ({ categoryName, imageSrc }) => {
       </div>
 
       {/* Phần chứa hình ảnh */}
-      <div className="flex justify-center mt-8 sm:mt-10 px-6"> {/* Điều chỉnh margin-top ở đây */}
+      <div className="flex justify-center mt-8 sm:mt-10 px-6">
+        {" "}
+        {/* Điều chỉnh margin-top ở đây */}
         <img
           className="max-w-[144px] w-auto h-auto object-cover" // Giới hạn chiều rộng tối đa là 144px
           src={imageSrc}

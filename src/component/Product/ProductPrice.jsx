@@ -31,21 +31,6 @@ const ProductPrice = ({
                 <span className="text-sm text-red-600 ml-2">-7%</span>
               </div>
             </div>
-            {/* "Hoặc" Text */}
-            <span className="ml-14 self-center">Hoặc</span>
-            {/* Installment Section */}
-            <div className="flex flex-col">
-              <span className="text-sm text-gray-600">Trả góp</span>
-              <div className="flex items-center">
-                <span className="text-xl font-bold text-gray-800">
-                  {installment.toLocaleString("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  })}
-                  /tháng
-                </span>
-              </div>
-            </div>
           </div>
           <div className="flex items-center justify-start mt-2 bg-[#fffbe5] rounded-full px-3 py-2 w-max">
             <FaBitcoin />

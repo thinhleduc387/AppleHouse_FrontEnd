@@ -9,7 +9,17 @@ import { FaTruck, FaTag } from "react-icons/fa";
 import { useState } from "react";
 import { ROUTERS } from "../../utils/router"; // Đảm bảo đường dẫn đúng
 
-const ProductItem = ({ productId, isEdit }) => {
+const ProductItem = ({ product, isEdit }) => {
+  console.log("🚀 ~ ProductItem ~ product:", product);
+  const { id, imageSrc, link, name, productPrice } = product;
+  console.log(
+    "🚀 ~ ProductItem ~ id, imageSrc, link, name, productPrice:",
+    id,
+    imageSrc,
+    link,
+    name,
+    productPrice
+  );
   const [showTooltipFavorites, setShowTooltipFavorites] = useState(false);
   const [showTooltipQuickLook, setShowTooltipQuickLook] = useState(false);
 
@@ -19,21 +29,20 @@ const ProductItem = ({ productId, isEdit }) => {
       e.preventDefault(); // Ngừng hành động bấm link
     }
   };
-
+  const calculateDiscount = () => {
+    return productPrice.priceAfterDiscount/productPrice.orignalPrice *100;
+  };
+  console.log("🚀 ~ calculateDiscount ~ calculateDiscount:", calculateDiscount)
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm relative flex flex-col">
       <div className="h-56 w-full">
         {/* Sử dụng thẻ <a> với href để điều hướng, thêm điều kiện không cho bấm link khi isEdit */}
         <a
-          href={ROUTERS.USER.PRODUCT_DETAIL(productId)}
+          href={ROUTERS.USER.PRODUCT_DETAIL(id)}
           onClick={handleLinkClick} // Ngăn việc bấm link khi ở trạng thái chỉnh sửa
           className={isEdit ? "cursor-default" : ""}
         >
-          <img
-            className="mx-auto h-full"
-            src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/iphone-light.svg"
-            alt=""
-          />
+          <img className="mx-auto h-full" src={imageSrc} alt="" />
         </a>
       </div>
       <div className="pt-6 flex-grow">
@@ -75,11 +84,13 @@ const ProductItem = ({ productId, isEdit }) => {
 
         {/* Sử dụng thẻ <a> với href để điều hướng, thêm điều kiện không cho bấm link khi isEdit */}
         <a
-          href={ROUTERS.USER.PRODUCT_DETAIL(productId)}
+          href={link}
           onClick={handleLinkClick} // Ngăn việc bấm link khi ở trạng thái chỉnh sửa
-          className={`text-lg font-semibold leading-tight text-gray-900  ${isEdit ? "cursor-default h" : "hover:underline"}`}
+          className={`text-lg font-semibold leading-tight text-gray-900  ${
+            isEdit ? "cursor-default h" : "hover:underline"
+          }`}
         >
-          Apple iMac 27, 1TB HDD, Retina 5K Display, M3 Max
+          {name}
         </a>
 
         <div className="mt-2 flex items-center gap-2">
@@ -108,12 +119,12 @@ const ProductItem = ({ productId, isEdit }) => {
         {!isEdit && (
           <div className="mt-4 mb-5">
             <p className="text-sm text-slate-900">
-              <span className="line-through">35.000.000</span>{" "}
+              <span className="line-through">{productPrice.orignalPrice}</span>{" "}
               <span className="font-light underline">đ</span>{" "}
-              <span className="text-red-600">-44%</span>
+              <span className="text-red-600">-{calculateDiscount()}%</span>
             </p>
             <p className="text-2xl font-bold text-slate-900">
-              33.999.000{" "}
+              {productPrice.priceAfterDiscount}
               <span className="text-xl font-bold text-slate-900 underline">
                 đ
               </span>
@@ -143,6 +154,7 @@ const ProductItem = ({ productId, isEdit }) => {
       </div>
     </div>
   );
+  console.log("🚀 ~ ProductItem ~ name:", name);
 };
 
 export default ProductItem;
