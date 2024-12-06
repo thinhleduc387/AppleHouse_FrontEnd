@@ -7,7 +7,7 @@ const MasterLayout = ({...props }) => {
   return (
     <>
       <div
-        className="flex flex-col min-h-screen mx-6 md:mx-12 lg:mx-28"
+        className="flex flex-col min-h-screen"
         {...props}
       >
         <Header/>

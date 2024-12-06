@@ -26,7 +26,7 @@ const LoginPage = () => {
           response.metadata.tokens.accessToken
         );
         localStorage.setItem("user_id", user._id);
-
+        
         dispatch(setUserLoginInfo(user));
 
         navigate("/");

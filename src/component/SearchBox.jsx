@@ -10,7 +10,7 @@ const Search = ({ className }) => {
   };
 
   return (
-    <form className={`flex items-center w-full ${className}`} onSubmit={handleSearch}>
+    <form className={`flex-1 items-center ${className}`} onSubmit={handleSearch}>
       <div className="relative w-full">
         <FaSearch className="absolute left-3 top-2.5 text-gray-500" /> {/* Biểu tượng tìm kiếm */}
         <input

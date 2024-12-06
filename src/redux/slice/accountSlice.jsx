@@ -5,7 +5,6 @@ export const fetchAccount = createAsyncThunk(
   "account/fetchAccount",
   async () => {
     const response = await callAccount();
-    console.log("🚀 ~ response.metadata:", response.metadata);
     return response.metadata;
   }
 );
@@ -36,9 +35,10 @@ const accountSlice = createSlice({
       state.user.name = action.payload.usr_name;
       state.user.role = action?.payload?.usr_role;
       state.user.avatar = action?.payload?.usr_avatar;
+      console.log("🚀 ~ state:", state);
     },
     setLogoutAction: (state, action) => {
-      localStorage.removeItem("access_token");
+      localStorage.clear();
       state.isAuthenticated = false;
       state.user = {
         _id: "",
@@ -65,7 +65,6 @@ const accountSlice = createSlice({
     });
 
     builder.addCase(fetchAccount.fulfilled, (state, action) => {
-      console.log("🚀 ~ builder.addCase ~ action:", action);
       if (action.payload) {
         state.isAuthenticated = true;
         state.isLoading = false;

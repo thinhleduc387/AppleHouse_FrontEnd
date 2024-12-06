@@ -67,7 +67,7 @@ const DropdownMenu = () => {
       </button>
       {dropdownOpen && (
         <div
-          className="bg-white text-base z-[45] list-none rounded-l-lg custom-shadow-left w-44 absolute right-0"
+          className="bg-white text-base z-[45] list-none rounded-l-lg custom-shadow-left w-44 absolute right-0 mt-1"
           style={{ height: getMenuHeight() }}
         >
           <ul className="py-1">

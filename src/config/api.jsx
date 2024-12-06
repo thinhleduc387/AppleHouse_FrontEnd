@@ -19,6 +19,14 @@ export const callAccount = async () => {
   return axios.get("/auth/account");
 };
 
+/*Category*/
 export const getAllCategory = async () => {
   return axios.get("/category/all");
+};
+
+/*Product*/
+export const getAllProduct = async (categoryId) => {
+  return axios.post("/product/publish/all", {
+    categoryId,
+  });
 };
