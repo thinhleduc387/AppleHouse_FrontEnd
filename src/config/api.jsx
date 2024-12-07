@@ -37,3 +37,19 @@ export const getProduct = async (spu_id) => {
     },
   });
 };
+
+export const searchProduct = async (textSearch) => {
+  return axios.get("/full-text-search", {
+    params: {
+      textSearch,
+    },
+  });
+};
+
+export const suggestionSearchProduct = async (textSearch) => {
+  return axios.get("/full-text-search/autocomplete", {
+    params: {
+      textSearch,
+    },
+  });
+};

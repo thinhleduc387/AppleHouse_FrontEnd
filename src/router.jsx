@@ -23,6 +23,7 @@ import OrderListPage from "./pages/admin/orderListPage";
 import ProductPageAdmin from "./pages/admin/productPage";
 
 import { ROUTERS } from "./utils/router";
+import SearchPage from "./pages/user/searchPage";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -37,7 +38,14 @@ const RouterCustom = () => {
         <Route path="/" element={<MasterLayout />}>
           <Route path={ROUTERS.USER.HOME} element={<HomePage />} />
           <Route path={ROUTERS.USER.LOGIN} element={<LoginPage />} />
-          <Route path={ROUTERS.USER.HOME+ "/:categorySlug"} element={<ProductPage />} />
+          <Route
+            path={ROUTERS.USER.HOME + "/tim-kiem"}
+            element={<SearchPage />}
+          />
+          <Route
+            path={ROUTERS.USER.HOME + "/:categorySlug"}
+            element={<ProductPage />}
+          />
           <Route path={ROUTERS.USER.CART} element={<CartPage />} />
           <Route path={ROUTERS.USER.PROFILE} element={<ProfilePage />} />
           <Route
