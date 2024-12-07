@@ -22,13 +22,18 @@ import DashBoard from "./pages/admin/dashBoard";
 import OrderListPage from "./pages/admin/orderListPage";
 import ProductPageAdmin from "./pages/admin/productPage";
 
+import OrderHistory from "./component/Profile/OrderList";  // Thêm trang OrderHistory
+
 import { ROUTERS } from "./utils/router";
+import Info from "./component/Profile/Info";
+import Favorites from "./component/Profile/Favorites";
+import Address from "./component/Profile/Address";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchAccount());
-  }, [dispatch]); // Add dependency to only run once
+  }, [dispatch]);
 
   return (
     <>
@@ -37,41 +42,41 @@ const RouterCustom = () => {
         <Route path="/" element={<MasterLayout />}>
           <Route path={ROUTERS.USER.HOME} element={<HomePage />} />
           <Route path={ROUTERS.USER.LOGIN} element={<LoginPage />} />
-          <Route path={ROUTERS.USER.HOME+ "/:categorySlug"} element={<ProductPage />} />
+          <Route path={ROUTERS.USER.HOME + "/:categorySlug"} element={<ProductPage />} />
           <Route path={ROUTERS.USER.CART} element={<CartPage />} />
-          <Route path={ROUTERS.USER.PROFILE} element={<ProfilePage />} />
-          <Route
-            path={ROUTERS.USER.PRODUCT_DETAIL(":productId")}
-            element={<DetailProduct />}
-          />
+          
+          {/* Profile Routes */}
+          <Route path={ROUTERS.USER.PROFILE} element={<ProfilePage />}>
+            <Route index element={<Info />} />  {/* Mặc định là trang thông tin */}
+            <Route path="" element={<Info />} />  {/* Trang Thông tin người dùng */}
+            <Route path={ROUTERS.USER.ORDER_LIST} element={<OrderHistory />} />  {/* Trang Lịch sử đơn hàng */}
+            <Route path={ROUTERS.USER.FAVORITES} element={<Favorites />} />
+            <Route path={ROUTERS.USER.ADDRESS} element={<Address />} />
+          </Route>
+
+          <Route path={ROUTERS.USER.PRODUCT_DETAIL(":productId")} element={<DetailProduct />} />
         </Route>
 
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route path={ROUTERS.ADMIN.DASHBOARD} element={<DashBoard />} />
-          <Route
-            path={ROUTERS.ADMIN.MANAGE_PRODUCTS}
-            element={<ProductPageAdmin />}
-          />
+          <Route path={ROUTERS.ADMIN.MANAGE_PRODUCTS} element={<ProductPageAdmin />} />
           <Route path={ROUTERS.ADMIN.ORDER} element={<OrderListPage />} />
-          <Route
-            path={ROUTERS.ADMIN.MANAGE_PRODUCTS + "/:productType"}
-            element={<ProductPageAdmin />}
-          />
+          <Route path={ROUTERS.ADMIN.MANAGE_PRODUCTS + "/:productType"} element={<ProductPageAdmin />} />
         </Route>
 
         {/* Catch-all for undefined routes */}
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
       <ToastContainer
-        position="top-right" // Vị trí toàn cục cho tất cả thông báo
-        autoClose={1000} // Thời gian đóng tự động mặc định
-        hideProgressBar={false} // Hiển thị thanh tiến trình
-        newestOnTop={false} // Để các thông báo mới ở dưới
-        closeButton={true} // Hiển thị nút đóng
-        pauseOnHover={true} // Dừng khi hover
-        draggable={true} // Cho phép kéo
-        rtl={false} // Tắt hiển thị RTL
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeButton={true}
+        pauseOnHover={true}
+        draggable={true}
+        rtl={false}
       />
     </>
   );

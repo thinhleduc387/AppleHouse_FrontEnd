@@ -6,6 +6,9 @@ export const ROUTERS = {
     PRODUCT_DETAIL: (productId = ":productId") => `/products/${productId}`, // Trang chi tiết sản phẩm
     CART: "/cart", // Giỏ hàng
     PROFILE: "/profile",
+    ORDER_LIST: "/profile/order-list",
+    FAVORITES: "/profile/favorites",
+    ADDRESS: "/profile/address",
   },
   ADMIN: {
     DASHBOARD: "/admin/dashboard",

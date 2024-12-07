@@ -35,7 +35,6 @@ const accountSlice = createSlice({
       state.user.name = action.payload.usr_name;
       state.user.role = action?.payload?.usr_role;
       state.user.avatar = action?.payload?.usr_avatar;
-      console.log("🚀 ~ state:", state);
     },
     setLogoutAction: (state, action) => {
       localStorage.clear();

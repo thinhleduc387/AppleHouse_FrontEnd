@@ -1,19 +1,19 @@
 import { useRef, useState } from "react";
-import { callLogout } from "../../../config/api";
-import { Link, Navigate } from "react-router-dom";
+import { callLogout } from "../../config/api";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 import { AiOutlineUser } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { setLogoutAction } from "../../../redux/slice/accountSlice";
+import { setLogoutAction } from "../../redux/slice/accountSlice";
 
 const ProfileNavBar = ({ userAvatar, userName }) => {
   const isAuthenticated = useSelector((state) => {
     return state.account.isAuthenticated;
   });
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  1;
 
   const dropdownRef = useRef(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Khai báo useNavigate
 
   const handleMouseEnter = () => {
     setDropdownOpen(true);
@@ -29,8 +29,7 @@ const ProfileNavBar = ({ userAvatar, userName }) => {
 
       if (response.status === 200 && response.metadata) {
         dispatch(setLogoutAction());
-        setIsAuthenticated(!isAuthenticated);
-        console.log(response)
+        navigate("/"); // Điều hướng về trang chủ sau khi đăng xuất
       } else {
         // Hiển thị lỗi nếu đăng xuất không thành công
         toast.error(response.message);

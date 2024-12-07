@@ -1,14 +1,12 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Bars3BottomRightIcon } from "@heroicons/react/24/solid";
 import SideBar from "./component/SideBar";
 import Search from "../../SearchBox";
 import { AiOutlineHeart } from "react-icons/ai";
 import { IoCartOutline } from "react-icons/io5";
-import { useDispatch, useSelector } from "react-redux";
-import { IoIosArrowDropdown } from "react-icons/io";
-import { AiOutlineUser } from "react-icons/ai";
+import {  useSelector } from "react-redux";
 import { PiBellSimpleRinging } from "react-icons/pi";
-import ProfileNavBar from "../../Profile/ProfileNav";
+import ProfileNavBar from "../../../component/ProfileNav";
 import DropdownMenu from "./component/DropdownMenu";
 import { Link } from "react-router-dom";
 
