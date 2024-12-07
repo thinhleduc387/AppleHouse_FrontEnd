@@ -1,24 +1,27 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom"; // Import useParams
+import { useLocation } from "react-router-dom"; // Import useParams
 import FilterSidebar from "../../../component/Product/FilterSidebar";
 import ProductItem from "../../../component/Product/ProductItem";
 import { AiOutlineSortAscending, AiOutlineRight } from "react-icons/ai";
-import { getAllProductByCategory } from "../../../config/api";
+import { getAllProductByCategory, searchProduct } from "../../../config/api";
 
-const ProductPage = () => {
-  const { categorySlug } = useParams(); // Lấy loại sản phẩm từ URL
-
+const SearchPage = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const searchTerm = queryParams.get("s");
+  const [numberResult, setNumberResult] = useState(0);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(50000000);
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
   const [productList, setProductList] = useState([]);
 
-  const handleGetListProduct = async () => {
-    const response = await getAllProductByCategory(categorySlug);
-
+  const handleGetListSearchProduct = async () => {
+    const response = await searchProduct(searchTerm);
     if (response && response.status === 200) {
-      console.log(response.metadata);
-      const products = response.metadata.map((product) => ({
+      console.log("🚀 ~ handleGetListSearchProduct ~ response:", response);
+
+      setNumberResult(response.metadata.totalResult);
+      const products = response.metadata.products.map((product) => ({
         id: product._id, // Hoặc _id, tùy theo cấu trúc của response
         name: product?.product_name,
         imageSrc: product?.product_thumb,
@@ -30,17 +33,15 @@ const ProductPage = () => {
     }
   };
   useEffect(() => {
-    handleGetListProduct();
-  }, []);
+    handleGetListSearchProduct();
+  }, [searchTerm]);
 
   const toggleSortDropdown = () => {
     setIsSortDropdownOpen((prev) => !prev);
   };
-  console.log(categorySlug);
   return (
     <section className="bg-[#f3f4f6] py-8 antialiased md:py-12">
       <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
-        {/* Main Content: Filters + Product List */}
         <div className="flex gap-6">
           <FilterSidebar
             minPrice={minPrice}
@@ -49,10 +50,10 @@ const ProductPage = () => {
             setMaxPrice={setMaxPrice}
           />
           <div className="flex-1">
-            {/* Sort Button */}
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">
-                {categorySlug}
+                Tìm thấy <strong>{numberResult}</strong> kết quả với từ khoá{" "}
+                <strong>{searchTerm}</strong>
               </h3>
               <div className="relative">
                 <button
@@ -102,4 +103,4 @@ const ProductPage = () => {
   );
 };
 
-export default ProductPage;
+export default SearchPage;

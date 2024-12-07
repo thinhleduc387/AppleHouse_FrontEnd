@@ -8,18 +8,12 @@ import {
 import { FaTruck, FaTag } from "react-icons/fa";
 import { useState } from "react";
 import { ROUTERS } from "../../utils/router"; // Đảm bảo đường dẫn đúng
+import { formatVND } from "../../utils";
+import { Link } from "react-router-dom";
 
 const ProductItem = ({ product, isEdit }) => {
-  console.log("🚀 ~ ProductItem ~ product:", product);
   const { id, imageSrc, link, name, productPrice } = product;
-  console.log(
-    "🚀 ~ ProductItem ~ id, imageSrc, link, name, productPrice:",
-    id,
-    imageSrc,
-    link,
-    name,
-    productPrice
-  );
+
   const [showTooltipFavorites, setShowTooltipFavorites] = useState(false);
   const [showTooltipQuickLook, setShowTooltipQuickLook] = useState(false);
 
@@ -30,9 +24,10 @@ const ProductItem = ({ product, isEdit }) => {
     }
   };
   const calculateDiscount = () => {
-    return productPrice.priceAfterDiscount/productPrice.orignalPrice *100;
+    const { priceAfterDiscount, orignalPrice } = productPrice;
+    const discount = ((orignalPrice - priceAfterDiscount) / orignalPrice) * 100;
+    return Math.round(discount * 100) / 100;
   };
-  console.log("🚀 ~ calculateDiscount ~ calculateDiscount:", calculateDiscount)
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm relative flex flex-col">
       <div className="h-56 w-full">
@@ -83,15 +78,14 @@ const ProductItem = ({ product, isEdit }) => {
         </div>
 
         {/* Sử dụng thẻ <a> với href để điều hướng, thêm điều kiện không cho bấm link khi isEdit */}
-        <a
-          href={link}
-          onClick={handleLinkClick} // Ngăn việc bấm link khi ở trạng thái chỉnh sửa
-          className={`text-lg font-semibold leading-tight text-gray-900  ${
-            isEdit ? "cursor-default h" : "hover:underline"
+        <Link
+          to={link}
+          className={`text-lg font-semibold leading-tight text-gray-900 ${
+            isEdit ? "cursor-default" : "hover:underline"
           }`}
         >
           {name}
-        </a>
+        </Link>
 
         <div className="mt-2 flex items-center gap-2">
           {/* Star Rating */}
@@ -116,18 +110,27 @@ const ProductItem = ({ product, isEdit }) => {
         </ul>
 
         {/* Điều kiện để hiển thị giá và nút "Add to cart" hay nút "Edit" */}
-        {!isEdit && (
+        {!isEdit &&
+        productPrice.orignalPrice !== productPrice.priceAfterDiscount ? (
           <div className="mt-4 mb-5">
             <p className="text-sm text-slate-900">
-              <span className="line-through">{productPrice.orignalPrice}</span>{" "}
+              <span className="line-through">
+                {formatVND(productPrice.orignalPrice)}
+              </span>
               <span className="font-light underline">đ</span>{" "}
               <span className="text-red-600">-{calculateDiscount()}%</span>
             </p>
             <p className="text-2xl font-bold text-slate-900">
-              {productPrice.priceAfterDiscount}
-              <span className="text-xl font-bold text-slate-900 underline">
-                đ
-              </span>
+              {formatVND(productPrice.priceAfterDiscount)}
+              <span className="text-xl font-bold text-slate-900 underline"></span>
+            </p>
+          </div>
+        ) : (
+          <div className="mt-9 mb-5">
+            <p className="text-sm text-slate-900"></p>
+            <p className="text-2xl font-bold text-slate-900">
+              {formatVND(productPrice.priceAfterDiscount)}
+              <span className="text-xl font-bold text-slate-900 underline"></span>
             </p>
           </div>
         )}

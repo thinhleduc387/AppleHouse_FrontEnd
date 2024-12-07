@@ -22,32 +22,13 @@ const HomePage = () => {
         <Banner />
       </div>
 
-      {/* ProductCategory */}
       <div>
         <ProductCategory />
       </div>
-      <div>
-        <ProductCategory />
-      </div>
-      <div>
-        <ProductCategory />
-      </div>
-      <div>
-        <ProductCategory />
-      </div>
-      <div>
-        <ProductCategory />
-      </div>
-      <div>
-        <ProductCategory />
-      </div>
-      
 
       {/* <div>
         <DiscountProduct />
       </div>
-
-
       <div>
         <ProductSection  title={"Điện thoại xịn - Công nghệ hàng đầu"} />
       </div>

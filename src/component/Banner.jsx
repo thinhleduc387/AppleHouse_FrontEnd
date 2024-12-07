@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import các icon
-import image1 from "../image/ip16-icon-sec1-mb-120924.png";
-import image2 from "../image/9.jpg";
 import useWindowSize from "../utils/useWindowSize";
 
 const Banner = () => {

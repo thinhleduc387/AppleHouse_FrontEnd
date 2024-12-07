@@ -22,12 +22,13 @@ import DashBoard from "./pages/admin/dashBoard";
 import OrderListPage from "./pages/admin/orderListPage";
 import ProductPageAdmin from "./pages/admin/productPage";
 
-import OrderHistory from "./component/Profile/OrderList";  // Thêm trang OrderHistory
+import OrderHistory from "./component/Profile/OrderList"; // Thêm trang OrderHistory
 
 import { ROUTERS } from "./utils/router";
 import Info from "./component/Profile/Info";
 import Favorites from "./component/Profile/Favorites";
 import Address from "./component/Profile/Address";
+import SearchPage from "./pages/user/searchPage";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -42,27 +43,49 @@ const RouterCustom = () => {
         <Route path="/" element={<MasterLayout />}>
           <Route path={ROUTERS.USER.HOME} element={<HomePage />} />
           <Route path={ROUTERS.USER.LOGIN} element={<LoginPage />} />
-          <Route path={ROUTERS.USER.HOME + "/:categorySlug"} element={<ProductPage />} />
+          <Route
+            path={ROUTERS.USER.HOME + "/:categorySlug"}
+            element={<ProductPage />}
+          />
+          <Route
+            path={ROUTERS.USER.HOME + "/tim-kiem"}
+            element={<SearchPage />}
+          />
           <Route path={ROUTERS.USER.CART} element={<CartPage />} />
-          
+
           {/* Profile Routes */}
           <Route path={ROUTERS.USER.PROFILE} element={<ProfilePage />}>
-            <Route index element={<Info />} />  {/* Mặc định là trang thông tin */}
-            <Route path="" element={<Info />} />  {/* Trang Thông tin người dùng */}
-            <Route path={ROUTERS.USER.ORDER_LIST} element={<OrderHistory />} />  {/* Trang Lịch sử đơn hàng */}
+            <Route index element={<Info />} />{" "}
+            {/* Mặc định là trang thông tin */}
+            <Route path="" element={<Info />} />{" "}
+            {/* Trang Thông tin người dùng */}
+            <Route
+              path={ROUTERS.USER.ORDER_LIST}
+              element={<OrderHistory />}
+            />{" "}
+            {/* Trang Lịch sử đơn hàng */}
             <Route path={ROUTERS.USER.FAVORITES} element={<Favorites />} />
             <Route path={ROUTERS.USER.ADDRESS} element={<Address />} />
           </Route>
 
-          <Route path={ROUTERS.USER.PRODUCT_DETAIL(":productId")} element={<DetailProduct />} />
+          <Route
+            path={ROUTERS.USER.PRODUCT_DETAIL(":productId")}
+            element={<DetailProduct />}
+          />
         </Route>
 
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route path={ROUTERS.ADMIN.DASHBOARD} element={<DashBoard />} />
-          <Route path={ROUTERS.ADMIN.MANAGE_PRODUCTS} element={<ProductPageAdmin />} />
+          <Route
+            path={ROUTERS.ADMIN.MANAGE_PRODUCTS}
+            element={<ProductPageAdmin />}
+          />
           <Route path={ROUTERS.ADMIN.ORDER} element={<OrderListPage />} />
-          <Route path={ROUTERS.ADMIN.MANAGE_PRODUCTS + "/:productType"} element={<ProductPageAdmin />} />
+          <Route
+            path={ROUTERS.ADMIN.MANAGE_PRODUCTS + "/:productType"}
+            element={<ProductPageAdmin />}
+          />
         </Route>
 
         {/* Catch-all for undefined routes */}
