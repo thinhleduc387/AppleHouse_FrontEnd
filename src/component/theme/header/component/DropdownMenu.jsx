@@ -42,7 +42,7 @@ const DropdownMenu = () => {
         const categories = response.metadata.map((category) => ({
           id: category._id, // Hoặc _id, tùy theo cấu trúc của response
           name: category.category_name,
-          link: `/products/${category.category_slug}`, // Giả sử slug là một thuộc tính trong API
+          link: `/${category.category_slug}`, // Giả sử slug là một thuộc tính trong API
           subItems: category.children || [], // Lấy danh sách subItems từ API
         }));
 

@@ -3,7 +3,7 @@ import CartItem from "../../../component/Product/Cart/CartItem";
 
 const CartPage = () => {
   return (
-    <div className="py-4 bg-slate-500 ">
+    <div className="py-4 ">
       <div className="grid md:grid-cols-3 gap-4 relative">
         <div className="md:col-span-2 p-4 bg-white rounded-md  overflow-y-auto">
           <div className="space-y-4">

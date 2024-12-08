@@ -28,7 +28,7 @@ const Banner = () => {
   return (
     <div
       id="default-carousel"
-      className="relative px-10 w-full h-auto bg-[url('')]"
+      className="relative px-10 w-full h-auto overflow-hidden"
     >
       <img
         src={`https://cdn2.fptshop.com.vn/unsafe/${width}x0/filters:quality(100)/mb_header_bg_44415b50e9.png`}

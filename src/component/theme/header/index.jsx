@@ -77,17 +77,17 @@ const Header = () => {
               </li>
             ))}
             <li className="font-extrabold text-2xl my-7 lg:my-0">
-              <a href="/favorites">
+              <Link to="/favorites">
                 <AiOutlineHeart />
-              </a>
+              </Link>
             </li>
             <li className="font-semibold text-2xl my-7 lg:my-0">
-              <Link href="/cart">
+              <Link to="/cart">
                 <IoCartOutline />
               </Link>
             </li>
             <li className="font-extrabold text-2xl my-7 lg:my-0">
-              <a href="/favorites">
+              <a href="/">
                 <PiBellSimpleRinging />
               </a>
             </li>
