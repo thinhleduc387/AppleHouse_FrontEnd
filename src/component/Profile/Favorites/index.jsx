@@ -1,5 +1,9 @@
+import ProductItem from "../../Product/ProductItem";
+
 const Favorites = () => {
-    return <>123</>;
+    return <div>
+      <ProductItem/>
+    </div>;
   };
   
   export default Favorites;

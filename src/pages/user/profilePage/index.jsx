@@ -7,7 +7,7 @@ const ProfilePage = () => {
     <div>
       <div className="flex overflow-hidden mt-6">
         {/* ===== Sidebar Start ===== */}
-        <div className="w-64 text-white h-fit z-10">
+        <div className="w-64 text-white h-fit z-10 sticky top-0">
           <Sidebar />
         </div>
         {/* ===== Sidebar End ===== */}

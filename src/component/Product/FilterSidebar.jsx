@@ -47,7 +47,7 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
   };
 
   return (
-    <aside className="hidden lg:block w-1/4 p-4 rounded-lg shadow-md bg-white sticky top-24 h-max">
+    <aside className="hidden lg:block w-1/4 p-4 rounded-lg shadow-md bg-white sticky top-16 h-max">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">
         Bộ lọc tìm kiếm
       </h3>

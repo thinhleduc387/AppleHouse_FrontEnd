@@ -12,6 +12,11 @@ import { formatVND } from "../../utils";
 import { Link } from "react-router-dom";
 
 const ProductItem = ({ product, isEdit }) => {
+  // Kiểm tra nếu product không có giá trị, return null (hoặc có thể là một UI thay thế)
+  if (!product) {
+    return <div className="p-6 text-center text-gray-500">Product not available</div>;
+  }
+
   const { id, imageSrc, link, name, productPrice } = product;
 
   const [showTooltipFavorites, setShowTooltipFavorites] = useState(false);
@@ -20,14 +25,16 @@ const ProductItem = ({ product, isEdit }) => {
   // Hàm xử lý khi cố gắng nhấn vào link khi ở chế độ edit
   const handleLinkClick = (e) => {
     if (isEdit) {
-      e.preventDefault(); // Ngừng hành động bấm link
+      e.preventDefault(); // Ngừng việc bấm link khi ở trạng thái chỉnh sửa
     }
   };
+
   const calculateDiscount = () => {
     const { priceAfterDiscount, orignalPrice } = productPrice;
     const discount = ((orignalPrice - priceAfterDiscount) / orignalPrice) * 100;
     return Math.round(discount * 100) / 100;
   };
+
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm relative flex flex-col">
       <div className="h-56 w-full">
@@ -110,8 +117,7 @@ const ProductItem = ({ product, isEdit }) => {
         </ul>
 
         {/* Điều kiện để hiển thị giá và nút "Add to cart" hay nút "Edit" */}
-        {!isEdit &&
-        productPrice.orignalPrice !== productPrice.priceAfterDiscount ? (
+        {!isEdit && productPrice.orignalPrice !== productPrice.priceAfterDiscount ? (
           <div className="mt-4 mb-5">
             <p className="text-sm text-slate-900">
               <span className="line-through">
@@ -157,7 +163,6 @@ const ProductItem = ({ product, isEdit }) => {
       </div>
     </div>
   );
-  console.log("🚀 ~ ProductItem ~ name:", name);
 };
 
 export default ProductItem;

@@ -1,8 +1,11 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom"; // Import useParams
+// src/pages/ProductPage.js
+
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import FilterSidebar from "../../../component/Product/FilterSidebar";
 import ProductItem from "../../../component/Product/ProductItem";
-import { AiOutlineSortAscending, AiOutlineRight } from "react-icons/ai";
+import SortButton from "../../../component/Product/SortButton"; // Import SortButton
+import { SortOptions } from "../../../component/Product/SortButton/sortOption"; // Import constants
 import { getAllProductByCategory } from "../../../config/api";
 
 const ProductPage = () => {
@@ -12,34 +15,80 @@ const ProductPage = () => {
   const [maxPrice, setMaxPrice] = useState(50000000);
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
   const [productList, setProductList] = useState([]);
+  const [sortedList, setSortedList] = useState([]); // State để lưu danh sách đã sắp xếp
 
+  // Fetch list of products from the API
   const handleGetListProduct = async () => {
     const response = await getAllProductByCategory(categorySlug);
 
     if (response && response.status === 200) {
-      console.log(response.metadata);
       const products = response.metadata.map((product) => ({
         id: product._id, // Hoặc _id, tùy theo cấu trúc của response
         name: product?.product_name,
         imageSrc: product?.product_thumb,
-        productPrice: product?.product_price, // Hoặc thuộc tính hình ảnh phù hợp
+        productPrice: product?.product_price,
         link: `/products/${product?.product_slug}`, // Giả sử slug là một thuộc tính trong API
       }));
 
       setProductList(products); // Cập nhật state categoryList
+      setSortedList(products); // Đặt danh sách ban đầu là sản phẩm chưa sắp xếp
     }
   };
-  useEffect(() => {
-    handleGetListProduct();
-  }, []);
 
+  // Hàm xử lý sắp xếp danh sách sản phẩm
+  const handleSortOptionSelect = (option) => {
+    let sortedProducts = [...productList]; // Copy lại danh sách sản phẩm gốc
+
+    switch (option) {
+      case SortOptions.POPULARITY:
+        sortedProducts = sortedProducts; // Không thay đổi gì nếu không có logic "Nổi bật"
+        break;
+
+      case SortOptions.PRICE_ASC:
+        sortedProducts.sort(
+          (a, b) =>
+            a.productPrice.priceAfterDiscount -
+            b.productPrice.priceAfterDiscount
+        );
+        break;
+
+      case SortOptions.PRICE_DESC:
+        sortedProducts.sort(
+          (a, b) =>
+            b.productPrice.priceAfterDiscount -
+            a.productPrice.priceAfterDiscount
+        );
+        break;
+
+      case SortOptions.NEWEST:
+        sortedProducts.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        break;
+
+      default:
+        break;
+    }
+
+    setSortedList(sortedProducts);
+    console.log(
+      "🚀 ~ handleSortOptionSelect ~ sortedProducts:",
+      sortedProducts
+    ); // Cập nhật danh sách đã sắp xếp
+  };
+
+  // Hàm xử lý mở/đóng dropdown
   const toggleSortDropdown = () => {
     setIsSortDropdownOpen((prev) => !prev);
   };
-  console.log(categorySlug);
+
+  useEffect(() => {
+    handleGetListProduct();
+  }, [categorySlug]);
+
   return (
-    <section className="bg-[#f3f4f6] py-8 antialiased md:py-12">
-      <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
+    <section className="bg-[#f3f4f6] antialiased">
+      <div className="mx-auto max-w-screen-xl">
         {/* Main Content: Filters + Product List */}
         <div className="flex gap-6">
           <FilterSidebar
@@ -54,45 +103,23 @@ const ProductPage = () => {
               <h3 className="text-lg font-semibold text-gray-900">
                 {categorySlug}
               </h3>
-              <div className="relative">
-                <button
-                  onClick={toggleSortDropdown}
-                  type="button"
-                  className="flex items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100"
-                >
-                  <AiOutlineSortAscending className="-ms-0.5 me-2 h-4 w-4" />
-                  Sắp xếp theo
-                  <AiOutlineRight className="-me-0.5 ms-2 h-4 w-4" />
-                </button>
-                {isSortDropdownOpen && (
-                  <div
-                    id="sortDropdown"
-                    className="absolute right-0 z-50 mt-2 w-48 divide-y divide-gray-100 rounded-lg bg-white shadow-lg p-4"
-                  >
-                    <div className="flex flex-col space-y-1">
-                      <button className="text-left w-full hover:bg-gray-100 px-2 py-1">
-                        Nổi bật
-                      </button>
-                      <button className="text-left w-full hover:bg-gray-100 px-2 py-1">
-                        Giá: Tăng dần
-                      </button>
-                      <button className="text-left w-full hover:bg-gray-100 px-2 py-1">
-                        Giá: Giảm dần
-                      </button>
-                      <button className="text-left w-full hover:bg-gray-100 px-2 py-1">
-                        Mới nhất
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
+              {/* Sử dụng SortButton component */}
+              <SortButton
+                isSortDropdownOpen={isSortDropdownOpen}
+                toggleSortDropdown={toggleSortDropdown}
+                handleSortOptionSelect={handleSortOptionSelect}
+              />
             </div>
 
             {/* Product List */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-2">
-              {/* Hiển thị các sản phẩm dựa trên loại */}
-              {productList.map((product) => (
-                <ProductItem product={product} isEdit={false} />
+              {/* Hiển thị các sản phẩm đã sắp xếp */}
+              {sortedList.map((product) => (
+                <ProductItem
+                  key={product.id}
+                  product={product}
+                  isEdit={false}
+                />
               ))}
             </div>
           </div>

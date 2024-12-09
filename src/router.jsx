@@ -41,29 +41,36 @@ const RouterCustom = () => {
       <Routes>
         {/* User Routes */}
         <Route path="/" element={<MasterLayout />}>
-          <Route path={ROUTERS.USER.HOME} element={<HomePage />} />
-          <Route path={ROUTERS.USER.LOGIN} element={<LoginPage />} />
+          <Route
+            path={ROUTERS.USER.HOME}
+            element={<HomePage />}
+            breadcrumbItems={[{ name: "Home", link: "/" }]} // Truyền breadcrumb cho Home
+          />
+          <Route
+            path={ROUTERS.USER.LOGIN}
+            element={<LoginPage />}
+            breadcrumbItems={[{ name: "Home", link: "/" }, { name: "Login", link: ROUTERS.USER.LOGIN }]} // Truyền breadcrumb cho Login
+          />
           <Route
             path={ROUTERS.USER.HOME + "/:categorySlug"}
             element={<ProductPage />}
+            breadcrumbItems={[{ name: "Home", link: "/" }, { name: "Products", link: ROUTERS.USER.HOME }]} // Truyền breadcrumb cho Products
           />
           <Route
             path={ROUTERS.USER.HOME + "/tim-kiem"}
             element={<SearchPage />}
+            breadcrumbItems={[{ name: "Home", link: "/" }, { name: "Search", link: ROUTERS.USER.HOME + "/tim-kiem" }]} // Truyền breadcrumb cho Search
           />
           <Route path={ROUTERS.USER.CART} element={<CartPage />} />
-
+          
           {/* Profile Routes */}
           <Route path={ROUTERS.USER.PROFILE} element={<ProfilePage />}>
-            <Route index element={<Info />} />{" "}
-            {/* Mặc định là trang thông tin */}
-            <Route path="" element={<Info />} />{" "}
-            {/* Trang Thông tin người dùng */}
+            <Route index element={<Info />} />
+            <Route path="" element={<Info />} />
             <Route
               path={ROUTERS.USER.ORDER_LIST}
               element={<OrderHistory />}
-            />{" "}
-            {/* Trang Lịch sử đơn hàng */}
+            />
             <Route path={ROUTERS.USER.FAVORITES} element={<Favorites />} />
             <Route path={ROUTERS.USER.ADDRESS} element={<Address />} />
           </Route>
