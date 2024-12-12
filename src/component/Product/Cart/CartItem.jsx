@@ -1,21 +1,99 @@
 import { useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import OptionsCard from "../OptionsCard";
+import { updateQuantity } from "../../../config/api";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
-const CartItem = () => {
-  // Giả sử giá trị cho sản phẩm
+const CartItem = ({ cartItem, setSelectedProducts }) => {
   const product = {
-    name: "Máy tính xách tay Macbook Air 13 2020 M1/8GB/256GB SSD Xám MGN63SA/A",
-    imageUrl: "https://readymadeui.com/images/product14.webp",
-    price: 1000000, // Giá sản phẩm
-    discountPrice: 1200000, // Giá gốc trước khi giảm giá
+    skuId: cartItem.skuId,
+    name: cartItem.name,
+    imageUrl: cartItem.thumb,
+    price: cartItem.originalPrice,
+    discountPrice: cartItem.priceAfterDiscount,
+    loyalPoint: cartItem.loyalPoint,
+    quantity: cartItem.quantity,
   };
-  const [selectedColor, setSelectedColor] = useState("256 GB");
 
+  const [quantity, setQuantity] = useState(product.quantity);
+  const [selectedColor, setSelectedColor] = useState("256 GB");
+  const [isChecked, setIsChecked] = useState(false);
+
+  const userId = useSelector((state) => state.account?.user?._id);
+
+  const handleIncreaseQuantity = () => {
+    if (callUpdateQuantity(quantity, quantity + 1, product.skuId)) {
+      setQuantity((prev) => prev + 1);
+
+      setSelectedProducts((prev) =>
+        prev.map((item) =>
+          item.skuId === product.skuId
+            ? { ...item, quantity: quantity + 1 }
+            : item
+        )
+      );
+    }
+  };
+
+  const handleDecreaseQuantity = () => {
+    if (quantity > 1) {
+      if (callUpdateQuantity(quantity, quantity - 1, product.skuId))
+        setQuantity((prev) => prev - 1);
+
+      setSelectedProducts((prev) =>
+        prev.map((item) =>
+          item.skuId === product.skuId
+            ? { ...item, quantity: quantity - 1 }
+            : item
+        )
+      );
+    }
+  };
+  const handleCheckboxChange = () => {
+    if (isChecked) {
+      setSelectedProducts((prev) =>
+        prev.filter((item) => item.skuId !== product.skuId)
+      );
+    } else {
+      setSelectedProducts((prev) => [
+        ...prev,
+        {
+          skuId: product.skuId,
+          quantity: quantity,
+        },
+      ]);
+    }
+    setIsChecked(!isChecked);
+  };
+  const callUpdateQuantity = async (old_quantity, quantity, skuId) => {
+    const response = await updateQuantity({
+      userId,
+      item_products: {
+        old_quantity,
+        quantity,
+        skuId,
+      },
+    });
+
+    if (response.status === 200) {
+      return 1;
+    } else {
+      toast.error("Câp nhất số lượng thất bại");
+    }
+  };
   return (
     <div className="grid grid-cols-3 items-center gap-4">
       <div className="col-span-2 flex items-center gap-4">
-        <div className="w-24 h-24 shrink-0 bg-white p-2 rounded-md">
+        <input
+          type="checkbox"
+          name=""
+          id=""
+          checked={isChecked}
+          className="w-4 h-4 cursor-pointer"
+          onChange={handleCheckboxChange}
+        />
+        <div className="w-24 h-24 shrink-0 bg-white p-2 rounded-md border border-gray-300">
           <img
             src={product.imageUrl}
             className="w-full h-full object-contain"
@@ -53,26 +131,6 @@ const CartItem = () => {
                       label: "Desert Titan",
                       src: "https://cdn2.fptshop.com.vn/unsafe/64x0/filters:quality(100)/iphone_16_pro_desert_titan_de8448c1fe.png",
                     },
-                    {
-                      label: "Desert Desert ",
-                      src: "https://cdn2.fptshop.com.vn/unsafe/64x0/filters:quality(100)/iphone_16_pro_desert_titan_de8448c1fe.png",
-                    },
-                    {
-                      label: "Desert Desert 123",
-                      src: "https://cdn2.fptshop.com.vn/unsafe/64x0/filters:quality(100)/iphone_16_pro_desert_titan_de8448c1fe.png",
-                    },
-                    {
-                      label: "Desert Titan",
-                      src: "https://cdn2.fptshop.com.vn/unsafe/64x0/filters:quality(100)/iphone_16_pro_desert_titan_de8448c1fe.png",
-                    },
-                    {
-                      label: "Desert Titan",
-                      src: "https://cdn2.fptshop.com.vn/unsafe/64x0/filters:quality(100)/iphone_16_pro_desert_titan_de8448c1fe.png",
-                    },
-                    {
-                      label: "Desert Titan",
-                      src: "https://cdn2.fptshop.com.vn/unsafe/64x0/filters:quality(100)/iphone_16_pro_desert_titan_de8448c1fe.png",
-                    },
                   ]}
                   selectedOption={selectedColor}
                   onSelectOption={(option) => setSelectedColor(option)}
@@ -106,31 +164,49 @@ const CartItem = () => {
           )}
         </div>
 
-        {/* Nút tăng giảm số lượng và nút xóa */}
         <div className="flex items-center space-x-6 pr-2">
-          <button
-            type="button"
-            className="flex items-center px-2.5 py-1.5 border border-gray-300 text-gray-800 text-xs outline-none bg-transparent rounded-md"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-2.5 fill-current"
-              viewBox="0 0 124 124"
+          <div className="flex items-center space-x-4 pr-2">
+            {/* Nút giảm số lượng */}
+            <button
+              type="button"
+              className="flex items-center justify-center w-8 h-8 border border-gray-300 rounded-full text-gray-600 hover:text-red-500 hover:border-red-500"
+              onClick={() => {
+                handleDecreaseQuantity();
+              }}
             >
-              <path d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"></path>
-            </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M5 12h14a1 1 0 1 1 0 2H5a1 1 0 1 1 0-2z" />
+              </svg>
+            </button>
 
-            <span className="mx-2.5">1</span>
+            {/* Hiển thị số lượng */}
+            <span className="text-base font-semibold text-gray-800 w-6 text-center">
+              {quantity}
+            </span>
 
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-2.5 fill-current"
-              viewBox="0 0 42 42"
+            {/* Nút tăng số lượng */}
+            <button
+              type="button"
+              className="flex items-center justify-center w-8 h-8 border border-gray-300 rounded-full text-gray-600 hover:text-green-500 hover:border-green-500"
+              onClick={() => {
+                handleIncreaseQuantity();
+              }}
             >
-              <path d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"></path>
-            </svg>
-          </button>
-
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M12 5a1 1 0 0 1 1 1v5h5a1 1 0 1 1 0 2h-5v5a1 1 0 1 1-2 0v-5H6a1 1 0 1 1 0-2h5V6a1 1 0 0 1 1-1z" />
+              </svg>
+            </button>
+          </div>
           {/* Nút xóa */}
           <button className="text-gray-600 hover:text-red-600">
             <RiDeleteBin6Line className="w-6 h-6" />

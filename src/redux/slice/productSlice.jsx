@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-
 export const fetchAccount = createAsyncThunk(
   "product/fetchProduct",
   async () => {
@@ -37,7 +36,6 @@ const productSlice = createSlice({
   },
 });
 
-export const {} =
-productSlice.actions;
+export const {} = productSlice.actions;
 
 export default productSlice.reducer;

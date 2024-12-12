@@ -115,7 +115,6 @@ const Header = () => {
             >
               <Link to="/">
                 <PiBellSimpleRinging />
-                {/* Hiển thị số thông báo nếu có */}
                 <span className="absolute top-0 right-0 text-[0.6rem] bg-red-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center">
                   {mockNotifications.length}
                 </span>

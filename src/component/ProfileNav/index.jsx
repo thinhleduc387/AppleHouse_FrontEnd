@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 import { AiOutlineUser } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { setLogoutAction } from "../../redux/slice/accountSlice";
-
+import { toast } from "react-toastify";
 const ProfileNavBar = ({ userAvatar, userName }) => {
   const isAuthenticated = useSelector((state) => {
     return state.account.isAuthenticated;

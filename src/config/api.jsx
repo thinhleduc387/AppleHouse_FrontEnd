@@ -53,3 +53,31 @@ export const suggestionSearchProduct = async (textSearch) => {
     },
   });
 };
+
+// Cart
+
+export const getCartItemList = async (userId) => {
+  return axios.get("/cart", {
+    params: {
+      userId,
+    },
+  });
+};
+export const updateQuantity = async ({ userId, item_products }) => {
+  return axios.post("/cart/update", { userId, item_products });
+};
+
+//  Checkout
+export const getCheckout = async ({
+  cartId = "6757bcb643aba0bc50e3e44e",
+  userId,
+  shop_discount = [],
+  products_order = [],
+}) => {
+  return axios.post("/checkout/review", {
+    cartId,
+    userId,
+    shop_discount,
+    products_order,
+  });
+};

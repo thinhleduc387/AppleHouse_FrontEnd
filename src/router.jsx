@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchAccount } from "./redux/slice/accountSlice";
 
 import { ToastContainer } from "react-toastify";
@@ -32,9 +32,12 @@ import SearchPage from "./pages/user/searchPage";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
+  const account = useSelector((state) => state.account);
   useEffect(() => {
-    dispatch(fetchAccount());
-  }, [dispatch]);
+    if (!account || !account.id) {
+      dispatch(fetchAccount());
+    }
+  }, [account, dispatch]);
 
   return (
     <>
@@ -49,28 +52,34 @@ const RouterCustom = () => {
           <Route
             path={ROUTERS.USER.LOGIN}
             element={<LoginPage />}
-            breadcrumbItems={[{ name: "Home", link: "/" }, { name: "Login", link: ROUTERS.USER.LOGIN }]} // Truyền breadcrumb cho Login
+            breadcrumbItems={[
+              { name: "Home", link: "/" },
+              { name: "Login", link: ROUTERS.USER.LOGIN },
+            ]} // Truyền breadcrumb cho Login
           />
           <Route
             path={ROUTERS.USER.HOME + "/:categorySlug"}
             element={<ProductPage />}
-            breadcrumbItems={[{ name: "Home", link: "/" }, { name: "Products", link: ROUTERS.USER.HOME }]} // Truyền breadcrumb cho Products
+            breadcrumbItems={[
+              { name: "Home", link: "/" },
+              { name: "Products", link: ROUTERS.USER.HOME },
+            ]} // Truyền breadcrumb cho Products
           />
           <Route
             path={ROUTERS.USER.HOME + "/tim-kiem"}
             element={<SearchPage />}
-            breadcrumbItems={[{ name: "Home", link: "/" }, { name: "Search", link: ROUTERS.USER.HOME + "/tim-kiem" }]} // Truyền breadcrumb cho Search
+            breadcrumbItems={[
+              { name: "Home", link: "/" },
+              { name: "Search", link: ROUTERS.USER.HOME + "/tim-kiem" },
+            ]} // Truyền breadcrumb cho Search
           />
           <Route path={ROUTERS.USER.CART} element={<CartPage />} />
-          
+
           {/* Profile Routes */}
           <Route path={ROUTERS.USER.PROFILE} element={<ProfilePage />}>
             <Route index element={<Info />} />
             <Route path="" element={<Info />} />
-            <Route
-              path={ROUTERS.USER.ORDER_LIST}
-              element={<OrderHistory />}
-            />
+            <Route path={ROUTERS.USER.ORDER_LIST} element={<OrderHistory />} />
             <Route path={ROUTERS.USER.FAVORITES} element={<Favorites />} />
             <Route path={ROUTERS.USER.ADDRESS} element={<Address />} />
           </Route>
