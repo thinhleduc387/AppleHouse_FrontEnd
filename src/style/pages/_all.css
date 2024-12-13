@@ -1,13 +1,10 @@
-@use "sass:map";
-@import "theme";
-
 html,
 body {
   margin: 0;
 }
 
 body {
-  font-family: "SF Pro Display", sans-serif; // Thêm sans-serif như fallback
+  font-family: "SF Pro Display", sans-serif; 
   background-color: #f3f4f6;
 }
 
