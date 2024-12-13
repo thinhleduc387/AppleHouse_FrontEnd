@@ -6,20 +6,64 @@ import ProductInfo from "../../../component/Product/ProductInfo";
 import RatingStat from "../../../component/Product/Feedback/RatingStat";
 import CommentSection from "../../../component/Product/Feedback/CommentSection";
 import { getProduct } from "../../../config/api";
+import { FaCheck } from "react-icons/fa";
+
+const price = 28590000; // Giá gốc
+const discountPrice = 28990000; // Giá giảm
+const points = 7147; // Điểm thường
+const installment = 2266778; // Trả góp
 
 const DetailProduct = () => {
-  const [selectedCapacity, setSelectedCapacity] = useState("256 GB");
-  const [selectedColor, setSelectedColor] = useState("256 GB");
-
-  const [product, setProduct] = useState(null);
-  
-  const price = 28590000; // Giá gốc
-  const discountPrice = 28990000; // Giá giảm
-  const points = 7147; // Điểm thường
-  const installment = 2266778; // Trả góp
+  const { productId } = useParams();
 
   const commentSectionRef = useRef(null);
   const ratingStatRef = useRef(null);
+
+  const [skus, setSkus] = useState([]);
+  const [spu, setSpu] = useState(null);
+  const [selectedVariants, setSelectedVariants] = useState(
+    skus.find((sku) => sku.sku_default)?.sku_index || [0, 0]
+  );
+  const [selectedImage, setSelectedImage] = useState();
+
+  const selectedSku = skus.find((sku) =>
+    sku.sku_index.every((index, i) => index === selectedVariants[i])
+  );
+
+  const handleGetProduct = async () => {
+    const response = await getProduct(productId);
+    if (response.metadata && response.status === 200) {
+      setSkus(response.metadata.sku_list);
+      setSpu(response.metadata.spu_info);
+    }
+  };
+
+  const handleVariantChange = (variationIndex, optionIndex) => {
+    const newSelectedVariants = [...selectedVariants];
+    newSelectedVariants[variationIndex] = optionIndex;
+    setSelectedVariants(newSelectedVariants);
+  };
+
+  const isVariantAvailable = (variationIndex, optionIndex) => {
+    const potentialSelection = [...selectedVariants];
+    potentialSelection[variationIndex] = optionIndex;
+
+    const currentSku = skus.find((sku) =>
+      sku.sku_index.every((index, i) => index === potentialSelection[i])
+    );
+
+    return currentSku !== undefined && currentSku.sku_stock !== 0;
+  };
+
+  useEffect(() => {
+    handleGetProduct();
+  }, []);
+
+  useEffect(() => {
+    if (selectedSku?.sku_imgs?.length > 0) {
+      setSelectedImage(selectedSku.sku_imgs[0]);
+    }
+  }, [selectedSku]);
 
   const scrollToComments = () => {
     if (commentSectionRef.current) {
@@ -32,16 +76,6 @@ const DetailProduct = () => {
       ratingStatRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
-  const { productId } = useParams();
-  const handleGetProduct = async () => {
-    const response = await getProduct(productId);
-    console.log("🚀 ~ handleGetProduct ~ response:", response);
-    console.log("🚀 ~ handleGetProduct ~ productId:", productId);
-  };
-  useEffect(() => {
-    handleGetProduct();
-  }, []);
-
   return (
     <div className="font-sans ">
       <div className="p-4 lg:max-w-7xl max-w-4xl mx-auto">
@@ -49,9 +83,9 @@ const DetailProduct = () => {
           <div className="lg:col-span-3 w-full lg:sticky top-0 text-center ">
             <div className="px-4 py-10 rounded-lg relative">
               <img
-                src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/iphone-light.svg"
+                src={selectedImage}
                 alt="iPhone 16 Pro Max"
-                className="w-1/4 rounded object-cover mx-auto"
+                className="w-10/12 rounded object-cover mx-auto"
               />
               <button type="button" className="absolute top-4 right-4">
                 <svg
@@ -70,20 +104,20 @@ const DetailProduct = () => {
             </div>
 
             <div className="mt-6 flex flex-wrap justify-center gap-6 mx-auto">
-              {[
-                "https://flowbite.s3.amazonaws.com/blocks/e-commerce/iphone-light.svg",
-                "https://readymadeui.com/images/laptop3.webp",
-                "https://readymadeui.com/images/laptop4.webp",
-                "https://readymadeui.com/images/laptop5.webp",
-              ].map((src, index) => (
+              {selectedSku?.sku_imgs.map((src, index) => (
                 <div
                   key={index}
-                  className="w-24 h-20 flex items-center justify-center rounded-lg p-4 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] cursor-pointer"
+                  className={`w-24 h-20 flex items-center justify-center rounded-lg p-4 cursor-pointer transition-all duration-300 ${
+                    selectedImage === src
+                      ? "shadow-[0_2px_10px_-3px_rgba(6,81,237,0.6)] border-2 border-mainColor scale-110"
+                      : "shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] hover:shadow-[0_2px_10px_-3px_rgba(6,81,237,0.5)] hover:scale-105"
+                  }`}
                 >
                   <img
                     src={src}
                     alt={`Product ${index + 1}`}
                     className="w-full"
+                    onClick={() => setSelectedImage(src)}
                   />
                 </div>
               ))}
@@ -91,15 +125,23 @@ const DetailProduct = () => {
           </div>
 
           <div className="lg:col-span-3">
-            <div className="bg-mainColor text-white rounded-full w-12 h-6 flex items-center justify-center">
-              Mới
+            <div className="flex items-center space-x-2 mt-4">
+              {spu?.product_tags.map((value, index) => (
+                <div
+                  key={index}
+                  className="bg-mainColor text-white rounded-full px-4 py-1 flex items-center justify-center text-sm font-semibold shadow-md hover:shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer"
+                >
+                  {value}
+                </div>
+              ))}
             </div>
+
             <h2 className="text-2xl font-extrabold text-gray-800 mt-4">
-              iPhone 16 Pro Max 256GB
+              {selectedSku?.sku_name}
             </h2>
 
             <div className="flex items-center space-x-2 mt-4">
-              <span className="text-gray-600">No.00911049</span>
+              <span className="text-gray-600">No.{selectedSku?._id}</span>
               <span className="text-gray-600">|</span>
               <span
                 className="text-mainColor cursor-pointer"
@@ -116,37 +158,78 @@ const DetailProduct = () => {
               </span>
             </div>
 
-            {/* Dung lượng */}
-            <div className="mt-8">
-              <h3 className="text-xl font-bold text-gray-800">Dung lượng</h3>
-              <OptionsCard
-                options={[{ label: "256GB" }, { label: "512GB" }]}
-                selectedOption={selectedCapacity}
-                onSelectOption={(option) => setSelectedCapacity(option)}
-              />
-            </div>
-
-            {/* Màu sắc */}
-            <div className="mt-8">
-              <h3 className="text-xl font-bold text-gray-800">Màu sắc</h3>
-              <OptionsCard
-                options={[
-                  {
-                    label: "Desert Titan",
-                    src: "https://cdn2.fptshop.com.vn/unsafe/64x0/filters:quality(100)/iphone_16_pro_desert_titan_de8448c1fe.png",
-                  },
-                ]}
-                selectedOption={selectedColor}
-                onSelectOption={(option) => setSelectedColor(option)}
-              />
+            {/* Variations */}
+            <div className="space-y-5">
+              {spu?.product_variations.map((variation, variationIndex) => (
+                <div key={variationIndex}>
+                  <h3 className="text-xl font-bold text-gray-800">
+                    {variation.name}
+                  </h3>
+                  <div className="flex flex-wrap gap-4 mt-4">
+                    {variation.options.map((option, optionIndex) => {
+                      const isAvailable = isVariantAvailable(
+                        variationIndex,
+                        optionIndex
+                      );
+                      return (
+                        <button
+                          key={optionIndex}
+                          className={`flex justify-center items-center relative px-2 py-1 border rounded-lg 
+                          ${
+                            !isAvailable
+                              ? "opacity-50 disabled:cursor-not-allowed"
+                              : "cursor-pointer"
+                          }
+                          ${
+                            selectedVariants[variationIndex] === optionIndex
+                              ? "border-mainColor"
+                              : "border-gray-300"
+                          }`}
+                          disabled={!isAvailable}
+                          onClick={() =>
+                            handleVariantChange(variationIndex, optionIndex)
+                          }
+                        >
+                          {variation.images.length > 0 && (
+                            <img
+                              src={variation.images[optionIndex]}
+                              className="w-8 h-8"
+                            />
+                          )}
+                          <span className="text-base font-semibold text-gray-800 p-2">
+                            {option}
+                          </span>
+                          {selectedVariants[variationIndex] === optionIndex && (
+                            <span
+                              className="absolute top-0 right-0 w-7 h-7 bg-mainColor flex items-center justify-center rounded-tr-lg"
+                              style={{
+                                clipPath: "polygon(100% 0, 0% 0, 100% 100%)",
+                                transform: "translate(1px, -1px)",
+                              }}
+                            >
+                              <FaCheck
+                                className="text-white text-xs"
+                                style={{ transform: "translate(5px, -5px)" }}
+                              />
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
 
             {/* Khuyến mãi */}
             <div className="flex flex-wrap gap-4 mt-8">
               <ProductPrice
-                price={price}
-                discountPrice={discountPrice}
-                points={points}
+                price={selectedSku?.sku_price?.originalPrice || 0}
+                discountPrice={0}
+                points={
+                  selectedSku?.loyalPointRate *
+                    selectedSku?.sku_price.originalPrice || 0
+                }
                 installment={installment}
               />
             </div>

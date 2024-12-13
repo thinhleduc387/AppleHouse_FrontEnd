@@ -7,7 +7,9 @@ const OptionsCard = ({ options, selectedOption, onSelectOption }) => {
         <a
           key={index}
           className={`flex justify-center items-center relative px-2 py-1 border rounded-lg cursor-pointer ${
-            selectedOption.label === option.label ? "border-mainColor" : "border-gray-300"
+            selectedOption.label === option.label
+              ? "border-mainColor"
+              : "border-gray-300"
           }`}
           onClick={() => onSelectOption(option)}
         >
@@ -18,7 +20,9 @@ const OptionsCard = ({ options, selectedOption, onSelectOption }) => {
               className="w-8 h-8"
             />
           )}
-          <span className="text-base font-semibold text-gray-800 p-2">{option.label}</span>
+          <span className="text-base font-semibold text-gray-800 p-2">
+            {option.label}
+          </span>
           {selectedOption.label === option.label && (
             <span
               className="absolute top-0 right-0 w-7 h-7 bg-mainColor flex items-center justify-center rounded-tr-lg"
@@ -38,5 +42,40 @@ const OptionsCard = ({ options, selectedOption, onSelectOption }) => {
     </div>
   );
 };
-
+const ok = () => {
+  return (
+    <>
+      <a
+        key={optionIndex}
+        className={`flex justify-center items-center relative px-2 py-1 border rounded-lg cursor-pointer ${
+          selectedVariants[variationIndex] === optionIndex
+            ? "border-mainColor"
+            : "border-gray-300"
+        }`}
+        onClick={() => handleVariantChange(variationIndex, optionIndex)}
+      >
+        {variation.images.length > 0 && (
+          <img src={variation.images[optionIndex]} className="w-8 h-8" />
+        )}
+        <span className="text-base font-semibold text-gray-800 p-2">
+          {option[optionIndex]}
+        </span>
+        {selectedVariants[variationIndex] === optionIndex && (
+          <span
+            className="absolute top-0 right-0 w-7 h-7 bg-mainColor flex items-center justify-center rounded-tr-lg"
+            style={{
+              clipPath: "polygon(100% 0, 0% 0, 100% 100%)",
+              transform: "translate(1px, -1px)",
+            }}
+          >
+            <FaCheck
+              className="text-white text-xs"
+              style={{ transform: "translate(5px, -5px)" }}
+            />
+          </span>
+        )}
+      </a>
+    </>
+  );
+};
 export default OptionsCard;
