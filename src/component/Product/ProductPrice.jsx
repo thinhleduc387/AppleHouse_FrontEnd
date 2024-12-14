@@ -1,7 +1,6 @@
 import { FaBitcoin } from "react-icons/fa";
-import { CiCircleCheck } from "react-icons/ci";
 
-const ProductPrice = ({ price, discountPrice, points, installment }) => {
+const ProductPrice = ({ price, discountPrice, points }) => {
   return (
     <div className="bg-white p-4 rounded-lg shadow-md w-full">
       <div className="flex items-center">

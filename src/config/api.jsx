@@ -56,6 +56,16 @@ export const suggestionSearchProduct = async (textSearch) => {
 
 // Cart
 
+export const addToCart = async ({ userId, skuId, quantity = 1 }) => {
+  return axios.post("/cart", { userId, skuId, quantity });
+};
+
+export const deleteItemInCart = async ({ userId, skuId }) => {
+  return axios.delete("/cart", {
+    data: { userId, skuId }, // Đưa payload vào thuộc tính `data`
+  });
+};
+
 export const getCartItemList = async (userId) => {
   return axios.get("/cart", {
     params: {
@@ -63,6 +73,7 @@ export const getCartItemList = async (userId) => {
     },
   });
 };
+
 export const updateQuantity = async ({ userId, item_products }) => {
   return axios.post("/cart/update", { userId, item_products });
 };

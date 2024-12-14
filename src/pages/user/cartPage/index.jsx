@@ -3,6 +3,7 @@ import CartItem from "../../../component/Product/Cart/CartItem";
 import { getCartItemList } from "../../../config/api";
 import { useSelector } from "react-redux";
 import CheckOut from "../../../component/Product/Cart/CheckOut";
+import CartEmpty from "../../../component/Product/Cart/CartEmpty";
 
 const CartPage = () => {
   const userId = useSelector((state) => state.account?.user?._id);
@@ -10,6 +11,7 @@ const CartPage = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     if (!userId) return;
 
@@ -38,25 +40,25 @@ const CartPage = () => {
         <div className="flex justify-center items-center h-96">
           <div className="loader border-t-4 border-blue-600 border-solid rounded-full w-12 h-12 animate-spin"></div>
         </div>
-      ) : error ? (
-        <div className="text-center text-red-500">{error}</div>
-      ) : (
+      ) : cartItems.length > 0 ? (
         <div className="grid md:grid-cols-3 gap-4 relative">
           <div className="md:col-span-2 p-4 bg-white rounded-md overflow-y-auto">
             <div className="space-y-4">
-              {cartItems.map((cartItem) => {
-                return (
-                  <CartItem
-                    key={cartItem.skuId}
-                    cartItem={cartItem}
-                    setSelectedProducts={setSelectedProducts}
-                  />
-                );
-              })}
+              {cartItems.map((cartItem) => (
+                <CartItem
+                  key={cartItem.skuId}
+                  cartItem={cartItem}
+                  setSelectedProducts={setSelectedProducts}
+                />
+              ))}
             </div>
           </div>
-          <CheckOut products_order={selectedProducts} userId={userId} />
+          {cartItems.length > 0 && (
+            <CheckOut products_order={selectedProducts} userId={userId} />
+          )}
         </div>
+      ) : (
+        <CartEmpty />
       )}
     </div>
   );
