@@ -2,7 +2,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import RouterCustom from "./router";
 import { Provider } from "react-redux";
-import "./style/style.scss";
+import "./style/style.css";
 import store from "./redux/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

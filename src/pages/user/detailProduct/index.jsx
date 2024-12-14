@@ -2,11 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ProductPrice from "../../../component/Product/ProductPrice"; // Import PromotionComponent
 import OptionsCard from "../../../component/Product/OptionsCard"; // Import OptionsCard
-import ProductInfo from "../../../component/Product/ProductInfo";
+import ProductSideBar from "../../../component/Product/ProductSideBar";
 import RatingStat from "../../../component/Product/Feedback/RatingStat";
 import CommentSection from "../../../component/Product/Feedback/CommentSection";
 import { getProduct } from "../../../config/api";
 import { FaCheck } from "react-icons/fa";
+import ProductDescription from "../../../component/Product/ProductDescription";
 
 const price = 28590000; // Giá gốc
 const discountPrice = 28990000; // Giá giảm
@@ -15,6 +16,11 @@ const installment = 2266778; // Trả góp
 
 const DetailProduct = () => {
   const { productId } = useParams();
+  const [selectedCapacity, setSelectedCapacity] = useState("256 GB");
+  const [selectedColor, setSelectedColor] = useState("256 GB");
+  const [isSidebarOpen, setSidebarOpen] = useState(false); // State cho Sidebar
+
+  const [product, setProduct] = useState(null);
 
   const commentSectionRef = useRef(null);
   const ratingStatRef = useRef(null);
@@ -251,10 +257,7 @@ const DetailProduct = () => {
           </div>
         </div>
 
-        <div className="mt-16 bg-white border-2  rounded-lg">
-          <ProductInfo />
-        </div>
-
+        <ProductDescription onClickThongSo={() => setSidebarOpen(true)} />
         <div className="mt-16 bg-white border-2  rounded-lg p-6 space-y-10">
           <div ref={ratingStatRef}>
             <RatingStat />
@@ -263,6 +266,8 @@ const DetailProduct = () => {
             <CommentSection />
           </div>
         </div>
+        {/* Sidebar */}
+        <ProductSideBar isOpen={isSidebarOpen} setIsOpen={setSidebarOpen} />
       </div>
     </div>
   );

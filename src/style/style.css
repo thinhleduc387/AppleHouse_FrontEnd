@@ -1,4 +1,4 @@
-@import "pages/all";
+@import "pages/_all.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
