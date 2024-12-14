@@ -5,7 +5,7 @@ import { deleteItemInCart, updateQuantity } from "../../../config/api";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
-const CartItem = ({ cartItem, setSelectedProducts }) => {
+const CartItem = ({ cartItem, setSelectedProducts, setCartItems }) => {
   const product = {
     skuId: cartItem.skuId,
     name: cartItem.name,
@@ -26,7 +26,10 @@ const CartItem = ({ cartItem, setSelectedProducts }) => {
     const response = await deleteItemInCart({ userId, skuId: product.skuId });
     if (response.metadata.modifiedCount !== 0) {
       toast.success("Delete successful");
-      setIsModalOpen(false); // Đóng modal sau khi xóa thành công
+      setCartItems((prevItems) =>
+        prevItems.filter((item) => item.skuId !== product.skuId)
+      );
+      setIsModalOpen(false);
     }
   };
 

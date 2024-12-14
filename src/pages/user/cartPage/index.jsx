@@ -11,7 +11,6 @@ const CartPage = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   useEffect(() => {
     if (!userId) return;
 
@@ -49,6 +48,7 @@ const CartPage = () => {
                   key={cartItem.skuId}
                   cartItem={cartItem}
                   setSelectedProducts={setSelectedProducts}
+                  setCartItems={setCartItems}
                 />
               ))}
             </div>
