@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import OptionsCard from "../OptionsCard";
+import OptionsCard from "../Product/OptionsCard";
 
 const CartItem = () => {
   // Giả sử giá trị cho sản phẩm
   const product = {
-    name: "Máy tính xách tay Macbook Air 13 2020 M1/8GB/256GB SSD Xám MGN63SA/A",
+    name: "Macbook Air 13 2020 M1/8GB/256GB",
     imageUrl: "https://readymadeui.com/images/product14.webp",
     price: 1000000, // Giá sản phẩm
     discountPrice: 1200000, // Giá gốc trước khi giảm giá
@@ -15,7 +15,7 @@ const CartItem = () => {
   return (
     <div className="grid grid-cols-3 items-center gap-4">
       <div className="col-span-2 flex items-center gap-4">
-        <div className="w-24 h-24 shrink-0 bg-white p-2 rounded-md">
+        <div className="lg:w-24 lg:h-24 md:w-20 md:h-20 w-16 h-16 shrink-0 bg-white p-2 rounded-md">
           <img
             src={product.imageUrl}
             className="w-full h-full object-contain"
@@ -23,8 +23,8 @@ const CartItem = () => {
           />
         </div>
 
-        <div>
-          <h3 className="text-base font-bold text-gray-800">{product.name}</h3>
+        <div className="flex flex-col justify-between">
+          <h3 className="lg:text-base md:text-sm text-xs font-bold text-gray-800">{product.name}</h3>
 
           <div className="flex gap-4 mt-4">
             <div className="relative group">
