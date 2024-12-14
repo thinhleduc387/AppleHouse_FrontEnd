@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ProductPrice from "../../../component/Product/ProductPrice"; // Import PromotionComponent
-import OptionsCard from "../../../component/Product/OptionsCard"; // Import OptionsCard
 import ProductSideBar from "../../../component/Product/ProductSideBar";
 import RatingStat from "../../../component/Product/Feedback/RatingStat";
 import CommentSection from "../../../component/Product/Feedback/CommentSection";

@@ -4,13 +4,19 @@ import { useSelector } from "react-redux";
 import CartEmpty from "../../../component/Cart/CartEmpty";
 import CartItem from "../../../component/Cart/CartItem";
 import CheckOut from "../../../component/Cart/CheckOut";
+import CheckoutInfo from "../../../component/Cart/CheckoutInfo"; // Import CheckoutInfo
+import { IoIosArrowBack } from "react-icons/io";
+import PaymentMethod from "../../../component/Cart/PaymentMethod";
 
 const CartPage = () => {
   const userId = useSelector((state) => state.account?.user?._id);
   const [cartItems, setCartItems] = useState([]);
+  const [selectedPayment, setSelectedPayment] = useState("");
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isCheckout, setIsCheckout] = useState(false); // Trạng thái thanh toán
   const [error, setError] = useState(null);
+
   useEffect(() => {
     if (!userId) return;
 
@@ -33,6 +39,12 @@ const CartPage = () => {
     getShowCart();
   }, [userId]);
 
+  const handleCheckout = (formData) => {
+    console.log("Thông tin thanh toán:", formData);
+    // Gửi thông tin thanh toán lên server
+    setIsCheckout(false); // Quay lại trạng thái giỏ hàng sau khi thanh toán xong
+  };
+
   return (
     <div className="py-4">
       {loading ? (
@@ -41,20 +53,56 @@ const CartPage = () => {
         </div>
       ) : cartItems.length > 0 ? (
         <div className="grid md:grid-cols-3 gap-4 relative">
-          <div className="md:col-span-2 p-4 bg-white rounded-md overflow-y-auto">
-            <div className="space-y-4">
-              {cartItems.map((cartItem) => (
-                <CartItem
-                  key={cartItem.skuId}
-                  cartItem={cartItem}
-                  setSelectedProducts={setSelectedProducts}
-                  setCartItems={setCartItems}
-                />
-              ))}
+          <div className="md:col-span-2">
+            <div className=" p-4 flex flex-col gap-4 bg-white rounded-md overflow-y-auto">
+              {isCheckout && (
+                <a
+                  onClick={() => setIsCheckout(false)}
+                  className="text-mainColor flex flex-row items-center cursor-pointer"
+                >
+                  <IoIosArrowBack />
+                  Quay lại giỏ hàng
+                </a>
+              )}
+              <div className="space-y-4 ">
+                {cartItems.map((cartItem) => (
+                  <CartItem
+                    key={cartItem.skuId}
+                    cartItem={cartItem}
+                    setSelectedProducts={setSelectedProducts}
+                    setCartItems={setCartItems}
+                    isCheckout={isCheckout}
+                  />
+                ))}
+              </div>
             </div>
+            {/* Hiển thị CheckoutInfo ngay dưới CheckOut nếu đang trong trạng thái thanh toán */}
+            {isCheckout && (
+              <>
+                <div className="mt-4 ">
+                  <CheckoutInfo
+                    onSubmit={handleCheckout} // Xác nhận thanh toán
+                  />
+                </div>
+                <div className="mt-4 ">
+                  <PaymentMethod
+                    selectedPayment={selectedPayment}
+                    setSelectedPayment={setSelectedPayment}
+                  />
+                </div>
+              </>
+            )}
           </div>
+
+          {/* Hiển thị CheckOut */}
           {cartItems.length > 0 && (
-            <CheckOut products_order={selectedProducts} userId={userId} />
+            <CheckOut
+              products_order={selectedProducts}
+              userId={userId}
+              onCheckout={() => setIsCheckout(true)} // Start the checkout process
+              onContinueShopping={() => setIsCheckout(false)} // Go back to the cart
+              isCheckout={isCheckout} // Pass the checkout state to toggle button text
+            />
           )}
         </div>
       ) : (
