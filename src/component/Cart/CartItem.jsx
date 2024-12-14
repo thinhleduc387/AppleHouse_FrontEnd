@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import OptionsCard from "../OptionsCard";
-import { deleteItemInCart, updateQuantity } from "../../../config/api";
+import { deleteItemInCart, updateQuantity } from "../../config/api";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import OptionsCard from "../Product/OptionsCard";
 
 const CartItem = ({ cartItem, setSelectedProducts, setCartItems }) => {
   const product = {

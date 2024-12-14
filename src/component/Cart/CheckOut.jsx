@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getCheckout } from "../../../config/api";
-import { formatVND } from "../../../utils";
+import { formatVND } from "../../utils";
+import { getCheckout } from "../../config/api";
 
 const initCheckOutValue = {
   accLoyalPoint: 0,

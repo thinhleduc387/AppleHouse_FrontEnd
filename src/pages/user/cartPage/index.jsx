@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import CartItem from "../../../component/Product/Cart/CartItem";
 import { getCartItemList } from "../../../config/api";
 import { useSelector } from "react-redux";
-import CheckOut from "../../../component/Product/Cart/CheckOut";
-import CartEmpty from "../../../component/Product/Cart/CartEmpty";
+import CartEmpty from "../../../component/Cart/CartEmpty";
+import CartItem from "../../../component/Cart/CartItem";
+import CheckOut from "../../../component/Cart/CheckOut";
 
 const CartPage = () => {
   const userId = useSelector((state) => state.account?.user?._id);
