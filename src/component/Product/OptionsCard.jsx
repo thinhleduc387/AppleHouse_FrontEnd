@@ -20,7 +20,10 @@ const OptionsCard = ({ options, selectedOption, onSelectOption }) => {
               className="w-8 h-8"
             />
           )}
-          <span className="text-base font-semibold text-gray-800 p-2">
+          <span
+            className=" font-semibold text-gray-800 p-2
+              lg:text-text-base md:text-sm text-xs" // Thêm các lớp thay đổi cỡ chữ
+          >
             {option.label}
           </span>
           {selectedOption.label === option.label && (

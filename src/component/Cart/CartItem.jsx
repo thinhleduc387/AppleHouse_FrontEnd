@@ -114,8 +114,10 @@ const CartItem = ({ cartItem, setSelectedProducts, setCartItems }) => {
           />
         </div>
 
-        <div>
-          <h3 className="text-base font-bold text-gray-800">{product.name}</h3>
+        <div className="flex flex-col justify-between">
+          <h3 className="lg:text-base md:text-sm text-xs font-bold text-gray-800">
+            {product.name}
+          </h3>
 
           <div className="flex gap-4 mt-4">
             <div className="relative group">
