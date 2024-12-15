@@ -92,7 +92,7 @@ const RouterCustom = () => {
 
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
-          <Route path={ROUTERS.ADMIN.DASHBOARD} element={<DashBoard />} />
+          <Route path="/admin/sales-analytics" element={<DashBoard />} />
           <Route
             path={ROUTERS.ADMIN.MANAGE_PRODUCTS}
             element={<ProductPageAdmin />}

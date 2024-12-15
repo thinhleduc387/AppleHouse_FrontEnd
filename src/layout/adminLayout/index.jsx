@@ -1,22 +1,25 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import Header from "../../component/admin/header";
 import Sidebar from "../../component/admin/sideBar";
 import { Outlet } from "react-router-dom";
 
 const AdminLayout = ({ children }) => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to manage sidebar visibility
+
   return (
     <div className="flex h-screen overflow-hidden">
       {/* ===== Sidebar Start ===== */}
-      <div className="w-64 bg-gray-800 text-white h-screen z-10">
-        <Sidebar />
-      </div>
+
+      <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
+
       {/* ===== Sidebar End ===== */}
 
       {/* ===== Content Area Start ===== */}
       <div className="flex-1 flex flex-col overflow-y-auto">
         {/* ===== Header Start ===== */}
         <div className="sticky top-0 z-20 bg-white shadow-md">
-          <Header />
+          <Header setIsSidebarOpen={setIsSidebarOpen} />{" "}
+          {/* Pass the setIsSidebarOpen function to Header */}
         </div>
         {/* ===== Header End ===== */}
 
