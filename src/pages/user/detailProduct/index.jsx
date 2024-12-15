@@ -278,7 +278,7 @@ const DetailProduct = () => {
                 <RatingStat />
               </div>
               <div ref={commentSectionRef}>
-                <CommentSection />
+                <CommentSection productId={productId} />
               </div>
             </div>
             {/* Sidebar */}

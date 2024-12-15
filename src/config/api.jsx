@@ -92,3 +92,39 @@ export const getCheckout = async ({
     products_order,
   });
 };
+
+// comment
+
+export const getListCommentBySpuId = async ({
+  productId,
+  parentCommentId = null,
+  limit = 50,
+  offset = 0,
+}) => {
+  return axios.get("/comment", {
+    params: {
+      productId,
+      parentCommentId,
+      limit,
+      offset,
+    },
+  });
+};
+
+export const createComment = async ({
+  productId,
+  userId,
+  content,
+  parentCommentId = null,
+}) => {
+  return axios.post("/comment", {
+    productId,
+    userId,
+    content,
+    parentCommentId,
+  });
+};
+
+export const toggleLikeComment = async (commentId) => {
+  return axios.put(`/comment/${commentId}/like`);
+};
