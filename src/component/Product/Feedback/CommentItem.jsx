@@ -8,6 +8,7 @@ import {
 import { formatDistance } from "date-fns";
 import { useSelector } from "react-redux";
 const CommentItem = ({ comment, depth = 0 }) => {
+  console.log("🚀 ~ CommentItem ~ depth:", depth);
   const userId = useSelector((state) => state.account?.user?._id);
 
   const [showReplies, setShowReplies] = useState(false);
@@ -18,8 +19,9 @@ const CommentItem = ({ comment, depth = 0 }) => {
     comment?.comment_user_likes?.includes(userId)
   );
   const [likeCount, setLikeCount] = useState(comment.comment_likes || 0);
-
-  const haveReplyComment = comment?.comment_right - comment?.comment_left > 1;
+  const [haveReplyComment, setHaveReplyComment] = useState(
+    comment?.comment_right - comment?.comment_left > 1
+  );
 
   const handleReplySubmit = async () => {
     if (replyText.trim()) {
@@ -34,6 +36,7 @@ const CommentItem = ({ comment, depth = 0 }) => {
       setReplyText("");
       setShowReplyForm(false);
       setShowReplies(true);
+      setHaveReplyComment(true);
     }
   };
 
@@ -43,6 +46,7 @@ const CommentItem = ({ comment, depth = 0 }) => {
       productId: comment.comment_productId,
       parentCommentId: comment._id,
     });
+    console.log("🚀 ~ handleGetListComment ~ response:", response);
 
     if (response.status === 200) {
       setReplies(response.metadata);
@@ -62,10 +66,18 @@ const CommentItem = ({ comment, depth = 0 }) => {
     }
   };
 
-  const indentClass = depth > 0 ? `ml-${depth * 8} mt-3 ` : "";
+  const indentClasses = [
+    "ml-8 mt-3",
+    "ml-16 mt-3",
+    "ml-24 mt-3",
+    "ml-32 mt-3",
+    "ml-40 mt-3",
+  ];
+  const indentClass =
+    depth > 0 && depth < indentClasses.length ? indentClasses[depth] : "";
 
   return (
-    <div className={`flex flex-col ${indentClass} `}>
+    <div className={`flex flex-col ${indentClass}`}>
       <div className="flex items-start">
         <img
           src={comment?.comment_userId?.usr_avatar}
@@ -163,8 +175,8 @@ const CommentItem = ({ comment, depth = 0 }) => {
       </div>
 
       {showReplies &&
-        replies.map((reply) => (
-          <CommentItem key={reply.id} comment={reply} depth={depth + 1} />
+        replies.map((reply, index) => (
+          <CommentItem key={index} comment={reply} depth={depth + 1} />
         ))}
     </div>
   );

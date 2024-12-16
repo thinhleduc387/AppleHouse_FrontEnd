@@ -7,6 +7,7 @@ import CommentItem from "./CommentItem";
 
 const CommentSection = ({ productId }) => {
   const [comments, setComments] = useState([]);
+  console.log("🚀 ~ CommentSection ~ comments:", comments);
   const userId = useSelector((state) => state.account?.user?._id);
 
   const handleSendNewComment = async (comment) => {
@@ -30,7 +31,7 @@ const CommentSection = ({ productId }) => {
 
   useEffect(() => {
     handleGetListComment();
-  }, [productId]);
+  }, []);
 
   return (
     <div className="space-y-10">
@@ -40,7 +41,10 @@ const CommentSection = ({ productId }) => {
 
       <div className="flex flex-col gap-4">
         {comments.length > 0 &&
-          comments.map((comment, index) => <CommentItem comment={comment} />)}
+          comments.map((comment) => (
+            <CommentItem key={comment._id} comment={comment} />
+          ))}
+
         <button
           type="button"
           className="w-full mt-10 px-4 py-2.5 bg-transparent hover:bg-gray-50 border border-blue-600 text-gray-800 font-bold rounded"
