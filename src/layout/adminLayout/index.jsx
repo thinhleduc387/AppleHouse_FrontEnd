@@ -24,7 +24,7 @@ const AdminLayout = ({ children }) => {
         {/* ===== Header End ===== */}
 
         {/* ===== Main Content Start ===== */}
-        <main className="p-4 md:p-6 2xl:p-10">
+        <main className="p-4 md:p-12 2xl:p-10">
           <Outlet />
         </main>
         {/* ===== Main Content End ===== */}

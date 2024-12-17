@@ -92,3 +92,18 @@ export const getCheckout = async ({
     products_order,
   });
 };
+
+//Image
+export const getImageLink = async (formData) => {
+  try {
+    const response = await axios.post("/product/thumb", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // Đảm bảo content-type là multipart/form-data
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Lỗi khi gửi ảnh:", error);
+    throw error;
+  }
+};

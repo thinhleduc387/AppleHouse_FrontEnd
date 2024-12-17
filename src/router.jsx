@@ -29,6 +29,7 @@ import Info from "./component/Profile/Info";
 import Favorites from "./component/Profile/Favorites";
 import Address from "./component/Profile/Address";
 import SearchPage from "./pages/user/searchPage";
+import AddProductPage from "./pages/admin/addProductPage";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -94,8 +95,8 @@ const RouterCustom = () => {
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="/admin/sales-analytics" element={<DashBoard />} />
           <Route
-            path={ROUTERS.ADMIN.MANAGE_PRODUCTS}
-            element={<ProductPageAdmin />}
+            path="/admin/products/add"
+            element={<AddProductPage />}
           />
           <Route path={ROUTERS.ADMIN.ORDER} element={<OrderListPage />} />
           <Route
