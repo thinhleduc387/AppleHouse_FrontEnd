@@ -1,19 +1,18 @@
-// src/pages/admin/AddProductPage.js
-
 import React, { useState } from "react";
 import AddSPUInfo from "../../../component/admin/addProduct/AddSPUInfo";
 import AddVariationsInfo from "../../../component/admin/addProduct/AddVariationsInfo";
+import AddAttributesInfo from "../../../component/admin/addProduct/AddAttributesInfo";
 
 const AddProductPage = () => {
   const [productData, setProductData] = useState({
     name: "",
-    category: [],
+    category: "", // Lưu giá trị category
     description: "",
     tags: [],
     thumb: null,
   });
-  console.log("🚀 ~ AddProductPage ~ productData:", productData)
 
+  // Hàm xử lý thay đổi chung cho input
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProductData({
@@ -25,22 +24,24 @@ const AddProductPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Product Data Submitted:", productData);
-    // Add API call or other logic to handle form submission
   };
 
   return (
-    <div>
-      <div>
-        {/* Sử dụng ProductForm để hiển thị form tạo sản phẩm */}
-        <AddSPUInfo
-          productData={productData}
-          handleChange={handleChange}
-          setProductData={setProductData}
-          handleSubmit={handleSubmit}
-        />
-      </div>
+    <div className="p-6">
+      <AddSPUInfo
+        productData={productData}
+        handleChange={handleChange}
+        setProductData={setProductData}
+        handleSubmit={handleSubmit}
+      />
+
       <div className="mt-10">
         <AddVariationsInfo />
+      </div>
+
+      <div className="mt-10">
+        {/* Truyền category cho AddAttributesInfo */}
+        <AddAttributesInfo category={productData.category} />
       </div>
     </div>
   );

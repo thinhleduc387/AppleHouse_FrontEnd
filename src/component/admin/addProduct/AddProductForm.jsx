@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import mammoth from "mammoth";
 import * as pdfjsLib from "pdfjs-dist/webpack";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; // Import style for React Quill
-
+import "react-quill/dist/quill.snow.css"; 
 const AddProductForm = ({ productData, handleChange }) => {
   const [file, setFile] = useState(null);
 
