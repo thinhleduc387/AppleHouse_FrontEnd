@@ -10,7 +10,9 @@ import { toast } from "react-toastify";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [isSignUpDialogOpen, setSignUpDialogOpen] = useState(false);
+
   const navigate = useNavigate(); // Khai báo useNavigate
   const dispatch = useDispatch();
   const handleSubmit = async (e) => {
@@ -26,7 +28,7 @@ const LoginPage = () => {
           response.metadata.tokens.accessToken
         );
         localStorage.setItem("user_id", user._id);
-        
+
         dispatch(setUserLoginInfo(user));
 
         navigate("/");

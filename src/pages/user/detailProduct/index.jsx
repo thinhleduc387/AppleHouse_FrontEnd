@@ -7,12 +7,14 @@ import CommentSection from "../../../component/Product/Feedback/CommentSection";
 import { addToCart, getProduct } from "../../../config/api";
 import { FaCheck } from "react-icons/fa";
 import ProductDescription from "../../../component/Product/ProductDescription";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { fetchCart, addToLocalCart } from "../../../redux/slice/cartSlice";
 
 const DetailProduct = () => {
   const { productId } = useParams();
   const userId = useSelector((state) => state.account?.user?._id);
+  const dispatch = useDispatch();
 
   const [isSidebarOpen, setSidebarOpen] = useState(false); // State cho Sidebar
   const [loading, setLoading] = useState(true);
@@ -56,9 +58,23 @@ const DetailProduct = () => {
 
     return currentSku !== undefined && currentSku.sku_stock !== 0;
   };
+
   const handleAddToCart = async () => {
-    const response = await addToCart({ userId, skuId: selectedSku._id });
-    if (response.status === 200) {
+    const newItem = {
+      skuId: selectedSku._id,
+      quantity: 1,
+    };
+
+    if (userId) {
+      const response = await addToCart({ userId, skuId: selectedSku._id });
+      if (response.status === 200) {
+        toast.success("Add to cart success");
+        dispatch(fetchCart(userId)); // Fetch giỏ hàng từ server
+      } else {
+        toast.error("Failed to add to cart");
+      }
+    } else {
+      dispatch(addToLocalCart(newItem));
       toast.success("Add to cart success");
     }
   };

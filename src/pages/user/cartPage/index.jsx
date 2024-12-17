@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getCartItemList } from "../../../config/api";
+import { getCartItemList, getShowCartForLocal } from "../../../config/api";
 import { useSelector } from "react-redux";
 import CartEmpty from "../../../component/Cart/CartEmpty";
 import CartItem from "../../../component/Cart/CartItem";
@@ -16,14 +16,16 @@ const CartPage = () => {
   const [loading, setLoading] = useState(true);
   const [isCheckout, setIsCheckout] = useState(false); // Trạng thái thanh toán
   const [error, setError] = useState(null);
+  const localCartItems = useSelector((state) => state.cart?.localCartItems);
 
   useEffect(() => {
-    if (!userId) return;
-
     const getShowCart = async () => {
       try {
         setLoading(true);
-        const response = await getCartItemList(userId);
+        const response = userId
+          ? await getCartItemList(userId)
+          : await getShowCartForLocal({ carts: localCartItems });
+
         if (response.status === 200) {
           setCartItems(response.metadata);
         } else {
@@ -37,11 +39,11 @@ const CartPage = () => {
     };
 
     getShowCart();
-  }, [userId]);
+  }, [userId, localCartItems]);
 
   const handleCheckout = (formData) => {
     console.log("Thông tin thanh toán:", formData);
-    // Gửi thông tin thanh toán lên server
+
     setIsCheckout(false); // Quay lại trạng thái giỏ hàng sau khi thanh toán xong
   };
 

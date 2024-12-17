@@ -9,18 +9,20 @@ const MasterLayout = ({ breadcrumbItems = [], ...props }) => {
 
   // Nếu không truyền breadcrumbItems từ trang con, ta có thể tự động tạo breadcrumb dựa trên location.pathname
   const generateBreadcrumbs = () => {
-    const pathnames = location.pathname.split('/').filter(x => x); // Tách đường dẫn thành mảng
+    const pathnames = location.pathname.split("/").filter((x) => x); // Tách đường dẫn thành mảng
     const breadcrumbs = pathnames.map((value, index) => {
-      const to = `/${pathnames.slice(0, index + 1).join('/')}`;
+      const to = `/${pathnames.slice(0, index + 1).join("/")}`;
       return {
         name: value.charAt(0).toUpperCase() + value.slice(1), // Capitalize first letter
         link: to,
       };
     });
-    return [{ name: 'Home', link: '/' }, ...breadcrumbs]; // Thêm "Home" vào đầu breadcrumb
+    return [{ name: "Home", link: "/" }, ...breadcrumbs]; // Thêm "Home" vào đầu breadcrumb
   };
 
-  const breadcrumbData = breadcrumbItems.length ? breadcrumbItems : generateBreadcrumbs();
+  const breadcrumbData = breadcrumbItems.length
+    ? breadcrumbItems
+    : generateBreadcrumbs();
 
   return (
     <>
@@ -32,7 +34,9 @@ const MasterLayout = ({ breadcrumbItems = [], ...props }) => {
 
         {/* Hiển thị breadcrumb nếu có dữ liệu */}
         {breadcrumbData.length > 1 && (
-          <div className="py-4"> {/* Thêm margin top/bottom cho breadcrumb */}
+          <div className="py-4">
+            {" "}
+            {/* Thêm margin top/bottom cho breadcrumb */}
             <Breadcrumb breadcrumbItems={breadcrumbData} />
           </div>
         )}
@@ -42,7 +46,9 @@ const MasterLayout = ({ breadcrumbItems = [], ...props }) => {
         </main>
       </div>
 
-      <div className="mt-8"> {/* Điều chỉnh khoảng cách với footer */}
+      <div className="mt-8">
+        {" "}
+        {/* Điều chỉnh khoảng cách với footer */}
         <Footer />
       </div>
     </>

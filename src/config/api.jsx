@@ -60,6 +60,10 @@ export const addToCart = async ({ userId, skuId, quantity = 1 }) => {
   return axios.post("/cart", { userId, skuId, quantity });
 };
 
+export const addToCartFromLocal = async ({ carts }) => {
+  return axios.post("/cart/add-cart-from-local", { carts });
+};
+
 export const deleteItemInCart = async ({ userId, skuId }) => {
   return axios.delete("/cart", {
     data: { userId, skuId }, // Đưa payload vào thuộc tính `data`
@@ -76,6 +80,14 @@ export const getCartItemList = async (userId) => {
 
 export const updateQuantity = async ({ userId, item_products }) => {
   return axios.post("/cart/update", { userId, item_products });
+};
+
+export const getCart = async ({ userId }) => {
+  return axios.post("/cart/get-cart", { userId });
+};
+
+export const getShowCartForLocal = async ({ carts }) => {
+  return axios.post("/cart/cart-for-local", { carts });
 };
 
 //  Checkout

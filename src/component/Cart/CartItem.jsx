@@ -2,8 +2,13 @@ import { useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { deleteItemInCart, updateQuantity } from "../../config/api";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import OptionsCard from "../Product/OptionsCard";
+import {
+  fetchCart,
+  removeFromLocalCart,
+  updateLocalCartQuantity,
+} from "../../redux/slice/cartSlice";
 
 const CartItem = ({ cartItem, setSelectedProducts, setCartItems }) => {
   const product = {
@@ -15,7 +20,7 @@ const CartItem = ({ cartItem, setSelectedProducts, setCartItems }) => {
     loyalPoint: cartItem.loyalPoint,
     quantity: cartItem.quantity,
   };
-
+  const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(product.quantity);
   const [selectedColor, setSelectedColor] = useState("256 GB");
   const [isChecked, setIsChecked] = useState(false);
@@ -23,42 +28,66 @@ const CartItem = ({ cartItem, setSelectedProducts, setCartItems }) => {
   const userId = useSelector((state) => state.account?.user?._id);
 
   const handleIncreaseQuantity = () => {
-    if (callUpdateQuantity(quantity, quantity + 1, product.skuId)) {
-      setQuantity((prev) => prev + 1);
+    if (userId) {
+      if (callUpdateQuantity(quantity, quantity + 1, product.skuId)) {
+        setQuantity((prev) => prev + 1);
 
-      setSelectedProducts((prev) =>
-        prev.map((item) =>
-          item.skuId === product.skuId
-            ? { ...item, quantity: quantity + 1 }
-            : item
-        )
-      );
+        setSelectedProducts((prev) =>
+          prev.map((item) =>
+            item.skuId === product.skuId
+              ? { ...item, quantity: quantity + 1 }
+              : item
+          )
+        );
+      }
+    } else {
+      setQuantity((prev) => {
+        dispatch(
+          updateLocalCartQuantity({ skuId: product.skuId, quantity: prev + 1 })
+        );
+        return prev + 1;
+      });
     }
   };
 
   const handleDeleteCart = async () => {
-    const response = await deleteItemInCart({ userId, skuId: product.skuId });
-    if (response.metadata.modifiedCount !== 0) {
-      toast.success("Delete successful");
-      setCartItems((prevItems) =>
-        prevItems.filter((item) => item.skuId !== product.skuId)
-      );
+    if (userId) {
+      const response = await deleteItemInCart({ userId, skuId: product.skuId });
+      if (response.metadata.modifiedCount !== 0) {
+        toast.success("Delete successful");
+        setCartItems((prevItems) =>
+          prevItems.filter((item) => item.skuId !== product.skuId)
+        );
+        dispatch(fetchCart(userId));
+        setIsModalOpen(false); // Đóng modal sau khi xóa thành công
+      }
+    } else {
+      dispatch(removeFromLocalCart({ skuId: product.skuId }));
       setIsModalOpen(false); // Đóng modal sau khi xóa thành công
     }
   };
 
   const handleDecreaseQuantity = () => {
-    if (quantity > 1) {
-      if (callUpdateQuantity(quantity, quantity - 1, product.skuId))
-        setQuantity((prev) => prev - 1);
+    if (userId) {
+      if (quantity > 1) {
+        if (callUpdateQuantity(quantity, quantity - 1, product.skuId))
+          setQuantity((prev) => prev - 1);
 
-      setSelectedProducts((prev) =>
-        prev.map((item) =>
-          item.skuId === product.skuId
-            ? { ...item, quantity: quantity - 1 }
-            : item
-        )
-      );
+        setSelectedProducts((prev) =>
+          prev.map((item) =>
+            item.skuId === product.skuId
+              ? { ...item, quantity: quantity - 1 }
+              : item
+          )
+        );
+      }
+    } else {
+      setQuantity((prev) => {
+        dispatch(
+          updateLocalCartQuantity({ skuId: product.skuId, quantity: prev - 1 })
+        );
+        return prev - 1;
+      });
     }
   };
 
