@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getCart } from "../../config/api";
 
 export const fetchCart = createAsyncThunk(
-  "account/fetchCart",
+  "cart/fetchCart",
   async (userId, thunkAPI) => {
     const response = await getCart({ userId });
     return response.metadata;
@@ -70,6 +70,13 @@ const cartSlice = createSlice({
       state.localCartItems = [];
       localStorage.removeItem("cart");
     },
+    resetCart: (state) => {
+      state._id = "";
+      state.cart_state = "";
+      state.cart_products = [];
+      state.localCartItems = [];
+      localStorage.removeItem("cart");
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -94,6 +101,7 @@ export const {
   removeFromLocalCart,
   updateLocalCartQuantity,
   clearLocalCart,
+  resetCart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

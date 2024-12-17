@@ -5,6 +5,7 @@ import { AiOutlineUser } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { setLogoutAction } from "../../redux/slice/accountSlice";
 import { toast } from "react-toastify";
+import { resetCart } from "../../redux/slice/cartSlice";
 const ProfileNavBar = ({ userAvatar, userName }) => {
   const isAuthenticated = useSelector((state) => {
     return state.account.isAuthenticated;
@@ -29,13 +30,12 @@ const ProfileNavBar = ({ userAvatar, userName }) => {
 
       if (response.status === 200 && response.metadata) {
         dispatch(setLogoutAction());
-        navigate("/"); // Điều hướng về trang chủ sau khi đăng xuất
+        dispatch(resetCart());
+        navigate("/");
       } else {
-        // Hiển thị lỗi nếu đăng xuất không thành công
         toast.error(response.message);
       }
     } catch (error) {
-      // Bắt lỗi nếu có lỗi từ API hoặc kết nối mạng
       console.error("Logout error:", error);
     }
   };

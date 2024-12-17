@@ -60,8 +60,8 @@ export const addToCart = async ({ userId, skuId, quantity = 1 }) => {
   return axios.post("/cart", { userId, skuId, quantity });
 };
 
-export const addToCartFromLocal = async ({ carts }) => {
-  return axios.post("/cart/add-cart-from-local", { carts });
+export const addToCartFromLocal = async ({ userId, carts }) => {
+  return axios.post("/cart/add-cart-from-local", { carts, userId });
 };
 
 export const deleteItemInCart = async ({ userId, skuId }) => {

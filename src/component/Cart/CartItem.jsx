@@ -80,6 +80,8 @@ const CartItem = ({ cartItem, setSelectedProducts, setCartItems }) => {
               : item
           )
         );
+      } else {
+        setIsModalOpen(true);
       }
     } else {
       setQuantity((prev) => {
