@@ -58,7 +58,7 @@ const ProductDescription = ({ description, onClickThongSo }) => {
         <div
           ref={paragraphRef}
           dangerouslySetInnerHTML={{ __html: description }}
-          className="prose max-w-none" // Add this if you're using Tailwind Typography
+          className="prose max-w-none"
         />
 
         {/* Lớp phủ mờ đục nằm ngay dưới */}

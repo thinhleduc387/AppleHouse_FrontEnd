@@ -36,6 +36,10 @@ const DetailProduct = () => {
     setLoading(true);
     const response = await getProduct(productId);
     if (response.metadata && response.status === 200) {
+      console.log(
+        "🚀 ~ handleGetProduct ~ response.metadata:",
+        response.metadata
+      );
       setSkus(response.metadata.sku_list);
       setSpu(response.metadata.spu_info);
     }
@@ -289,6 +293,7 @@ const DetailProduct = () => {
               description={spu?.product_description}
               onClickThongSo={() => setSidebarOpen(true)}
             />
+
             <div className="mt-16 bg-white border-2  rounded-lg p-6 space-y-10">
               <div ref={ratingStatRef}>
                 <RatingStat />
@@ -298,7 +303,12 @@ const DetailProduct = () => {
               </div>
             </div>
             {/* Sidebar */}
-            <ProductSideBar isOpen={isSidebarOpen} setIsOpen={setSidebarOpen} />
+
+            <ProductSideBar
+              productAttributes={spu?.product_attributes}
+              isOpen={isSidebarOpen}
+              setIsOpen={setSidebarOpen}
+            />
           </div>
         </div>
       )}
