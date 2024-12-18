@@ -84,12 +84,19 @@ const CartItem = ({ cartItem, setSelectedProducts, setCartItems }) => {
         setIsModalOpen(true);
       }
     } else {
-      setQuantity((prev) => {
-        dispatch(
-          updateLocalCartQuantity({ skuId: product.skuId, quantity: prev - 1 })
-        );
-        return prev - 1;
-      });
+      if (quantity > 1) {
+        setQuantity((prev) => {
+          dispatch(
+            updateLocalCartQuantity({
+              skuId: product.skuId,
+              quantity: prev - 1,
+            })
+          );
+          return prev - 1;
+        });
+      } else {
+        setIsModalOpen(true);
+      }
     }
   };
 
@@ -187,11 +194,8 @@ const CartItem = ({ cartItem, setSelectedProducts, setCartItems }) => {
         </div>
       </div>
 
-      {/* Phần giá và các nút (giảm số lượng, tăng số lượng và xóa) */}
       <div className="ml-auto flex flex-col md:flex-row items-center justify-between w-full md:w-auto space-y-4 md:space-y-0 md:space-x-7">
-        {/* Chứa giá và giá gốc theo dạng cột */}
         <div className="flex flex-col items-end">
-          {/* Giá hiện tại */}
           <span className="text-base font-bold text-gray-800">
             {product.price.toLocaleString("vi-VN", {
               style: "currency",
@@ -199,7 +203,6 @@ const CartItem = ({ cartItem, setSelectedProducts, setCartItems }) => {
             })}
           </span>
 
-          {/* Giá gốc nếu có */}
           {product.discountPrice && (
             <span className="text-xs text-gray-500 line-through">
               {product.discountPrice.toLocaleString("vi-VN", {

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { formatVND } from "../../utils";
 import { getCheckout } from "../../config/api";
+import { FaBitcoin } from "react-icons/fa";
+import { FaBitcoinSign } from "react-icons/fa6";
+import { BsCoin } from "react-icons/bs";
 
 const initCheckOutValue = {
   accLoyalPoint: 0,
@@ -11,7 +14,13 @@ const initCheckOutValue = {
   voucherDiscount: 0,
 };
 
-const CheckOut = ({ products_order, userId, onCheckout, onContinueShopping, isCheckout }) => {
+const CheckOut = ({
+  products_order,
+  userId,
+  onCheckout,
+  onContinueShopping,
+  isCheckout,
+}) => {
   const [checkoutValue, setCheckOutValue] = useState(initCheckOutValue);
   const [promoCode, setPromoCode] = useState("");
 
@@ -67,21 +76,18 @@ const CheckOut = ({ products_order, userId, onCheckout, onContinueShopping, isCh
         </li>
         <li className="flex justify-between text-base">
           Shipping
-          <span className="font-bold">
-            {formatVND(checkoutValue.feeShip)}
-          </span>
+          <span className="font-bold">{formatVND(checkoutValue.feeShip)}</span>
         </li>
         <li className="flex justify-between text-base">
           Loyal Points
-          <span className="font-bold">
-            {formatVND(checkoutValue.accLoyalPoint)}
+          <span className="font-bold flex justify-center align-middle">
+            <BsCoin color="#e5a624" className="pt-1 size-5" />+{" "}
+            {checkoutValue.accLoyalPoint}
           </span>
         </li>
         <li className="flex justify-between text-base font-bold">
           Total
-          <span>
-            {formatVND(checkoutValue.totalCheckOut)}
-          </span>
+          <span>{formatVND(checkoutValue.totalCheckOut)}</span>
         </li>
       </ul>
 

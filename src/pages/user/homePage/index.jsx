@@ -26,11 +26,11 @@ const HomePage = () => {
         <ProductCategory />
       </div>
 
-      {/* <div>
+      <div>
         <DiscountProduct />
       </div>
       <div>
-        <ProductSection  title={"Điện thoại xịn - Công nghệ hàng đầu"} />
+        <ProductSection title={"Điện thoại xịn - Công nghệ hàng đầu"} />
       </div>
       <div>
         <ProductSection title={"Macbook ngon - Hiệu suất vượt trội"} />
@@ -43,7 +43,7 @@ const HomePage = () => {
       </div>
       <div>
         <ProductSection title={"Tai nghe cao cấp - Âm thanh chất lượng"} />
-      </div> */}
+      </div>
     </div>
   );
 };

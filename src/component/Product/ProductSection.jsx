@@ -1,13 +1,24 @@
-import { useRef, useEffect, useState } from 'react';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import ProductItem from './ProductItem';
+import { useRef, useEffect, useState } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import ProductItem from "./ProductItem";
 
 const ProductSection = ({ title }) => {
   const scrollRef = useRef(null);
   const [cardWidth, setCardWidth] = useState(0);
 
   const totalProductsToShow = 4;
-
+  const product = {
+    id: "123",
+    imageSrc:
+      "https://cdn2.fptshop.com.vn/unsafe/360x0/filters:quality(100)/iphone_16_pro_37987b6def.png",
+    link: "",
+    name: "Iphone",
+    productPrice: {
+      orignalPrice: 11000,
+      priceAfterDiscount: 1000,
+      discount: 100,
+    },
+  };
   useEffect(() => {
     const updateCardWidth = () => {
       if (scrollRef.current) {
@@ -19,19 +30,19 @@ const ProductSection = ({ title }) => {
     };
 
     updateCardWidth();
-    window.addEventListener('resize', updateCardWidth);
+    window.addEventListener("resize", updateCardWidth);
 
     return () => {
-      window.removeEventListener('resize', updateCardWidth);
+      window.removeEventListener("resize", updateCardWidth);
     };
   }, []);
 
   const scrollLeft = () => {
-    scrollRef.current.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+    scrollRef.current.scrollBy({ left: -cardWidth, behavior: "smooth" });
   };
 
   const scrollRight = () => {
-    scrollRef.current.scrollBy({ left: cardWidth, behavior: 'smooth' });
+    scrollRef.current.scrollBy({ left: cardWidth, behavior: "smooth" });
   };
 
   return (
@@ -48,9 +59,13 @@ const ProductSection = ({ title }) => {
           <div
             key={index}
             className="flex-none"
-            style={{ width: `calc((100% - ${16 * (totalProductsToShow - 1)}px) / ${totalProductsToShow})` }}
+            style={{
+              width: `calc((100% - ${
+                16 * (totalProductsToShow - 1)
+              }px) / ${totalProductsToShow})`,
+            }}
           >
-            <ProductItem />
+            <ProductItem product={product} />
           </div>
         ))}
       </div>
