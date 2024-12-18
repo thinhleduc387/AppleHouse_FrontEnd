@@ -9,7 +9,7 @@ const ImageUpload = ({ skuIndexId, skuImgs, onImageUpload, onRemoveImage }) => {
           {skuImgs.map((image, imgIndex) => (
             <div key={imgIndex} className="relative">
               <img
-                src={URL.createObjectURL(image)}
+                src={image}
                 alt={`Image ${imgIndex + 1}`}
                 className="w-20 h-20 object-cover border rounded"
               />

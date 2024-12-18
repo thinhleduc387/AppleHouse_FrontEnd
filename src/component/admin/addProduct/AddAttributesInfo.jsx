@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { AiOutlineEdit, AiOutlineCheck, AiOutlineDelete } from "react-icons/ai";
 import {
   iphoneAttributes,
   ipadAttributes,
@@ -7,144 +8,266 @@ import {
   earphonesAttributes,
 } from "./AttributesData";
 
-const AddAttributesInfo = ({ category }) => {
+const AddAttributesInfo = ({ category, productData, onUpdateAttributes }) => {
   const [attributes, setAttributes] = useState([]); // Danh sách bộ attributes
-  const [expandedGroup, setExpandedGroup] = useState(null); // Nhóm đang mở rộng
+  const [expandedGroups, setExpandedGroups] = useState([]); // Nhóm đang mở
+  const [defaultLength, setDefaultLength] = useState(0); // Số nhóm cố định
+  const [editingGroup, setEditingGroup] = useState(null); // Trạng thái chỉnh sửa tên nhóm
+  const [editingPropertyName, setEditingPropertyName] = useState({
+    groupIndex: null,
+    propertyIndex: null,
+  }); // Trạng thái chỉnh sửa thuộc tính
 
-  // State để thêm bộ mới
-  const [newGroupName, setNewGroupName] = useState("");
-  const [newProperties, setNewProperties] = useState([""]);
-
-  // Cập nhật bộ attributes dựa trên category
-  useEffect(() => {
-    if (!category) {
-      setAttributes([]);
-      return;
+  // Cập nhật attributes và đồng bộ với component cha
+  const setAttributesWithCallback = (updatedAttributes) => {
+    setAttributes(updatedAttributes);
+    if (onUpdateAttributes) {
+      onUpdateAttributes(updatedAttributes); // Gửi dữ liệu lên component cha
     }
+  };
 
-    switch (category) {
-      case "iPhone":
-        setAttributes(iphoneAttributes);
-        break;
-      case "iPad":
-        setAttributes(ipadAttributes);
-        break;
-      case "MacBook":
-        setAttributes(macbookAttributes);
-        break;
-      case "Apple Watch":
-        setAttributes(applewatchAttributes);
-        break;
-      case "Earphones":
-        setAttributes(earphonesAttributes);
-        break;
-      default:
+  useEffect(() => {
+    if (!productData.attributes || !productData.attributes.length > 0) {
+      if (!category) {
         setAttributes([]);
-        break;
+        setDefaultLength(0);
+        return;
+      }
+
+      let initialAttributes = [];
+      switch (category) {
+        case "iPhone":
+          initialAttributes = iphoneAttributes;
+          break;
+        case "iPad":
+          initialAttributes = ipadAttributes;
+          break;
+        case "Mac":
+          initialAttributes = macbookAttributes;
+          break;
+        case "Apple Watch":
+          initialAttributes = applewatchAttributes;
+          break;
+        case "Tai nghe":
+          initialAttributes = earphonesAttributes;
+          break;
+        default:
+          initialAttributes = [];
+          break;
+      }
+
+      // Chuyển đổi structure attributes
+      const updatedAttributes = initialAttributes.map((group) => ({
+        groupName: group.groupName,
+        attributes: group.propertiesName.map((property) => ({
+          displayName: property,
+          value: "",
+        })),
+      }));
+
+      setAttributesWithCallback(updatedAttributes);
+      setDefaultLength(updatedAttributes.length);
     }
   }, [category]);
 
-  // Toggle expand/collapse group
-  const handleToggleGroup = (groupName) => {
-    setExpandedGroup((prev) => (prev === groupName ? null : groupName));
-  };
-
-  // Xử lý thêm thuộc tính mới
-  const handleAddNewGroup = () => {
-    if (newGroupName.trim() && newProperties.some((p) => p.trim())) {
-      const newGroup = {
-        groupName: newGroupName,
-        propertiesName: newProperties.filter((p) => p.trim()),
-      };
-
-      setAttributes((prev) => [...prev, newGroup]);
-      setNewGroupName(""); // Reset input groupName
-      setNewProperties([""]); // Reset input propertiesName
+  useEffect(() => {
+    if (productData.attributes && productData.attributes.length > 0) {
+      setAttributes(productData.attributes);
     }
+  }, []);
+
+  const handleToggleGroup = (groupName) => {
+    setExpandedGroups((prev) =>
+      prev.includes(groupName)
+        ? prev.filter((name) => name !== groupName)
+        : [...prev, groupName]
+    );
   };
 
-  // Thêm ô input cho thuộc tính mới
-  const handleAddPropertyInput = () => {
-    setNewProperties((prev) => [...prev, ""]);
+  const handleAddNewGroup = () => {
+    const newGroupName = `Nhóm mới ${attributes.length + 1}`;
+    const newGroupData = {
+      groupName: newGroupName,
+      attributes: [{ displayName: "Thuộc tính 1", value: "" }],
+    };
+    setAttributesWithCallback([...attributes, newGroupData]);
+    setExpandedGroups([...expandedGroups, newGroupName]);
   };
 
-  // Cập nhật thuộc tính mới
-  const handlePropertyChange = (index, value) => {
-    const updatedProperties = [...newProperties];
-    updatedProperties[index] = value;
-    setNewProperties(updatedProperties);
+  const handleAddProperty = (groupIndex) => {
+    const updatedAttributes = [...attributes];
+    updatedAttributes[groupIndex].attributes.push({
+      displayName: `Thuộc tính ${updatedAttributes[groupIndex].attributes.length + 1}`,
+      value: "",
+    });
+    setAttributesWithCallback(updatedAttributes);
+  };
+
+  const handleDeleteGroup = (groupIndex) => {
+    const updatedAttributes = attributes.filter((_, index) => index !== groupIndex);
+    setAttributesWithCallback(updatedAttributes);
+  };
+
+  const handleDeleteProperty = (groupIndex, propertyIndex) => {
+    const updatedAttributes = [...attributes];
+    updatedAttributes[groupIndex].attributes.splice(propertyIndex, 1);
+    setAttributesWithCallback(updatedAttributes);
+  };
+
+  const handleSaveGroupName = () => setEditingGroup(null);
+
+  const handleSavePropertyName = () => {
+    setEditingPropertyName({ groupIndex: null, propertyIndex: null }); // Reset trạng thái chỉnh sửa
   };
 
   return (
     <div className="p-4 bg-white shadow-md rounded-lg">
       <h2 className="text-xl font-bold mb-4">Thuộc tính sản phẩm</h2>
 
-      {attributes.map((group, index) => (
-        <div key={index} className="mb-4 border-b last:border-b-0">
-          {/* Expandable Group Header */}
-          <div
-            className="cursor-pointer bg-gray-100 hover:bg-gray-200 flex justify-between items-center px-4 py-3 rounded-md"
-            onClick={() => handleToggleGroup(group.groupName)}
-          >
-            <h3 className="text-lg font-semibold text-gray-700">
-              {group.groupName}
-            </h3>
-            <span className="text-xl text-gray-500">
-              {expandedGroup === group.groupName ? "−" : "+"}
-            </span>
+      {attributes.map((group, groupIndex) => (
+        <div key={groupIndex} className="mb-4 border-b last:border-b-0">
+          {/* Header Group */}
+          <div className="cursor-pointer bg-gray-100 hover:bg-gray-200 flex justify-between items-center px-4 py-3 rounded-md">
+            {editingGroup === groupIndex ? (
+              <div className="flex items-center gap-2 w-full">
+                <input
+                  type="text"
+                  value={group.groupName}
+                  onChange={(e) => {
+                    const updatedAttributes = [...attributes];
+                    updatedAttributes[groupIndex].groupName = e.target.value;
+                    setAttributesWithCallback(updatedAttributes);
+                  }}
+                  className="border rounded-md px-2 py-1 w-full"
+                />
+              </div>
+            ) : (
+              <h3
+                className="text-lg font-semibold flex-1"
+                onClick={() => handleToggleGroup(group.groupName)}
+              >
+                {group.groupName}
+              </h3>
+            )}
+
+            {groupIndex >= defaultLength && (
+              <div className="flex gap-2">
+                {editingGroup === groupIndex ? (
+                  <AiOutlineCheck
+                    onClick={() => handleSaveGroupName()}
+                    className="text-green-500 cursor-pointer"
+                  />
+                ) : (
+                  <AiOutlineEdit
+                    onClick={() => setEditingGroup(groupIndex)}
+                    className="text-blue-500 cursor-pointer"
+                  />
+                )}
+                <AiOutlineDelete
+                  onClick={() => handleDeleteGroup(groupIndex)}
+                  className="text-red-500 cursor-pointer"
+                />
+              </div>
+            )}
           </div>
 
-          {/* Expandable Content */}
-          {expandedGroup === group.groupName && (
+          {/* Content */}
+          {expandedGroups.includes(group.groupName) && (
             <div className="p-4 bg-gray-50 border-t">
-              {group.propertiesName.map((property, idx) => (
-                <div key={idx} className="flex items-center mb-3">
-                  <label className="w-1/3 text-gray-700 font-medium">
-                    {property}:
-                  </label>
+              {group.attributes.map((property, propertyIndex) => (
+                <div
+                  key={propertyIndex}
+                  className="flex items-center gap-4 mb-4"
+                >
+                  {/* Display Name */}
+                  <div className="flex items-center w-1/3">
+                    {groupIndex >= defaultLength &&
+                    editingPropertyName.groupIndex === groupIndex &&
+                    editingPropertyName.propertyIndex === propertyIndex ? (
+                      <div className="flex items-center gap-2 w-full">
+                        <input
+                          type="text"
+                          value={property.displayName}
+                          onChange={(e) => {
+                            const updatedAttributes = [...attributes];
+                            updatedAttributes[groupIndex].attributes[
+                              propertyIndex
+                            ].displayName = e.target.value;
+                            setAttributesWithCallback(updatedAttributes);
+                          }}
+                          className="border rounded-md px-2 py-1 w-full"
+                        />
+                      </div>
+                    ) : (
+                      <span>{property.displayName}</span>
+                    )}
+                  </div>
+
+                  {/* Input Value */}
                   <input
                     type="text"
-                    placeholder={`Nhập ${property}`}
-                    className="w-2/3 border border-gray-300 rounded-md px-3 py-2"
+                    value={property.value}
+                    onChange={(e) => {
+                      const updatedAttributes = [...attributes];
+                      updatedAttributes[groupIndex].attributes[propertyIndex].value =
+                        e.target.value;
+                      setAttributesWithCallback(updatedAttributes);
+                    }}
+                    className="border rounded-md px-2 py-1 w-2/3"
                   />
+
+                  {/* Edit and Delete Icons */}
+                  {groupIndex >= defaultLength && (
+                    <div className="flex gap-2">
+                      {editingPropertyName.groupIndex === groupIndex &&
+                      editingPropertyName.propertyIndex === propertyIndex ? (
+                        <AiOutlineCheck
+                          onClick={handleSavePropertyName}
+                          className="text-green-500 cursor-pointer"
+                        />
+                      ) : (
+                        <AiOutlineEdit
+                          onClick={() =>
+                            setEditingPropertyName({
+                              groupIndex,
+                              propertyIndex,
+                            })
+                          }
+                          className="text-blue-500 cursor-pointer"
+                        />
+                      )}
+                      <AiOutlineDelete
+                        onClick={() =>
+                          handleDeleteProperty(groupIndex, propertyIndex)
+                        }
+                        className="text-red-500 cursor-pointer"
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
+
+              {/* Add Property */}
+              {groupIndex >= defaultLength && (
+                <button
+                  onClick={() => handleAddProperty(groupIndex)}
+                  className="text-blue-500 border border-blue-500 px-2 py-1 rounded-md hover:bg-blue-500 hover:text-white"
+                >
+                  + Thêm thuộc tính
+                </button>
+              )}
             </div>
           )}
         </div>
       ))}
 
-      {/* Form thêm bộ mới */}
-      <div className="mt-6">
-        <h3 className="text-lg font-semibold mb-2">Thêm bộ thuộc tính mới</h3>
-        <input
-          type="text"
-          placeholder="Tên nhóm thuộc tính"
-          value={newGroupName}
-          onChange={(e) => setNewGroupName(e.target.value)}
-          className="w-full mb-3 border border-gray-300 rounded-md px-3 py-2"
-        />
-        {newProperties.map((property, idx) => (
-          <input
-            key={idx}
-            type="text"
-            placeholder={`Thuộc tính ${idx + 1}`}
-            value={property}
-            onChange={(e) => handlePropertyChange(idx, e.target.value)}
-            className="w-full mb-2 border border-gray-300 rounded-md px-3 py-2"
-          />
-        ))}
-        <button
-          onClick={handleAddPropertyInput}
-          className="bg-blue-500 text-white px-3 py-1 rounded-md mr-2 hover:bg-blue-600"
-        >
-          + Thêm thuộc tính
-        </button>
+      {/* Thêm nhóm mới */}
+      <div className="mt-4">
         <button
           onClick={handleAddNewGroup}
-          className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600"
+          className="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600"
         >
-          Thêm nhóm
+          Thêm nhóm mới
         </button>
       </div>
     </div>

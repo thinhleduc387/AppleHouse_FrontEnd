@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { formatVND } from "../../utils";
+import { formatVND } from "../../utils/format";
 import { getCheckout } from "../../config/api";
 
 const initCheckOutValue = {
@@ -11,7 +11,13 @@ const initCheckOutValue = {
   voucherDiscount: 0,
 };
 
-const CheckOut = ({ products_order, userId, onCheckout, onContinueShopping, isCheckout }) => {
+const CheckOut = ({
+  products_order,
+  userId,
+  onCheckout,
+  onContinueShopping,
+  isCheckout,
+}) => {
   const [checkoutValue, setCheckOutValue] = useState(initCheckOutValue);
   const [promoCode, setPromoCode] = useState("");
 
@@ -67,9 +73,7 @@ const CheckOut = ({ products_order, userId, onCheckout, onContinueShopping, isCh
         </li>
         <li className="flex justify-between text-base">
           Shipping
-          <span className="font-bold">
-            {formatVND(checkoutValue.feeShip)}
-          </span>
+          <span className="font-bold">{formatVND(checkoutValue.feeShip)}</span>
         </li>
         <li className="flex justify-between text-base">
           Loyal Points
@@ -79,9 +83,7 @@ const CheckOut = ({ products_order, userId, onCheckout, onContinueShopping, isCh
         </li>
         <li className="flex justify-between text-base font-bold">
           Total
-          <span>
-            {formatVND(checkoutValue.totalCheckOut)}
-          </span>
+          <span>{formatVND(checkoutValue.totalCheckOut)}</span>
         </li>
       </ul>
 

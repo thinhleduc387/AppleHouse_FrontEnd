@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { ImBin } from "react-icons/im";
 import ImageUpload from "./ImageUpload";
+import { formatNumber, parseNumber } from "../../../utils/format";
 
-const SkuTable = ({ skuList, variationsList, onPriceChange, onStockChange, onImageUpload, onRemoveImage }) => {
+const SkuTable = ({
+  skuList,
+  variationsList,
+  onPriceChange,
+  onStockChange,
+  onImageUpload,
+  onRemoveImage,
+}) => {
   return (
     <table className="table-auto w-full mt-6 border">
       <thead>
@@ -27,9 +35,12 @@ const SkuTable = ({ skuList, variationsList, onPriceChange, onStockChange, onIma
             ))}
             <td className="border px-4 py-2">
               <input
-                type="number"
-                value={sku.sku_price || ""}
-                onChange={(e) => onPriceChange(skuIndexId, e.target.value)}
+                type="text"
+                value={formatNumber(sku.sku_price || "")}
+                onChange={(e) => {
+                  const rawValue = parseNumber(e.target.value);
+                  onPriceChange(skuIndexId, rawValue);
+                }}
                 className="w-full p-2 border rounded"
               />
             </td>

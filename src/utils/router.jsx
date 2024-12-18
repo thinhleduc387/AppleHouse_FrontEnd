@@ -33,7 +33,7 @@ export const ROUTERS = {
       icon: <FaBox />,
       links: [
         { name: "Nổi bật", path: "/admin/top-products" },
-        { name: "Kho hàng", path: "/admin/products-management" },
+        { name: "Kho hàng", path: "/admin/stock" },
         { name: "Thêm mới sản phẩm", path: "/admin/products/add" },
       ],
     },

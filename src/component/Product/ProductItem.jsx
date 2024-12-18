@@ -8,7 +8,7 @@ import {
 import { FaTruck, FaTag } from "react-icons/fa";
 import { useState } from "react";
 import { ROUTERS } from "../../utils/router"; // Đảm bảo đường dẫn đúng
-import { formatVND } from "../../utils";
+import { formatVND } from "../../utils/format";
 import { Link } from "react-router-dom";
 
 const ProductItem = ({ product, isEdit }) => {

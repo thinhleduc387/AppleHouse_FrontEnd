@@ -12,8 +12,10 @@ const CategorySelect = ({ productData, handleChange }) => {
   const getCategory = async () => {
     try {
       const response = await getAllCategory();
+      console.log("🚀 ~ getCategory ~ response:", response);
       if (response.status === 200 && response.metadata) {
         const categories = response.metadata.map((category) => ({
+          id: category._id,
           name: category.category_name,
           subItems: category.children || [],
         }));
@@ -26,7 +28,10 @@ const CategorySelect = ({ productData, handleChange }) => {
 
   return (
     <div className="mb-4">
-      <label htmlFor="category" className="block text-gray-700 font-medium mb-2">
+      <label
+        htmlFor="category"
+        className="block text-gray-700 font-medium mb-2"
+      >
         Category
       </label>
       <select
@@ -47,7 +52,10 @@ const CategorySelect = ({ productData, handleChange }) => {
 
       {productData.category === "Khác" && (
         <div className="mt-2">
-          <label htmlFor="customCategory" className="block text-gray-700 font-medium mb-2">
+          <label
+            htmlFor="customCategory"
+            className="block text-gray-700 font-medium mb-2"
+          >
             Nhập category khác
           </label>
           <input

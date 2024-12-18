@@ -10,20 +10,17 @@ const ThumbnailUpload = ({ productData, setProductData }) => {
         "🚀 ~ handleFileChange ~ productData.thumb:",
         productData.thumb
       );
-      const fileURL = URL.createObjectURL(file); // Tạo đường dẫn tạm cho hình ảnh
-
-      // Cập nhật thông tin ảnh vào productData
-      setProductData({
-        ...productData,
-        thumb: fileURL,
-      });
-
       const formData = new FormData();
       formData.append("file", file); // 'file' là tên trường mà backend mong đợi
 
       try {
         const response = await getImageLink(formData);
         console.log("🚀 ~ handleFileChange ~ response:", response);
+        // Cập nhật thông tin ảnh vào productData
+        setProductData({
+          ...productData,
+          thumb: response.metadata.thumb_url,
+        });
       } catch (error) {
         console.error("Lỗi khi tải hình ảnh lên:", error);
       }

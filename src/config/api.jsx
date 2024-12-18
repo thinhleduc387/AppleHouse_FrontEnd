@@ -107,3 +107,19 @@ export const getImageLink = async (formData) => {
     throw error;
   }
 };
+
+//ProductStock
+export const getAllProduct = async () => {
+  return axios.get("/product/spu/get-all");
+};
+export const getPublishedProduct = async () => {
+  return axios.get("/product/spu/get-published");
+};
+export const getDraftProduct = async () => {
+  return axios.get("/product/spu/get-draft");
+};
+
+//ProductAdd
+export const creatNewProduct = async (productData) => {
+  return axios.post("/product/spu/new", { productData });
+};

@@ -1,33 +1,61 @@
 import React, { useState, useEffect } from "react";
 import VariationForm from "./VariationForm";
 import SkuTable from "./SkuTable";
+import { formatNumber, parseNumber } from "../../../utils/format";
 
-const AddVariationsInfo = () => {
+const AddVariationsInfo = ({
+  productData,
+  onUpdateVariations,
+  onUpdateSkuList,
+}) => {
   const [variationsList, setVariationsList] = useState([]);
-  console.log("🚀 ~ AddVariationsInfo ~ variationsList:", variationsList)
   const [sku_list, setSku_list] = useState([]);
-  console.log("🚀 ~ AddVariationsInfo ~ sku_list:", sku_list)
   const [price, setPrice] = useState(""); // Giá cho tất cả các SKU
   const [stock, setStock] = useState(""); // Kho cho tất cả các SKU
 
+  useEffect(() => {
+    if (productData.variations && productData.variations.length > 0) {
+      setVariationsList(productData.variations);
+    }
+    if (productData.sku_list && productData.sku_list.length > 0) {
+      const updatedSkuList = productData.sku_list.map((sku) => ({
+        ...sku,
+        sku_price: sku.sku_price.originalPrice || 0,
+      }));
+
+      setSku_list(updatedSkuList);
+    }
+  }, [productData]);
+  // Cập nhật variations và gọi callback
+  const setVariationsListAndUpdate = (newVariationsList) => {
+    setVariationsList(newVariationsList);
+    onUpdateVariations(newVariationsList); // Cập nhật dữ liệu lên component cha
+    generateSkuList(newVariationsList);
+  };
+
+  // Cập nhật sku_list và gọi callback
+  const setSkuListAndUpdate = (newSkuList) => {
+    setSku_list(newSkuList);
+    onUpdateSkuList(newSkuList); // Cập nhật dữ liệu lên component cha
+  };
   const addNewVariation = () => {
-    setVariationsList([
+    const newVariations = [
       ...variationsList,
       { images: [], name: "", options: [""] },
-    ]);
+    ];
+    setVariationsListAndUpdate(newVariations);
   };
 
   const removeVariation = (index) => {
     const updatedVariations = variationsList.filter((_, i) => i !== index);
-    setVariationsList(updatedVariations);
-    generateSkuList(updatedVariations);
+    setVariationsListAndUpdate(updatedVariations);
   };
 
   const handleVariationChange = (index, field, value) => {
     const updatedVariations = variationsList.map((variation, i) =>
       i === index ? { ...variation, [field]: value } : variation
     );
-    setVariationsList(updatedVariations);
+    setVariationsListAndUpdate(updatedVariations);
   };
 
   const handleOptionChange = (variationIndex, optionIndex, value) => {
@@ -39,19 +67,20 @@ const AddVariationsInfo = () => {
       }
       return variation;
     });
-    setVariationsList(updatedVariations);
+    setVariationsListAndUpdate(updatedVariations);
   };
 
   const addOption = (variationIndex) => {
     const updatedVariations = variationsList.map((variation, i) => {
-      if (i === variationIndex) {
-        if (variation.options[variation.options.length - 1] !== "") {
-          return { ...variation, options: [...variation.options, ""] };
-        }
+      if (
+        i === variationIndex &&
+        variation.options[variation.options.length - 1] !== ""
+      ) {
+        return { ...variation, options: [...variation.options, ""] };
       }
       return variation;
     });
-    setVariationsList(updatedVariations);
+    setVariationsListAndUpdate(updatedVariations);
   };
 
   const removeOption = (variationIndex, optionIndex) => {
@@ -64,19 +93,20 @@ const AddVariationsInfo = () => {
       }
       return variation;
     });
-    setVariationsList(updatedVariations);
+    setVariationsListAndUpdate(updatedVariations);
   };
 
   const handlePriceChange = (skuIndexId, value) => {
-    const updatedSkuList = [...sku_list];
-    updatedSkuList[skuIndexId].sku_price = value;
-    setSku_list(updatedSkuList);
+    const updatedSkuList = sku_list.map((sku, i) =>
+      i === skuIndexId ? { ...sku, sku_price: value } : sku
+    );
+    setSkuListAndUpdate(updatedSkuList);
   };
-
   const handleStockChange = (skuIndexId, value) => {
-    const updatedSkuList = [...sku_list];
-    updatedSkuList[skuIndexId].sku_stock = value;
-    setSku_list(updatedSkuList);
+    const updatedSkuList = sku_list.map((sku, i) =>
+      i === skuIndexId ? { ...sku, sku_stock: value } : sku
+    );
+    setSkuListAndUpdate(updatedSkuList);
   };
 
   const handleImageUpload = (skuIndexId, event) => {
@@ -111,7 +141,7 @@ const AddVariationsInfo = () => {
       const skuIndex = [];
       let combinationIndex = i;
 
-      variations.forEach((variation, index) => {
+      variations.forEach((variation) => {
         const optionIndex = combinationIndex % variation.options.length;
         skuIndex.push(optionIndex);
         combinationIndex = Math.floor(
@@ -127,20 +157,21 @@ const AddVariationsInfo = () => {
       });
     }
 
-    setSku_list(skuList);
+    setSkuListAndUpdate(skuList);
   };
-
   const applyToAll = () => {
     const updatedSkuList = sku_list.map((sku) => ({
       ...sku,
       sku_price: price,
       sku_stock: stock,
     }));
-    setSku_list(updatedSkuList);
+    setSkuListAndUpdate(updatedSkuList);
   };
 
   useEffect(() => {
-    generateSkuList();
+    if (!productData.sku_list || !productData.sku_list.length > 0) {
+      generateSkuList();
+    }
   }, [variationsList]);
 
   return (
@@ -180,9 +211,12 @@ const AddVariationsInfo = () => {
                     <div className="flex items-center md:flex-col md:items-start w-full md:w-1/2 gap-x-4 md:gap-y-2">
                       <label className="font-medium w-24 md:w-full">Giá</label>
                       <input
-                        type="number"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
+                        type="text"
+                        value={formatNumber(price) || ""}
+                        onChange={(e) => {
+                          const rawValue = parseNumber(e.target.value);
+                          setPrice(rawValue);
+                        }}
                         className="w-full md:w-full p-2 border rounded"
                       />
                     </div>
@@ -194,7 +228,7 @@ const AddVariationsInfo = () => {
                       </label>
                       <input
                         type="number"
-                        value={stock}
+                        value={stock || ""}
                         onChange={(e) => setStock(e.target.value)}
                         className="w-full md:w-full p-2 border rounded"
                       />
@@ -229,9 +263,12 @@ const AddVariationsInfo = () => {
               <div className="flex flex-col md:flex-row md:items-center gap-y-2 md:gap-y-0">
                 <label className="font-medium w-32">Giá</label>
                 <input
-                  type="number"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
+                  type="text"
+                  value={formatNumber(price) || ""}
+                  onChange={(e) => {
+                    const rawValue = parseNumber(e.target.value);
+                    setPrice(rawValue);
+                  }}
                   className="md:ml-4 w-full md:w-1/3 p-2 border rounded"
                 />
               </div>
@@ -241,7 +278,7 @@ const AddVariationsInfo = () => {
                 <label className="font-medium w-32">Kho hàng</label>
                 <input
                   type="number"
-                  value={stock}
+                  value={stock || ""}
                   onChange={(e) => setStock(e.target.value)}
                   className="md:ml-4 w-full md:w-1/3 p-2 border rounded"
                 />

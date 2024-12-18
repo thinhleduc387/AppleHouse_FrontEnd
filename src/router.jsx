@@ -20,7 +20,6 @@ import ProfilePage from "./pages/user/profilePage";
 // Admin Pages (commented out, can be added later)
 import DashBoard from "./pages/admin/dashBoard";
 import OrderListPage from "./pages/admin/orderListPage";
-import ProductPageAdmin from "./pages/admin/productPage";
 
 import OrderHistory from "./component/Profile/OrderList"; // Thêm trang OrderHistory
 
@@ -30,6 +29,7 @@ import Favorites from "./component/Profile/Favorites";
 import Address from "./component/Profile/Address";
 import SearchPage from "./pages/user/searchPage";
 import AddProductPage from "./pages/admin/addProductPage";
+import StockPage from "./pages/admin/stockPage";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -94,15 +94,10 @@ const RouterCustom = () => {
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="/admin/sales-analytics" element={<DashBoard />} />
-          <Route
-            path="/admin/products/add"
-            element={<AddProductPage />}
-          />
+          <Route path="/admin/products/add" element={<AddProductPage />} />
+          <Route path="/admin/products/edit/:id" element={<AddProductPage />} />
           <Route path={ROUTERS.ADMIN.ORDER} element={<OrderListPage />} />
-          <Route
-            path={ROUTERS.ADMIN.MANAGE_PRODUCTS + "/:productType"}
-            element={<ProductPageAdmin />}
-          />
+          <Route path="/admin/stock" element={<StockPage />} />
         </Route>
 
         {/* Catch-all for undefined routes */}
