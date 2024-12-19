@@ -1,9 +1,12 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
   const trackRef = useRef(null);
   const MIN = 0;
   const MAX = 50000000;
+
+  // Add a state to track which checkbox is selected
+  const [selectedPriceRange, setSelectedPriceRange] = useState(null);
 
   const getPercentageFromPosition = (positionX) => {
     if (trackRef.current) {
@@ -46,6 +49,35 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
     document.addEventListener(endEvent, onEnd);
   };
 
+  // Hàm xử lý khi chọn checkbox "Tất cả"
+  const handleOnClick1 = () => {
+    setMinPrice(MIN); // Reset minPrice
+    setMaxPrice(MAX); // Reset maxPrice
+    setSelectedPriceRange(null); // Deselect all checkboxes
+  };
+
+  // Hàm xử lý khi chọn các khoảng giá cụ thể
+  const handleOnClick2 = (range) => {
+    setSelectedPriceRange(range); // Set the selected price range
+
+    switch (range) {
+      case "20-25":
+        setMinPrice(20000000);
+        setMaxPrice(25000000);
+        break;
+      case "25-30":
+        setMinPrice(25000000);
+        setMaxPrice(30000000);
+        break;
+      case "above-30":
+        setMinPrice(30000000);
+        setMaxPrice(MAX);
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <aside className="hidden lg:block w-1/4 p-4 rounded-lg shadow-md bg-white sticky top-16 h-max">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -56,20 +88,36 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
         <div>
           <h4 className="font-semibold text-sm text-gray-700 mb-2">Mức giá</h4>
           <div className="flex flex-col space-y-1 mb-4">
-            <label>
-              <input type="checkbox" className="mr-2" />
+            <label onClick={handleOnClick1}>
+              <input
+                type="checkbox"
+                checked={selectedPriceRange === null}
+                className="mr-2"
+              />
               Tất cả
             </label>
-            <label>
-              <input type="checkbox" className="mr-2" />
+            <label onClick={() => handleOnClick2("20-25")}>
+              <input
+                type="checkbox"
+                checked={selectedPriceRange === "20-25"}
+                className="mr-2"
+              />
               Từ 20 - 25 triệu
             </label>
-            <label>
-              <input type="checkbox" className="mr-2" />
+            <label onClick={() => handleOnClick2("25-30")}>
+              <input
+                type="checkbox"
+                checked={selectedPriceRange === "25-30"}
+                className="mr-2"
+              />
               Từ 25 - 30 triệu
             </label>
-            <label>
-              <input type="checkbox" className="mr-2" />
+            <label onClick={() => handleOnClick2("above-30")}>
+              <input
+                type="checkbox"
+                checked={selectedPriceRange === "above-30"}
+                className="mr-2"
+              />
               Trên 30 triệu
             </label>
           </div>

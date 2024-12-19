@@ -5,7 +5,6 @@ import useWindowSize from "../utils/useWindowSize";
 const Banner = () => {
   // Danh sách hình ảnh
   const images = [
-    "https://cdn2.fptshop.com.vn/unsafe/750x0/filters:quality(100)/desk_header_c7ad8b92b8.png",
     "https://cdn2.fptshop.com.vn/unsafe/2000x0/filters:quality(100)/desk_header_c7ad8b92b8.png",
   ];
   const [currentIndex, setCurrentIndex] = useState(0);

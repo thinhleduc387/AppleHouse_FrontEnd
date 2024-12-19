@@ -54,8 +54,8 @@ const CartPage = () => {
   return (
     <div className="py-4">
       {loading ? (
-        <div className="flex justify-center items-center h-96">
-          <div className="loader border-t-4 border-blue-600 border-solid rounded-full w-12 h-12 animate-spin"></div>
+        <div class="flex items-center justify-center h-[50vh]">
+          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
         </div>
       ) : cartItems.length > 0 ? (
         <div className="grid md:grid-cols-3 gap-4 relative">

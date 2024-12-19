@@ -1,8 +1,6 @@
-// src/utils/sortOptions.js
 export const SortOptions = {
-    POPULARITY: 'Nổi bật',
-    PRICE_ASC: 'Giá: Tăng dần',
-    PRICE_DESC: 'Giá: Giảm dần',
-    NEWEST: 'Mới nhất',
-  };
-  
+  newest: "Mới nhất",
+  price_asc: "Giá tăng dần",
+  price_desc: "Giá giảm dần",
+  best_selling: "Bán chạy nhất",
+};

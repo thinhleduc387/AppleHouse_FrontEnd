@@ -25,11 +25,36 @@ export const getAllCategory = async () => {
 };
 
 /*Product*/
+export const filterProduct = async ({
+  product_status,
+  stock_status,
+  minPrice,
+  maxPrice,
+  categorySlug,
+  sortBy,
+  limit = 10,
+  skip = 0,
+}) => {
+  return axios.get("/product/spu/filter", {
+    params: {
+      product_status,
+      stock_status,
+      minPrice,
+      maxPrice,
+      categorySlug,
+      sortBy,
+      limit,
+      skip,
+    },
+  });
+};
+
 export const getAllProductByCategory = async (categorySlug) => {
   return axios.post("/product/published/all", {
     categorySlug,
   });
 };
+
 export const getProduct = async (spu_id) => {
   return axios.get("/product/spu", {
     params: {
@@ -38,10 +63,18 @@ export const getProduct = async (spu_id) => {
   });
 };
 
-export const searchProduct = async (textSearch) => {
+export const searchProduct = async ({
+  textSearch,
+  minPrice,
+  maxPrice,
+  sortBy,
+}) => {
   return axios.get("/full-text-search", {
     params: {
       textSearch,
+      minPrice,
+      maxPrice,
+      sortBy,
     },
   });
 };
