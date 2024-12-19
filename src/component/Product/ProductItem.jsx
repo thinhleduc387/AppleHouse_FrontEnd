@@ -3,7 +3,6 @@ import {
   AiOutlineHeart,
   AiFillStar,
   AiOutlineShoppingCart,
-  AiOutlineEdit, // Thêm icon edit
 } from "react-icons/ai";
 import { FaTruck, FaTag } from "react-icons/fa";
 import { useState } from "react";
@@ -11,7 +10,7 @@ import { ROUTERS } from "../../utils/router"; // Đảm bảo đường dẫn đ
 import { formatVND } from "../../utils";
 import { Link } from "react-router-dom";
 
-const ProductItem = ({ product, isEdit }) => {
+const ProductItem = ({ product, isForShow }) => {
   if (!product) {
     return (
       <div className="p-6 text-center text-gray-500">Product not available</div>
@@ -23,13 +22,6 @@ const ProductItem = ({ product, isEdit }) => {
   const [showTooltipFavorites, setShowTooltipFavorites] = useState(false);
   const [showTooltipQuickLook, setShowTooltipQuickLook] = useState(false);
 
-  // Hàm xử lý khi cố gắng nhấn vào link khi ở chế độ edit
-  const handleLinkClick = (e) => {
-    if (isEdit) {
-      e.preventDefault(); // Ngừng việc bấm link khi ở trạng thái chỉnh sửa
-    }
-  };
-
   const calculateDiscount = () => {
     const { priceAfterDiscount, orignalPrice } = productPrice;
     const discount = ((orignalPrice - priceAfterDiscount) / orignalPrice) * 100;
@@ -37,35 +29,15 @@ const ProductItem = ({ product, isEdit }) => {
   };
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm relative flex flex-col">
+    <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm relative flex flex-col">
       <div className="h-56 w-full">
-        <a
-          href={ROUTERS.USER.PRODUCT_DETAIL(id)}
-          onClick={handleLinkClick} // Ngăn việc bấm link khi ở trạng thái chỉnh sửa
-          className={isEdit ? "cursor-default" : ""}
-        >
+        <a href={ROUTERS.USER.PRODUCT_DETAIL(id)} className="cursor-default">
           <img className="mx-auto h-full" src={imageSrc} alt="" />
         </a>
       </div>
       <div className="pt-6 flex-grow">
         <div className="mb-4 flex items-center justify-end">
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              className="relative rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900"
-              onMouseEnter={() => setShowTooltipQuickLook(true)}
-              onMouseLeave={() => setShowTooltipQuickLook(false)}
-            >
-              <span className="sr-only">Quick look</span>
-              <AiOutlineEye className="h-5 w-5" />
-              {showTooltipQuickLook && (
-                <div className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-sm rounded whitespace-nowrap">
-                  Quick look
-                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-800 rotate-45" />
-                </div>
-              )}
-            </button>
-
             <button
               type="button"
               className="relative rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900"
@@ -87,9 +59,7 @@ const ProductItem = ({ product, isEdit }) => {
         {/* Sử dụng thẻ <a> với href để điều hướng, thêm điều kiện không cho bấm link khi isEdit */}
         <Link
           to={link}
-          className={`text-lg font-semibold leading-tight text-gray-900 ${
-            isEdit ? "cursor-default" : "hover:underline"
-          }`}
+          className="text-lg font-semibold leading-tight text-gray-900 hover:underline cursor-pointer"
         >
           {name}
         </Link>
@@ -117,9 +87,8 @@ const ProductItem = ({ product, isEdit }) => {
         </ul>
 
         {/* Điều kiện để hiển thị giá và nút "Add to cart" hay nút "Edit" */}
-        {!isEdit &&
-        productPrice.orignalPrice !== productPrice.priceAfterDiscount ? (
-          <div className="mt-4 mb-5">
+        {productPrice.orignalPrice !== productPrice.priceAfterDiscount ? (
+          <div className="mt-5">
             <p className="text-sm text-slate-900">
               <span className="line-through">
                 {formatVND(productPrice.orignalPrice)}
@@ -127,13 +96,13 @@ const ProductItem = ({ product, isEdit }) => {
               <span className="font-light underline">đ</span>{" "}
               <span className="text-red-600">-{calculateDiscount()}%</span>
             </p>
-            <p className="text-2xl font-bold text-slate-900">
+            <p className="text-2xl font-bold mt-2 text-slate-900">
               {formatVND(productPrice.priceAfterDiscount)}
               <span className="text-xl font-bold text-slate-900 underline"></span>
             </p>
           </div>
         ) : (
-          <div className="mt-9 mb-5">
+          <div className="">
             <p className="text-sm text-slate-900"></p>
             <p className="text-2xl font-bold text-slate-900">
               {formatVND(productPrice.priceAfterDiscount)}
@@ -144,24 +113,17 @@ const ProductItem = ({ product, isEdit }) => {
       </div>
 
       {/* Nút Add to Cart hoặc Edit */}
-      <div className="mt-4">
-        <button
-          type="button"
-          className="inline-flex items-center text-center justify-center rounded-lg bg-blue-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 min-w-36"
-        >
-          {isEdit ? (
-            <>
-              <AiOutlineEdit className="h-5 w-5 mr-2" />
-              Edit
-            </>
-          ) : (
-            <>
-              <AiOutlineShoppingCart className="h-5 w-5 mr-2" />
-              Add to cart
-            </>
-          )}
-        </button>
-      </div>
+      {!isForShow && (
+        <div className="mt-4">
+          <button
+            type="button"
+            className="inline-flex items-center text-center justify-center rounded-lg bg-blue-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 min-w-36"
+          >
+            <AiOutlineShoppingCart className="h-5 w-5 mr-2" />
+            Add to cart
+          </button>
+        </div>
+      )}
     </div>
   );
 };

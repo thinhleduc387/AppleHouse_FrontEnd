@@ -29,6 +29,7 @@ import Info from "./component/Profile/Info";
 import Favorites from "./component/Profile/Favorites";
 import Address from "./component/Profile/Address";
 import SearchPage from "./pages/user/searchPage";
+import OrderDetails from "./component/Profile/OrderDetails";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -74,12 +75,16 @@ const RouterCustom = () => {
             ]} // Truyền breadcrumb cho Search
           />
           <Route path={ROUTERS.USER.CART} element={<CartPage />} />
-
+          <Route
+            path="/profile/order-list/detail/:orderId"
+            element={<OrderDetails />}
+          />
           {/* Profile Routes */}
           <Route path={ROUTERS.USER.PROFILE} element={<ProfilePage />}>
             <Route index element={<Info />} />
             <Route path="" element={<Info />} />
             <Route path={ROUTERS.USER.ORDER_LIST} element={<OrderHistory />} />
+
             <Route path={ROUTERS.USER.FAVORITES} element={<Favorites />} />
             <Route path={ROUTERS.USER.ADDRESS} element={<Address />} />
           </Route>

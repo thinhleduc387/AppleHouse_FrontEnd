@@ -3,6 +3,7 @@ import Banner from "../../../component/Banner";
 import ProductCategory from "../../../component/Product/Category/ProductCategory";
 import DiscountProduct from "../../../component/Product/DiscountProduct";
 import ProductSection from "../../../component/Product/ProductSection";
+import FlashSale from "../../../component/Product/FlashSale";
 
 const HomePage = () => {
   useEffect(() => {
@@ -25,7 +26,9 @@ const HomePage = () => {
       <div>
         <ProductCategory />
       </div>
-
+      <div>
+        <FlashSale />
+      </div>
       <div>
         <DiscountProduct />
       </div>

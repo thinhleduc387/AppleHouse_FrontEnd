@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { deleteItemInCart, updateQuantity } from "../../config/api";
 import { toast } from "react-toastify";
@@ -10,7 +10,13 @@ import {
   updateLocalCartQuantity,
 } from "../../redux/slice/cartSlice";
 
-const CartItem = ({ cartItem, setSelectedProducts, setCartItems }) => {
+const CartItem = ({
+  isSelectAll,
+  cartItem,
+  setSelectedProducts,
+  setCartItems,
+}) => {
+  console.log("🚀 ~ isSelectAll:", isSelectAll);
   const product = {
     skuId: cartItem.skuId,
     name: cartItem.name,
@@ -26,6 +32,22 @@ const CartItem = ({ cartItem, setSelectedProducts, setCartItems }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const userId = useSelector((state) => state.account?.user?._id);
+
+  useEffect(() => {
+    setIsChecked(isSelectAll); // Cập nhật trạng thái checkbox
+    if (isSelectAll) {
+      // Nếu Check All, thêm sản phẩm vào danh sách
+      setSelectedProducts((prev) => [
+        ...prev.filter((item) => item.skuId !== cartItem.skuId), // Loại bỏ trùng lặp
+        { skuId: cartItem.skuId, quantity: cartItem.quantity },
+      ]);
+    } else {
+      // Nếu bỏ Check All, xóa sản phẩm khỏi danh sách
+      setSelectedProducts((prev) =>
+        prev.filter((item) => item.skuId !== cartItem.skuId)
+      );
+    }
+  }, [isSelectAll, cartItem.skuId, cartItem.quantity, setSelectedProducts]);
 
   const handleIncreaseQuantity = () => {
     if (userId) {
@@ -213,7 +235,7 @@ const CartItem = ({ cartItem, setSelectedProducts, setCartItems }) => {
           )}
         </div>
 
-        <div className="flex items-center space-x-6 pr-2">
+        <div className="flex items-center pr-2">
           <div className="flex items-center space-x-4 pr-2">
             {/* Nút giảm số lượng */}
             <button

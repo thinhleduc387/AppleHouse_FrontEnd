@@ -1,11 +1,13 @@
 import { useRef, useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import ProductItem from "./ProductItem"; // Đảm bảo đường dẫn đúng với vị trí của ProductCard
-
-const DiscountProduct = () => {
+import "../../style/snow.css";
+import FlashSaleItem from "./FlashSaleItem";
+const FlashSale = () => {
   const scrollRef = useRef(null);
   const [cardWidth, setCardWidth] = useState(0);
   const [totalProductsToShow, setTotalProductsToShow] = useState(4); // Mặc định 4 sản phẩm trên md
+  const [timeLeft, setTimeLeft] = useState(3600); // Thời gian flash sale ban đầu (giây)
 
   const product = {
     id: "123",
@@ -14,10 +16,29 @@ const DiscountProduct = () => {
     link: "",
     name: "Iphone",
     productPrice: {
-      orignalPrice: 11000,
-      priceAfterDiscount: 1000,
+      orignalPrice: 900000,
+      priceAfterDiscount: 1000000,
       discount: 100,
     },
+  };
+
+  // Update thời gian đếm ngược
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeLeft((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(interval); // Xóa interval khi component bị hủy
+  }, []);
+
+  // Tính toán số giờ, phút, giây còn lại
+  const formatTime = (time) => {
+    const hours = Math.floor(time / 3600);
+    const minutes = Math.floor((time % 3600) / 60);
+    const seconds = time % 60;
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
   useEffect(() => {
@@ -76,38 +97,72 @@ const DiscountProduct = () => {
       className="p-4 relative rounded-lg"
       style={{
         backgroundImage:
-          'url("https://img.lovepik.com/background/20211021/large/lovepik-background-of-black-line-science-and-technology-image_500425114.jpg")',
+          'url("https://treobangron.com.vn/wp-content/uploads/2022/09/background-tet-2023-2-2.jpg")',
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
-      <h2 className="text-2xl font-bold mb-4 text-white">
-        Mua Online giá siêu rẻ
-      </h2>
+      <div class="initial-snow">
+        {Array.from({ length: 50 }).map((_, index) => (
+          <div class="snow">&#x1F9E7;</div>
+        ))}
+      </div>
+      {/* Thời gian flash sale */}
+      <div className="flex items-center justify-between bg-gradient-to-r from-yellow-500 to-red-500 text-white px-6 py-4 rounded-lg mb-6 shadow-lg">
+        <h2 className="text-2xl font-bold">FLASH SALE - XUÂN 2025</h2>
+        <div className="flex items-center gap-4">
+          <span className="text-sm font-semibold uppercase tracking-wider">
+            Kết thúc trong:
+          </span>
+          <div className="flex gap-1">
+            <div className="flex flex-col items-center justify-center w-12 h-12 bg-white text-red-500 rounded-lg text-lg font-bold shadow-inner">
+              {formatTime(timeLeft).split(":")[0]}
+              <span className="text-xs font-medium text-gray-500">Giờ</span>
+            </div>
+            <span className="text-xl font-extrabold">:</span>
+            <div className="flex flex-col items-center justify-center w-12 h-12 bg-white text-red-500 rounded-lg text-lg font-bold shadow-inner">
+              {formatTime(timeLeft).split(":")[1]}
+              <span className="text-xs font-medium text-gray-500">Phút</span>
+            </div>
+            <span className="text-xl font-extrabold">:</span>
+            <div className="flex flex-col items-center justify-center w-12 h-12 bg-white text-red-500 rounded-lg text-lg font-bold shadow-inner">
+              {formatTime(timeLeft).split(":")[2]}
+              <span className="text-xs font-medium text-gray-500">Giây</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      {/* Nút điều hướng trái */}
       <button
         onClick={scrollLeft}
         className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white text-2xl pl-2 z-10 rounded-full shadow-md"
       >
         <FaChevronLeft />
       </button>
+
+      {/* Danh sách sản phẩm */}
       <div className="flex space-x-4 overflow-hidden px-4" ref={scrollRef}>
         {[...Array(10)].map((_, index) => (
           <div
             key={index}
-            className="flex-none"
+            className="flex-none z-10"
             style={{
               width: `calc((100% - ${
                 16 * (totalProductsToShow - 1)
               }px) / ${totalProductsToShow})`,
             }}
           >
-            <ProductItem product={product} isForShow={true} />
+            <FlashSaleItem product={product} isForShow={true} />
           </div>
         ))}
       </div>
+
+      {/* Nút điều hướng phải */}
       <button
         onClick={scrollRight}
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 text-white text-2xl pr-2  rounded-full shadow-md"
+        className="absolute right-0 top-1/2 transform -translate-y-1/2 text-white text-2xl pr-2 rounded-full shadow-md"
       >
         <FaChevronRight />
       </button>
@@ -115,4 +170,4 @@ const DiscountProduct = () => {
   );
 };
 
-export default DiscountProduct;
+export default FlashSale;

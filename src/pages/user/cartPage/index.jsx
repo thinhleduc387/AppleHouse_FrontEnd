@@ -7,12 +7,14 @@ import CheckOut from "../../../component/Cart/CheckOut";
 import CheckoutInfo from "../../../component/Cart/CheckoutInfo"; // Import CheckoutInfo
 import { IoIosArrowBack } from "react-icons/io";
 import PaymentMethod from "../../../component/Cart/PaymentMethod";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 const CartPage = () => {
   const userId = useSelector((state) => state.account?.user?._id);
   const [cartItems, setCartItems] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState("");
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [isSelectAll, setIsSelectAll] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isCheckout, setIsCheckout] = useState(false); // Trạng thái thanh toán
   const [error, setError] = useState(null);
@@ -46,7 +48,9 @@ const CartPage = () => {
 
     setIsCheckout(false); // Quay lại trạng thái giỏ hàng sau khi thanh toán xong
   };
-
+  const handleCheckAll = () => {
+    setIsSelectAll((prev) => !prev);
+  };
   return (
     <div className="py-4">
       {loading ? (
@@ -56,7 +60,22 @@ const CartPage = () => {
       ) : cartItems.length > 0 ? (
         <div className="grid md:grid-cols-3 gap-4 relative">
           <div className="md:col-span-2">
-            <div className=" p-4 flex flex-col gap-4 bg-white rounded-md overflow-y-auto">
+            <div className=" p-4 flex justify-between gap-4 bg-white rounded-md font-bold overflow-y-auto">
+              <div className="flex items-center gap-4">
+                <input
+                  type="checkbox"
+                  checked={isSelectAll} // Đảm bảo trạng thái đồng bộ
+                  onChange={() => handleCheckAll()} // Sử dụng callback để thay đổi trạng thái
+                  className="w-4 h-4 cursor-pointer"
+                />
+                Chọn tất cả ({selectedProducts.length}/{cartItems.length})
+              </div>
+              <button className="text-gray-600 hover:text-red-600">
+                <RiDeleteBin6Line className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className=" p-4 mt-3 flex flex-col gap-4 bg-white rounded-md overflow-y-auto">
               {isCheckout && (
                 <a
                   onClick={() => setIsCheckout(false)}
@@ -69,6 +88,7 @@ const CartPage = () => {
               <div className="space-y-4 ">
                 {cartItems.map((cartItem) => (
                   <CartItem
+                    isSelectAll={isSelectAll}
                     key={cartItem.skuId}
                     cartItem={cartItem}
                     setSelectedProducts={setSelectedProducts}

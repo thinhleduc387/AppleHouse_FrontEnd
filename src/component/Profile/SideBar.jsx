@@ -16,9 +16,21 @@ const Sidebar = () => {
 
   // Danh sách các mục trong sidebar
   const items = [
-    { icon: AiOutlineOrderedList, text: "Đơn hàng của tôi", path: "/profile/order-list" },
-    { icon: AiOutlineHeart, text: "Sản phẩm yêu thích", path: "/profile/favorites" },
-    { icon: FaLocationDot, text: "Địa chỉ nhận hàng", path: "/profile/address" },
+    {
+      icon: AiOutlineOrderedList,
+      text: "Đơn hàng của tôi",
+      path: "/profile/order-list",
+    },
+    {
+      icon: AiOutlineHeart,
+      text: "Sản phẩm yêu thích",
+      path: "/profile/favorites",
+    },
+    {
+      icon: FaLocationDot,
+      text: "Địa chỉ nhận hàng",
+      path: "/profile/address",
+    },
     { icon: RiLogoutBoxLine, text: "Đăng xuất", path: "/profile/order-list" }, // Giữ path là "/logout"
   ];
 
@@ -48,13 +60,13 @@ const Sidebar = () => {
   useEffect(() => {
     const currentPath = location.pathname; // Lấy đường dẫn hiện tại
     // Tìm mục trong sidebar có path trùng với đường dẫn hiện tại
-    const active = items.find(item => currentPath.startsWith(item.path)); 
+    const active = items.find((item) => currentPath.startsWith(item.path));
     setActiveItem(active ? active.text : null); // Cập nhật activeItem
   }, [location]); // Mỗi khi URL thay đổi, chạy lại useEffect
 
   return (
-    <div className="top-0 left-0 min-w-[250px] overflow-auto space-y-4">
-      <div className="bg-white py-6 rounded-xl">
+    <div className="top-0 left-0 min-w-[250px] overflow-auto space-y-4 md:rounded-lg">
+      <div className="bg-white py-6 rounded-xl shadow-md">
         {/* Profile Section */}
         <ProfileSection
           userName={userName}
@@ -62,7 +74,8 @@ const Sidebar = () => {
           userEmail={userEmail}
         />
       </div>
-      <div className="relative flex flex-col h-full bg-white rounded-xl py-6">
+
+      <div className="relative flex flex-col h-full bg-white rounded-xl py-6 border border-gray-300">
         {/* Sidebar Items */}
         <ul className="space-y-3 flex-1">
           {items.map((item) => (

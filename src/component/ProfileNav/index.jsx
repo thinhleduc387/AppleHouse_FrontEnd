@@ -6,12 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLogoutAction } from "../../redux/slice/accountSlice";
 import { toast } from "react-toastify";
 import { resetCart } from "../../redux/slice/cartSlice";
-const ProfileNavBar = ({ userAvatar, userName }) => {
-  const isAuthenticated = useSelector((state) => {
-    return state.account.isAuthenticated;
-  });
-  const [dropdownOpen, setDropdownOpen] = useState(false);
 
+const ProfileNavBar = ({ userAvatar, userName }) => {
+  const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Khai báo useNavigate
@@ -27,7 +25,6 @@ const ProfileNavBar = ({ userAvatar, userName }) => {
   const handleLogOut = async () => {
     try {
       const response = await callLogout();
-
       if (response.status === 200 && response.metadata) {
         dispatch(setLogoutAction());
         dispatch(resetCart());
@@ -41,55 +38,63 @@ const ProfileNavBar = ({ userAvatar, userName }) => {
   };
 
   return (
-    <>
+    <div className="relative">
       {isAuthenticated ? (
         <div
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           className="relative"
         >
-          <a
+          {/* Profile Display */}
+          <button
             ref={dropdownRef}
             className="flex items-center space-x-2 focus:outline-none"
             aria-label="User menu"
             aria-haspopup="true"
           >
             <img
-              className="h-8 w-8 rounded-full object-cover"
+              className="h-10 w-10 rounded-full object-cover border-2 border-gray-300"
               src={userAvatar}
               alt="User Avatar"
             />
-            <span className="text-sm">{userName || "Thịnh"}</span>
-          </a>
+            <span className="text-sm font-semibold text-gray-700">
+              {userName || "Thịnh"}
+            </span>
+          </button>
+
+          {/* Dropdown Menu */}
           {dropdownOpen && (
-            <div className="absolute -right-2 w-48 bg-white rounded-md shadow-lg z-50">
-              <Link
-                to="/profile" // Sửa href thành to cho Link từ react-router-dom
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Your Profile
-              </Link>
-              <Link
-                to="/settings" // Sửa href thành to cho Link từ react-router-dom
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Settings
-              </Link>
-              <button
-                onClick={handleLogOut}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-              >
-                Sign out
-              </button>
+            <div
+              className="absolute right-0 w-56 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 z-50"
+              style={{ animation: "fadeIn 0.2s ease-in-out" }}
+            >
+              <div className="py-2">
+                <Link
+                  to="/profile"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition duration-150"
+                >
+                  Thông tin khách hàng
+                </Link>
+                <button
+                  onClick={handleLogOut}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-500 transition duration-150 w-full text-left"
+                >
+                  Đăng xuất
+                </button>
+              </div>
             </div>
           )}
         </div>
       ) : (
-        <Link to={"/login"}>
-          <AiOutlineUser className="font-semibold text-2xl" />
+        <Link
+          to={"/login"}
+          className="flex items-center justify-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-150"
+        >
+          <AiOutlineUser className="text-lg" />
+          <span className="font-medium">Đăng nhập</span>
         </Link>
       )}
-    </>
+    </div>
   );
 };
 
