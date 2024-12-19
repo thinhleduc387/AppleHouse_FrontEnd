@@ -12,7 +12,7 @@ const ProductPage = () => {
   const { categorySlug } = useParams(); // Lấy loại sản phẩm từ URL
 
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(50000000);
+  const [maxPrice, setMaxPrice] = useState("");
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
   const [productList, setProductList] = useState([]);
   const [sortedList, setSortedList] = useState([]); // State để lưu danh sách đã sắp xếp
@@ -92,6 +92,7 @@ const ProductPage = () => {
         {/* Main Content: Filters + Product List */}
         <div className="flex gap-6">
           <FilterSidebar
+            categorySlug={categorySlug}
             minPrice={minPrice}
             maxPrice={maxPrice}
             setMinPrice={setMinPrice}
