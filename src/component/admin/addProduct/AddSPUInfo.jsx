@@ -22,12 +22,14 @@ const AddSPUInfo = ({
           <AddProductForm
             productData={productData}
             handleChange={handleChange}
+            setProductData={setProductData}
           />
 
           {/* CategorySelect: Chọn danh mục sản phẩm */}
           <CategorySelect
             productData={productData}
             handleChange={handleChange}
+            setProductData={setProductData}
           />
 
           {/* TagInput: Thêm thẻ cho sản phẩm */}

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import mammoth from "mammoth";
-import * as pdfjsLib from "pdfjs-dist/webpack";
+//import * as pdfjsLib from "pdfjs-dist/webpack";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; 
-const AddProductForm = ({ productData, handleChange }) => {
+import "react-quill/dist/quill.snow.css";
+const AddProductForm = ({ productData, handleChange, setProductData }) => {
   const [file, setFile] = useState(null);
 
   // Hàm xử lý đọc nội dung file
@@ -134,10 +134,12 @@ const AddProductForm = ({ productData, handleChange }) => {
           id="description"
           name="description"
           value={productData.description}
-          onChange={(value) =>
-            handleChange({ target: { name: "description", value } })
-          }
-          modules={modules} // Áp dụng các tùy chỉnh modules vào ReactQuill
+          onChange={(value) => {
+            handleChange({
+              target: { name: "description", value: value },
+            });
+          }}
+          modules={modules}
           className="w-full max-h-screen overflow-y-auto border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Nhập mô tả sản phẩm"
         />

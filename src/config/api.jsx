@@ -121,5 +121,5 @@ export const getDraftProduct = async () => {
 
 //ProductAdd
 export const creatNewProduct = async (productData) => {
-  return axios.post("/product/spu/new", { productData });
+  return axios.post("/product/spu/new", { ...productData });
 };

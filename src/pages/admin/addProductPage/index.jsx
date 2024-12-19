@@ -24,7 +24,6 @@ const AddProductPage = () => {
   // Hàm xử lý thay đổi chung cho input
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setProductData((prev) => ({
       ...prev,
       [name]: value,
@@ -61,21 +60,17 @@ const AddProductPage = () => {
       handleGetProduct(id).finally(() => setIsLoading(false)); // Tắt loading
     }
   }, [id]);
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Thêm logic submit dữ liệu lên server tại đây
     console.log("Submitting product data:", productData);
+    await handleCreateNew(productData);
   };
   const handleCreateNew = async (productData) => {
-    console.log("🚀 ~ handleCreateNew ~ productData:", productData);
     try {
-      // Gọi API để tạo sản phẩm mới
       const response = await creatNewProduct(productData);
-      console.log("🚀 ~ handleCreateNew ~ response:", response);
 
-      if (response && response.success) {
-        console.log("Sản phẩm đã được tạo thành công:", response);
-        alert("Sản phẩm đã được tạo thành công!");
+      if (response && response.status === 200) {
+        console.log("🚀 ~ handleCreateNew ~ response:", response);
       }
     } catch (error) {
       console.error("Lỗi khi tạo sản phẩm:", error.message);
@@ -90,8 +85,6 @@ const AddProductPage = () => {
       const response = await getProduct(spu_id);
       if (response && response.metadata) {
         const product = response.metadata;
-        console.log("🚀 ~ handleGetProduct ~ product:", product);
-
         const spu_info = product.spu_info;
         const sku_list = product.sku_list;
 

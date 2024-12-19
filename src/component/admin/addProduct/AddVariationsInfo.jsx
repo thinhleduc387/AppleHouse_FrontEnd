@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import VariationForm from "./VariationForm";
 import SkuTable from "./SkuTable";
 import { formatNumber, parseNumber } from "../../../utils/format";
+import { getImageLink } from "../../../config/api";
 
 const AddVariationsInfo = ({
   productData,
@@ -11,7 +12,7 @@ const AddVariationsInfo = ({
   const [variationsList, setVariationsList] = useState([]);
   const [sku_list, setSku_list] = useState([]);
   const [price, setPrice] = useState(""); // Giá cho tất cả các SKU
-  const [stock, setStock] = useState(""); // Kho cho tất cả các SKU
+  const [stock, setStock] = useState(0); // Kho cho tất cả các SKU
 
   useEffect(() => {
     if (productData.variations && productData.variations.length > 0) {
@@ -36,7 +37,7 @@ const AddVariationsInfo = ({
   // Cập nhật sku_list và gọi callback
   const setSkuListAndUpdate = (newSkuList) => {
     setSku_list(newSkuList);
-    onUpdateSkuList(newSkuList); // Cập nhật dữ liệu lên component cha
+    onUpdateSkuList(newSkuList);
   };
   const addNewVariation = () => {
     const newVariations = [
@@ -102,23 +103,39 @@ const AddVariationsInfo = ({
     );
     setSkuListAndUpdate(updatedSkuList);
   };
+
   const handleStockChange = (skuIndexId, value) => {
     const updatedSkuList = sku_list.map((sku, i) =>
-      i === skuIndexId ? { ...sku, sku_stock: value } : sku
+      i === skuIndexId ? { ...sku, sku_stock: Number(value) } : sku
     );
     setSkuListAndUpdate(updatedSkuList);
   };
 
-  const handleImageUpload = (skuIndexId, event) => {
+  const handleImageUpload = async (skuIndexId, e) => {
     const updatedSkuList = [...sku_list];
-    const files = Array.from(event.target.files); // Chuyển đổi FileList thành mảng
+    // setSku_list(updatedSkuList);
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
 
-    updatedSkuList[skuIndexId].sku_imgs = [
-      ...updatedSkuList[skuIndexId].sku_imgs,
-      ...files,
-    ];
+      reader.readAsDataURL(file);
 
-    setSku_list(updatedSkuList);
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await getImageLink(formData);
+
+        updatedSkuList[skuIndexId].sku_imgs = [
+          ...updatedSkuList[skuIndexId].sku_imgs,
+          response.metadata.image_url,
+        ];
+
+        setSkuListAndUpdate(updatedSkuList);
+      } catch (error) {
+        console.error("Lỗi khi tải hình ảnh lên:", error);
+      }
+    }
   };
 
   const handleRemoveImage = (skuIndexId, imgIndex) => {

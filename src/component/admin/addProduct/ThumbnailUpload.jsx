@@ -1,32 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaUpload, FaTrash } from "react-icons/fa";
 import { getImageLink } from "../../../config/api";
 
 const ThumbnailUpload = ({ productData, setProductData }) => {
+  const [previewImage, setPreviewImage] = useState(null);
+
   const handleFileChange = async (e) => {
-    const file = e.target.files[0]; // Lấy file từ input
+    const file = e.target.files[0];
     if (file) {
-      console.log(
-        "🚀 ~ handleFileChange ~ productData.thumb:",
-        productData.thumb
-      );
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+
       const formData = new FormData();
-      formData.append("file", file); // 'file' là tên trường mà backend mong đợi
+      formData.append("file", file);
 
       try {
         const response = await getImageLink(formData);
         console.log("🚀 ~ handleFileChange ~ response:", response);
-        // Cập nhật thông tin ảnh vào productData
         setProductData({
           ...productData,
-          thumb: response.metadata.thumb_url,
+          thumb: response.metadata.image_url,
         });
       } catch (error) {
         console.error("Lỗi khi tải hình ảnh lên:", error);
       }
-
-      // Reset input file để có thể upload lại cùng một file
-      e.target.value = null;
     }
   };
 
@@ -35,16 +35,17 @@ const ThumbnailUpload = ({ productData, setProductData }) => {
       ...productData,
       thumb: null, // Xóa đường dẫn ảnh hiện tại
     });
+    setPreviewImage(null); // Xóa luôn ảnh preview
   };
 
   return (
     <div className="w-full h-auto">
       <div className="flex flex-row justify-between">
         <h2 className="text-xl font-bold mb-4">Ảnh sản phẩm</h2>
-        {productData.thumb && (
+        {previewImage && (
           <button
             onClick={handleRemoveImage}
-            className=" bg-red-500 text-white rounded-full p-2 hover:bg-red-600 w-8 h-8"
+            className="bg-red-500 text-white rounded-full p-2 hover:bg-red-600 w-8 h-8"
           >
             <FaTrash />
           </button>
@@ -54,14 +55,14 @@ const ThumbnailUpload = ({ productData, setProductData }) => {
         htmlFor="uploadFile1"
         className={`bg-white text-gray-500 font-semibold text-base rounded h-auto flex flex-col items-center 
         justify-center cursor-pointer ${
-          productData.thumb ? "" : "border-2 border-mainColor border-dashed"
+          previewImage ? "" : "border-2 border-mainColor border-dashed"
         } 
         mx-auto font-[sans-serif]`}
       >
-        {productData.thumb ? (
+        {previewImage ? (
           <div className="relative w-full h-full flex items-center justify-center">
             <img
-              src={productData.thumb}
+              src={previewImage} // Ưu tiên hiển thị preview nếu có
               alt="Thumbnail Preview"
               className="max-w-full max-h-full object-contain transform scale-200"
             />

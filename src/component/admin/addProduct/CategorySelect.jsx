@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { getAllCategory } from "../../../config/api";
 
-const CategorySelect = ({ productData, handleChange }) => {
+const CategorySelect = ({ productData, setProductData }) => {
   const [categoryList, setCategoryList] = useState([]);
 
-  // Lấy danh mục sản phẩm khi component được mount
   useEffect(() => {
     getCategory();
   }, []);
@@ -12,7 +11,6 @@ const CategorySelect = ({ productData, handleChange }) => {
   const getCategory = async () => {
     try {
       const response = await getAllCategory();
-      console.log("🚀 ~ getCategory ~ response:", response);
       if (response.status === 200 && response.metadata) {
         const categories = response.metadata.map((category) => ({
           id: category._id,
@@ -25,7 +23,13 @@ const CategorySelect = ({ productData, handleChange }) => {
       console.error("Error fetching categories:", error);
     }
   };
-
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProductData((prev) => ({
+      ...prev,
+      [name]: [value],
+    }));
+  };
   return (
     <div className="mb-4">
       <label
@@ -43,7 +47,7 @@ const CategorySelect = ({ productData, handleChange }) => {
       >
         <option value="">Chọn category</option>
         {categoryList.map((category, index) => (
-          <option key={index} value={category.name}>
+          <option key={index} value={category.id}>
             {category.name}
           </option>
         ))}
