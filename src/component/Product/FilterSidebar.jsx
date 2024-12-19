@@ -9,35 +9,35 @@ const FilterSidebar = ({
 }) => {
   const trackRef = useRef(null);
   const MIN = 0;
-
+  const MAX = 0;
   // Determine criteria based on categorySlug
-  const criteria = (() => {
-    if (categorySlug.includes("iphone")) return iphoneCriteria;
-    if (categorySlug.includes("ipad")) return ipadCriteria;
-    if (categorySlug.includes("macbook")) return macbookCriteria;
-    if (categorySlug.includes("applewatch")) return applewatchCriteria;
-    if (categorySlug.includes("earphones")) return earphonesCriteria;
-    return [];
-  })();
+  // const criteria = (() => {
+  //   if (categorySlug.includes("iphone")) return iphoneCriteria;
+  //   if (categorySlug.includes("ipad")) return ipadCriteria;
+  //   if (categorySlug.includes("macbook")) return macbookCriteria;
+  //   if (categorySlug.includes("applewatch")) return applewatchCriteria;
+  //   if (categorySlug.includes("earphones")) return earphonesCriteria;
+  //   return [];
+  // })();
 
-  const MAX = criteria[0]?.maxPrice
-    ? parseInt(criteria[0].maxPrice, 10)
-    : 50000000;
+  // const MAX = criteria[0]?.maxPrice
+  //   ? parseInt(criteria[0].maxPrice, 10)
+  //   : 50000000;
 
   // Clamp values within bounds
-  const clampValue = (value, min, max) => Math.max(min, Math.min(value, max));
+  // const clampValue = (value, min, max) => Math.max(min, Math.min(value, max));
 
   // Add a state to track which checkbox is selected
   const [selectedPriceRange, setSelectedPriceRange] = useState(null);
 
-  const getPercentageFromPosition = (positionX) => {
-    if (trackRef.current) {
-      const { left, width } = trackRef.current.getBoundingClientRect();
-      const clampedX = clampValue(positionX, left, left + width);
-      return ((clampedX - left) / width) * (MAX - MIN) + MIN;
-    }
-    return MIN;
-  };
+  // const getPercentageFromPosition = (positionX) => {
+  //   if (trackRef.current) {
+  //     const { left, width } = trackRef.current.getBoundingClientRect();
+  //     const clampedX = clampValue(positionX, left, left + width);
+  //     return ((clampedX - left) / width) * (MAX - MIN) + MIN;
+  //   }
+  //   return MIN;
+  // };
 
   const handleThumbMove = (e, thumb) => {
     const positionX = e.type.includes("mouse")
@@ -194,7 +194,7 @@ const FilterSidebar = ({
         </div>
 
         {/* Other Filters */}
-        {criteria.map((group, index) => (
+        {/* {criteria.map((group, index) => (
           <div key={index} className="mb-4">
             <h4 className="font-semibold text-sm text-gray-700 mb-2">
               {group.propertiesName[0].groupName}
@@ -224,7 +224,7 @@ const FilterSidebar = ({
               ))}
             </div>
           </div>
-        ))}
+        ))} */}
       </div>
     </aside>
   );

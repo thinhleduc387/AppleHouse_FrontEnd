@@ -18,12 +18,20 @@ const ProductPage = () => {
 
   const handleGetListProduct = async () => {
     setLoading(true); // Start loading
-    const response = await filterProduct({
-      categorySlug,
-      minPrice,
-      maxPrice,
-      sortBy: selectedOption,
-    });
+    let response;
+    if (minPrice > 0 || maxPrice > 0) {
+      response = await filterProduct({
+        categorySlug,
+        minPrice,
+        maxPrice,
+        sortBy: selectedOption,
+      });
+    } else {
+      response = await filterProduct({
+        categorySlug,
+        sortBy: selectedOption,
+      });
+    }
     if (response && response.status === 200) {
       const products = response.metadata.map((product) => ({
         id: product._id,
@@ -35,6 +43,7 @@ const ProductPage = () => {
 
       setProductList(products);
     }
+
     setLoading(false); // Stop loading
   };
 

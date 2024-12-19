@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import ProductItem from "./ProductItem"; // Đảm bảo đường dẫn đúng với vị trí của ProductCard
 import "../../style/snow.css";
 import FlashSaleItem from "./FlashSaleItem";
 const FlashSale = () => {
@@ -132,7 +131,6 @@ const FlashSale = () => {
           </div>
         </div>
       </div>
-
 
       {/* Nút điều hướng trái */}
       <button

@@ -21,12 +21,20 @@ const SearchPage = () => {
 
   const handleGetListSearchProduct = async () => {
     setLoading(true);
-    const response = await searchProduct({
-      textSearch: searchTerm,
-      minPrice,
-      maxPrice,
-      sortBy: selectedOption,
-    });
+    let response;
+    if (maxPrice > 0 || minPrice > 0) {
+      response = await searchProduct({
+        textSearch: searchTerm,
+        minPrice,
+        maxPrice,
+        sortBy: selectedOption,
+      });
+    } else {
+      response = await searchProduct({
+        textSearch: searchTerm,
+        sortBy: selectedOption,
+      });
+    }
     if (response && response.status === 200) {
       setNumberResult(response.metadata.totalResult);
       const products = response.metadata.products.map((product) => ({
