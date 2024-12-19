@@ -30,6 +30,7 @@ import Favorites from "./component/Profile/Favorites";
 import Address from "./component/Profile/Address";
 import SearchPage from "./pages/user/searchPage";
 import OrderDetails from "./component/Profile/OrderDetails";
+import MessengerCustomerChat from "react-messenger-customer-chat";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -112,6 +113,8 @@ const RouterCustom = () => {
         {/* Catch-all for undefined routes */}
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
+      <MessengerCustomerChat pageId="61570604916404" appId="<APP_ID>" />
+      ,
       <ToastContainer
         position="top-right"
         autoClose={1000}

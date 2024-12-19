@@ -10,7 +10,7 @@ const ProductPage = () => {
   const { categorySlug } = useParams();
 
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(50000000);
+  const [maxPrice, setMaxPrice] = useState("");
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
   const [productList, setProductList] = useState([]);
   const [selectedOption, setSelectedOption] = useState(SortOptions.newest);
@@ -52,6 +52,7 @@ const ProductPage = () => {
       <div className="mx-auto max-w-screen-xl">
         <div className="flex gap-6">
           <FilterSidebar
+            categorySlug={categorySlug}
             minPrice={minPrice}
             maxPrice={maxPrice}
             setMinPrice={setMinPrice}

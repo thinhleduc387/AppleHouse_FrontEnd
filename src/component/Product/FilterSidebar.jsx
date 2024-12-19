@@ -1,9 +1,31 @@
 import { useRef, useState } from "react";
 
-const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
+const FilterSidebar = ({
+  categorySlug,
+  minPrice,
+  maxPrice,
+  setMinPrice,
+  setMaxPrice,
+}) => {
   const trackRef = useRef(null);
   const MIN = 0;
-  const MAX = 50000000;
+
+  // Determine criteria based on categorySlug
+  const criteria = (() => {
+    if (categorySlug.includes("iphone")) return iphoneCriteria;
+    if (categorySlug.includes("ipad")) return ipadCriteria;
+    if (categorySlug.includes("macbook")) return macbookCriteria;
+    if (categorySlug.includes("applewatch")) return applewatchCriteria;
+    if (categorySlug.includes("earphones")) return earphonesCriteria;
+    return [];
+  })();
+
+  const MAX = criteria[0]?.maxPrice
+    ? parseInt(criteria[0].maxPrice, 10)
+    : 50000000;
+
+  // Clamp values within bounds
+  const clampValue = (value, min, max) => Math.max(min, Math.min(value, max));
 
   // Add a state to track which checkbox is selected
   const [selectedPriceRange, setSelectedPriceRange] = useState(null);
@@ -11,7 +33,7 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
   const getPercentageFromPosition = (positionX) => {
     if (trackRef.current) {
       const { left, width } = trackRef.current.getBoundingClientRect();
-      const clampedX = Math.max(left, Math.min(positionX, left + width));
+      const clampedX = clampValue(positionX, left, left + width);
       return ((clampedX - left) / width) * (MAX - MIN) + MIN;
     }
     return MIN;
@@ -24,13 +46,9 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
     const newValue = getPercentageFromPosition(positionX);
 
     if (thumb === "min") {
-      if (newValue < maxPrice && newValue >= MIN) {
-        setMinPrice(newValue);
-      }
+      setMinPrice(clampValue(newValue, MIN, maxPrice));
     } else {
-      if (newValue > minPrice && newValue <= MAX) {
-        setMaxPrice(newValue);
-      }
+      setMaxPrice(clampValue(newValue, minPrice, MAX));
     }
   };
 
@@ -147,7 +165,7 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
               className="absolute h-2 bg-blue-500 rounded"
               style={{
                 left: `${((minPrice - MIN) / (MAX - MIN)) * 100}%`,
-                right: `${100 - ((maxPrice - MIN) / (MAX - MIN)) * 100}%`,
+                width: `${((maxPrice - minPrice) / (MAX - MIN)) * 100}%`,
               }}
             ></div>
 
@@ -176,17 +194,37 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
         </div>
 
         {/* Other Filters */}
-        <div>
-          <h4 className="font-semibold text-sm text-gray-700 mb-2">
-            Tính năng đặc biệt
-          </h4>
-          <div className="flex flex-col space-y-1">
-            <label>
-              <input type="checkbox" className="mr-2" />
-              Sạc không dây
-            </label>
+        {criteria.map((group, index) => (
+          <div key={index} className="mb-4">
+            <h4 className="font-semibold text-sm text-gray-700 mb-2">
+              {group.propertiesName[0].groupName}
+            </h4>
+            <div className="space-y-1">
+              {group.propertiesName.map((property, propertyIndex) => (
+                <div key={propertyIndex} className="mb-2">
+                  <h5 className="font-medium text-gray-600 mb-1">
+                    {property.groupName}
+                  </h5>
+                  {property.criteriasName.map((criteria, criteriaIndex) => (
+                    <label key={criteriaIndex} className="block">
+                      <input
+                        type="checkbox"
+                        className="mr-2"
+                        checked={
+                          selectedFilters[property.groupName] === criteria
+                        }
+                        onChange={() =>
+                          handleSingleSelection(property.groupName, criteria)
+                        }
+                      />
+                      {criteria}
+                    </label>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </aside>
   );
