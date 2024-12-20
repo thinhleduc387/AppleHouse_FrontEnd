@@ -20,11 +20,11 @@ const ProductItem = ({ product, isForShow }) => {
   const { id, imageSrc, link, name, productPrice } = product;
 
   const [showTooltipFavorites, setShowTooltipFavorites] = useState(false);
-  const [showTooltipQuickLook, setShowTooltipQuickLook] = useState(false);
 
   const calculateDiscount = () => {
-    const { priceAfterDiscount, orignalPrice } = productPrice;
-    const discount = ((orignalPrice - priceAfterDiscount) / orignalPrice) * 100;
+    const { priceAfterDiscount, originalPrice } = productPrice;
+    const discount =
+      ((originalPrice - priceAfterDiscount) / originalPrice) * 100;
     return Math.round(discount * 100) / 100;
   };
 
@@ -87,11 +87,11 @@ const ProductItem = ({ product, isForShow }) => {
         </ul>
 
         {/* Điều kiện để hiển thị giá và nút "Add to cart" hay nút "Edit" */}
-        {productPrice.orignalPrice !== productPrice.priceAfterDiscount ? (
+        {productPrice.originalPrice !== productPrice.priceAfterDiscount ? (
           <div className="mt-5">
             <p className="text-sm text-slate-900">
               <span className="line-through">
-                {formatVND(productPrice.orignalPrice)}
+                {formatVND(productPrice.originalPrice)}
               </span>
               <span className="font-light underline">đ</span>{" "}
               <span className="text-red-600">-{calculateDiscount()}%</span>

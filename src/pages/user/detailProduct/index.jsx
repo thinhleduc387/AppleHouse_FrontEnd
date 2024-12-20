@@ -104,11 +104,12 @@ const DetailProduct = () => {
       ratingStatRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+
   return (
     <>
       {loading ? (
-        <div className="flex justify-center items-center h-96">
-          <div className="loader border-t-4 border-blue-600 border-solid rounded-full w-12 h-12 animate-spin"></div>
+        <div className="fixed inset-0 flex items-center justify-center">
+          <div className="border-t-4 border-blue-600 border-solid rounded-full w-12 h-12 animate-spin"></div>
         </div>
       ) : (
         <div className="font-sans ">
@@ -262,12 +263,15 @@ const DetailProduct = () => {
                 {/* Khuyến mãi */}
                 <div className="flex flex-wrap gap-4 mt-8">
                   <ProductPrice
-                    price={selectedSku?.sku_price?.originalPrice || 0}
-                    discountPrice={0}
+                    priceAfterDiscount={
+                      selectedSku?.sku_price?.priceAfterDiscount || 0
+                    }
+                    originalPrice={selectedSku?.sku_price?.originalPrice}
                     points={
                       selectedSku?.loyalPointRate *
-                        selectedSku?.sku_price.originalPrice || 0
+                        selectedSku?.sku_price.priceAfterDiscount || 0
                     }
+                    promotionId={selectedSku?.sku_price?.promotionId}
                   />
                 </div>
 

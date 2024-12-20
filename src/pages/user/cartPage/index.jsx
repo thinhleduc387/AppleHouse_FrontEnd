@@ -12,6 +12,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 const CartPage = () => {
   const userId = useSelector((state) => state.account?.user?._id);
   const [cartItems, setCartItems] = useState([]);
+  console.log("🚀 ~ CartPage ~ cartItems:", cartItems);
   const [selectedPayment, setSelectedPayment] = useState("");
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [isSelectAll, setIsSelectAll] = useState(false);

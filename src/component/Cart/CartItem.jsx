@@ -16,13 +16,12 @@ const CartItem = ({
   setSelectedProducts,
   setCartItems,
 }) => {
-  console.log("🚀 ~ isSelectAll:", isSelectAll);
   const product = {
     skuId: cartItem.skuId,
     name: cartItem.name,
     imageUrl: cartItem.thumb,
-    price: cartItem.originalPrice,
-    discountPrice: cartItem.priceAfterDiscount,
+    price: cartItem.priceAfterDiscount,
+    discountPrice: cartItem.originalPrice,
     loyalPoint: cartItem.loyalPoint,
     quantity: cartItem.quantity,
   };

@@ -173,3 +173,13 @@ export const createComment = async ({
 export const toggleLikeComment = async (commentId) => {
   return axios.put(`/comment/${commentId}/like`);
 };
+
+// flash sale
+
+export const getFlashSaleActive = async () => {
+  return axios.get(`/promotion/active-flash-sale`);
+};
+
+export const findOnePromotion = async (promotionId) => {
+  return axios.get(`/promotion/find-one/${promotionId}`);
+};
