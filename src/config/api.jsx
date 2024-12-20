@@ -183,3 +183,8 @@ export const getFlashSaleActive = async () => {
 export const findOnePromotion = async (promotionId) => {
   return axios.get(`/promotion/find-one/${promotionId}`);
 };
+
+//voucher
+export const getListVouver = async () => {
+  return axios.get(`/discount`);
+};
