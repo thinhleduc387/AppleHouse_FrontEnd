@@ -102,9 +102,9 @@ const FlashSale = () => {
         backgroundPosition: "center",
       }}
     >
-      <div class="initial-snow">
+      <div className="initial-snow">
         {Array.from({ length: 50 }).map((_, index) => (
-          <div class="snow">&#x1F9E7;</div>
+          <div className="snow">&#x1F9E7;</div>
         ))}
       </div>
       {/* Thời gian flash sale */}

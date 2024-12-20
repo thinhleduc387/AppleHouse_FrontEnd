@@ -31,6 +31,7 @@ import Address from "./component/Profile/Address";
 import SearchPage from "./pages/user/searchPage";
 import OrderDetails from "./component/Profile/OrderDetails";
 import MessengerCustomerChat from "react-messenger-customer-chat";
+import FacebookMsg from "./component/FacebookMsg";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -113,8 +114,7 @@ const RouterCustom = () => {
         {/* Catch-all for undefined routes */}
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
-      <MessengerCustomerChat pageId="61570604916404" appId="<APP_ID>" />
-      ,
+      {/* <FacebookMsg /> */}
       <ToastContainer
         position="top-right"
         autoClose={1000}
