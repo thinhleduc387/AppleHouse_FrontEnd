@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 
 const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
   const trackRef = useRef(null);
+
   const MIN = 0;
   const MAX = 50000000;
 
