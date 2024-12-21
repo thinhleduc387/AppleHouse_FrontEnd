@@ -30,6 +30,12 @@ import Address from "./component/Profile/Address";
 import SearchPage from "./pages/user/searchPage";
 import AddProductPage from "./pages/admin/addProductPage";
 import StockPage from "./pages/admin/stockPage";
+import FlashSalePage from "./pages/admin/flashSalePage";
+import FlashSaleCreate from "./pages/admin/flashSaleCreate";
+import EventPage from "./pages/admin/eventPage";
+import EventCreate from "./pages/admin/eventCreate";
+import VoucherPage from "./pages/admin/voucherPage";
+import VoucherCreate from "./pages/admin/voucherCreate";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -96,6 +102,23 @@ const RouterCustom = () => {
           <Route path="/admin/sales-analytics" element={<DashBoard />} />
           <Route path="/admin/products/add" element={<AddProductPage />} />
           <Route path="/admin/products/edit/:id" element={<AddProductPage />} />
+          <Route path="/admin/flash-sale" element={<FlashSalePage />} />
+          <Route
+            path="/admin/flash-sale/create"
+            element={<FlashSaleCreate />}
+          />{" "}
+          <Route
+            path="/admin/flash-sale/edit/:id"
+            element={<FlashSaleCreate />}
+          />
+          <Route path="/admin/event" element={<EventPage />} />
+          <Route path="/admin/event/create" element={<EventCreate />} />{" "}
+          <Route path="/admin/event/edit/:id" element={<EventCreate />} />
+          <Route path="/admin/voucher" element={<VoucherPage />} />
+          <Route
+            path="/admin/voucher/create/:type"
+            element={<VoucherCreate />}
+          />
           <Route path={ROUTERS.ADMIN.ORDER} element={<OrderListPage />} />
           <Route path="/admin/stock" element={<StockPage />} />
         </Route>

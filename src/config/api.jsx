@@ -123,3 +123,43 @@ export const getDraftProduct = async () => {
 export const creatNewProduct = async (productData) => {
   return axios.post("/product/spu/new", { productData });
 };
+
+//Admin
+export const getAdminAllProduct = async (spuIds) => {
+  return axios.post("/product/list-detail-product", { spuIds });
+};
+
+//FlashSale
+export const creatNewFlashSale = async (flashSaleData) => {
+  return axios.post("/promotion", { ...flashSaleData });
+};
+export const EditFlashSale = async (flashSaleData, promId) => {
+  return axios.patch("/promotion", { ...flashSaleData, promId });
+};
+export const getFlashSale = async (promId) => {
+  return axios.get(`/promotion/get-one/${promId}`);
+};
+export const getListFlashSale = async (eventType) => {
+  return axios.post("/promotion/get-list", { eventType });
+};
+export const toggleFlashSale = async (promId) => {
+  return axios.patch(`/promotion/toggle-disable/${promId}`);
+};
+export const filterProductFlashSale = async (
+  startTime,
+  endTime,
+  categoryId,
+  product_name
+) => {
+  return axios.post("/product/spu/filter-for-promotion", {
+    startTime,
+    endTime,
+    categoryId,
+    product_name,
+  });
+};
+
+//Voucher
+export const getListVoucher = async () => {
+  return axios.get("/discount/find-all");
+};

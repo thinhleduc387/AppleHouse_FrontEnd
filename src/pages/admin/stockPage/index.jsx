@@ -134,7 +134,7 @@ const StockPage = () => {
         <h1 className="text-4xl font-bold text-gray-700">Product Management</h1>
         <Link
           to="/admin/products/add"
-          className="flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 shadow-md"
+          className="flex items-center bg-mainColor text-white px-4 py-2 rounded hover:bg-blue-700 shadow-md"
         >
           <BiPlus className="mr-2 text-xl" /> Add Product
         </Link>
