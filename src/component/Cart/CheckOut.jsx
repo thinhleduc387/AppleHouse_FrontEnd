@@ -14,7 +14,6 @@ const initCheckOutValue = {
   voucherDiscount: 0,
   availableLoyalPoints: 0, // Điểm thưởng khả dụng mà khách hàng có thể sử dụng
 };
-
 const CheckOut = ({
   products_order,
   userId,
@@ -23,29 +22,23 @@ const CheckOut = ({
   isCheckout,
 }) => {
   const [checkoutValue, setCheckOutValue] = useState(initCheckOutValue);
-  const [promoCode, setPromoCode] = useState("");
+  console.log("🚀 ~ checkoutValue:", checkoutValue);
   const [useLoyalPoints, setUseLoyalPoints] = useState(false); // Trạng thái sử dụng điểm thưởng
-  const [showVoucherList, setShowVoucherList] = useState(false);
+  const [selectedVoucher, setSelectedVoucher] = useState([]);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [voucherList, setVoucherList] = useState([
-    { id: 1, code: "DISCOUNT10", description: "Giảm 10% cho đơn hàng" },
-    { id: 2, code: "FREESHIP", description: "Miễn phí vận chuyển" },
-    {
-      id: 3,
-      code: "LOYALTY50",
-      description: "Giảm 50k cho khách hàng thân thiết",
-    },
-  ]);
 
   useEffect(() => {
-    const fetchVoucherList = async () => {};
     const handleCheckOut = async () => {
       if (!products_order.length) {
         setCheckOutValue(initCheckOutValue);
         return;
       }
       try {
-        const response = await getCheckout({ products_order, userId });
+        const response = await getCheckout({
+          products_order,
+          userId,
+          shop_discount: selectedVoucher,
+        });
         if (response.status === 200) {
           setCheckOutValue(response.metadata.checkOut_order);
         }
@@ -55,33 +48,29 @@ const CheckOut = ({
     };
 
     handleCheckOut();
-  }, [products_order, userId]);
-
-  const handleApplyVoucher = (voucherCode) => {
-    setPromoCode(voucherCode); // Gán voucher vào ô nhập mã
-    setShowVoucherList(false); // Đóng danh sách voucher
-  };
+  }, [products_order, userId, selectedVoucher]);
 
   return (
     <>
       <div className="bg-white rounded-md p-4 md:self-start sticky top-0 shadow-md">
         {/* Mục chọn hoặc nhập ưu đãi */}
-
-        <div
-          className="flex items-center justify-between bg-gray-100 px-4 py-3 rounded-md cursor-pointer"
-          onClick={() => {
-            setSidebarOpen(true);
-            console.log(isSidebarOpen);
-          }}
-        >
-          <span className="text-gray-800 text-sm font-medium flex items-center gap-2">
-            <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs">
-              %
+        {products_order.length > 0 && (
+          <div
+            className="flex items-center justify-between bg-gray-100 px-4 py-3 rounded-md cursor-pointer"
+            onClick={() => {
+              setSidebarOpen(true);
+              console.log(isSidebarOpen);
+            }}
+          >
+            <span className="text-gray-800 text-sm font-medium flex items-center gap-2">
+              <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs">
+                %
+              </span>
+              Chọn hoặc nhập ưu đãi
             </span>
-            Chọn hoặc nhập ưu đãi
-          </span>
-          <FaChevronRight className="text-gray-500" />
-        </div>
+            <FaChevronRight className="text-gray-500" />
+          </div>
+        )}
 
         {/* Mục sử dụng điểm thưởng */}
         <div className="flex items-center justify-between mt-6 border rounded-md px-4 py-3">
@@ -109,9 +98,23 @@ const CheckOut = ({
         {/* Chi tiết thanh toán */}
         <ul className="text-gray-800 mt-8 space-y-4">
           <li className="flex justify-between text-base">
-            Giảm giá
+            Tổng tiền
+            <span className="font-bold">
+              {formatVND(checkoutValue.totalPrice)}
+            </span>
+          </li>
+          <hr />
+          <li className="flex justify-between text-base">
+            Khuyến mãi sản phẩm
             <span className="font-bold">
               {formatVND(checkoutValue.productDiscount)}
+            </span>
+          </li>
+          <hr />
+          <li className="flex justify-between text-base">
+            Khuyến mãi voucher
+            <span className="font-bold">
+              {formatVND(checkoutValue.voucherDiscount)}
             </span>
           </li>
           <hr />
@@ -132,9 +135,9 @@ const CheckOut = ({
             </span>
           </li>
           <hr />
-          <li className="flex justify-between text-base font-bold">
-            Tổng tiền
-            <span>
+          <li className="flex justify-between text-base font-bold ">
+            Cần thanh toán
+            <span className="text-red-500">
               {formatVND(
                 checkoutValue.totalCheckOut -
                   (useLoyalPoints
@@ -168,7 +171,14 @@ const CheckOut = ({
           </button>
         </div>
       </div>
-      <VoucherSideBar isOpen={isSidebarOpen} setIsOpen={setSidebarOpen} />
+
+      <VoucherSideBar
+        isOpen={isSidebarOpen}
+        setIsOpen={setSidebarOpen}
+        products_order={products_order}
+        selectedVoucher={selectedVoucher}
+        setSelectedVoucher={setSelectedVoucher}
+      />
     </>
   );
 };

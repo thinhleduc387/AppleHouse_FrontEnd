@@ -18,6 +18,7 @@ const CartItem = ({
 }) => {
   const product = {
     skuId: cartItem.skuId,
+    spuId: cartItem.spuId,
     name: cartItem.name,
     imageUrl: cartItem.thumb,
     price: cartItem.priceAfterDiscount,
@@ -33,12 +34,16 @@ const CartItem = ({
   const userId = useSelector((state) => state.account?.user?._id);
 
   useEffect(() => {
-    setIsChecked(isSelectAll); // Cập nhật trạng thái checkbox
+    setIsChecked(isSelectAll);
     if (isSelectAll) {
-      // Nếu Check All, thêm sản phẩm vào danh sách
       setSelectedProducts((prev) => [
-        ...prev.filter((item) => item.skuId !== cartItem.skuId), // Loại bỏ trùng lặp
-        { skuId: cartItem.skuId, quantity: cartItem.quantity },
+        ...prev.filter((item) => item.skuId !== cartItem.skuId),
+        {
+          skuId: cartItem.skuId,
+          quantity: cartItem.quantity,
+          spuId: cartItem.spuId,
+          price: cartItem.price,
+        },
       ]);
     } else {
       // Nếu bỏ Check All, xóa sản phẩm khỏi danh sách
@@ -132,6 +137,8 @@ const CartItem = ({
         {
           skuId: product.skuId,
           quantity: quantity,
+          spuId: product.spuId,
+          price: product.price,
         },
       ]);
     }

@@ -185,6 +185,14 @@ export const findOnePromotion = async (promotionId) => {
 };
 
 //voucher
-export const getListVouver = async () => {
-  return axios.get(`/discount`);
+export const getListVoucher = async () => {
+  return axios.get(`/discount/find-all`);
+};
+
+export const getListVoucherAvailable = async ({ userId, products }) => {
+  return axios.post(`/discount/find-all/available`, { userId, products });
+};
+
+export const getDiscountAmmountV2 = async (discountId, products) => {
+  return axios.post(`/discount/amountV2`, { discountId, products });
 };
