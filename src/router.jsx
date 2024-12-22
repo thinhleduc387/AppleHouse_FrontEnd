@@ -119,6 +119,7 @@ const RouterCustom = () => {
             path="/admin/voucher/create/:type"
             element={<VoucherCreate />}
           />
+          <Route path="/admin/voucher/edit/:id" element={<VoucherCreate />} />
           <Route path={ROUTERS.ADMIN.ORDER} element={<OrderListPage />} />
           <Route path="/admin/stock" element={<StockPage />} />
         </Route>

@@ -163,3 +163,9 @@ export const filterProductFlashSale = async (
 export const getListVoucher = async () => {
   return axios.get("/discount/find-all");
 };
+export const createNewVoucher = async (voucherData) => {
+  return axios.post("/discount", { ...voucherData });
+};
+export const editVoucher = async (voucherData, id) => {
+  return axios.patch(`/discount/${id}`, { ...voucherData });
+};
