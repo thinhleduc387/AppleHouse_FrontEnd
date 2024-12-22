@@ -4,6 +4,7 @@ import { getCheckout } from "../../config/api";
 import { BsCoin } from "react-icons/bs";
 import { FaChevronRight } from "react-icons/fa";
 import VoucherSideBar from "./VoucherSidebar";
+import { useSelector } from "react-redux";
 
 const initCheckOutValue = {
   accLoyalPoint: 0, // Điểm khách hàng sẽ nhận được
@@ -22,7 +23,7 @@ const CheckOut = ({
   isCheckout,
 }) => {
   const [checkoutValue, setCheckOutValue] = useState(initCheckOutValue);
-  console.log("🚀 ~ checkoutValue:", checkoutValue);
+  const accLoyalPoint = useSelector((state) => state.account?.user?.loyalPoint);
   const [useLoyalPoints, setUseLoyalPoints] = useState(false); // Trạng thái sử dụng điểm thưởng
   const [selectedVoucher, setSelectedVoucher] = useState([]);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -38,6 +39,7 @@ const CheckOut = ({
           products_order,
           userId,
           shop_discount: selectedVoucher,
+          isUseLoyalPoint: useLoyalPoints,
         });
         if (response.status === 200) {
           setCheckOutValue(response.metadata.checkOut_order);
@@ -48,18 +50,16 @@ const CheckOut = ({
     };
 
     handleCheckOut();
-  }, [products_order, userId, selectedVoucher]);
+  }, [products_order, userId, selectedVoucher, useLoyalPoints]);
 
   return (
     <>
       <div className="bg-white rounded-md p-4 md:self-start sticky top-0 shadow-md">
-        {/* Mục chọn hoặc nhập ưu đãi */}
         {products_order.length > 0 && (
           <div
             className="flex items-center justify-between bg-gray-100 px-4 py-3 rounded-md cursor-pointer"
             onClick={() => {
               setSidebarOpen(true);
-              console.log(isSidebarOpen);
             }}
           >
             <span className="text-gray-800 text-sm font-medium flex items-center gap-2">
@@ -73,27 +73,29 @@ const CheckOut = ({
         )}
 
         {/* Mục sử dụng điểm thưởng */}
-        <div className="flex items-center justify-between mt-6 border rounded-md px-4 py-3">
-          <div className="flex items-center gap-3">
-            <BsCoin size={24} color="#E5A624" />
-            <span className="text-gray-600 text-sm font-medium">
-              Sử dụng {checkoutValue.availableLoyalPoints} điểm (~
-              {formatVND(checkoutValue.availableLoyalPoints * 1000)})
-            </span>
-          </div>
-          <div
-            className={`relative w-12 h-6 rounded-full cursor-pointer transition-colors duration-300 ${
-              useLoyalPoints ? "bg-blue-600" : "bg-gray-300"
-            }`}
-            onClick={() => setUseLoyalPoints(!useLoyalPoints)}
-          >
+        {products_order.length > 0 && (
+          <div className="flex items-center justify-between mt-6 border rounded-md px-4 py-3">
+            <div className="flex items-center gap-3">
+              <BsCoin size={24} color="#E5A624" />
+              <span className="text-gray-600 text-sm font-medium">
+                Sử dụng {accLoyalPoint} điểm (~
+                {formatVND(accLoyalPoint)})
+              </span>
+            </div>
             <div
-              className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ${
-                useLoyalPoints ? "translate-x-6" : "translate-x-0"
+              className={`relative w-12 h-6 rounded-full cursor-pointer transition-colors duration-300 ${
+                useLoyalPoints ? "bg-blue-600" : "bg-gray-300"
               }`}
-            ></div>
+              onClick={() => setUseLoyalPoints(!useLoyalPoints)}
+            >
+              <div
+                className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ${
+                  useLoyalPoints ? "translate-x-6" : "translate-x-0"
+                }`}
+              ></div>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Chi tiết thanh toán */}
         <ul className="text-gray-800 mt-8 space-y-4">
@@ -135,15 +137,10 @@ const CheckOut = ({
             </span>
           </li>
           <hr />
-          <li className="flex justify-between text-base font-bold ">
+          <li className="flex justify-between text-base ">
             Cần thanh toán
-            <span className="text-red-500">
-              {formatVND(
-                checkoutValue.totalCheckOut -
-                  (useLoyalPoints
-                    ? checkoutValue.availableLoyalPoints * 1000
-                    : 0)
-              )}
+            <span className="text-red-500 font-bold">
+              {formatVND(checkoutValue.totalCheckOut)}
             </span>
           </li>
         </ul>
@@ -178,6 +175,7 @@ const CheckOut = ({
         products_order={products_order}
         selectedVoucher={selectedVoucher}
         setSelectedVoucher={setSelectedVoucher}
+        isUseLoyalPoint={useLoyalPoints}
       />
     </>
   );

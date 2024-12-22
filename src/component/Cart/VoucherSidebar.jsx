@@ -15,6 +15,7 @@ const VoucherSideBar = ({
   products_order,
   selectedVoucher,
   setSelectedVoucher,
+  isUseLoyalPoint,
 }) => {
   const [vouchers, setVouchers] = useState([]);
   const [unAvailableVoucher, setUnAvailableVoucher] = useState([]);
@@ -33,6 +34,7 @@ const VoucherSideBar = ({
         products_order,
         userId,
         shop_discount,
+        isUseLoyalPoint,
       });
       if (response.status === 200) {
         setPreviewCheckout(response.metadata.checkOut_order);

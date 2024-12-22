@@ -129,12 +129,14 @@ export const getCheckout = async ({
   userId,
   shop_discount = [],
   products_order = [],
+  isUseLoyalPoint,
 }) => {
   return axios.post("/checkout/review", {
     cartId,
     userId,
     shop_discount,
     products_order,
+    isUseLoyalPoint,
   });
 };
 

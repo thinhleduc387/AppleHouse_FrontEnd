@@ -22,6 +22,9 @@ const CartPage = () => {
   const localCartItems = useSelector((state) => state.cart?.localCartItems);
   const [cartItemSelected, setCartItemsSelected] = useState([]);
   useEffect(() => {
+    if (isCheckout !== false) {
+      return;
+    }
     const getShowCart = async () => {
       try {
         setLoading(true);
