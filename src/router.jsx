@@ -36,6 +36,8 @@ import EventPage from "./pages/admin/eventPage";
 import EventCreate from "./pages/admin/eventCreate";
 import VoucherPage from "./pages/admin/voucherPage";
 import VoucherCreate from "./pages/admin/voucherCreate";
+import OrderPage from "./pages/admin/orderPage";
+import FeedBackPage from "./pages/admin/feedBackPage";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -120,8 +122,9 @@ const RouterCustom = () => {
             element={<VoucherCreate />}
           />
           <Route path="/admin/voucher/edit/:id" element={<VoucherCreate />} />
-          <Route path={ROUTERS.ADMIN.ORDER} element={<OrderListPage />} />
+          <Route path="/admin/orders" element={<OrderPage />} />
           <Route path="/admin/stock" element={<StockPage />} />
+          <Route path="/admin/feedback" element={<FeedBackPage />} />
         </Route>
 
         {/* Catch-all for undefined routes */}

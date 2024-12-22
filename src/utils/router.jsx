@@ -45,7 +45,7 @@ export const ROUTERS = {
     {
       name: "Đánh giá",
       icon: <FaStar />,
-      path: "/admin/reviews",
+      path: "/admin/feedback",
     },
     {
       name: "Khách hàng",
