@@ -3,16 +3,13 @@ import { FaUpload, FaTrash } from "react-icons/fa";
 import { getImageLink } from "../../../config/api";
 
 const ThumbnailUpload = ({ productData, setProductData }) => {
-  const [previewImage, setPreviewImage] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null); // State để lưu URL xem trước hình ảnh
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setPreviewImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+      const fileURL = URL.createObjectURL(file); // Tạo URL tạm thời cho file
+      setPreviewUrl(fileURL); // Gán URL tạm thời vào previewUrl
 
       const formData = new FormData();
       formData.append("file", file);
@@ -20,9 +17,11 @@ const ThumbnailUpload = ({ productData, setProductData }) => {
       try {
         const response = await getImageLink(formData);
         console.log("🚀 ~ handleFileChange ~ response:", response);
+
+        // Cập nhật thông tin ảnh vào productData
         setProductData({
-          ...productData,
-          thumb: response.metadata.image_url,
+          ...productData, // Duy trì các thuộc tính hiện có
+          thumb: response.metadata.thumb_url, // Cập nhật thumb bằng URL từ API
         });
       } catch (error) {
         console.error("Lỗi khi tải hình ảnh lên:", error);
@@ -31,9 +30,10 @@ const ThumbnailUpload = ({ productData, setProductData }) => {
   };
 
   const handleRemoveImage = () => {
+    setPreviewUrl(null); // Xóa URL xem trước
     setProductData({
       ...productData,
-      thumb: null, // Xóa đường dẫn ảnh hiện tại
+      thumb: null, // Xóa thumb trong productData
     });
     setPreviewImage(null); // Xóa luôn ảnh preview
   };
@@ -42,7 +42,7 @@ const ThumbnailUpload = ({ productData, setProductData }) => {
     <div className="w-full h-auto">
       <div className="flex flex-row justify-between">
         <h2 className="text-xl font-bold mb-4">Ảnh sản phẩm</h2>
-        {previewImage && (
+        {(previewUrl || productData.thumb) && (
           <button
             onClick={handleRemoveImage}
             className="bg-red-500 text-white rounded-full p-2 hover:bg-red-600 w-8 h-8"
@@ -55,14 +55,16 @@ const ThumbnailUpload = ({ productData, setProductData }) => {
         htmlFor="uploadFile1"
         className={`bg-white text-gray-500 font-semibold text-base rounded h-auto flex flex-col items-center 
         justify-center cursor-pointer ${
-          previewImage ? "" : "border-2 border-mainColor border-dashed"
+          previewUrl || productData.thumb
+            ? ""
+            : "border-2 border-mainColor border-dashed"
         } 
         mx-auto font-[sans-serif]`}
       >
-        {previewImage ? (
+        {previewUrl || productData.thumb ? (
           <div className="relative w-full h-full flex items-center justify-center">
             <img
-              src={previewImage} // Ưu tiên hiển thị preview nếu có
+              src={previewUrl || productData.thumb}
               alt="Thumbnail Preview"
               className="max-w-full max-h-full object-contain transform scale-200"
             />

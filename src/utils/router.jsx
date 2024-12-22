@@ -58,19 +58,19 @@ export const ROUTERS = {
       path: "/admin/customers",
     },
     {
-      name: "Khuyến mãi",
+      name: "Voucher",
       icon: <FaUser />,
-      path: "/admin/customers",
+      path: "/admin/voucher",
     },
     {
       name: "Flash Sale",
       icon: <FaUser />,
-      path: "/admin/customers",
+      path: "/admin/flash-sale",
     },
     {
       name: "Sự kiện ưu đãi",
       icon: <FaUser />,
-      path: "/admin/customers",
+      path: "/admin/event",
     },
 
     {
