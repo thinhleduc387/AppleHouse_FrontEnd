@@ -1,17 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { X, Plus, Check, Info, AlertTriangle } from "lucide-react";
 import {
-  X,
-  ChevronRight,
-  Plus,
-  Check,
-  Info,
-  AlertTriangle,
-} from "lucide-react";
-import {
-  getDiscountAmmountV2,
   getListVoucherAvailable,
-  getListVoucher,
   getCheckout,
+  getListVoucherPrivate,
 } from "../../config/api";
 import VoucherDetailsModal from "./VoucherDetailsModal";
 import { useSelector } from "react-redux";
@@ -21,18 +13,17 @@ const VoucherSideBar = ({
   isOpen,
   setIsOpen,
   products_order,
-  setCheckOutValue,
   selectedVoucher,
   setSelectedVoucher,
 }) => {
-  //const [selectedVoucher, setSelectedVoucher] = useState([]);
   const [vouchers, setVouchers] = useState([]);
   const [unAvailableVoucher, setUnAvailableVoucher] = useState([]);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [selectedVoucherDetails, setSelectedVoucherDetails] = useState(null);
   const userId = useSelector((state) => state.account?.user?._id);
   const [previewCheckout, setPreviewCheckout] = useState({});
-
+  const [codeSearch, setCodeSearch] = useState();
+  const [privateVouchers, setPrivateVouchers] = useState([]);
   const handleCheckOut = async (products_order, userId, shop_discount) => {
     if (!products_order.length) {
       return;
@@ -106,6 +97,11 @@ const VoucherSideBar = ({
 
   const handleSubmit = () => {
     setIsOpen(false);
+  };
+
+  const handleFindVoucher = async () => {
+    const response = await getListVoucherPrivate({ code: codeSearch });
+    setPrivateVouchers(response.metadata);
   };
 
   const VoucherItem = ({ voucher, isAvailable = true }) => (
@@ -182,7 +178,6 @@ const VoucherSideBar = ({
       )}
     </div>
   );
-
   return (
     <>
       {isOpen && (
@@ -211,12 +206,39 @@ const VoucherSideBar = ({
                   <div className="flex items-center justify-between">
                     <input
                       type="text"
+                      value={codeSearch}
+                      onChange={(e) => setCodeSearch(e.target.value)}
                       placeholder="Nhập mã giảm giá của bạn tại đây nhé"
                       className="w-full bg-transparent text-sm placeholder:text-gray-500 focus:outline-none"
                     />
-                    <ChevronRight className="w-5 h-5 text-gray-400" />
+                    <button
+                      size="sm"
+                      onClick={handleFindVoucher}
+                      className="px-4 py-2 text-xs font-medium text-white bg-red-500 rounded-r-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+                    >
+                      Tìm kiếm
+                    </button>
                   </div>
                 </div>
+
+                {privateVouchers.length > 0 && (
+                  <>
+                    <h3 className="text-base font-semibold mb-4">Tìm kiếm</h3>
+                    <div className="space-y-3 mb-6">
+                      {privateVouchers.map((voucher) => (
+                        <VoucherItem
+                          key={voucher._id}
+                          voucher={voucher}
+                          isAvailable={
+                            !unAvailableVoucher.some(
+                              (uv) => uv._id === voucher._id
+                            )
+                          }
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
 
                 <h3 className="text-base font-semibold mb-4">
                   Voucher khả dụng

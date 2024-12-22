@@ -8,6 +8,7 @@ import CheckoutInfo from "../../../component/Cart/CheckoutInfo"; // Import Check
 import { IoIosArrowBack } from "react-icons/io";
 import PaymentMethod from "../../../component/Cart/PaymentMethod";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import CartItemCheckout from "../../../component/Cart/CartItemCheckout";
 
 const CartPage = () => {
   const userId = useSelector((state) => state.account?.user?._id);
@@ -19,7 +20,7 @@ const CartPage = () => {
   const [isCheckout, setIsCheckout] = useState(false); // Trạng thái thanh toán
   const [error, setError] = useState(null);
   const localCartItems = useSelector((state) => state.cart?.localCartItems);
-
+  const [cartItemSelected, setCartItemsSelected] = useState([]);
   useEffect(() => {
     const getShowCart = async () => {
       try {
@@ -41,7 +42,7 @@ const CartPage = () => {
     };
 
     getShowCart();
-  }, [userId, localCartItems]);
+  }, [userId, localCartItems, isCheckout]);
 
   const handleCheckout = (formData) => {
     console.log("Thông tin thanh toán:", formData);
@@ -78,7 +79,9 @@ const CartPage = () => {
             <div className=" p-4 mt-3 flex flex-col gap-4 bg-white rounded-md overflow-y-auto">
               {isCheckout && (
                 <a
-                  onClick={() => setIsCheckout(false)}
+                  onClick={() => {
+                    setIsCheckout(false);
+                  }}
                   className="text-mainColor flex flex-row items-center cursor-pointer"
                 >
                   <IoIosArrowBack />
@@ -86,16 +89,22 @@ const CartPage = () => {
                 </a>
               )}
               <div className="space-y-4 ">
-                {cartItems.map((cartItem) => (
-                  <CartItem
-                    isSelectAll={isSelectAll}
-                    key={cartItem.skuId}
-                    cartItem={cartItem}
-                    setSelectedProducts={setSelectedProducts}
-                    setCartItems={setCartItems}
-                    isCheckout={isCheckout}
-                  />
-                ))}
+                {!isCheckout &&
+                  cartItems.map((cartItem) => (
+                    <CartItem
+                      isSelectAll={isSelectAll}
+                      key={cartItem.skuId}
+                      cartItem={cartItem}
+                      setSelectedProducts={setSelectedProducts}
+                      setCartItems={setCartItems}
+                      isCheckout={isCheckout}
+                      setCartItemsSelected={setCartItemsSelected}
+                    />
+                  ))}
+                {isCheckout &&
+                  cartItemSelected.map((cartItem) => (
+                    <CartItemCheckout cartItem={cartItem} />
+                  ))}
               </div>
             </div>
             {/* Hiển thị CheckoutInfo ngay dưới CheckOut nếu đang trong trạng thái thanh toán */}

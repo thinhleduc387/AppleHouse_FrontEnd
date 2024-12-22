@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { FaMoneyBillWaveAlt } from "react-icons/fa";
-import { BsBank } from "react-icons/bs";
 const PaymentMethod = ({ selectedPayment, setSelectedPayment }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -11,7 +10,9 @@ const PaymentMethod = ({ selectedPayment, setSelectedPayment }) => {
 
   return (
     <div className="p-6 bg-white rounded-md shadow-md">
-      <h3 className="text-lg font-semibold text-gray-800">Chọn phương thức thanh toán</h3>
+      <h3 className="text-lg font-semibold text-gray-800">
+        Chọn phương thức thanh toán
+      </h3>
 
       {/* Payment options */}
       <div className="mt-4">
@@ -36,13 +37,17 @@ const PaymentMethod = ({ selectedPayment, setSelectedPayment }) => {
           onClick={() => handlePaymentSelect("cod")}
         >
           <FaMoneyBillWaveAlt className="w-6 h-6 text-gray-600" />
-          <span className="ml-3 text-gray-800">Thanh toán khi nhận hàng (COD)</span>
+          <span className="ml-3 text-gray-800">
+            Thanh toán khi nhận hàng (COD)
+          </span>
         </div>
       </div>
 
       {/* Display selected payment method */}
       <div className="mt-4">
-        <h4 className="font-semibold text-gray-700">Phương thức thanh toán đã chọn:</h4>
+        <h4 className="font-semibold text-gray-700">
+          Phương thức thanh toán đã chọn:
+        </h4>
         <span className="text-gray-800">{selectedPayment}</span>
       </div>
 

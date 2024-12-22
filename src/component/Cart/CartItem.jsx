@@ -15,6 +15,7 @@ const CartItem = ({
   cartItem,
   setSelectedProducts,
   setCartItems,
+  setCartItemsSelected,
 }) => {
   const product = {
     skuId: cartItem.skuId,
@@ -45,13 +46,26 @@ const CartItem = ({
           price: cartItem.price,
         },
       ]);
+      setCartItemsSelected((prev) => [
+        ...prev.filter((item) => item.skuId !== cartItem.skuId),
+        cartItem,
+      ]);
     } else {
       // Nếu bỏ Check All, xóa sản phẩm khỏi danh sách
       setSelectedProducts((prev) =>
         prev.filter((item) => item.skuId !== cartItem.skuId)
       );
+      setCartItemsSelected((prev) =>
+        prev.filter((item) => item.skuId !== cartItem.skuId)
+      );
     }
-  }, [isSelectAll, cartItem.skuId, cartItem.quantity, setSelectedProducts]);
+  }, [
+    isSelectAll,
+    cartItem.skuId,
+    cartItem.quantity,
+    setSelectedProducts,
+    setCartItemsSelected,
+  ]);
 
   const handleIncreaseQuantity = () => {
     if (userId) {
@@ -59,6 +73,14 @@ const CartItem = ({
         setQuantity((prev) => prev + 1);
 
         setSelectedProducts((prev) =>
+          prev.map((item) =>
+            item.skuId === product.skuId
+              ? { ...item, quantity: quantity + 1 }
+              : item
+          )
+        );
+
+        setCartItemsSelected((prev) =>
           prev.map((item) =>
             item.skuId === product.skuId
               ? { ...item, quantity: quantity + 1 }
@@ -106,6 +128,13 @@ const CartItem = ({
               : item
           )
         );
+        setCartItemsSelected((prev) =>
+          prev.map((item) =>
+            item.skuId === product.skuId
+              ? { ...item, quantity: quantity - 1 }
+              : item
+          )
+        );
       } else {
         setIsModalOpen(true);
       }
@@ -131,6 +160,9 @@ const CartItem = ({
       setSelectedProducts((prev) =>
         prev.filter((item) => item.skuId !== product.skuId)
       );
+      setCartItemsSelected((prev) =>
+        prev.filter((item) => item.skuId !== product.skuId)
+      );
     } else {
       setSelectedProducts((prev) => [
         ...prev,
@@ -140,6 +172,10 @@ const CartItem = ({
           spuId: product.spuId,
           price: product.price,
         },
+      ]);
+      setCartItemsSelected((prev) => [
+        ...prev,
+        { ...cartItem, quantity: quantity },
       ]);
     }
     setIsChecked(!isChecked);

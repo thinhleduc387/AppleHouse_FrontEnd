@@ -193,6 +193,10 @@ export const getListVoucherAvailable = async ({ userId, products }) => {
   return axios.post(`/discount/find-all/available`, { userId, products });
 };
 
+export const getListVoucherPrivate = async ({ code }) => {
+  return axios.post(`/discount/find-all/private`, { code });
+};
+
 export const getDiscountAmmountV2 = async (discountId, products) => {
   return axios.post(`/discount/amountV2`, { discountId, products });
 };
