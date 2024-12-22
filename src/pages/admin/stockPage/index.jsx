@@ -173,7 +173,10 @@ const StockPage = () => {
 
           {/* Product Table */}
           <div className="hidden md:block">
-            <ProductTable products={paginatedProducts()} />
+            <ProductTable
+              products={paginatedProducts()}
+              handleEditProduct={handleEditProduct}
+            />
           </div>
 
           {/* Collapse View for Small Screens */}

@@ -2,7 +2,7 @@ import React from "react";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { formatVND } from "../../../utils/format";
 
-const ProductTable = ({ products }) => {
+const ProductTable = ({ products, handleEditProduct }) => {
   const formatDate = (dateString) => {
     if (!dateString) return "-";
     const date = new Date(dateString);
@@ -52,7 +52,7 @@ const ProductTable = ({ products }) => {
                 {product.product_stockStatus} ({product.product_quantity})
               </td>
               <td className="p-5 border-b">
-                {formatVND(product.product_price?.orignalPrice)}
+                {formatVND(product.product_price?.originalPrice)}
               </td>
               <td className="p-5 border-b text-mainColor">
                 {product.product_category
@@ -78,7 +78,10 @@ const ProductTable = ({ products }) => {
               </td>
               <td className="p-5 border-b text-center">
                 <div className="flex justify-center items-center gap-x-2">
-                  <AiOutlineEdit className="text-blue-500 cursor-pointer hover:text-blue-700" />
+                  <AiOutlineEdit
+                    className="text-blue-500 cursor-pointer hover:text-blue-700"
+                    onClick={() => handleEditProduct(product._id)}
+                  />
                   <AiOutlineDelete className="text-red-500 cursor-pointer hover:text-red-700" />
                 </div>
               </td>
