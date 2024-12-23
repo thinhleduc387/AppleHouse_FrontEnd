@@ -13,7 +13,6 @@ const ProductPage = () => {
   const [maxPrice, setMaxPrice] = useState(50000000);
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
   const [productList, setProductList] = useState([]);
-  console.log("🚀 ~ ProductPage ~ productList:", productList);
   const [selectedOption, setSelectedOption] = useState(SortOptions.newest);
   const [loading, setLoading] = useState(true); // Add loading state
 

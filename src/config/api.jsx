@@ -202,3 +202,41 @@ export const getListVoucherPrivate = async ({ code }) => {
 export const getDiscountAmmountV2 = async (discountId, products) => {
   return axios.post(`/discount/amountV2`, { discountId, products });
 };
+
+// order
+export const createOrder = async ({
+  cartId,
+  userId,
+  products_order,
+  shop_discount,
+  user_payment,
+  user_address,
+  payment_method,
+  isUseLoyalPoint,
+  orderNote,
+}) => {
+  return axios.post(`/order/test`, {
+    cartId,
+    userId,
+    products_order,
+    user_payment,
+    user_address,
+    payment_method,
+    shop_discount,
+    isUseLoyalPoint,
+    orderNote,
+  });
+};
+
+//address
+export const addNewUserAddress = async ({ id, address }) => {
+  return axios.post(`/user/address`, { id, address });
+};
+
+export const getListUserAddress = async ({ id }) => {
+  return axios.get(`/user/address/${id}`);
+};
+
+export const getUserDefaultAddress = async ({ id }) => {
+  return axios.get(`/user/default/address/${id}`);
+};

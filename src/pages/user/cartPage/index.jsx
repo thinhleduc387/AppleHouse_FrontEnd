@@ -12,8 +12,9 @@ import CartItemCheckout from "../../../component/Cart/CartItemCheckout";
 
 const CartPage = () => {
   const userId = useSelector((state) => state.account?.user?._id);
+  const user = useSelector((state) => state.account?.user);
+
   const [cartItems, setCartItems] = useState([]);
-  const [selectedPayment, setSelectedPayment] = useState("");
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [isSelectAll, setIsSelectAll] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -21,6 +22,14 @@ const CartPage = () => {
   const [error, setError] = useState(null);
   const localCartItems = useSelector((state) => state.cart?.localCartItems);
   const [cartItemSelected, setCartItemsSelected] = useState([]);
+  console.log("🚀 ~ CartPage ~ cartItemSelected:", cartItemSelected);
+
+  // state for create order
+  const [orderAddress, setOrderAddress] = useState("");
+  const [orderMethodPayment, setOrderMethodPayment] = useState("");
+  const [orderNote, setOrderNote] = useState("");
+  //
+
   useEffect(() => {
     if (isCheckout !== false) {
       return;
@@ -111,17 +120,72 @@ const CartPage = () => {
               </div>
             </div>
             {/* Hiển thị CheckoutInfo ngay dưới CheckOut nếu đang trong trạng thái thanh toán */}
+
             {isCheckout && (
               <>
+                {userId && (
+                  <div className="mt-6">
+                    <div className="p-6 bg-white rounded-lg shadow-md">
+                      <h2 className="text-xl font-semibold text-gray-800 border-b pb-2 mb-4">
+                        Thông tin người đặt
+                      </h2>
+                      <div className="space-y-2">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-600">
+                            Họ và tên
+                          </label>
+                          <input
+                            type="text"
+                            name="phone"
+                            disabled
+                            value={user?.name}
+                            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 hover:border-blue-500 transition-all"
+                            required
+                          />
+                        </div>
+                        {user?.email && (
+                          <div>
+                            <label className="block text-sm font-medium text-gray-600">
+                              Email
+                            </label>
+                            <input
+                              type="text"
+                              name="phone"
+                              disabled
+                              value={user?.email}
+                              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 hover:border-blue-500 transition-all"
+                              required
+                            />
+                          </div>
+                        )}
+                        {user?.phone && (
+                          <div>
+                            <label className="block text-sm font-medium text-gray-600">
+                              Số điện thoại:
+                            </label>
+                            <p className="text-base font-medium text-gray-800">
+                              {user?.phone}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="mt-4 ">
                   <CheckoutInfo
                     onSubmit={handleCheckout} // Xác nhận thanh toán
+                    setOrderAddress={setOrderAddress}
+                    orderNote={orderNote}
+                    setOrderNote={setOrderNote}
                   />
                 </div>
+
                 <div className="mt-4 ">
                   <PaymentMethod
-                    selectedPayment={selectedPayment}
-                    setSelectedPayment={setSelectedPayment}
+                    orderMethodPayment={orderMethodPayment}
+                    setOrderMethodPayment={setOrderMethodPayment}
                   />
                 </div>
               </>
@@ -131,11 +195,14 @@ const CartPage = () => {
           {/* Hiển thị CheckOut */}
           {cartItems.length > 0 && (
             <CheckOut
-              products_order={selectedProducts}
+              products_order={cartItemSelected}
               userId={userId}
               onCheckout={() => setIsCheckout(true)} // Start the checkout process
               onContinueShopping={() => setIsCheckout(false)} // Go back to the cart
               isCheckout={isCheckout} // Pass the checkout state to toggle button text
+              orderMethodPayment={orderMethodPayment}
+              orderAddress={orderAddress}
+              orderNote={orderNote}
             />
           )}
         </div>

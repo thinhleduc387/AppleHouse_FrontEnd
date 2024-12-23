@@ -30,6 +30,8 @@ import Favorites from "./component/Profile/Favorites";
 import Address from "./component/Profile/Address";
 import SearchPage from "./pages/user/searchPage";
 import OrderDetails from "./component/Profile/OrderDetails";
+import OrderSuccess from "./pages/user/order/OrderSuccess";
+import OrderFailed from "./pages/user/order/OrderFailed";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -79,6 +81,7 @@ const RouterCustom = () => {
             path="/profile/order-list/detail/:orderId"
             element={<OrderDetails />}
           />
+
           {/* Profile Routes */}
           <Route path={ROUTERS.USER.PROFILE} element={<ProfilePage />}>
             <Route index element={<Info />} />
@@ -109,7 +112,9 @@ const RouterCustom = () => {
           />
         </Route>
 
-        {/* Catch-all for undefined routes */}
+        <Route path="/order/order-success/:id" element={<OrderSuccess />} />
+        <Route path="/order/order-failed" element={<OrderFailed />} />
+
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
       <ToastContainer

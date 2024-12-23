@@ -39,10 +39,6 @@ const VoucherSideBar = ({
       if (response.status === 200) {
         setPreviewCheckout(response.metadata.checkOut_order);
       }
-      console.log(
-        "🚀 ~ handleCheckOut ~ response.metadata.checkOut_order:",
-        response.metadata.checkOut_order
-      );
     } catch (error) {
       console.error("Failed to fetch checkout data:", error.message);
     }

@@ -24,13 +24,22 @@ const DetailProduct = () => {
     skus.find((sku) => sku.sku_default)?.sku_index || [0, 0]
   );
   const [selectedImage, setSelectedImage] = useState();
-
+  const [moreImgs, setMoreImgs] = useState();
   const commentSectionRef = useRef(null);
   const ratingStatRef = useRef(null);
 
   const selectedSku = skus.find((sku) =>
     sku.sku_index.every((index, i) => index === selectedVariants[i])
   );
+  const collectProductImages = (product) => {
+    const moreImgs = product.product_more_imgs || [];
+    const variationImgs =
+      product.product_variations?.flatMap(
+        (variation) => variation.images || []
+      ) || [];
+    const allImages = [...new Set([...moreImgs, ...variationImgs])];
+    return allImages;
+  };
 
   const handleGetProduct = async () => {
     setLoading(true);
@@ -42,6 +51,7 @@ const DetailProduct = () => {
       );
       setSkus(response.metadata.sku_list);
       setSpu(response.metadata.spu_info);
+      setMoreImgs(collectProductImages(response.metadata.spu_info));
     }
     setLoading(false);
   };
@@ -139,7 +149,7 @@ const DetailProduct = () => {
                 </div>
 
                 <div className="mt-6 flex flex-wrap justify-center gap-6 mx-auto">
-                  {selectedSku?.sku_imgs.map((src, index) => (
+                  {moreImgs.map((src, index) => (
                     <div
                       key={index}
                       className={`w-24 h-20 flex items-center justify-center rounded-lg p-4 cursor-pointer transition-all duration-300 ${
@@ -221,9 +231,17 @@ const DetailProduct = () => {
                               : "border-gray-300"
                           }`}
                               disabled={!isAvailable}
-                              onClick={() =>
-                                handleVariantChange(variationIndex, optionIndex)
-                              }
+                              onClick={() => {
+                                handleVariantChange(
+                                  variationIndex,
+                                  optionIndex
+                                );
+                                if (variation.images.length > 0) {
+                                  setSelectedImage(
+                                    variation.images[optionIndex]
+                                  );
+                                }
+                              }}
                             >
                               {variation.images.length > 0 && (
                                 <img
