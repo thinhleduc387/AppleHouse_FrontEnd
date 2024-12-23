@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import VariationForm from "./VariationForm";
 import SkuTable from "./SkuTable";
 import { formatNumber, parseNumber } from "../../../utils/format";
-import { getImageLink } from "../../../config/api";
 
 const AddVariationsInfo = ({
   productData,
@@ -19,31 +18,23 @@ const AddVariationsInfo = ({
       setVariationsList(productData.variations);
     }
     if (productData.sku_list && productData.sku_list.length > 0) {
-      const updatedSkuList = productData.sku_list.map((sku) => ({
-        ...sku,
-        sku_price: sku.sku_price.originalPrice || 0,
-      }));
-
-      setSku_list(updatedSkuList);
+      setSku_list(productData.sku_list);
     }
   }, [productData]);
-  // Cập nhật variations và gọi callback
+
   const setVariationsListAndUpdate = (newVariationsList) => {
     setVariationsList(newVariationsList);
     onUpdateVariations(newVariationsList); // Cập nhật dữ liệu lên component cha
     generateSkuList(newVariationsList);
   };
 
-  // Cập nhật sku_list và gọi callback
   const setSkuListAndUpdate = (newSkuList) => {
     setSku_list(newSkuList);
     onUpdateSkuList(newSkuList);
   };
+
   const addNewVariation = () => {
-    const newVariations = [
-      ...variationsList,
-      { images: [], name: "", options: [""] },
-    ];
+    const newVariations = [...variationsList, { name: "", options: [""] }];
     setVariationsListAndUpdate(newVariations);
   };
 
@@ -111,39 +102,6 @@ const AddVariationsInfo = ({
     setSkuListAndUpdate(updatedSkuList);
   };
 
-  const handleImageUpload = async (skuIndexId, e) => {
-    const updatedSkuList = [...sku_list];
-    // setSku_list(updatedSkuList);
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-
-      reader.readAsDataURL(file);
-
-      const formData = new FormData();
-      formData.append("file", file);
-
-      try {
-        const response = await getImageLink(formData);
-
-        updatedSkuList[skuIndexId].sku_imgs = [
-          ...updatedSkuList[skuIndexId].sku_imgs,
-          response.metadata.image_url,
-        ];
-
-        setSkuListAndUpdate(updatedSkuList);
-      } catch (error) {
-        console.error("Lỗi khi tải hình ảnh lên:", error);
-      }
-    }
-  };
-
-  const handleRemoveImage = (skuIndexId, imgIndex) => {
-    const updatedSkuList = [...sku_list];
-    updatedSkuList[skuIndexId].sku_imgs.splice(imgIndex, 1); // Xóa ảnh tại chỉ số imgIndex
-    setSku_list(updatedSkuList);
-  };
-
   const generateSkuList = (variations = variationsList) => {
     const skuList = [];
     const optionsCount = variations.map(
@@ -170,12 +128,12 @@ const AddVariationsInfo = ({
         sku_index: skuIndex,
         sku_price: "",
         sku_stock: "",
-        sku_imgs: [],
       });
     }
 
     setSkuListAndUpdate(skuList);
   };
+
   const applyToAll = () => {
     const updatedSkuList = sku_list.map((sku) => ({
       ...sku,
@@ -224,7 +182,6 @@ const AddVariationsInfo = ({
               {variationsList.length > 0 && (
                 <>
                   <div className="mt-4 flex flex-col md:flex-row gap-4">
-                    {/* Giá */}
                     <div className="flex items-center md:flex-col md:items-start w-full md:w-1/2 gap-x-4 md:gap-y-2">
                       <label className="font-medium w-24 md:w-full">Giá</label>
                       <input
@@ -237,8 +194,6 @@ const AddVariationsInfo = ({
                         className="w-full md:w-full p-2 border rounded"
                       />
                     </div>
-
-                    {/* Kho hàng */}
                     <div className="flex items-center md:flex-col md:items-start w-full md:w-1/2 gap-x-4 md:gap-y-2">
                       <label className="font-medium w-24 md:w-full">
                         Kho hàng
@@ -266,8 +221,6 @@ const AddVariationsInfo = ({
                   variationsList={variationsList}
                   onPriceChange={handlePriceChange}
                   onStockChange={handleStockChange}
-                  onImageUpload={handleImageUpload}
-                  onRemoveImage={handleRemoveImage}
                 />
               )}
             </div>

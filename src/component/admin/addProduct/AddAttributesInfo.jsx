@@ -6,9 +6,14 @@ import {
   macbookAttributes,
   applewatchAttributes,
   earphonesAttributes,
-} from "./AttributesData";
+} from "./AttributesData"; // Import các bộ thuộc tính
+import { getCategoryById } from "../../../config/api";
 
 const AddAttributesInfo = ({ category, productData, onUpdateAttributes }) => {
+  console.log(
+    "🚀 ~ AddAttributesInfo ~ category:",
+    category && productData.attributes.length <= 0
+  );
   const [attributes, setAttributes] = useState([]); // Danh sách bộ attributes
   const [expandedGroups, setExpandedGroups] = useState([]); // Nhóm đang mở
   const [defaultLength, setDefaultLength] = useState(0); // Số nhóm cố định
@@ -26,55 +31,66 @@ const AddAttributesInfo = ({ category, productData, onUpdateAttributes }) => {
     }
   };
 
-  useEffect(() => {
-    if (!productData.attributes || !productData.attributes.length > 0) {
-      if (!category) {
-        setAttributes([]);
-        setDefaultLength(0);
-        return;
-      }
+  // Lấy thông tin category và cập nhật attributes dựa trên category_name
+  const handleGetCategory = async () => {
+    const response = await getCategoryById(category[0]); // category là id
 
-      let initialAttributes = [];
-      switch (category) {
-        case "iPhone":
+    try {
+      const response = await getCategoryById(category[0]); // category là id
+
+      if (response && response.status === 200 && response.metadata) {
+        const categoryName = response.metadata.category_name.toLowerCase(); // Chuyển thành chữ thường
+
+        let initialAttributes = [];
+        if (categoryName.includes("iphone")) {
           initialAttributes = iphoneAttributes;
-          break;
-        case "iPad":
+        } else if (categoryName.includes("ipad")) {
           initialAttributes = ipadAttributes;
-          break;
-        case "Mac":
+        } else if (categoryName.includes("mac")) {
           initialAttributes = macbookAttributes;
-          break;
-        case "Apple Watch":
+        } else if (categoryName.includes("watch")) {
           initialAttributes = applewatchAttributes;
-          break;
-        case "Tai nghe":
+        } else if (
+          categoryName.includes("tai nghe") ||
+          categoryName.includes("earphone")
+        ) {
           initialAttributes = earphonesAttributes;
-          break;
-        default:
-          initialAttributes = [];
-          break;
+        } else {
+          initialAttributes = []; // Không khớp với danh mục nào
+        }
+
+        // Chuyển đổi structure attributes
+        const updatedAttributes = initialAttributes.map((group) => ({
+          groupName: group.groupName,
+          attributes: group.propertiesName.map((property) => ({
+            displayName: property,
+            value: "",
+          })),
+        }));
+
+        setAttributesWithCallback(updatedAttributes);
+        setDefaultLength(updatedAttributes.length);
       }
-
-      // Chuyển đổi structure attributes
-      const updatedAttributes = initialAttributes.map((group) => ({
-        groupName: group.groupName,
-        attributes: group.propertiesName.map((property) => ({
-          displayName: property,
-          value: "",
-        })),
-      }));
-
-      setAttributesWithCallback(updatedAttributes);
-      setDefaultLength(updatedAttributes.length);
+    } catch (error) {
+      console.error("🚀 ~ Lỗi khi lấy danh mục:", error);
     }
-  }, [category]);
+  };
 
+  // Khi category thay đổi, lấy thông tin category_name và cập nhật attributes
   useEffect(() => {
     if (productData.attributes && productData.attributes.length > 0) {
+      // Nếu đã có attributes, chỉ cần đồng bộ với state
       setAttributes(productData.attributes);
+      setDefaultLength(0);
+    } else if (category && productData.attributes.length <= 0) {
+      // Nếu chưa có attributes, gọi API để lấy thông tin từ category
+      handleGetCategory();
+    } else {
+      // Nếu không có category và attributes, đặt về giá trị mặc định
+      setAttributes([]);
+      setDefaultLength(0);
     }
-  }, []);
+  }, [category, productData.attributes]);
 
   const handleToggleGroup = (groupName) => {
     setExpandedGroups((prev) =>
@@ -97,14 +113,18 @@ const AddAttributesInfo = ({ category, productData, onUpdateAttributes }) => {
   const handleAddProperty = (groupIndex) => {
     const updatedAttributes = [...attributes];
     updatedAttributes[groupIndex].attributes.push({
-      displayName: `Thuộc tính ${updatedAttributes[groupIndex].attributes.length + 1}`,
+      displayName: `Thuộc tính ${
+        updatedAttributes[groupIndex].attributes.length + 1
+      }`,
       value: "",
     });
     setAttributesWithCallback(updatedAttributes);
   };
 
   const handleDeleteGroup = (groupIndex) => {
-    const updatedAttributes = attributes.filter((_, index) => index !== groupIndex);
+    const updatedAttributes = attributes.filter(
+      (_, index) => index !== groupIndex
+    );
     setAttributesWithCallback(updatedAttributes);
   };
 
@@ -117,7 +137,7 @@ const AddAttributesInfo = ({ category, productData, onUpdateAttributes }) => {
   const handleSaveGroupName = () => setEditingGroup(null);
 
   const handleSavePropertyName = () => {
-    setEditingPropertyName({ groupIndex: null, propertyIndex: null }); // Reset trạng thái chỉnh sửa
+    setEditingPropertyName({ groupIndex: null, propertyIndex: null });
   };
 
   return (
@@ -154,7 +174,7 @@ const AddAttributesInfo = ({ category, productData, onUpdateAttributes }) => {
               <div className="flex gap-2">
                 {editingGroup === groupIndex ? (
                   <AiOutlineCheck
-                    onClick={() => handleSaveGroupName()}
+                    onClick={handleSaveGroupName}
                     className="text-green-500 cursor-pointer"
                   />
                 ) : (
@@ -209,8 +229,9 @@ const AddAttributesInfo = ({ category, productData, onUpdateAttributes }) => {
                     value={property.value}
                     onChange={(e) => {
                       const updatedAttributes = [...attributes];
-                      updatedAttributes[groupIndex].attributes[propertyIndex].value =
-                        e.target.value;
+                      updatedAttributes[groupIndex].attributes[
+                        propertyIndex
+                      ].value = e.target.value;
                       setAttributesWithCallback(updatedAttributes);
                     }}
                     className="border rounded-md px-2 py-1 w-2/3"

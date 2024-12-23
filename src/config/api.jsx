@@ -23,6 +23,9 @@ export const callAccount = async () => {
 export const getAllCategory = async () => {
   return axios.get("/category/all");
 };
+export const getCategoryById = async (id) => {
+  return axios.get(`/category/find-one/${id}`);
+};
 
 /*Product*/
 export const getAllProductByCategory = async (categorySlug) => {
@@ -123,7 +126,9 @@ export const getDraftProduct = async () => {
 export const creatNewProduct = async (productData) => {
   return axios.post("/product/spu/new", { ...productData });
 };
-
+export const editNewProduct = async (productData, id) => {
+  return axios.patch(`/product/spu/update/${id}`, { ...productData });
+};
 //Admin
 export const getAdminAllProduct = async (spuIds) => {
   return axios.post("/product/list-detail-product", { spuIds });

@@ -5,6 +5,7 @@ import AddProductForm from "./AddProductForm";
 import CategorySelect from "./CategorySelect";
 import TagInput from "./TagInput";
 import ThumbnailUpload from "./ThumbnailUpload";
+import MoreImagesUpload from "./MoreImagesUpload";
 
 const AddSPUInfo = ({
   productData,
@@ -12,6 +13,7 @@ const AddSPUInfo = ({
   setProductData,
   handleSubmit,
 }) => {
+  console.log("🚀 ~ productData:", productData)
   return (
     <div className="flex w-full justify-center items-center bg-white rounded-lg shadow-md p-10">
       <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-8">
@@ -34,13 +36,10 @@ const AddSPUInfo = ({
 
           {/* TagInput: Thêm thẻ cho sản phẩm */}
           <TagInput productData={productData} setProductData={setProductData} />
-
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
-          >
-            Thêm sản phẩm
-          </button>
+          <MoreImagesUpload
+            productData={productData}
+            setProductData={setProductData}
+          />
         </form>
 
         {/* ThumbnailUpload: Upload ảnh thumbnail */}

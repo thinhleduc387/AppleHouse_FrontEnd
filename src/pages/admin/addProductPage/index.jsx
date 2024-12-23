@@ -2,26 +2,37 @@ import React, { useEffect, useState } from "react";
 import AddSPUInfo from "../../../component/admin/addProduct/AddSPUInfo";
 import AddVariationsInfo from "../../../component/admin/addProduct/AddVariationsInfo";
 import AddAttributesInfo from "../../../component/admin/addProduct/AddAttributesInfo";
-import { getProduct, creatNewProduct } from "../../../config/api";
+import { toast } from "react-toastify";
+import {
+  getProduct,
+  creatNewProduct,
+  editNewProduct,
+} from "../../../config/api";
 import { useParams } from "react-router-dom";
 
 const AddProductPage = () => {
   const { id } = useParams();
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isLoading, setIsLoading] = useState(false);
   const [productData, setProductData] = useState({
     name: "",
-    category: [], // Lưu giá trị category
+    category: [],
     description: "",
     tags: [],
     thumb: null,
     variations: [],
     sku_list: [],
     attributes: [],
+    more_imgs: [],
   });
+  const [showDialog, setShowDialog] = useState(false);
 
-  console.log("🚀 ~ AddProductPage ~ productData:", productData);
+  useEffect(() => {
+    if (id) {
+      setIsLoading(true);
+      handleGetProduct(id).finally(() => setIsLoading(false));
+    }
+  }, [id]);
 
-  // Hàm xử lý thay đổi chung cho input
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProductData((prev) => ({
@@ -30,7 +41,6 @@ const AddProductPage = () => {
     }));
   };
 
-  // Hàm xử lý khi `attributes` thay đổi
   const handleUpdateAttributes = (updatedAttributes) => {
     setProductData((prev) => ({
       ...prev,
@@ -38,7 +48,6 @@ const AddProductPage = () => {
     }));
   };
 
-  // Hàm xử lý khi `variations` thay đổi
   const handleUpdateVariations = (updatedVariations) => {
     setProductData((prev) => ({
       ...prev,
@@ -46,38 +55,11 @@ const AddProductPage = () => {
     }));
   };
 
-  // Hàm xử lý khi `sku_list` thay đổi
   const handleUpdateSkuList = (updatedSkuList) => {
     setProductData((prev) => ({
       ...prev,
       sku_list: updatedSkuList,
     }));
-  };
-
-  useEffect(() => {
-    if (id) {
-      setIsLoading(true); // Bật trạng thái loading
-      handleGetProduct(id).finally(() => setIsLoading(false)); // Tắt loading
-    }
-  }, [id]);
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("Submitting product data:", productData);
-    await handleCreateNew(productData);
-  };
-  const handleCreateNew = async (productData) => {
-    try {
-      const response = await creatNewProduct(productData);
-
-      if (response && response.status === 200) {
-        console.log("🚀 ~ handleCreateNew ~ response:", response);
-      }
-    } catch (error) {
-      console.error("Lỗi khi tạo sản phẩm:", error.message);
-      alert(
-        "Đã xảy ra lỗi trong quá trình tạo sản phẩm. Vui lòng thử lại sau!"
-      );
-    }
   };
 
   const handleGetProduct = async (spu_id) => {
@@ -88,20 +70,86 @@ const AddProductPage = () => {
         const spu_info = product.spu_info;
         const sku_list = product.sku_list;
 
+        // Làm sạch sku_list
+        const cleanedSkuList = sku_list.map((sku) => ({
+          sku_index: sku.sku_index,
+          sku_price: sku.sku_price.originalPrice,
+          sku_stock: sku.sku_stock,
+        }));
+
         setProductData({
           ...productData,
           name: spu_info.product_name || "",
-          category: product.product_category || "",
+          category: spu_info.product_category || [],
           description: spu_info.product_description || "",
           tags: spu_info.product_tags || [],
           thumb: spu_info.product_thumb || null,
           variations: spu_info.product_variations || [],
-          sku_list: sku_list || [],
+          sku_list: cleanedSkuList, // Sử dụng sku_list đã làm sạch
           attributes: spu_info.product_attributes || [],
+          more_imgs: spu_info.product_more_imgs || [],
         });
       }
     } catch (error) {
       console.error("Error fetching product data:", error);
+    }
+  };
+
+  const handleConfirm = () => {
+    const requiredFields = [
+      { key: "name", label: "Tên sản phẩm" },
+      { key: "category", label: "Danh mục sản phẩm" },
+      { key: "description", label: "Mô tả sản phẩm" },
+      { key: "tags", label: "Tags sản phẩm" },
+    ];
+
+    for (const field of requiredFields) {
+      if (
+        !productData[field.key] ||
+        (Array.isArray(productData[field.key]) &&
+          productData[field.key].length === 0) ||
+        (typeof productData[field.key] === "string" &&
+          productData[field.key].trim() === "")
+      ) {
+        toast.error(`Vui lòng nhập ${field.label}`);
+        return;
+      }
+    }
+
+    setShowDialog(true);
+  };
+
+  const handleCreateNew = async () => {
+    try {
+      const response = await creatNewProduct(productData);
+      if (response && response.status === 200) {
+        toast.success("Sản phẩm đã được tạo mới thành công!");
+      } else {
+        throw new Error("Đã xảy ra lỗi trong quá trình tạo sản phẩm.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi tạo sản phẩm:", error.message);
+      toast.error("Đã xảy ra lỗi. Vui lòng thử lại sau!");
+    } finally {
+      setShowDialog(false);
+    }
+  };
+
+  const handleEdit = async () => {
+    try {
+      const response = await editNewProduct(productData, id);
+      console.log("🚀 ~ handleEdit ~ productData:", productData)
+      console.log("🚀 ~ handleEdit ~ response:", response)
+      if (response && response.status === 200) {
+        toast.success("Sản phẩm đã được cập nhật thành công!");
+      } else {
+        throw new Error("Đã xảy ra lỗi trong quá trình cập nhật sản phẩm.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi cập nhật sản phẩm:", error.message);
+      toast.error("Đã xảy ra lỗi. Vui lòng thử lại sau!");
+    } finally {
+      setShowDialog(false);
     }
   };
 
@@ -115,14 +163,13 @@ const AddProductPage = () => {
             productData={productData}
             handleChange={handleChange}
             setProductData={setProductData}
-            handleSubmit={handleSubmit}
           />
 
           <div className="mt-10">
             <AddVariationsInfo
               productData={productData}
-              onUpdateVariations={handleUpdateVariations} // Truyền callback cho variations
-              onUpdateSkuList={handleUpdateSkuList} // Truyền callback cho sku_list
+              onUpdateVariations={handleUpdateVariations}
+              onUpdateSkuList={handleUpdateSkuList}
             />
           </div>
 
@@ -130,10 +177,44 @@ const AddProductPage = () => {
             <AddAttributesInfo
               category={productData.category}
               productData={productData}
-              onUpdateAttributes={handleUpdateAttributes} // Truyền callback cho attributes
+              onUpdateAttributes={handleUpdateAttributes}
             />
           </div>
-          <button onClick={() => handleCreateNew(productData)}>Tạo mới</button>
+
+          <div className="flex justify-end mt-5">
+            <button
+              className="bg-mainColor text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+              onClick={handleConfirm}
+            >
+              {id ? "Cập nhật sản phẩm" : "Tạo sản phẩm"}
+            </button>
+          </div>
+
+          {showDialog && (
+            <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                <h2 className="text-xl font-bold mb-4">Xác nhận</h2>
+                <p className="mb-6">
+                  Bạn có chắc chắn muốn {id ? "cập nhật" : "thêm mới"} sản phẩm
+                  này?
+                </p>
+                <div className="flex justify-end gap-4">
+                  <button
+                    className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+                    onClick={() => setShowDialog(false)}
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                    onClick={id ? handleEdit : handleCreateNew}
+                  >
+                    Xác nhận
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

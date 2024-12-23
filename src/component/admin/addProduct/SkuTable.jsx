@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { ImBin } from "react-icons/im";
-import ImageUpload from "./ImageUpload";
+import React from "react";
 import { formatNumber, parseNumber } from "../../../utils/format";
 
 const SkuTable = ({
@@ -8,9 +6,8 @@ const SkuTable = ({
   variationsList,
   onPriceChange,
   onStockChange,
-  onImageUpload,
-  onRemoveImage,
 }) => {
+  console.log("🚀 ~ skuList:", skuList)
   return (
     <table className="table-auto w-full mt-6 border">
       <thead>
@@ -22,7 +19,6 @@ const SkuTable = ({
           ))}
           <th className="border px-4 py-2">Giá</th>
           <th className="border px-4 py-2">Kho hàng</th>
-          <th className="border px-4 py-2">Hình ảnh</th>
         </tr>
       </thead>
       <tbody>
@@ -50,14 +46,6 @@ const SkuTable = ({
                 value={sku.sku_stock || ""}
                 onChange={(e) => onStockChange(skuIndexId, e.target.value)}
                 className="w-full p-2 border rounded"
-              />
-            </td>
-            <td className="border px-4 py-2">
-              <ImageUpload
-                skuIndexId={skuIndexId}
-                skuImgs={sku.sku_imgs}
-                onImageUpload={onImageUpload}
-                onRemoveImage={onRemoveImage}
               />
             </td>
           </tr>
