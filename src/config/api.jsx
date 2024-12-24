@@ -174,6 +174,9 @@ export const publishProcduct = async (id) => {
 export const unPublishProcduct = async (id) => {
   return axios.get(`/product/unpublish/${id}`);
 };
+export const deleteProduct = async (id) => {
+  return axios.delete(`/product/spu/delete/${id}`);
+};
 
 //ProductAdd
 export const creatNewProduct = async (productData) => {

@@ -13,6 +13,7 @@ import {
   getDraftProduct,
   publishProcduct,
   unPublishProcduct,
+  deleteProduct,
 } from "../../../config/api";
 import ProductFilter from "../../../component/admin/stockProduct/ProductFilter";
 import ProductTable from "../../../component/admin/stockProduct/ProductTable";
@@ -42,6 +43,9 @@ const StockPage = () => {
   const [allCount, setAllCount] = useState(0);
   const [publishedCount, setPublishedCount] = useState(0);
   const [draftCount, setDraftCount] = useState(0);
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteProductIds, setDeleteProductIds] = useState([]); // Sản phẩm sẽ được xóa
 
   useEffect(() => {
     fetchTabCounts();
@@ -95,17 +99,18 @@ const StockPage = () => {
       toast.error("Please select at least one product to publish.");
       return;
     }
-  
+
     // Kiểm tra trạng thái của sản phẩm trước khi publish
     const productsToPublish = products.filter(
-      (product) => selectedProducts.includes(product._id) && !product.isPublished
+      (product) =>
+        selectedProducts.includes(product._id) && !product.isPublished
     );
-  
+
     if (productsToPublish.length === 0) {
       toast.error("All selected products are already published.");
       return;
     }
-  
+
     try {
       setIsLoading(true);
       await Promise.all(productsToPublish.map((id) => publishProcduct(id)));
@@ -120,23 +125,23 @@ const StockPage = () => {
       setIsLoading(false);
     }
   };
-  
+
   const handleUnpublishSelected = async () => {
     if (selectedProducts.length === 0) {
       toast.error("Please select at least one product to unpublish.");
       return;
     }
-  
+
     // Kiểm tra trạng thái của sản phẩm trước khi unpublish
     const productsToUnpublish = products.filter(
       (product) => selectedProducts.includes(product._id) && product.isPublished
     );
-  
+
     if (productsToUnpublish.length === 0) {
       toast.error("All selected products are already unpublished.");
       return;
     }
-  
+
     try {
       setIsLoading(true);
       await Promise.all(productsToUnpublish.map((id) => unPublishProcduct(id)));
@@ -151,7 +156,35 @@ const StockPage = () => {
       setIsLoading(false);
     }
   };
-  
+
+   // Show confirmation modal for deletion
+   const handleDeleteSelected = () => {
+    if (selectedProducts.length === 0) {
+      toast.error("Please select at least one product to delete.");
+      return;
+    }
+
+    setDeleteProductIds(selectedProducts); // Store selected product ids to delete
+    setIsDeleteModalOpen(true); // Open delete modal
+  };
+
+  // Confirm delete action
+  const confirmDelete = async () => {
+    try {
+      setIsLoading(true);
+      await Promise.all(deleteProductIds.map((id) => deleteProduct(id))); // Call API to delete products
+      toast.success("Selected products deleted successfully!");
+      await fetchTabData(); // Refresh data
+      await fetchTabCounts(); // Update counts
+      setSelectedProducts([]); // Clear selected products
+    } catch (error) {
+      toast.error("Error deleting products. Please try again.");
+      console.error("Error deleting products:", error);
+    } finally {
+      setIsLoading(false);
+      setIsDeleteModalOpen(false); // Close the delete modal
+    }
+  };
 
   const handleFilterProducts = () => {
     let filtered = [...products];
@@ -224,7 +257,34 @@ const StockPage = () => {
   const handleEditProduct = (id) => {
     navigate(`/admin/products/edit/${id}`);
   };
+  const DeleteModal = ({ isOpen, onClose, onConfirm }) => {
+    if (!isOpen) return null;
 
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div className="bg-white rounded-lg p-6 w-1/3 shadow-lg">
+          <h3 className="text-xl font-semibold">Confirm Deletion</h3>
+          <p className="mt-4">
+            Are you sure you want to delete the selected products?
+          </p>
+          <div className="flex justify-end mt-6">
+            <button
+              onClick={onClose}
+              className="mr-4 text-gray-600 bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => onConfirm()}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
   return (
     <div className="p-6 min-h-screen">
       {/* Header */}
@@ -283,6 +343,12 @@ const StockPage = () => {
                 className="flex items-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 shadow-md"
               >
                 Publish
+              </button>
+              <button
+                onClick={handleDeleteSelected}
+                className="flex items-center bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 shadow-md"
+              >
+                Delete
               </button>
             </div>
           </div>
@@ -413,6 +479,12 @@ const StockPage = () => {
           </li>
         </ul>
       )}
+      {/* Delete Confirmation Modal */}
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 };
