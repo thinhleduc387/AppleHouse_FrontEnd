@@ -3,6 +3,7 @@ import Banner from "../../../component/Banner";
 import ProductCategory from "../../../component/Product/Category/ProductCategory";
 import DiscountProduct from "../../../component/Product/DiscountProduct";
 import ProductSection from "../../../component/Product/ProductSection";
+import FlashSale from "../../../component/Product/FlashSale";
 
 const HomePage = () => {
   useEffect(() => {
@@ -25,12 +26,14 @@ const HomePage = () => {
       <div>
         <ProductCategory />
       </div>
-
-      {/* <div>
+      <div>
+        <FlashSale />
+      </div>
+      <div>
         <DiscountProduct />
       </div>
       <div>
-        <ProductSection  title={"Điện thoại xịn - Công nghệ hàng đầu"} />
+        <ProductSection title={"Điện thoại xịn - Công nghệ hàng đầu"} />
       </div>
       <div>
         <ProductSection title={"Macbook ngon - Hiệu suất vượt trội"} />
@@ -43,7 +46,7 @@ const HomePage = () => {
       </div>
       <div>
         <ProductSection title={"Tai nghe cao cấp - Âm thanh chất lượng"} />
-      </div> */}
+      </div>
     </div>
   );
 };

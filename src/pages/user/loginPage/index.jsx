@@ -1,16 +1,23 @@
 import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Thêm import cho useNavigate
-import { callLogin, callLoginGG } from "../../../config/api";
+import {
+  addToCartFromLocal,
+  callLogin,
+  callLoginGG,
+} from "../../../config/api";
 import SignUpDialog from "../../../component/Auth/SignUp";
 import FloatingInput from "../../../component/FloatingInput";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUserLoginInfo } from "../../../redux/slice/accountSlice";
 import { toast } from "react-toastify";
+import { clearLocalCart, fetchCart } from "../../../redux/slice/cartSlice";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [isSignUpDialogOpen, setSignUpDialogOpen] = useState(false);
+  const localCartItems = useSelector((state) => state.cart?.localCartItems);
   const navigate = useNavigate(); // Khai báo useNavigate
   const dispatch = useDispatch();
   const handleSubmit = async (e) => {
@@ -26,8 +33,18 @@ const LoginPage = () => {
           response.metadata.tokens.accessToken
         );
         localStorage.setItem("user_id", user._id);
-        
         dispatch(setUserLoginInfo(user));
+
+        if (localCartItems.length > 0) {
+          const response = await addToCartFromLocal({
+            userId: user._id,
+            carts: localCartItems,
+          });
+          dispatch(fetchCart(user._id));
+          if (response.status === 200) {
+            dispatch(clearLocalCart());
+          }
+        }
 
         navigate("/");
       } else {

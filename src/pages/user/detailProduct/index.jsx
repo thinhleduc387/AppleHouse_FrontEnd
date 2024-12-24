@@ -7,12 +7,14 @@ import CommentSection from "../../../component/Product/Feedback/CommentSection";
 import { addToCart, getProduct } from "../../../config/api";
 import { FaCheck } from "react-icons/fa";
 import ProductDescription from "../../../component/Product/ProductDescription";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { fetchCart, addToLocalCart } from "../../../redux/slice/cartSlice";
 
 const DetailProduct = () => {
   const { productId } = useParams();
   const userId = useSelector((state) => state.account?.user?._id);
+  const dispatch = useDispatch();
 
   const [isSidebarOpen, setSidebarOpen] = useState(false); // State cho Sidebar
   const [loading, setLoading] = useState(true);
@@ -22,13 +24,22 @@ const DetailProduct = () => {
     skus.find((sku) => sku.sku_default)?.sku_index || [0, 0]
   );
   const [selectedImage, setSelectedImage] = useState();
-
+  const [moreImgs, setMoreImgs] = useState();
   const commentSectionRef = useRef(null);
   const ratingStatRef = useRef(null);
 
   const selectedSku = skus.find((sku) =>
     sku.sku_index.every((index, i) => index === selectedVariants[i])
   );
+  const collectProductImages = (product) => {
+    const moreImgs = product.product_more_imgs || [];
+    const variationImgs =
+      product.product_variations?.flatMap(
+        (variation) => variation.images || []
+      ) || [];
+    const allImages = [...new Set([...moreImgs, ...variationImgs])];
+    return allImages;
+  };
 
   const handleGetProduct = async () => {
     setLoading(true);
@@ -36,6 +47,7 @@ const DetailProduct = () => {
     if (response.metadata && response.status === 200) {
       setSkus(response.metadata.sku_list);
       setSpu(response.metadata.spu_info);
+      setMoreImgs(collectProductImages(response.metadata.spu_info));
     }
     setLoading(false);
   };
@@ -56,9 +68,23 @@ const DetailProduct = () => {
 
     return currentSku !== undefined && currentSku.sku_stock !== 0;
   };
+
   const handleAddToCart = async () => {
-    const response = await addToCart({ userId, skuId: selectedSku._id });
-    if (response.status === 200) {
+    const newItem = {
+      skuId: selectedSku._id,
+      quantity: 1,
+    };
+
+    if (userId) {
+      const response = await addToCart({ userId, skuId: selectedSku._id });
+      if (response.status === 200) {
+        toast.success("Add to cart success");
+        dispatch(fetchCart(userId)); // Fetch giỏ hàng từ server
+      } else {
+        toast.error("Failed to add to cart");
+      }
+    } else {
+      dispatch(addToLocalCart(newItem));
       toast.success("Add to cart success");
     }
   };
@@ -84,11 +110,12 @@ const DetailProduct = () => {
       ratingStatRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+
   return (
     <>
       {loading ? (
-        <div className="flex justify-center items-center h-96">
-          <div className="loader border-t-4 border-blue-600 border-solid rounded-full w-12 h-12 animate-spin"></div>
+        <div className="fixed inset-0 flex items-center justify-center">
+          <div className="border-t-4 border-blue-600 border-solid rounded-full w-12 h-12 animate-spin"></div>
         </div>
       ) : (
         <div className="font-sans ">
@@ -118,7 +145,7 @@ const DetailProduct = () => {
                 </div>
 
                 <div className="mt-6 flex flex-wrap justify-center gap-6 mx-auto">
-                  {selectedSku?.sku_imgs.map((src, index) => (
+                  {moreImgs.map((src, index) => (
                     <div
                       key={index}
                       className={`w-24 h-20 flex items-center justify-center rounded-lg p-4 cursor-pointer transition-all duration-300 ${
@@ -200,9 +227,17 @@ const DetailProduct = () => {
                               : "border-gray-300"
                           }`}
                               disabled={!isAvailable}
-                              onClick={() =>
-                                handleVariantChange(variationIndex, optionIndex)
-                              }
+                              onClick={() => {
+                                handleVariantChange(
+                                  variationIndex,
+                                  optionIndex
+                                );
+                                if (variation.images.length > 0) {
+                                  setSelectedImage(
+                                    variation.images[optionIndex]
+                                  );
+                                }
+                              }}
                             >
                               {variation.images.length > 0 && (
                                 <img
@@ -242,12 +277,15 @@ const DetailProduct = () => {
                 {/* Khuyến mãi */}
                 <div className="flex flex-wrap gap-4 mt-8">
                   <ProductPrice
-                    price={selectedSku?.sku_price?.originalPrice || 0}
-                    discountPrice={0}
+                    priceAfterDiscount={
+                      selectedSku?.sku_price?.priceAfterDiscount || 0
+                    }
+                    originalPrice={selectedSku?.sku_price?.originalPrice}
                     points={
                       selectedSku?.loyalPointRate *
-                        selectedSku?.sku_price.originalPrice || 0
+                        selectedSku?.sku_price.priceAfterDiscount || 0
                     }
+                    promotionId={selectedSku?.sku_price?.promotionId}
                   />
                 </div>
 
@@ -273,16 +311,22 @@ const DetailProduct = () => {
               description={spu?.product_description}
               onClickThongSo={() => setSidebarOpen(true)}
             />
+
             <div className="mt-16 bg-white border-2  rounded-lg p-6 space-y-10">
               <div ref={ratingStatRef}>
                 <RatingStat />
               </div>
               <div ref={commentSectionRef}>
-                <CommentSection />
+                <CommentSection productId={productId} />
               </div>
             </div>
             {/* Sidebar */}
-            <ProductSideBar isOpen={isSidebarOpen} setIsOpen={setSidebarOpen} />
+
+            <ProductSideBar
+              productAttributes={spu?.product_attributes}
+              isOpen={isSidebarOpen}
+              setIsOpen={setSidebarOpen}
+            />
           </div>
         </div>
       )}

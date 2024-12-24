@@ -19,6 +19,9 @@ export const ROUTERS = {
     CART: "/cart", // Giỏ hàng
     PROFILE: "/profile",
     ORDER_LIST: "/profile/order-list",
+    ORDER_DETAIL: (orderId = ":orderId") =>
+      `/profile/order-list/detail/${orderId}`,
+
     FAVORITES: "/profile/favorites",
     ADDRESS: "/profile/address",
   },

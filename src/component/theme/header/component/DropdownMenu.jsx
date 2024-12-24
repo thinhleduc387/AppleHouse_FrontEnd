@@ -149,7 +149,7 @@ const DropdownMenu = ({ headerHeight }) => {
                     ?.subItems?.map((subItem) => (
                       <li key={subItem._id}>
                         <a
-                          href={`/products/${subItem.category_slug}`} // Giả sử subitem có category_slug
+                          href={`/${subItem.category_slug}`} // Giả sử subitem có category_slug
                           className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
                         >
                           {subItem.category_name} {/* Hiển thị tên subitem */}

@@ -1,17 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
 import { AiOutlineHeart } from "react-icons/ai";
 import { IoCartOutline } from "react-icons/io5";
 import { AiOutlineUser } from "react-icons/ai";
-import { submenuItems, displayNames } from "../Data/MenuItems";
 import "../../../../style/sideBar.css";
+import { getAllCategory } from "../../../../config/api";
+import ProfileNavBar from "../../../ProfileNav";
+import { useSelector } from "react-redux";
 
 const SideBar = ({ isOpen, setIsOpen }) => {
   const [selectedItem, setSelectedItem] = useState(null);
+  const [categoryList, setCategoryList] = useState([]);
+  const userName = useSelector((state) => state.account.user.name);
+  const userAvatar = useSelector((state) => state.account.user.avatar);
+  const handleItemClick = (category) => {
+    setSelectedItem(category); // Set the entire category object
+  };
 
-  const handleItemClick = (item) => {
-    setSelectedItem(item);
+  useEffect(() => {
+    getCategory();
+  }, []);
+
+  const getCategory = async () => {
+    try {
+      const response = await getAllCategory();
+      if (response.status === 200 && response.metadata) {
+        const categories = response.metadata.map((category) => ({
+          id: category._id,
+          name: category.category_name,
+          link: `/${category.category_slug}`,
+          subItems: category.children || [],
+        }));
+        setCategoryList(categories);
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy danh mục:", error);
+    }
   };
 
   return (
@@ -25,9 +50,11 @@ const SideBar = ({ isOpen, setIsOpen }) => {
         }}
       />
 
-      {/* Sidebar chính */}
+      {/* Main Sidebar */}
       <div
-        className={`sidebar ${isOpen ? "sidebar-open" : "sidebar-close"}`}
+        className={`sidebar w-[300px] ${
+          isOpen ? "sidebar-open" : "sidebar-close"
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sidebar-header">
@@ -42,19 +69,19 @@ const SideBar = ({ isOpen, setIsOpen }) => {
 
         <div className="p-8">
           <div className="flex flex-col gap-8 mt-8">
-            {Object.keys(submenuItems).map((item, index) => (
+            {categoryList.map((category) => (
               <div
-                key={index}
-                onClick={() => handleItemClick(item)}
+                key={category.id}
+                onClick={() => handleItemClick(category)}
                 className="flex items-center justify-between font-bold cursor-pointer hover:bg-gray-200 p-2 rounded transition-colors duration-300"
               >
-                <span>{displayNames[item]}</span>
+                <span>{category.name}</span>
                 <FaAngleRight className="text-gray-500" />
               </div>
             ))}
           </div>
 
-          {/* Tích hợp lại mục Favorites, Cart, và Login */}
+          {/* Additional Actions */}
           <div className="grid grid-cols-3 gap-4 mt-4 border-t">
             <a
               href="/favorites"
@@ -68,15 +95,10 @@ const SideBar = ({ isOpen, setIsOpen }) => {
             >
               <IoCartOutline className="text-2xl" />
             </a>
-            <a
-              href="/login"
-              className="flex items-center justify-center gap-2 font-bold hover:bg-gray-200 p-2 rounded transition-colors duration-300"
-            >
-              <AiOutlineUser className="text-2xl" />
-            </a>
+
+            <ProfileNavBar userAvatar={userAvatar} userName={userName} />
           </div>
-          {/* Căn giữa About và Contact */}
-          <div className="flex justify-between px-20 gap-8 mt-4">
+          <div className="flex items-center justify-center px-20 gap-10 mt-4">
             <a
               className="font-bold transition-colors duration-300 hover:text-blue-500"
               href="/"
@@ -93,9 +115,11 @@ const SideBar = ({ isOpen, setIsOpen }) => {
         </div>
       </div>
 
-      {/* Sidebar con */}
+      {/* Subcategory Sidebar */}
       <div
-        className={`sidebar ${selectedItem ? "sidebar-open" : "sidebar-close"}`}
+        className={`sidebar w-[300px] ${
+          selectedItem ? "sidebar-open" : "sidebar-close"
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sidebar-header">
@@ -106,17 +130,21 @@ const SideBar = ({ isOpen, setIsOpen }) => {
         </div>
         {selectedItem && (
           <div className="p-8">
-            <h2 className="sidebar-title">{displayNames[selectedItem]}</h2>
+            <h2 className="sidebar-title">{selectedItem.name}</h2>
             <div className="flex flex-col gap-4">
-              {submenuItems[selectedItem].map((subItem, subIndex) => (
-                <a
-                  key={subIndex}
-                  href="#"
-                  className="text-gray-700 hover:text-blue-500 transition-colors duration-300"
-                >
-                  {subItem}
-                </a>
-              ))}
+              {selectedItem.subItems.length > 0 ? (
+                selectedItem.subItems.map((subItem, subIndex) => (
+                  <a
+                    key={subItem._id}
+                    href={`/${subItem.category_slug}`} // Adjust based on your API response
+                    className="text-gray-700 hover:text-blue-500 transition-colors duration-300"
+                  >
+                    {subItem.category_name}
+                  </a>
+                ))
+              ) : (
+                <p className="text-gray-500 text-sm">Không có danh mục con</p>
+              )}
             </div>
           </div>
         )}

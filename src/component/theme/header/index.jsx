@@ -4,21 +4,28 @@ import SideBar from "./component/SideBar";
 import Search from "../../SearchBox";
 import { AiOutlineHeart } from "react-icons/ai";
 import { IoCartOutline } from "react-icons/io5";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { PiBellSimpleRinging } from "react-icons/pi";
 import ProfileNavBar from "../../../component/ProfileNav";
 import DropdownMenu from "./component/DropdownMenu";
 import { Link } from "react-router-dom";
 import NotificationMenu from "../../Notification/notificationMenu";
+import { fetchCart } from "../../../redux/slice/cartSlice";
 
 const Header = () => {
+  const dispatch = useDispatch();
+
   const Links = [
     { name: "About", link: "/" },
     { name: "Contact", link: "/profile" },
   ];
 
+  const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const userAvatar = useSelector((state) => state.account.user.avatar);
   const userName = useSelector((state) => state.account.user.name);
+  const userId = useSelector((state) => state.account.user._id);
+  const cart_products = useSelector((state) => state.cart.cart_products);
+  const localCartItems = useSelector((state) => state.cart.localCartItems);
 
   const mockNotifications = [
     { message: "Your order has been shipped.", time: "2 minutes ago" },
@@ -43,12 +50,16 @@ const Header = () => {
     if (headerRef.current) {
       setHeaderHeight(headerRef.current.offsetHeight);
     }
-
     window.addEventListener("resize", handleResize);
+
+    if (userId) {
+      dispatch(fetchCart(userId));
+    }
+
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [userId, dispatch]);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "unset";
@@ -59,7 +70,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="w-full top-0 left-0 z-[40] sticky">
+      <div className="w-full top-0 left-0 z-10 sticky">
         <div
           className="py-4 lg:flex justify-between items-center bg-[#f3f4f6] relative"
           ref={headerRef} // Attach ref to the header
@@ -95,35 +106,42 @@ const Header = () => {
                 <a href={link.link}>{link.name}</a>
               </li>
             ))}
-            <li className="font-extrabold text-3xl my-7 lg:my-0">
-              <Link to="/favorites">
-                <AiOutlineHeart />
-              </Link>
-            </li>
+            {isAuthenticated && (
+              <li className="font-extrabold text-3xl my-7 lg:my-0">
+                <Link to="/favorites">
+                  <AiOutlineHeart />
+                </Link>
+              </li>
+            )}
+
             <li className="font-extrabold text-3xl my-7 lg:my-0 relative">
               <Link to="/cart">
                 <IoCartOutline />
-                <span className="absolute top-0 right-0 text-[0.6rem] bg-red-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center">
-                  3
-                </span>
+                {(cart_products.length > 0 || localCartItems.length > 0) && (
+                  <span className="absolute top-0 right-0 text-[0.6rem] bg-red-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center">
+                    {cart_products.length + localCartItems.length}{" "}
+                  </span>
+                )}
               </Link>
             </li>
-            <li
-              onMouseEnter={() => setNotifyIsOpen(true)}
-              onMouseLeave={() => setNotifyIsOpen(false)}
-              className="font-extrabold text-3xl my-7 lg:my-0 relative"
-            >
-              <Link to="/">
-                <PiBellSimpleRinging />
-                <span className="absolute top-0 right-0 text-[0.6rem] bg-red-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center">
-                  {mockNotifications.length}
-                </span>
-              </Link>
-              {/* Hiển thị dropdown khi hover */}
-              {notifyIsOpen && (
-                <NotificationMenu notifications={mockNotifications} />
-              )}
-            </li>
+            {isAuthenticated && (
+              <li
+                onMouseEnter={() => setNotifyIsOpen(true)}
+                onMouseLeave={() => setNotifyIsOpen(false)}
+                className="font-extrabold text-3xl my-7 lg:my-0 relative"
+              >
+                <Link to="/">
+                  <PiBellSimpleRinging />
+                  <span className="absolute top-0 right-0 text-[0.6rem] bg-red-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center">
+                    {mockNotifications.length}
+                  </span>
+                </Link>
+
+                {notifyIsOpen && (
+                  <NotificationMenu notifications={mockNotifications} />
+                )}
+              </li>
+            )}
             {/* Profile Section with Dropdown */}
             <li className="my-7 lg:my-0">
               <ProfileNavBar userAvatar={userAvatar} userName={userName} />

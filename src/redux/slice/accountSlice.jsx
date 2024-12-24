@@ -20,6 +20,7 @@ const initialState = {
     name: "",
     avatar: "",
     role: "",
+    loyalPoint: 0,
   },
 };
 
@@ -35,6 +36,7 @@ const accountSlice = createSlice({
       state.user.name = action.payload.usr_name;
       state.user.role = action?.payload?.usr_role;
       state.user.avatar = action?.payload?.usr_avatar;
+      state.user.loyalPoint = action?.payload?.usr_loyalPoint;
     },
     setLogoutAction: (state, action) => {
       localStorage.clear();
@@ -47,6 +49,7 @@ const accountSlice = createSlice({
           _id: "",
           name: "",
         },
+        loyalPoint: 0,
       };
     },
     setRefreshTokenAction: (state, action) => {
@@ -73,6 +76,7 @@ const accountSlice = createSlice({
         state.user.name = action.payload.usr_name;
         state.user.role = action?.payload?.usr_role;
         state.user.avatar = action?.payload?.usr_avatar;
+        state.user.loyalPoint = action?.payload?.usr_loyalPoint;
       }
     });
 

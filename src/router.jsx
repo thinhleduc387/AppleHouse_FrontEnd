@@ -38,6 +38,9 @@ import VoucherPage from "./pages/admin/voucherPage";
 import VoucherCreate from "./pages/admin/voucherCreate";
 import OrderPage from "./pages/admin/orderPage";
 import FeedBackPage from "./pages/admin/feedBackPage";
+import OrderDetails from "./component/Profile/OrderDetails";
+import OrderSuccess from "./pages/user/order/OrderSuccess";
+import OrderFailed from "./pages/user/order/OrderFailed";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -83,12 +86,17 @@ const RouterCustom = () => {
             ]} // Truyền breadcrumb cho Search
           />
           <Route path={ROUTERS.USER.CART} element={<CartPage />} />
+          <Route
+            path="/profile/order-list/:orderId"
+            element={<OrderDetails />}
+          />
 
           {/* Profile Routes */}
           <Route path={ROUTERS.USER.PROFILE} element={<ProfilePage />}>
             <Route index element={<Info />} />
             <Route path="" element={<Info />} />
             <Route path={ROUTERS.USER.ORDER_LIST} element={<OrderHistory />} />
+
             <Route path={ROUTERS.USER.FAVORITES} element={<Favorites />} />
             <Route path={ROUTERS.USER.ADDRESS} element={<Address />} />
           </Route>
@@ -127,7 +135,9 @@ const RouterCustom = () => {
           <Route path="/admin/feedback" element={<FeedBackPage />} />
         </Route>
 
-        {/* Catch-all for undefined routes */}
+        <Route path="/order/order-success/:id" element={<OrderSuccess />} />
+        <Route path="/order/order-failed" element={<OrderFailed />} />
+
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
       <ToastContainer

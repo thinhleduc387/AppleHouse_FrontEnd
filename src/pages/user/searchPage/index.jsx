@@ -2,24 +2,32 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom"; // Import useParams
 import FilterSidebar from "../../../component/Product/FilterSidebar";
 import ProductItem from "../../../component/Product/ProductItem";
-import { AiOutlineSortAscending, AiOutlineRight } from "react-icons/ai";
 import { getAllProductByCategory, searchProduct } from "../../../config/api";
+import SortButton from "../../../component/Product/SortButton";
+import { SortOptions } from "../../../component/Product/SortButton/sortOption";
 
 const SearchPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
+
   const searchTerm = queryParams.get("s");
   const [numberResult, setNumberResult] = useState(0);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(50000000);
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
   const [productList, setProductList] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(SortOptions.newest);
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const handleGetListSearchProduct = async () => {
-    const response = await searchProduct(searchTerm);
+    setLoading(true);
+    const response = await searchProduct({
+      textSearch: searchTerm,
+      minPrice,
+      maxPrice,
+      sortBy: selectedOption,
+    });
     if (response && response.status === 200) {
-      console.log("🚀 ~ handleGetListSearchProduct ~ response:", response);
-
       setNumberResult(response.metadata.totalResult);
       const products = response.metadata.products.map((product) => ({
         id: product._id, // Hoặc _id, tùy theo cấu trúc của response
@@ -31,17 +39,25 @@ const SearchPage = () => {
 
       setProductList(products); // Cập nhật state categoryList
     }
+    setLoading(false);
   };
+
   useEffect(() => {
     handleGetListSearchProduct();
   }, [searchTerm]);
 
+  // Hàm xử lý mở/đóng dropdown
   const toggleSortDropdown = () => {
     setIsSortDropdownOpen((prev) => !prev);
   };
+
+  useEffect(() => {
+    handleGetListSearchProduct();
+  }, [minPrice, maxPrice, selectedOption]);
+
   return (
-    <section className="bg-[#f3f4f6] py-8 antialiased md:py-12">
-      <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
+    <section className="bg-[#f3f4f6] antialiased">
+      <div className="mx-auto max-w-screen-xl">
         <div className="flex gap-6">
           <FilterSidebar
             minPrice={minPrice}
@@ -55,47 +71,33 @@ const SearchPage = () => {
                 Tìm thấy <strong>{numberResult}</strong> kết quả với từ khoá{" "}
                 <strong>{searchTerm}</strong>
               </h3>
-              <div className="relative">
-                <button
-                  onClick={toggleSortDropdown}
-                  type="button"
-                  className="flex items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100"
-                >
-                  <AiOutlineSortAscending className="-ms-0.5 me-2 h-4 w-4" />
-                  Sắp xếp theo
-                  <AiOutlineRight className="-me-0.5 ms-2 h-4 w-4" />
-                </button>
-                {isSortDropdownOpen && (
-                  <div
-                    id="sortDropdown"
-                    className="absolute right-0 z-50 mt-2 w-48 divide-y divide-gray-100 rounded-lg bg-white shadow-lg p-4"
-                  >
-                    <div className="flex flex-col space-y-1">
-                      <button className="text-left w-full hover:bg-gray-100 px-2 py-1">
-                        Nổi bật
-                      </button>
-                      <button className="text-left w-full hover:bg-gray-100 px-2 py-1">
-                        Giá: Tăng dần
-                      </button>
-                      <button className="text-left w-full hover:bg-gray-100 px-2 py-1">
-                        Giá: Giảm dần
-                      </button>
-                      <button className="text-left w-full hover:bg-gray-100 px-2 py-1">
-                        Mới nhất
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <SortButton
+                isSortDropdownOpen={isSortDropdownOpen}
+                toggleSortDropdown={toggleSortDropdown}
+                selectedOption={selectedOption}
+                setSelectedOption={setSelectedOption}
+              />
             </div>
 
-            {/* Product List */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-2">
-              {/* Hiển thị các sản phẩm dựa trên loại */}
-              {productList.map((product) => (
-                <ProductItem product={product} isEdit={false} />
-              ))}
-            </div>
+            {loading ? (
+              <div className="flex justify-center items-center h-96">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+              </div>
+            ) : productList.length === 0 ? (
+              <div className="text-center text-lg text-gray-600">
+                Không tìm thấy sản phẩm nào
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-2">
+                {productList.map((product) => (
+                  <ProductItem
+                    key={product.id}
+                    product={product}
+                    isEdit={false}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

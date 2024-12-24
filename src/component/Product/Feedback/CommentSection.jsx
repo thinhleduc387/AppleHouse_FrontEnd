@@ -1,53 +1,57 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Comment from "./Comment";
 import NewComment from "./NewComment";
+import { createComment, getListCommentBySpuId } from "../../../config/api";
+import { useSelector } from "react-redux";
+import CommentItem from "./CommentItem";
 
-const CommentSection = () => {
-  const [comments, setComments] = useState([]); // Lưu danh sách các bình luận
-  const [replyIndex, setReplyIndex] = useState(null); // State để xác định comment nào đang mở input
+const CommentSection = ({ productId }) => {
+  const [comments, setComments] = useState([]);
+  console.log("🚀 ~ CommentSection ~ comments:", comments);
+  const userId = useSelector((state) => state.account?.user?._id);
 
-  const handleReplyClick = (index) => {
-    setReplyIndex((prevIndex) => (prevIndex === index ? null : index)); // Đóng nếu click lại
+  const handleSendNewComment = async (comment) => {
+    const newComment = await createComment({
+      productId,
+      userId,
+      content: comment,
+    });
+    if (newComment && newComment.metadata) {
+      await handleGetListComment();
+    } else {
+      throw new Error("Không thể tạo bình luận");
+    }
+  };
+  const handleGetListComment = async () => {
+    const response = await getListCommentBySpuId({ productId });
+    if (response.status === 200) {
+      setComments(response.metadata);
+    }
   };
 
-  const handleCloseInput = () => {
-    setReplyIndex(null); // Đóng thanh input
-  };
+  useEffect(() => {
+    handleGetListComment();
+  }, []);
 
-  const handleSendCommentReply = (comment) => {
-    console.log(`Bình luận mới: ${comment} cho comment ${replyIndex}`);
-    setReplyIndex(null); // Đóng thanh input sau khi gửi
-  };
-  const handleSendNewComment = (comment) => {
-    setComments([...comments, { id: comments.length + 1, content: comment }]); // Thêm bình luận mới vào danh sách
-  };
   return (
     <div className="space-y-10">
       <div>
         <NewComment onSend={handleSendNewComment} />
       </div>
+
       <div className="flex flex-col gap-4">
-        <Comment
-          commentIndex={0}
-          replyIndex={replyIndex}
-          onReplyClick={handleReplyClick}
-          onCloseInput={handleCloseInput}
-          onSendComment={handleSendCommentReply}
-        />
-        <Comment
-          commentIndex={1}
-          replyIndex={replyIndex}
-          onReplyClick={handleReplyClick}
-          onCloseInput={handleCloseInput}
-          onSendComment={handleSendCommentReply}
-        />
+        {comments.length > 0 &&
+          comments.map((comment) => (
+            <CommentItem key={comment._id} comment={comment} />
+          ))}
+
+        <button
+          type="button"
+          className="w-full mt-10 px-4 py-2.5 bg-transparent hover:bg-gray-50 border border-blue-600 text-gray-800 font-bold rounded"
+        >
+          Read all reviews
+        </button>
       </div>
-      <button
-        type="button"
-        className="w-full mt-10 px-4 py-2.5 bg-transparent hover:bg-gray-50 border border-blue-600 text-gray-800 font-bold rounded"
-      >
-        Read all reviews
-      </button>
     </div>
   );
 };
