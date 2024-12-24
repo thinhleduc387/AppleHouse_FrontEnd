@@ -10,9 +10,8 @@ const MasterLayout = ({ ...props }) => {
         <Header />
       </div>
 
-      <main className="flex-grow w-full mt-[64px]">
+      <main className="flex-grow w-full mt-[100px]">
         {" "}
-        {/* Adjust mt-[64px] to match your header height */}
         <div className="mx-4 sm:mx-6 md:mx-12 lg:mx-28" {...props}>
           <Outlet />
         </div>
