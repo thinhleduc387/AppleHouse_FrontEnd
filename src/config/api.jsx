@@ -168,6 +168,12 @@ export const getPublishedProduct = async () => {
 export const getDraftProduct = async () => {
   return axios.get("/product/spu/get-draft");
 };
+export const publishProcduct = async (id) => {
+  return axios.get(`/product/publish/${id}`);
+};
+export const unPublishProcduct = async (id) => {
+  return axios.get(`/product/unpublish/${id}`);
+};
 
 //ProductAdd
 export const creatNewProduct = async (productData) => {
@@ -338,6 +344,12 @@ export const getOneOrder = async ({ orderId }) => {
 
 export const cancelOrder = async ({ orderId }) => {
   return axios.delete(`/order/${orderId}`);
+};
+export const getOneOrderForAdmin = async ({ orderId }) => {
+  return axios.get(`/order/get-one-for-admin/${orderId}`);
+};
+export const getCountOrderStatus = async () => {
+  return axios.get("/order/count-order");
 };
 
 //address

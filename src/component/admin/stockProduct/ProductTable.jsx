@@ -2,11 +2,51 @@ import React from "react";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { formatVND } from "../../../utils/format";
 
-const ProductTable = ({ products, handleEditProduct }) => {
+const ProductTable = ({
+  products,
+  selectedProducts,
+  setSelectedProducts,
+  handleEditProduct,
+}) => {
+  console.log("🚀 ~ products:", products)
   const formatDate = (dateString) => {
     if (!dateString) return "-";
     const date = new Date(dateString);
     return new Intl.DateTimeFormat("en-GB").format(date); // dd/mm/yyyy
+  };
+
+  // Check if all products on the current page are selected
+  const areAllPageProductsSelected = products.every((product) =>
+    selectedProducts.includes(product._id)
+  );
+
+  // Handle select/deselect all products on the current page
+  const handleSelectAllOnPage = () => {
+    if (areAllPageProductsSelected) {
+      const updatedSelectedProducts = selectedProducts.filter(
+        (id) => !products.some((product) => product._id === id)
+      );
+      setSelectedProducts(updatedSelectedProducts);
+    } else {
+      const updatedSelectedProducts = [
+        ...selectedProducts,
+        ...products
+          .filter((product) => !selectedProducts.includes(product._id))
+          .map((product) => product._id),
+      ];
+      setSelectedProducts(updatedSelectedProducts);
+    }
+  };
+
+  // Handle select/deselect a single product
+  const handleSelectProduct = (productId) => {
+    if (selectedProducts.includes(productId)) {
+      setSelectedProducts((prev) =>
+        prev.filter((id) => id !== productId) // Remove product from selection
+      );
+    } else {
+      setSelectedProducts((prev) => [...prev, productId]); // Add product to selection
+    }
   };
 
   return (
@@ -14,7 +54,15 @@ const ProductTable = ({ products, handleEditProduct }) => {
       <table className="w-full bg-white table-auto shadow-md rounded-lg">
         <thead className="rounded-t-lg">
           <tr className="bg-white">
-            <th className="p-5 text-left rounded-full">Image</th>
+            <th className="p-5 text-left rounded-tl-lg">
+              <input
+                type="checkbox"
+                className="h-5 w-5"
+                checked={areAllPageProductsSelected}
+                onChange={handleSelectAllOnPage}
+              />
+            </th>
+            <th className="p-5 text-left">Image</th>
             <th className="p-5 text-left">Product Name</th>
             <th className="p-5 text-left">Stock</th>
             <th className="p-5 text-left">Price</th>
@@ -22,12 +70,26 @@ const ProductTable = ({ products, handleEditProduct }) => {
             <th className="p-5 text-left hidden lg:table-cell">Tags</th>
             <th className="p-5 text-left hidden lg:table-cell">Review</th>
             <th className="p-5 text-left">Date</th>
-            <th className="p-5 text-center rounded-full">Actions</th>
+            <th className="p-5 text-left">Published</th>
+            <th className="p-5 text-center rounded-tr-lg">Actions</th>
           </tr>
         </thead>
         <tbody>
           {products.map((product) => (
-            <tr key={product._id} className="hover:bg-gray-50">
+            <tr
+              key={product._id}
+              className={`hover:bg-gray-50 ${
+                selectedProducts.includes(product._id) ? "bg-blue-50" : ""
+              }`}
+            >
+              <td className="p-5 border-b">
+                <input
+                  type="checkbox"
+                  className="h-5 w-5"
+                  checked={selectedProducts.includes(product._id)}
+                  onChange={() => handleSelectProduct(product._id)}
+                />
+              </td>
               <td className="p-5 border-b">
                 <img
                   src={
@@ -52,7 +114,7 @@ const ProductTable = ({ products, handleEditProduct }) => {
                 {product.product_stockStatus} ({product.product_quantity})
               </td>
               <td className="p-5 border-b">
-                {formatVND(product.product_price?.originalPrice)}
+                {formatVND(product.product_price)}
               </td>
               <td className="p-5 border-b text-mainColor">
                 {product.product_category
@@ -75,6 +137,13 @@ const ProductTable = ({ products, handleEditProduct }) => {
 
               <td className="p-5 border-b text-gray-700 font-semibold">
                 {formatDate(product.createdAt)}
+              </td>
+              <td className="p-5 border-b text-center font-semibold">
+                {product.isPublished ? (
+                  <span className="text-green-500">Yes</span>
+                ) : (
+                  <span className="text-red-500">No</span>
+                )}
               </td>
               <td className="p-5 border-b text-center">
                 <div className="flex justify-center items-center gap-x-2">

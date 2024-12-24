@@ -2,7 +2,6 @@ import { useRef, useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import ProductItem from "./ProductItem"; // Đảm bảo đường dẫn đúng với vị trí của ProductCard
 import { getOneNearestPromotionEvent } from "../../config/api";
-import promotionModel from "../../../../backend-ecommerce/backend-nodejs/src/models/promotion.model";
 
 const DiscountProduct = () => {
   const scrollRef = useRef(null);

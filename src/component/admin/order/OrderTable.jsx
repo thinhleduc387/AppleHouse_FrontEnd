@@ -1,10 +1,12 @@
 import React from "react";
-import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { formatVND } from "../../../utils/format";
 import { changeOrderStatus } from "../../../config/api";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const OrderTable = ({ listOrder, setListOrder }) => {
+  const navigate = useNavigate(); // Hook for navigation
+
   const getStatusClass = (status) => {
     switch (status) {
       case "confirmed":
@@ -37,7 +39,7 @@ const OrderTable = ({ listOrder, setListOrder }) => {
       if (response.status === 200) {
         toast.success("Status updated successfully!");
 
-        // Cập nhật trạng thái trong listOrder
+        // Update order status in listOrder
         setListOrder((prevOrders) =>
           prevOrders.map((order) =>
             order._id === orderId
@@ -47,9 +49,13 @@ const OrderTable = ({ listOrder, setListOrder }) => {
         );
       }
     } catch (error) {
-      console.log("🚀 ~ handleStatusChange ~ error:", error);
       console.error("Error updating status:", error);
+      toast.error("Failed to update status. Please try again.");
     }
+  };
+
+  const handleViewDetails = (orderId) => {
+    navigate(`/admin/orders/detail/${orderId}`); // Navigate to detail page
   };
 
   return (
@@ -58,6 +64,7 @@ const OrderTable = ({ listOrder, setListOrder }) => {
         <thead className="rounded-t-lg">
           <tr className="bg-white">
             <th className="p-5 text-left rounded-tl-lg">Order ID</th>
+            <th className="p-5 text-left">Người đặt</th>
             <th className="p-5 text-left">Payment</th>
             <th className="p-5 text-left">Status</th>
             <th className="p-5 text-left">Total Amount</th>
@@ -69,6 +76,16 @@ const OrderTable = ({ listOrder, setListOrder }) => {
             <tr key={order._id} className="hover:bg-gray-50">
               <td className="p-5 border-b text-mainColor font-semibold">
                 {order._id}
+              </td>
+              <td className="p-5 border-b text-gray-700 font-semibold">
+                <div className="flex items-center gap-4">
+                  <img
+                    src={order.order_userId.usr_avatar || "https://via.placeholder.com/50"}
+                    alt={order.order_userId.usr_name}
+                    className="w-10 h-10 rounded-full"
+                  />
+                  <span>{order.order_userId.usr_name}</span>
+                </div>
               </td>
               <td className="p-5 border-b text-gray-700 font-semibold">
                 {order.order_payment.payment_method}
@@ -88,8 +105,8 @@ const OrderTable = ({ listOrder, setListOrder }) => {
                       key={option.value}
                       value={option.value}
                       style={{
-                        backgroundColor: "white", // Màu nền khi mở dropdown
-                        color: "black", // Màu chữ khi mở dropdown
+                        backgroundColor: "white", // Dropdown background color
+                        color: "black", // Dropdown text color
                       }}
                     >
                       {option.label}
@@ -97,14 +114,15 @@ const OrderTable = ({ listOrder, setListOrder }) => {
                   ))}
                 </select>
               </td>
-
               <td className="p-5 border-b text-gray-700 font-semibold">
                 {formatVND(order.order_checkout.totalCheckOut)}
               </td>
               <td className="p-5 border-b text-center">
-                <div className="flex justify-center items-center gap-x-2">
-                  <AiOutlineEdit className="text-blue-500 cursor-pointer hover:text-blue-700" />
-                  <AiOutlineDelete className="text-red-500 cursor-pointer hover:text-red-700" />
+                <div
+                  onClick={() => handleViewDetails(order._id)} // Handle click to navigate
+                  className="flex border cursor-pointer border-mainColor text-mainColor hover:bg-blue-100 rounded-full justify-center items-center gap-x-2 px-3 py-2"
+                >
+                  Chi tiết
                 </div>
               </td>
             </tr>

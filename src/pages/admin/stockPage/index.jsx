@@ -11,18 +11,23 @@ import {
   getAllProduct,
   getPublishedProduct,
   getDraftProduct,
+  publishProcduct,
+  unPublishProcduct,
 } from "../../../config/api";
 import ProductFilter from "../../../component/admin/stockProduct/ProductFilter";
 import ProductTable from "../../../component/admin/stockProduct/ProductTable";
 import { formatVND } from "../../../utils/format";
 import Loading from "../../../component/Loading";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { formatDate } from "../../../utils";
 
 const ITEMS_PER_PAGE = 8;
 
 const StockPage = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [selectedProducts, setSelectedProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
     stockStatus: "",
@@ -48,7 +53,7 @@ const StockPage = () => {
   }, [filters, products]);
 
   const fetchTabCounts = async () => {
-    setIsLoading(true); // Bật trạng thái loading
+    setIsLoading(true);
     try {
       const allResponse = await getAllProduct();
       setAllCount(allResponse?.metadata?.length || 0);
@@ -61,16 +66,15 @@ const StockPage = () => {
     } catch (error) {
       console.error("Error fetching counts:", error);
     } finally {
-      setIsLoading(false); // Tắt trạng thái loading
+      setIsLoading(false);
     }
   };
 
   const fetchTabData = async () => {
-    setIsLoading(true); // Bật trạng thái loading
+    setIsLoading(true);
     try {
       let response;
       if (activeTab === "all") response = await getAllProduct();
-      console.log("🚀 ~ fetchTabData ~ response:", response);
       if (activeTab === "published") response = await getPublishedProduct();
       if (activeTab === "draft") response = await getDraftProduct();
 
@@ -82,9 +86,72 @@ const StockPage = () => {
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
-      setIsLoading(false); // Tắt trạng thái loading
+      setIsLoading(false);
     }
   };
+
+  const handlePublishSelected = async () => {
+    if (selectedProducts.length === 0) {
+      toast.error("Please select at least one product to publish.");
+      return;
+    }
+  
+    // Kiểm tra trạng thái của sản phẩm trước khi publish
+    const productsToPublish = products.filter(
+      (product) => selectedProducts.includes(product._id) && !product.isPublished
+    );
+  
+    if (productsToPublish.length === 0) {
+      toast.error("All selected products are already published.");
+      return;
+    }
+  
+    try {
+      setIsLoading(true);
+      await Promise.all(productsToPublish.map((id) => publishProcduct(id)));
+      toast.success("Selected products published successfully!");
+      await fetchTabData(); // Ensure data is refreshed
+      await fetchTabCounts(); // Ensure counts are updated
+      setSelectedProducts([]);
+    } catch (error) {
+      toast.error("Error publishing products. Please try again.");
+      console.error("Error publishing products:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  const handleUnpublishSelected = async () => {
+    if (selectedProducts.length === 0) {
+      toast.error("Please select at least one product to unpublish.");
+      return;
+    }
+  
+    // Kiểm tra trạng thái của sản phẩm trước khi unpublish
+    const productsToUnpublish = products.filter(
+      (product) => selectedProducts.includes(product._id) && product.isPublished
+    );
+  
+    if (productsToUnpublish.length === 0) {
+      toast.error("All selected products are already unpublished.");
+      return;
+    }
+  
+    try {
+      setIsLoading(true);
+      await Promise.all(productsToUnpublish.map((id) => unPublishProcduct(id)));
+      toast.success("Selected products unpublished successfully!");
+      await fetchTabData(); // Ensure data is refreshed
+      await fetchTabCounts(); // Ensure counts are updated
+      setSelectedProducts([]);
+    } catch (error) {
+      toast.error("Error unpublishing products. Please try again.");
+      console.error("Error unpublishing products:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
 
   const handleFilterProducts = () => {
     let filtered = [...products];
@@ -112,6 +179,35 @@ const StockPage = () => {
     setCurrentPage(1);
   };
 
+  const handleSelectProduct = (productId) => {
+    let updatedSelection = [...selectedProducts];
+    if (selectedProducts.includes(productId)) {
+      updatedSelection = updatedSelection.filter((id) => id !== productId);
+    } else {
+      updatedSelection.push(productId);
+    }
+    setSelectedProducts(updatedSelection);
+  };
+
+  const handleSelectAll = () => {
+    const isAllSelected = paginatedProducts().every((product) =>
+      selectedProducts.includes(product._id)
+    );
+    let updatedSelection = [...selectedProducts];
+    if (isAllSelected) {
+      updatedSelection = updatedSelection.filter(
+        (id) => !paginatedProducts().some((product) => product._id === id)
+      );
+    } else {
+      paginatedProducts().forEach((product) => {
+        if (!updatedSelection.includes(product._id)) {
+          updatedSelection.push(product._id);
+        }
+      });
+    }
+    setSelectedProducts(updatedSelection);
+  };
+
   const paginatedProducts = () => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     return filteredProducts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
@@ -122,7 +218,9 @@ const StockPage = () => {
   const toggleCollapse = (id) => {
     setActiveCollapse((prev) => (prev === id ? null : id));
   };
+
   const navigate = useNavigate();
+
   const handleEditProduct = (id) => {
     navigate(`/admin/products/edit/${id}`);
   };
@@ -132,13 +230,15 @@ const StockPage = () => {
       {/* Header */}
       <div className="flex justify-between bg-white px-6 py-8 rounded-lg items-center mb-6">
         <h1 className="text-4xl font-bold text-gray-700">Product Management</h1>
+
         <Link
           to="/admin/products/add"
-          className="flex items-center bg-mainColor text-white px-4 py-2 rounded hover:bg-blue-700 shadow-md"
+          className="ml-4 flex items-center bg-mainColor text-white px-4 py-2 rounded hover:bg-blue-700 shadow-md"
         >
           <BiPlus className="mr-2 text-xl" /> Add Product
         </Link>
       </div>
+
       {isLoading ? (
         <div className="flex justify-center items-center min-h-[300px]">
           <Loading />
@@ -167,20 +267,48 @@ const StockPage = () => {
           </div>
 
           {/* Filters */}
-          <div className="mb-4">
-            <ProductFilter filters={filters} setFilters={setFilters} />
+          <div className="mb-4 flex justify-between items-center">
+            <div className="flex gap-4">
+              <ProductFilter filters={filters} setFilters={setFilters} />
+            </div>
+            <div className="flex gap-4">
+              <button
+                onClick={handleUnpublishSelected}
+                className="flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 shadow-md"
+              >
+                Unpublish
+              </button>
+              <button
+                onClick={handlePublishSelected}
+                className="flex items-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 shadow-md"
+              >
+                Publish
+              </button>
+            </div>
           </div>
 
           {/* Product Table */}
           <div className="hidden md:block">
             <ProductTable
               products={paginatedProducts()}
+              selectedProducts={selectedProducts}
+              setSelectedProducts={setSelectedProducts}
               handleEditProduct={handleEditProduct}
             />
           </div>
 
           {/* Collapse View for Small Screens */}
           <div className="md:hidden">
+            <div className="flex items-center justify-between p-4 bg-white shadow-md mb-4 rounded-lg">
+              <input
+                type="checkbox"
+                checked={paginatedProducts().every((product) =>
+                  selectedProducts.includes(product._id)
+                )}
+                onChange={handleSelectAll}
+              />
+              <label>Select All</label>
+            </div>
             {paginatedProducts().map((product) => (
               <div
                 key={product._id}
@@ -188,6 +316,11 @@ const StockPage = () => {
               >
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-4">
+                    <input
+                      type="checkbox"
+                      checked={selectedProducts.includes(product._id)}
+                      onChange={() => handleSelectProduct(product._id)}
+                    />
                     <img
                       src={
                         product.product_thumb ||
@@ -201,7 +334,7 @@ const StockPage = () => {
                         {product.product_name}
                       </p>
                       <p className="text-sm text-gray-500">
-                        {formatVND(product.product_price?.orignalPrice)}
+                        {formatVND(product.product_price)}
                       </p>
                     </div>
                   </div>
@@ -210,7 +343,6 @@ const StockPage = () => {
                       onClick={() => handleEditProduct(product._id)}
                       className="text-blue-500 cursor-pointer"
                     />
-
                     <AiOutlineDelete className="text-red-500 cursor-pointer" />
                     <AiOutlineDown
                       className={`text-gray-500 ${
@@ -220,37 +352,21 @@ const StockPage = () => {
                     />
                   </div>
                 </div>
+
+                {/* Collapse content */}
                 {activeCollapse === product._id && (
                   <div className="mt-4 bg-gray-50 p-4 rounded-lg shadow-inner">
-                    <div className="flex justify-between items-center mb-2">
-                      <p className="text-gray-700 font-medium">Số lượng:</p>
-                      <p className="text-gray-800 font-semibold">
-                        {product.product_quantity}
-                      </p>
-                    </div>
-                    <div className="border-t border-gray-200 my-2"></div>
-                    <div className="flex justify-between items-center mb-2">
-                      <p className="text-gray-700 font-medium">Danh mục:</p>
-                      <p className="text-gray-800 font-semibold">
-                        {product.product_category
-                          .map((category) => category.category_name)
-                          .join(", ")}
-                      </p>
-                    </div>
-                    <div className="border-t border-gray-200 my-2"></div>
-                    <div className="flex justify-between items-center mb-2">
-                      <p className="text-gray-700 font-medium">Giá:</p>
-                      <p className="text-blue-500 font-bold">
-                        {formatVND(product.product_price?.orignalPrice)}
-                      </p>
-                    </div>
-                    <div className="border-t border-gray-200 my-2"></div>
-                    <div className="flex justify-between items-center">
-                      <p className="text-gray-700 font-medium">Seller:</p>
-                      <p className="text-gray-800 font-semibold">
-                        {product.seller}
-                      </p>
-                    </div>
+                    <p>Stock: {product.product_quantity}</p>
+                    <p>Price: {formatVND(product.product_price)}</p>
+                    <p>
+                      Category:{" "}
+                      {product.product_category
+                        .map((c) => c.category_name)
+                        .join(", ")}
+                    </p>
+                    <p>Tags: {product.product_tags.join(", ")}</p>
+                    <p>Review: {product.product_ratingAverage} &#9733;</p>
+                    <p>Date Created: {formatDate(product.createdAt)}</p>
                   </div>
                 )}
               </div>
@@ -262,7 +378,6 @@ const StockPage = () => {
       {/* Pagination */}
       {!isLoading && totalPages > 1 && (
         <ul className="flex space-x-5 justify-center font-[sans-serif] mt-6">
-          {/* Previous Button */}
           <li
             className={`flex items-center justify-center shrink-0 bg-gray-100 w-9 h-9 rounded-md cursor-pointer ${
               currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
@@ -271,8 +386,6 @@ const StockPage = () => {
           >
             <AiOutlineLeft className="text-gray-500" />
           </li>
-
-          {/* Page Numbers */}
           {Array.from({ length: totalPages }, (_, index) => index + 1).map(
             (page) => (
               <li
@@ -288,8 +401,6 @@ const StockPage = () => {
               </li>
             )
           )}
-
-          {/* Next Button */}
           <li
             className={`flex items-center justify-center shrink-0 bg-gray-100 w-9 h-9 rounded-md cursor-pointer ${
               currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""

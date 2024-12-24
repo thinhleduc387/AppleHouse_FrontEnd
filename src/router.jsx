@@ -41,6 +41,7 @@ import FeedBackPage from "./pages/admin/feedBackPage";
 import OrderDetails from "./component/Profile/OrderDetails";
 import OrderSuccess from "./pages/user/order/OrderSuccess";
 import OrderFailed from "./pages/user/order/OrderFailed";
+import OrderDetailPage from "./pages/admin/orderDetailPage";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -131,6 +132,10 @@ const RouterCustom = () => {
           />
           <Route path="/admin/voucher/edit/:id" element={<VoucherCreate />} />
           <Route path="/admin/orders" element={<OrderPage />} />
+          <Route
+            path="/admin/orders/detail/:orderId"
+            element={<OrderDetailPage />}
+          />
           <Route path="/admin/stock" element={<StockPage />} />
           <Route path="/admin/feedback" element={<FeedBackPage />} />
         </Route>
