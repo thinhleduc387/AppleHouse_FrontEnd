@@ -9,7 +9,7 @@ const DiscountProduct = () => {
   const [cardWidth, setCardWidth] = useState(0);
   const [totalProductsToShow, setTotalProductsToShow] = useState(4); // Mặc định 4 sản phẩm trên md
   const [listProduct, setListProduct] = useState([]);
-  const [promotion, setPromotion] = useState("");
+  const [promotion, setPromotion] = useState(null);
 
   useEffect(() => {
     const fetchOneNearestPromotionEvent = async () => {
@@ -82,45 +82,49 @@ const DiscountProduct = () => {
   };
 
   return (
-    <div
-      className="p-4 relative rounded-lg"
-      style={{
-        backgroundImage: `url(https://img.lovepik.com/background/20211021/large/lovepik-background-of-black-line-science-and-technology-image_500425114.jpg)`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      <h2 className="text-2xl font-bold mb-4 text-white">
-        {promotion.prom_name}
-      </h2>
-      <button
-        onClick={scrollLeft}
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white text-2xl pl-2 z-10 rounded-full shadow-md"
-      >
-        <FaChevronLeft />
-      </button>
-      <div className="flex space-x-4 overflow-hidden px-4" ref={scrollRef}>
-        {listProduct.map((value, index) => (
-          <div
-            key={index}
-            className="flex-none"
-            style={{
-              width: `calc((100% - ${
-                16 * (totalProductsToShow - 1)
-              }px) / ${totalProductsToShow})`,
-            }}
+    <>
+      {promotion !== null && (
+        <div
+          className="p-4 relative rounded-lg"
+          style={{
+            backgroundImage: `url(https://img.lovepik.com/background/20211021/large/lovepik-background-of-black-line-science-and-technology-image_500425114.jpg)`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <h2 className="text-2xl font-bold mb-4 text-white">
+            {promotion.prom_name}
+          </h2>
+          <button
+            onClick={scrollLeft}
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white text-2xl pl-2 z-10 rounded-full shadow-md"
           >
-            <ProductItem product={value} isForShow={true} />
+            <FaChevronLeft />
+          </button>
+          <div className="flex space-x-4 overflow-hidden px-4" ref={scrollRef}>
+            {listProduct.map((value, index) => (
+              <div
+                key={index}
+                className="flex-none"
+                style={{
+                  width: `calc((100% - ${
+                    16 * (totalProductsToShow - 1)
+                  }px) / ${totalProductsToShow})`,
+                }}
+              >
+                <ProductItem product={value} isForShow={true} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <button
-        onClick={scrollRight}
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 text-white text-2xl pr-2  rounded-full shadow-md"
-      >
-        <FaChevronRight />
-      </button>
-    </div>
+          <button
+            onClick={scrollRight}
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 text-white text-2xl pr-2  rounded-full shadow-md"
+          >
+            <FaChevronRight />
+          </button>
+        </div>
+      )}
+    </>
   );
 };
 
