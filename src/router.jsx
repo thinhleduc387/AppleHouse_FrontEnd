@@ -19,7 +19,6 @@ import ProfilePage from "./pages/user/profilePage";
 
 // Admin Pages (commented out, can be added later)
 import DashBoard from "./pages/admin/dashBoard";
-import OrderListPage from "./pages/admin/orderListPage";
 
 import OrderHistory from "./component/Profile/OrderList"; // Thêm trang OrderHistory
 
@@ -57,34 +56,15 @@ const RouterCustom = () => {
       <Routes>
         {/* User Routes */}
         <Route path="/" element={<MasterLayout />}>
-          <Route
-            path={ROUTERS.USER.HOME}
-            element={<HomePage />}
-            breadcrumbItems={[{ name: "Home", link: "/" }]} // Truyền breadcrumb cho Home
-          />
-          <Route
-            path={ROUTERS.USER.LOGIN}
-            element={<LoginPage />}
-            breadcrumbItems={[
-              { name: "Home", link: "/" },
-              { name: "Login", link: ROUTERS.USER.LOGIN },
-            ]} // Truyền breadcrumb cho Login
-          />
+          <Route path={ROUTERS.USER.HOME} element={<HomePage />} />
+          <Route path={ROUTERS.USER.LOGIN} element={<LoginPage />} />
           <Route
             path={ROUTERS.USER.HOME + "/:categorySlug"}
             element={<ProductPage />}
-            breadcrumbItems={[
-              { name: "Home", link: "/" },
-              { name: "Products", link: ROUTERS.USER.HOME },
-            ]} // Truyền breadcrumb cho Products
           />
           <Route
             path={ROUTERS.USER.HOME + "/tim-kiem"}
             element={<SearchPage />}
-            breadcrumbItems={[
-              { name: "Home", link: "/" },
-              { name: "Search", link: ROUTERS.USER.HOME + "/tim-kiem" },
-            ]} // Truyền breadcrumb cho Search
           />
           <Route path={ROUTERS.USER.CART} element={<CartPage />} />
           <Route
@@ -97,7 +77,6 @@ const RouterCustom = () => {
             <Route index element={<Info />} />
             <Route path="" element={<Info />} />
             <Route path={ROUTERS.USER.ORDER_LIST} element={<OrderHistory />} />
-
             <Route path={ROUTERS.USER.FAVORITES} element={<Favorites />} />
             <Route path={ROUTERS.USER.ADDRESS} element={<Address />} />
           </Route>
@@ -117,13 +96,13 @@ const RouterCustom = () => {
           <Route
             path="/admin/flash-sale/create"
             element={<FlashSaleCreate />}
-          />{" "}
+          />
           <Route
             path="/admin/flash-sale/edit/:id"
             element={<FlashSaleCreate />}
           />
           <Route path="/admin/event" element={<EventPage />} />
-          <Route path="/admin/event/create" element={<EventCreate />} />{" "}
+          <Route path="/admin/event/create" element={<EventCreate />} />
           <Route path="/admin/event/edit/:id" element={<EventCreate />} />
           <Route path="/admin/voucher" element={<VoucherPage />} />
           <Route
