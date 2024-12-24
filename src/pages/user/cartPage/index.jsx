@@ -77,7 +77,7 @@ const CartPage = () => {
           <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
         </div>
       ) : cartItems.length > 0 ? (
-        <div className="grid md:grid-cols-3 gap-4 relative">
+        <div className="grid md:grid-cols-3 gap-4 ">
           <div className="md:col-span-2">
             <div className=" p-4 flex justify-between gap-4 bg-white rounded-md font-bold overflow-y-auto">
               <div className="flex items-center gap-4">

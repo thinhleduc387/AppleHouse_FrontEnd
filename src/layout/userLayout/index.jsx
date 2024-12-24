@@ -41,7 +41,7 @@ const MasterLayout = ({ breadcrumbItems = [], ...props }) => {
           </div>
         )}
 
-        <main className="flex-grow overflow-y-auto">
+        <main className="flex-grow overflow-y-auto z-8">
           <Outlet />
         </main>
       </div>
