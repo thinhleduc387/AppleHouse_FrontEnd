@@ -70,9 +70,9 @@ const Header = () => {
 
   return (
     <>
-      <div className="w-full top-0 left-0 z-10 sticky">
+      <div className="w-full top-0 left-0 z-10 sticky shadow-md ">
         <div
-          className="py-4 lg:flex justify-between items-center bg-[#f3f4f6] relative"
+          className="py-4 px-4 sm:px-6 md:px-12 lg:px-16  lg:flex justify-between items-center bg-[#f3f4f6] relative"
           ref={headerRef} // Attach ref to the header
         >
           {/* Logo and Menu */}

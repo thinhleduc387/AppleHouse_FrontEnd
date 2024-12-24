@@ -5,24 +5,21 @@ import { Outlet } from "react-router-dom";
 
 const MasterLayout = ({ ...props }) => {
   return (
-    <>
-      <div
-        className="flex flex-col min-h-screen mx-4 sm:mx-6 md:mx-12 lg:mx-28" // Điều chỉnh margin cho các màn hình khác nhau
-        {...props}
-      >
+    <div className="min-h-screen flex flex-col">
+      <div className="w-full fixed top-0 left-0 right-0 z-50 bg-white">
         <Header />
-
-        <main className="flex-grow overflow-y-auto z-8">
-          <Outlet />
-        </main>
       </div>
 
-      <div className="mt-8">
+      <main className="flex-grow w-full mt-[64px]">
         {" "}
-        {/* Điều chỉnh khoảng cách với footer */}
-        <Footer />
-      </div>
-    </>
+        {/* Adjust mt-[64px] to match your header height */}
+        <div className="mx-4 sm:mx-6 md:mx-12 lg:mx-28" {...props}>
+          <Outlet />
+        </div>
+      </main>
+
+      <Footer />
+    </div>
   );
 };
 
