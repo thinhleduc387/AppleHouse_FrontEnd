@@ -228,6 +228,21 @@ export const createOrder = async ({
   });
 };
 
+export const getListOrder = async ({ userId, status }) => {
+  return axios.post(`/order/find-all/${userId}`, {
+    params: {
+      status,
+    },
+  });
+};
+
+export const getOneOrder = async ({ orderId }) => {
+  return axios.get(`/order/${orderId}`);
+};
+
+export const cancelOrder = async ({ orderId }) => {
+  return axios.delete(`/order/${orderId}`);
+};
 //address
 export const addNewUserAddress = async ({ id, address }) => {
   return axios.post(`/user/address`, { id, address });

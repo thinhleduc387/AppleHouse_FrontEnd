@@ -78,7 +78,7 @@ const RouterCustom = () => {
           />
           <Route path={ROUTERS.USER.CART} element={<CartPage />} />
           <Route
-            path="/profile/order-list/detail/:orderId"
+            path="/profile/order-list/:orderId"
             element={<OrderDetails />}
           />
 
