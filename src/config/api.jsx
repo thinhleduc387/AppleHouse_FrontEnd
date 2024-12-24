@@ -278,7 +278,11 @@ export const getOneNearestPromotionEvent = async () => {
   return axios.get(`/promotion/get-event`);
 };
 
-export const geLisPromotionEvemt = async () => {
+export const getPromotionById = async (id) => {
+  return axios.get(`/promotion/get-event/${id}`);
+};
+
+export const geLisPromotionEvent = async () => {
   return axios.get(`/promotion/get-events`);
 };
 

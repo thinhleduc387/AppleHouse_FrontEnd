@@ -19,10 +19,7 @@ import ProfilePage from "./pages/user/profilePage";
 
 // Admin Pages (commented out, can be added later)
 import DashBoard from "./pages/admin/dashBoard";
-import OrderListPage from "./pages/admin/orderListPage";
-
 import OrderHistory from "./component/Profile/OrderList"; // Thêm trang OrderHistory
-
 import { ROUTERS } from "./utils/router";
 import Info from "./component/Profile/Info";
 import Favorites from "./component/Profile/Favorites";
@@ -41,6 +38,7 @@ import FeedBackPage from "./pages/admin/feedBackPage";
 import OrderDetails from "./component/Profile/OrderDetails";
 import OrderSuccess from "./pages/user/order/OrderSuccess";
 import OrderFailed from "./pages/user/order/OrderFailed";
+import PromotionPage from "./pages/user/eventPage";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -105,6 +103,7 @@ const RouterCustom = () => {
             path={ROUTERS.USER.PRODUCT_DETAIL(":productId")}
             element={<DetailProduct />}
           />
+          <Route path={"/promotion/:id"} element={<PromotionPage />} />
         </Route>
 
         {/* Admin Routes */}
@@ -122,7 +121,7 @@ const RouterCustom = () => {
             element={<FlashSaleCreate />}
           />
           <Route path="/admin/event" element={<EventPage />} />
-          <Route path="/admin/event/create" element={<EventCreate />} />{" "}
+          <Route path="/admin/event/create" element={<EventCreate />} />
           <Route path="/admin/event/edit/:id" element={<EventCreate />} />
           <Route path="/admin/voucher" element={<VoucherPage />} />
           <Route
@@ -140,6 +139,7 @@ const RouterCustom = () => {
 
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
+
       <ToastContainer
         position="top-right"
         autoClose={1000}
