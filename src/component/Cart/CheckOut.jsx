@@ -103,7 +103,6 @@ const CheckOut = ({
         return;
       }
 
-      // Redirect tới Stripe Checkout
       const stripe = await stripePromise;
       const { error } = await stripe.redirectToCheckout({
         sessionId: sessionId,

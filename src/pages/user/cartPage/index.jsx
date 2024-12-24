@@ -9,6 +9,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import PaymentMethod from "../../../component/Cart/PaymentMethod";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import CartItemCheckout from "../../../component/Cart/CartItemCheckout";
+import LoginRequiredModal from "./LoginRequireModal";
 
 const CartPage = () => {
   const userId = useSelector((state) => state.account?.user?._id);
@@ -22,8 +23,7 @@ const CartPage = () => {
   const [error, setError] = useState(null);
   const localCartItems = useSelector((state) => state.cart?.localCartItems);
   const [cartItemSelected, setCartItemsSelected] = useState([]);
-  console.log("🚀 ~ CartPage ~ cartItemSelected:", cartItemSelected);
-
+  const [showLoginModal, setShowLoginModal] = useState(false);
   // state for create order
   const [orderAddress, setOrderAddress] = useState("");
   const [orderMethodPayment, setOrderMethodPayment] = useState("");
@@ -57,13 +57,19 @@ const CartPage = () => {
   }, [userId, localCartItems, isCheckout]);
 
   const handleCheckout = (formData) => {
-    console.log("Thông tin thanh toán:", formData);
-
-    setIsCheckout(false); // Quay lại trạng thái giỏ hàng sau khi thanh toán xong
+    setIsCheckout(false);
   };
   const handleCheckAll = () => {
     setIsSelectAll((prev) => !prev);
   };
+  const handleCheckoutAuth = () => {
+    if (userId) {
+      setIsCheckout(true);
+    } else {
+      setShowLoginModal(true);
+    }
+  };
+
   return (
     <div className="py-4">
       {loading ? (
@@ -119,8 +125,6 @@ const CartPage = () => {
                   ))}
               </div>
             </div>
-            {/* Hiển thị CheckoutInfo ngay dưới CheckOut nếu đang trong trạng thái thanh toán */}
-
             {isCheckout && (
               <>
                 {userId && (
@@ -191,13 +195,16 @@ const CartPage = () => {
               </>
             )}
           </div>
-
+          <LoginRequiredModal
+            isOpen={showLoginModal}
+            onClose={() => setShowLoginModal(false)}
+          />
           {/* Hiển thị CheckOut */}
           {cartItems.length > 0 && (
             <CheckOut
               products_order={cartItemSelected}
               userId={userId}
-              onCheckout={() => setIsCheckout(true)} // Start the checkout process
+              onCheckout={() => handleCheckoutAuth()} // Start the checkout proces
               onContinueShopping={() => setIsCheckout(false)} // Go back to the cart
               isCheckout={isCheckout} // Pass the checkout state to toggle button text
               orderMethodPayment={orderMethodPayment}
