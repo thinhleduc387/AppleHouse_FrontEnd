@@ -251,14 +251,16 @@ const OrderDetails = () => {
       </div>
 
       {/* Nút "Mua lại" */}
-      <div className="mt-6 flex justify-end">
-        <button
-          className="bg-red-500 text-white text-sm px-6 py-2 rounded-md hover:bg-red-600 shadow"
-          onClick={() => setShowCancelModal(true)}
-        >
-          {orderDetail?.order_status === "confirmed" && " Hủy đơn"}
-        </button>
-      </div>
+      {orderDetail?.order_status === "confirmed" && (
+        <div className="mt-6 flex justify-end">
+          <button
+            className="bg-red-500 text-white text-sm px-6 py-2 rounded-md hover:bg-red-600 shadow"
+            onClick={() => setShowCancelModal(true)}
+          >
+            Hủy đơn
+          </button>
+        </div>
+      )}
 
       <Modal
         isOpen={showCancelModal}

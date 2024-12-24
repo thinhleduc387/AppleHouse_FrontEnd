@@ -45,10 +45,6 @@ const DetailProduct = () => {
     setLoading(true);
     const response = await getProduct(productId);
     if (response.metadata && response.status === 200) {
-      console.log(
-        "🚀 ~ handleGetProduct ~ response.metadata:",
-        response.metadata
-      );
       setSkus(response.metadata.sku_list);
       setSpu(response.metadata.spu_info);
       setMoreImgs(collectProductImages(response.metadata.spu_info));

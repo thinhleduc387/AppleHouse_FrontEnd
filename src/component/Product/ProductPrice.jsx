@@ -22,6 +22,8 @@ const ProductPrice = ({
     if (promotionId && promotionId !== "") {
       try {
         const response = await findOnePromotion(promotionId);
+        console.log("🚀 ~ getPromotion ~ response:", response);
+        if (response.metadata.eventType === "Custom") return;
         setPromotion(response.metadata);
       } catch (error) {
         console.error("Error fetching promotion:", error);

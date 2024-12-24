@@ -186,6 +186,16 @@ export const findOnePromotion = async (promotionId) => {
   return axios.get(`/promotion/find-one/${promotionId}`);
 };
 
+// promotion event
+
+export const getOneNearestPromotionEvent = async () => {
+  return axios.get(`/promotion/get-event`);
+};
+
+export const geLisPromotionEvemt = async () => {
+  return axios.get(`/promotion/get-events`);
+};
+
 //voucher
 export const getListVoucher = async () => {
   return axios.get(`/discount/find-all`);
@@ -243,6 +253,7 @@ export const getOneOrder = async ({ orderId }) => {
 export const cancelOrder = async ({ orderId }) => {
   return axios.delete(`/order/${orderId}`);
 };
+
 //address
 export const addNewUserAddress = async ({ id, address }) => {
   return axios.post(`/user/address`, { id, address });
