@@ -120,7 +120,6 @@ const Header = () => {
                 {(cart_products.length > 0 || localCartItems.length > 0) && (
                   <span className="absolute top-0 right-0 text-[0.6rem] bg-red-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center">
                     {cart_products.length + localCartItems.length}{" "}
-                    {/* Tổng số lượng sản phẩm */}
                   </span>
                 )}
               </Link>
@@ -137,7 +136,7 @@ const Header = () => {
                     {mockNotifications.length}
                   </span>
                 </Link>
-                {/* Hiển thị dropdown khi hover */}
+
                 {notifyIsOpen && (
                   <NotificationMenu notifications={mockNotifications} />
                 )}

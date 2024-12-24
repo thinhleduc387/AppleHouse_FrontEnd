@@ -88,10 +88,9 @@ const ProfileNavBar = ({ userAvatar, userName }) => {
       ) : (
         <Link
           to={"/login"}
-          className="flex items-center justify-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-150"
+          className="font-extrabold text-3xl my-7 lg:my-0 relative"
         >
-          <AiOutlineUser className="text-lg" />
-          <span className="font-medium">Đăng nhập</span>
+          <AiOutlineUser />
         </Link>
       )}
     </div>
