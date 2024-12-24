@@ -21,7 +21,6 @@ import ProfilePage from "./pages/user/profilePage";
 import DashBoard from "./pages/admin/dashBoard";
 
 import OrderHistory from "./component/Profile/OrderList"; // Thêm trang OrderHistory
-
 import { ROUTERS } from "./utils/router";
 import Info from "./component/Profile/Info";
 import Favorites from "./component/Profile/Favorites";
@@ -41,6 +40,7 @@ import OrderDetails from "./component/Profile/OrderDetails";
 import OrderSuccess from "./pages/user/order/OrderSuccess";
 import OrderFailed from "./pages/user/order/OrderFailed";
 import OrderDetailPage from "./pages/admin/orderDetailPage";
+import PromotionPage from "./pages/user/eventPage";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -85,6 +85,7 @@ const RouterCustom = () => {
             path={ROUTERS.USER.PRODUCT_DETAIL(":productId")}
             element={<DetailProduct />}
           />
+          <Route path={"/promotion/:id"} element={<PromotionPage />} />
         </Route>
 
         {/* Admin Routes */}
@@ -124,6 +125,7 @@ const RouterCustom = () => {
 
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
+
       <ToastContainer
         position="top-right"
         autoClose={1000}
