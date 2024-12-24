@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import AddSPUInfo from "../../../component/admin/addProduct/AddSPUInfo";
 import AddVariationsInfo from "../../../component/admin/addProduct/AddVariationsInfo";
 import AddAttributesInfo from "../../../component/admin/addProduct/AddAttributesInfo";
@@ -8,10 +9,10 @@ import {
   creatNewProduct,
   editNewProduct,
 } from "../../../config/api";
-import { useParams } from "react-router-dom";
 
 const AddProductPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate(); // Hook for navigation
   const [isLoading, setIsLoading] = useState(false);
   const [productData, setProductData] = useState({
     name: "",
@@ -70,7 +71,6 @@ const AddProductPage = () => {
         const spu_info = product.spu_info;
         const sku_list = product.sku_list;
 
-        // Làm sạch sku_list
         const cleanedSkuList = sku_list.map((sku) => ({
           sku_index: sku.sku_index,
           sku_price: sku.sku_price.originalPrice,
@@ -85,7 +85,7 @@ const AddProductPage = () => {
           tags: spu_info.product_tags || [],
           thumb: spu_info.product_thumb || null,
           variations: spu_info.product_variations || [],
-          sku_list: cleanedSkuList, // Sử dụng sku_list đã làm sạch
+          sku_list: cleanedSkuList,
           attributes: spu_info.product_attributes || [],
           more_imgs: spu_info.product_more_imgs || [],
         });
@@ -124,6 +124,7 @@ const AddProductPage = () => {
       const response = await creatNewProduct(productData);
       if (response && response.status === 200) {
         toast.success("Sản phẩm đã được tạo mới thành công!");
+        navigate("/admin/stock"); // Redirect to "Kho hàng"
       } else {
         throw new Error("Đã xảy ra lỗi trong quá trình tạo sản phẩm.");
       }
@@ -138,10 +139,9 @@ const AddProductPage = () => {
   const handleEdit = async () => {
     try {
       const response = await editNewProduct(productData, id);
-      console.log("🚀 ~ handleEdit ~ productData:", productData)
-      console.log("🚀 ~ handleEdit ~ response:", response)
       if (response && response.status === 200) {
         toast.success("Sản phẩm đã được cập nhật thành công!");
+        navigate("/admin/inventory"); // Redirect to "Kho hàng"
       } else {
         throw new Error("Đã xảy ra lỗi trong quá trình cập nhật sản phẩm.");
       }

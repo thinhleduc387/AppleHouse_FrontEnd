@@ -174,3 +174,11 @@ export const createNewVoucher = async (voucherData) => {
 export const editVoucher = async (voucherData, id) => {
   return axios.patch(`/discount/${id}`, { ...voucherData });
 };
+
+//Order
+export const getAllOrder = async () => {
+  return axios.get("/order/get-all-for-admin");
+};
+export const changeOrderStatus = async (orderId, status) => {
+  return axios.post("/order/change-status", { orderId, status });
+};
