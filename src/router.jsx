@@ -41,6 +41,9 @@ import OrderDetails from "./component/Profile/OrderDetails";
 import OrderSuccess from "./pages/user/order/OrderSuccess";
 import OrderFailed from "./pages/user/order/OrderFailed";
 import OrderDetailPage from "./pages/admin/orderDetailPage";
+import CustomerPage from "./pages/admin/userPage";
+import UserPage from "./pages/admin/userPage";
+import CategoryCreate from "./pages/admin/categoryCreate";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -92,6 +95,7 @@ const RouterCustom = () => {
           <Route path="/admin/sales-analytics" element={<DashBoard />} />
           <Route path="/admin/products/add" element={<AddProductPage />} />
           <Route path="/admin/products/edit/:id" element={<AddProductPage />} />
+          <Route path="/admin/category-create" element={<CategoryCreate />} />
           <Route path="/admin/flash-sale" element={<FlashSalePage />} />
           <Route
             path="/admin/flash-sale/create"
@@ -117,6 +121,7 @@ const RouterCustom = () => {
           />
           <Route path="/admin/stock" element={<StockPage />} />
           <Route path="/admin/feedback" element={<FeedBackPage />} />
+          <Route path="/admin/users" element={<UserPage />} />
         </Route>
 
         <Route path="/order/order-success/:id" element={<OrderSuccess />} />

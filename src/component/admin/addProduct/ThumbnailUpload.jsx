@@ -41,7 +41,7 @@ const ThumbnailUpload = ({ productData, setProductData }) => {
   return (
     <div className="w-full h-auto">
       <div className="flex flex-row justify-between">
-        <h2 className="text-xl font-bold mb-4">Ảnh sản phẩm</h2>
+        <h2 className="text-xl font-bold mb-4">Ảnh</h2>
         {(previewUrl || productData.thumb) && (
           <button
             onClick={handleRemoveImage}

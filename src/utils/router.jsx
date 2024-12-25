@@ -51,9 +51,9 @@ export const ROUTERS = {
       path: "/admin/feedback",
     },
     {
-      name: "Khách hàng",
+      name: "Người dùng",
       icon: <FaUser />,
-      path: "/admin/customers",
+      path: "/admin/users",
     },
     {
       name: "Banners",

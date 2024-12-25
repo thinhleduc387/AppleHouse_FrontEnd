@@ -157,8 +157,8 @@ const StockPage = () => {
     }
   };
 
-   // Show confirmation modal for deletion
-   const handleDeleteSelected = () => {
+  // Show confirmation modal for deletion
+  const handleDeleteSelected = () => {
     if (selectedProducts.length === 0) {
       toast.error("Please select at least one product to delete.");
       return;
@@ -290,13 +290,23 @@ const StockPage = () => {
       {/* Header */}
       <div className="flex justify-between bg-white px-6 py-8 rounded-lg items-center mb-6">
         <h1 className="text-4xl font-bold text-gray-700">Product Management</h1>
+        <div className="flex gap-4">
+          {/* Create Category Button */}
+          <Link
+            to="/admin/category-create"
+            className="flex items-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 shadow-md"
+          >
+            <BiPlus className="mr-2 text-xl" /> Create Category
+          </Link>
 
-        <Link
-          to="/admin/products/add"
-          className="ml-4 flex items-center bg-mainColor text-white px-4 py-2 rounded hover:bg-blue-700 shadow-md"
-        >
-          <BiPlus className="mr-2 text-xl" /> Add Product
-        </Link>
+          {/* Add Product Button */}
+          <Link
+            to="/admin/products/add"
+            className="flex items-center bg-mainColor text-white px-4 py-2 rounded hover:bg-blue-700 shadow-md"
+          >
+            <BiPlus className="mr-2 text-xl" /> Add Product
+          </Link>
+        </div>
       </div>
 
       {isLoading ? (
@@ -442,43 +452,46 @@ const StockPage = () => {
       )}
 
       {/* Pagination */}
-      {!isLoading && totalPages > 1 && (
-        <ul className="flex space-x-5 justify-center font-[sans-serif] mt-6">
-          <li
-            className={`flex items-center justify-center shrink-0 bg-gray-100 w-9 h-9 rounded-md cursor-pointer ${
-              currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
-          >
-            <AiOutlineLeft className="text-gray-500" />
-          </li>
-          {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-            (page) => (
-              <li
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`flex items-center justify-center shrink-0 cursor-pointer text-base font-bold px-[13px] h-9 rounded-md ${
-                  currentPage === page
-                    ? "bg-blue-500 text-white border-blue-500"
-                    : "border text-gray-800 hover:border-blue-500"
-                }`}
-              >
-                {page}
-              </li>
-            )
-          )}
-          <li
-            className={`flex items-center justify-center shrink-0 bg-gray-100 w-9 h-9 rounded-md cursor-pointer ${
-              currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            onClick={() =>
-              currentPage < totalPages && setCurrentPage(currentPage + 1)
-            }
-          >
-            <AiOutlineRight className="text-gray-500" />
-          </li>
-        </ul>
-      )}
+      <ul className="flex space-x-5 justify-center mt-6">
+        {/* Previous Button */}
+        <li
+          className={`flex items-center justify-center bg-gray-100 w-9 h-9 rounded-md cursor-pointer ${
+            currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+        >
+          <AiOutlineLeft className="text-gray-500" />
+        </li>
+
+        {/* Page Numbers */}
+        {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+          (page) => (
+            <li
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`flex items-center justify-center w-9 h-9 rounded-md cursor-pointer ${
+                currentPage === page
+                  ? "bg-blue-500 text-white"
+                  : "text-gray-800 hover:bg-gray-200"
+              }`}
+            >
+              {page}
+            </li>
+          )
+        )}
+
+        {/* Next Button */}
+        <li
+          className={`flex items-center justify-center bg-gray-100 w-9 h-9 rounded-md cursor-pointer ${
+            currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          onClick={() =>
+            currentPage < totalPages && setCurrentPage(currentPage + 1)
+          }
+        >
+          <AiOutlineRight className="text-gray-500" />
+        </li>
+      </ul>
       {/* Delete Confirmation Modal */}
       <DeleteModal
         isOpen={isDeleteModalOpen}

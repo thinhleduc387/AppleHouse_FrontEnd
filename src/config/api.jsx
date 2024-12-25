@@ -26,6 +26,9 @@ export const getAllCategory = async () => {
 export const getCategoryById = async (id) => {
   return axios.get(`/category/find-one/${id}`);
 };
+export const createCategory = async (newCategory) => {
+  return axios.post("/category", { ...newCategory });
+};
 
 /*Product*/
 export const filterProduct = async ({
@@ -366,4 +369,15 @@ export const getListUserAddress = async ({ id }) => {
 
 export const getUserDefaultAddress = async ({ id }) => {
   return axios.get(`/user/default/address/${id}`);
+};
+
+//User
+export const getAllUsers = async (query = {}) => {
+  return axios.get(`/user/find-all`, { params: query });
+};
+export const getListRole = async () => {
+  return axios.get("/rbac/list/roles");
+};
+export const lockUser = async (userId, status) => {
+  return axios.post("/user/change-status", { userId, status });
 };

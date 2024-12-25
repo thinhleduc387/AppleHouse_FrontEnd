@@ -135,30 +135,28 @@ const FlashSaleCreate = () => {
   };
 
   const validateTimeRange = (startTime, endTime) => {
+    // Nếu không có thời gian bắt đầu hoặc kết thúc -> Mặc định là hợp lệ
     if (!startTime || !endTime) return true;
 
+    // Chuyển đổi thời gian sang đối tượng Date
     const start = new Date(startTime);
     const end = new Date(endTime);
 
+    // Kiểm tra ngày bắt đầu và ngày kết thúc có cùng ngày không
     if (
       start.getFullYear() !== end.getFullYear() ||
       start.getMonth() !== end.getMonth() ||
       start.getDate() !== end.getDate()
     ) {
-      return false;
+      return false; // Không cùng ngày
     }
 
-    const startHour = start.getHours();
-    const endHour = end.getHours();
-
-    if (startHour < 6 || startHour >= 23 || endHour < 6 || endHour > 23) {
-      return false;
-    }
-
+    // Kiểm tra thứ tự thời gian: Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc
     if (start >= end) {
       return false;
     }
 
+    // Nếu vượt qua tất cả các kiểm tra, thời gian là hợp lệ
     return true;
   };
   const handleGetSKU = async (selectedProducts) => {
@@ -443,10 +441,8 @@ const FlashSaleCreate = () => {
     setIsCancelDialogOpen(true);
   };
   const handleConfirmAction = async () => {
-    // Đóng dialog xác nhận
     setIsConfirmDialogOpen(false);
 
-    // Validate thời gian
     const { startTime, endTime } = flashSaleData || {};
     if (!startTime || !endTime || !validateTimeRange(startTime, endTime)) {
       alert("Ngày không hợp lệ! Vui lòng kiểm tra lại khung thời gian.");
@@ -455,14 +451,18 @@ const FlashSaleCreate = () => {
 
     if (!isEdit) {
       try {
-        // Gọi API tạo flash sale
         const response = await creatNewFlashSale(flashSaleData);
         console.log("🚀 ~ handleConfirmAction ~ response:", response);
 
-        toast.success("Tạo flash sale thành công");
-      } catch (error) {}
+        toast.success("Tạo Flash Sale thành công");
+        navigate("/admin/flash-sale"); // Quay về trang danh sách Flash Sale
+      } catch (error) {
+        toast.error("Đã xảy ra lỗi khi tạo Flash Sale");
+      }
     } else {
       handleEdit();
+      toast.success("Cập nhật Flash Sale thành công");
+      navigate("/admin/flash-sale"); // Quay về trang danh sách Flash Sale sau khi cập nhật
     }
   };
 
@@ -470,6 +470,9 @@ const FlashSaleCreate = () => {
     setIsCancelDialogOpen(false);
     navigate("/admin/flash-sale");
   };
+  const isAddProductEnabled =
+    !!flashSaleData.startTime && !!flashSaleData.endTime;
+
   return (
     <div className="flex flex-col w-full p-10 bg-gray-100 min-h-screen">
       {/* Sử dụng component FlashSaleInfo */}
@@ -653,7 +656,12 @@ const FlashSaleCreate = () => {
 
         <button
           onClick={handleModalOpen}
-          className="w-full border border-mainColor text-mainColor py-2 rounded-md text-center font-medium hover:bg-blue-50"
+          className={`w-full py-2 rounded-md text-center font-medium ${
+            isAddProductEnabled
+              ? "border border-mainColor text-mainColor hover:bg-blue-50"
+              : "border border-gray-300 text-gray-400 cursor-not-allowed"
+          }`}
+          disabled={!isAddProductEnabled}
         >
           + Thêm sản phẩm
         </button>
@@ -677,7 +685,7 @@ const FlashSaleCreate = () => {
 
       {/* Dialog xác nhận */}
       {isConfirmDialogOpen && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+        <div className="fixed inset-0 z-50 bg-gray-500 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white rounded-lg shadow-md p-6 w-96">
             <h3 className="text-lg font-bold mb-4">Xác nhận Flash Sale?</h3>
             <p>Bạn có chắc chắn muốn xác nhận thông tin này không?</p>
@@ -701,7 +709,7 @@ const FlashSaleCreate = () => {
 
       {/* Dialog hủy */}
       {isCancelDialogOpen && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+        <div className="fixed inset-0 z-50 bg-gray-500 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white rounded-lg shadow-md p-6 w-96">
             <h3 className="text-lg font-bold mb-4">Hủy Flash Sale?</h3>
             <p>Bạn có chắc chắn muốn hủy và quay về không?</p>
