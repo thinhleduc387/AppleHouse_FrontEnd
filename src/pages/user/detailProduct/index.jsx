@@ -3,7 +3,12 @@ import { useParams } from "react-router-dom";
 import ProductPrice from "../../../component/Product/ProductPrice"; // Import PromotionComponent
 import ProductSideBar from "../../../component/Product/ProductSideBar";
 import CommentSection from "../../../component/Product/Feedback/CommentSection";
-import { addToCart, checkPurchase, getProduct } from "../../../config/api";
+import {
+  addToCart,
+  checkPurchase,
+  getProduct,
+  totalRatingRateComment,
+} from "../../../config/api";
 import { FaCheck } from "react-icons/fa";
 import ProductDescription from "../../../component/Product/ProductDescription";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +28,7 @@ const DetailProduct = () => {
   const [selectedVariants, setSelectedVariants] = useState(
     skus.find((sku) => sku.sku_default)?.sku_index || [0, 0]
   );
+  const [totalreviews, setTotalReviews] = useState({});
   const [selectedImage, setSelectedImage] = useState();
   const [moreImgs, setMoreImgs] = useState();
   const commentSectionRef = useRef(null);
@@ -40,7 +46,17 @@ const DetailProduct = () => {
     const allImages = [...new Set([...moreImgs, ...variationImgs])];
     return allImages;
   };
-
+  const getToTalReviewAndComment = async () => {
+    const response = await totalRatingRateComment({ productId });
+    if (response.status === 200) {
+      const numberOfComment = response.metadata.totalComments;
+      const numberOfRating = response.metadata.ratingCounts.length;
+      setTotalReviews({
+        numberOfComment,
+        numberOfRating,
+      });
+    }
+  };
   const handleGetProduct = async () => {
     setLoading(true);
     const response = await getProduct(productId);
@@ -92,6 +108,7 @@ const DetailProduct = () => {
 
   useEffect(() => {
     handleGetProduct();
+    getToTalReviewAndComment();
   }, [productId]);
 
   useEffect(() => {
@@ -189,14 +206,14 @@ const DetailProduct = () => {
                     className="text-mainColor cursor-pointer"
                     onClick={scrollToRatingStat}
                   >
-                    2 đánh giá
+                    {totalreviews.numberOfRating} đánh giá
                   </span>
                   <span className="text-gray-600">|</span>
                   <span
                     className="text-mainColor cursor-pointer"
                     onClick={scrollToComments}
                   >
-                    193 bình luận
+                    {totalreviews.numberOfComment} bình luận
                   </span>
                 </div>
 
@@ -315,7 +332,10 @@ const DetailProduct = () => {
 
             <div className="mt-16 bg-white border-2  rounded-lg p-6 space-y-10">
               <div ref={ratingStatRef}>
-                <RatingStar spuId={spu._id} />
+                <RatingStar
+                  numberOfRating={totalreviews.numberOfRating}
+                  spuId={spu._id}
+                />
               </div>
               <div ref={commentSectionRef}>
                 <CommentSection productId={productId} />

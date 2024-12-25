@@ -281,6 +281,15 @@ export const toggleLikeComment = async (commentId) => {
 export const checkExistCommentofPurchaser = async ({ userId, productId }) => {
   return axios.post(`/comment/check-has-purchased`, { userId, productId });
 };
+
+export const ratingCount = async ({ productId }) => {
+  return axios.get(`/comment/rating-count/${productId}`);
+};
+
+export const totalRatingRateComment = async ({ productId }) => {
+  return axios.get(`/comment/total-rating-comment/${productId}`);
+};
+
 // flash sale
 
 export const getFlashSaleActive = async () => {
