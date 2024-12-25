@@ -2,14 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ProductPrice from "../../../component/Product/ProductPrice"; // Import PromotionComponent
 import ProductSideBar from "../../../component/Product/ProductSideBar";
-import RatingStat from "../../../component/Product/Feedback/RatingStat";
 import CommentSection from "../../../component/Product/Feedback/CommentSection";
-import { addToCart, getProduct } from "../../../config/api";
+import { addToCart, checkPurchase, getProduct } from "../../../config/api";
 import { FaCheck } from "react-icons/fa";
 import ProductDescription from "../../../component/Product/ProductDescription";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { fetchCart, addToLocalCart } from "../../../redux/slice/cartSlice";
+import RatingStar from "../../../component/Product/Feedback/RatingStar";
 
 const DetailProduct = () => {
   const { productId } = useParams();
@@ -48,6 +48,7 @@ const DetailProduct = () => {
       setSkus(response.metadata.sku_list);
       setSpu(response.metadata.spu_info);
       setMoreImgs(collectProductImages(response.metadata.spu_info));
+      setSelectedImage(collectProductImages(response.metadata.spu_info)[0]);
     }
     setLoading(false);
   };
@@ -91,7 +92,7 @@ const DetailProduct = () => {
 
   useEffect(() => {
     handleGetProduct();
-  }, []);
+  }, [productId]);
 
   useEffect(() => {
     if (selectedSku?.sku_imgs?.length > 0) {
@@ -314,13 +315,12 @@ const DetailProduct = () => {
 
             <div className="mt-16 bg-white border-2  rounded-lg p-6 space-y-10">
               <div ref={ratingStatRef}>
-                <RatingStat />
+                <RatingStar spuId={spu._id} />
               </div>
               <div ref={commentSectionRef}>
                 <CommentSection productId={productId} />
               </div>
             </div>
-            {/* Sidebar */}
 
             <ProductSideBar
               productAttributes={spu?.product_attributes}

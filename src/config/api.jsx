@@ -232,8 +232,13 @@ export const editVoucher = async (voucherData, id) => {
 export const getAllOrder = async () => {
   return axios.get("/order/get-all-for-admin");
 };
+
 export const changeOrderStatus = async (orderId, status) => {
   return axios.post("/order/change-status", { orderId, status });
+};
+
+export const checkPurchase = async ({ userId, spuId }) => {
+  return axios.post(`/order/check-purchase`, { userId, spuId });
 };
 // comment
 
@@ -257,12 +262,14 @@ export const createComment = async ({
   productId,
   userId,
   content,
+  rating = 0,
   parentCommentId = null,
 }) => {
   return axios.post("/comment", {
     productId,
     userId,
     content,
+    rating,
     parentCommentId,
   });
 };
@@ -271,6 +278,9 @@ export const toggleLikeComment = async (commentId) => {
   return axios.put(`/comment/${commentId}/like`);
 };
 
+export const checkExistCommentofPurchaser = async ({ userId, productId }) => {
+  return axios.post(`/comment/check-has-purchased`, { userId, productId });
+};
 // flash sale
 
 export const getFlashSaleActive = async () => {
