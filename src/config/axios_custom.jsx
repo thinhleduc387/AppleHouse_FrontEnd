@@ -32,11 +32,23 @@ instance.interceptors.request.use(
 // Add a response interceptor
 instance.interceptors.response.use(
   function (response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
     return response.data;
   },
   function (error) {
+    const statusCode = error?.response?.status;
+
+    switch (statusCode) {
+      case 403:
+        break;
+      case 401:
+        window.location.href = "/access-denied";
+        break;
+
+      case 404:
+        break;
+
+      // Có thể thêm các case khác ...
+    }
     return error?.response?.data || Promise.reject(error);
   }
 );

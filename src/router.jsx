@@ -41,6 +41,8 @@ import OrderSuccess from "./pages/user/order/OrderSuccess";
 import OrderFailed from "./pages/user/order/OrderFailed";
 import OrderDetailPage from "./pages/admin/orderDetailPage";
 import PromotionPage from "./pages/user/eventPage";
+import AccessDenied from "./pages/Other/AccessDenyPage";
+import NotFound from "./pages/Other/NotFound";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -123,7 +125,8 @@ const RouterCustom = () => {
         <Route path="/order/order-success/:id" element={<OrderSuccess />} />
         <Route path="/order/order-failed" element={<OrderFailed />} />
 
-        <Route path="*" element={<h1>404 Not Found</h1>} />
+        <Route path="/access-denied" element={<AccessDenied />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <ToastContainer
