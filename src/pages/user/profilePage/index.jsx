@@ -15,8 +15,7 @@ const ProfilePage = () => {
         </div>
 
         <div className="flex-1 flex flex-col overflow-y-auto">
-          {/* Main Content */}
-          <main className="px-0 md:px-6 2xl:px-10">
+          <main className="px-0 md:px-6 2xl:px-10 h-full">
             <Outlet />
           </main>
         </div>

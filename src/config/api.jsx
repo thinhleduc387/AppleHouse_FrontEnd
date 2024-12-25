@@ -390,3 +390,21 @@ export const getListUserAddress = async ({ id }) => {
 export const getUserDefaultAddress = async ({ id }) => {
   return axios.get(`/user/default/address/${id}`);
 };
+
+export const updateProfile = async ({
+  usr_name,
+  usr_phone,
+  usr_email,
+  usr_img,
+  usr_sex,
+  usr_date_of_birth,
+}) => {
+  return axios.put(`/user/profile`, {
+    usr_name,
+    usr_phone,
+    usr_email,
+    usr_img,
+    usr_sex,
+    usr_date_of_birth,
+  });
+};

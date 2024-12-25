@@ -19,6 +19,9 @@ const initialState = {
     email: "",
     name: "",
     avatar: "",
+    sex: "",
+    dataOfBirth: "",
+    phone: "",
     role: "",
     loyalPoint: 0,
   },
@@ -37,6 +40,9 @@ const accountSlice = createSlice({
       state.user.role = action?.payload?.usr_role;
       state.user.avatar = action?.payload?.usr_avatar;
       state.user.loyalPoint = action?.payload?.usr_loyalPoint;
+      state.user.sex = action?.payload?.usr_sex;
+      state.user.dataOfBirth = action?.payload?.usr_date_of_birth;
+      state.user.phone = action?.payload?.usr_phone;
     },
     setLogoutAction: (state, action) => {
       localStorage.clear();
@@ -45,10 +51,11 @@ const accountSlice = createSlice({
         _id: "",
         email: "",
         name: "",
-        role: {
-          _id: "",
-          name: "",
-        },
+        avatar: "",
+        sex: "",
+        dataOfBirth: "",
+        phone: "",
+        role: "",
         loyalPoint: 0,
       };
     },
@@ -77,6 +84,9 @@ const accountSlice = createSlice({
         state.user.role = action?.payload?.usr_role;
         state.user.avatar = action?.payload?.usr_avatar;
         state.user.loyalPoint = action?.payload?.usr_loyalPoint;
+        state.user.sex = action?.payload?.usr_sex;
+        state.user.dataOfBirth = action?.payload?.usr_date_of_birth;
+        state.user.phone = action?.payload?.usr_phone;
       }
     });
 
