@@ -4,6 +4,7 @@ import ProductCategory from "../../../component/Product/Category/ProductCategory
 import DiscountProduct from "../../../component/Product/DiscountProduct";
 import ProductSection from "../../../component/Product/ProductSection";
 import FlashSale from "../../../component/Product/FlashSale";
+import RecommendSection from "../../../component/RecommendSection/RecommendSection";
 
 const HomePage = () => {
   useEffect(() => {
@@ -32,6 +33,8 @@ const HomePage = () => {
       <div>
         <DiscountProduct />
       </div>
+      <RecommendSection />
+
       <div>
         <ProductSection title={"Điện thoại xịn - Công nghệ hàng đầu"} />
       </div>

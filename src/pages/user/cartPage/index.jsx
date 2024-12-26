@@ -10,6 +10,7 @@ import PaymentMethod from "../../../component/Cart/PaymentMethod";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import CartItemCheckout from "../../../component/Cart/CartItemCheckout";
 import LoginRequiredModal from "./LoginRequireModal";
+import ProductSectionInCart from "../../../component/RecommendSection/RecomendSectionInCart";
 
 const CartPage = () => {
   const userId = useSelector((state) => state.account?.user?._id);
@@ -215,6 +216,11 @@ const CartPage = () => {
         </div>
       ) : (
         <CartEmpty />
+      )}
+      {!isCheckout && (
+        <div className="py-14">
+          <ProductSectionInCart />
+        </div>
       )}
     </div>
   );

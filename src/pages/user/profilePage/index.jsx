@@ -1,6 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../../../component/Profile/SideBar";
+import ProductSectionForProfile from "../../../component/RecommendSection/RecommendSectionInProfile";
 
 const ProfilePage = () => {
   return (
@@ -20,6 +21,7 @@ const ProfilePage = () => {
           </main>
         </div>
       </div>
+      <div className="py-10">{/* <ProductSectionForProfile /> */}</div>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { formatVND } from "../../utils";
 import { FaBitcoin } from "react-icons/fa";
+import ProductSectionForDetailPage from "../RecommendSection/RecommendSectionDetailProruct";
 
 const FlashSaleBanner = ({
   promotion,

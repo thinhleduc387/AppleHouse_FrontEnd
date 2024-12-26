@@ -32,7 +32,11 @@ const ProductItem = ({ product, isForShow }) => {
     <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm relative flex flex-col">
       <div className="h-56 w-full">
         <a href={ROUTERS.USER.PRODUCT_DETAIL(id)} className="cursor-default">
-          <img className="mx-auto h-full" src={imageSrc} alt="" />
+          <img
+            className="mx-auto h-full transition-transform duration-300 ease-in-out hover:scale-110"
+            src={imageSrc}
+            alt={name}
+          />
         </a>
       </div>
       <div className="pt-6 flex-grow">
@@ -111,19 +115,6 @@ const ProductItem = ({ product, isForShow }) => {
           </div>
         )}
       </div>
-
-      {/* Nút Add to Cart hoặc Edit */}
-      {!isForShow && (
-        <div className="mt-4">
-          <button
-            type="button"
-            className="inline-flex items-center text-center justify-center rounded-lg bg-blue-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 min-w-36"
-          >
-            <AiOutlineShoppingCart className="h-5 w-5 mr-2" />
-            Add to cart
-          </button>
-        </div>
-      )}
     </div>
   );
 };

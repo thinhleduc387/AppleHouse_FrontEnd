@@ -452,3 +452,24 @@ export const getListRole = async () => {
 export const lockUser = async (userId, status) => {
   return axios.post("/user/change-status", { userId, status });
 };
+
+//recommentd
+export const getRecommendForDetailProductPage = async ({ productId }) => {
+  return axios.get(`/product/recommendations/detail-product/${productId}`);
+};
+
+export const getRecommendTrending = async () => {
+  return axios.get(`/product/recommendations/trending`);
+};
+
+export const getRecommendForHomePage = async () => {
+  return axios.get(`/product/recommendations/home-page`);
+};
+
+export const getRecommendForCartPage = async () => {
+  return axios.get(`/product/recommendations/cart`);
+};
+
+export const getRecommendForProfilePage = async () => {
+  return axios.get(`/product/recommendations/profile`);
+};

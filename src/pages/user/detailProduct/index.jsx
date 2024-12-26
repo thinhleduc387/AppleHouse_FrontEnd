@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { fetchCart, addToLocalCart } from "../../../redux/slice/cartSlice";
 import RatingStar from "../../../component/Product/Feedback/RatingStar";
+import ProductSectionForDetailPage from "../../../component/RecommendSection/RecommendSectionDetailProruct";
 
 const DetailProduct = () => {
   const { productId } = useParams();
@@ -350,6 +351,9 @@ const DetailProduct = () => {
           </div>
         </div>
       )}
+      <div className="py-10">
+        <ProductSectionForDetailPage productId={productId} />
+      </div>
     </>
   );
 };
