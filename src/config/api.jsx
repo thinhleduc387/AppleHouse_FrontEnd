@@ -26,6 +26,12 @@ export const getAllCategory = async () => {
 export const getCategoryById = async (id) => {
   return axios.get(`/category/find-one/${id}`);
 };
+export const createCategory = async (newCategory) => {
+  return axios.post("/category", { ...newCategory });
+};
+export const deleteCategory = async (id) => {
+  return axios.delete(`/category/${id}`);
+};
 
 /*Product*/
 export const filterProduct = async ({
@@ -435,4 +441,14 @@ export const updateRole = async ({
   grants,
 }) => {
   return axios.patch(`/rbac/role`, { id, name, slug, description, grants });
+};
+//User
+export const getAllUsers = async (query = {}) => {
+  return axios.get(`/user/find-all`, { params: query });
+};
+export const getListRole = async () => {
+  return axios.get("/rbac/list/roles");
+};
+export const lockUser = async (userId, status) => {
+  return axios.post("/user/change-status", { userId, status });
 };

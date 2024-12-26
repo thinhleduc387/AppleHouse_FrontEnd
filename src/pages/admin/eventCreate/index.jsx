@@ -135,32 +135,22 @@ const EventCreate = () => {
   };
 
   const validateTimeRange = (startTime, endTime) => {
+    // Nếu không có thời gian bắt đầu hoặc kết thúc -> Mặc định là hợp lệ
     if (!startTime || !endTime) return true;
 
+    // Chuyển đổi thời gian sang đối tượng Date
     const start = new Date(startTime);
     const end = new Date(endTime);
 
-    if (
-      start.getFullYear() !== end.getFullYear() ||
-      start.getMonth() !== end.getMonth() ||
-      start.getDate() !== end.getDate()
-    ) {
-      return false;
-    }
-
-    const startHour = start.getHours();
-    const endHour = end.getHours();
-
-    if (startHour < 6 || startHour >= 23 || endHour < 6 || endHour > 23) {
-      return false;
-    }
-
+    // Kiểm tra thứ tự thời gian: Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc
     if (start >= end) {
       return false;
     }
 
+    // Nếu vượt qua kiểm tra, thời gian là hợp lệ
     return true;
   };
+
   const handleGetSKU = async (selectedProducts) => {
     try {
       const existingSpuIds = new Set(
@@ -460,9 +450,12 @@ const EventCreate = () => {
         console.log("🚀 ~ handleConfirmAction ~ response:", response);
 
         toast.success("Tạo sự kiện thành công");
+        navigate("/admin/event"); // Quay về trang danh sách Flash Sale
       } catch (error) {}
     } else {
       handleEdit();
+      toast.success("Cập nhật Flash Sale thành công");
+      navigate("/admin/event"); // Quay về trang danh sách Flash Sale sau khi cập nhật
     }
   };
 
@@ -470,6 +463,8 @@ const EventCreate = () => {
     setIsCancelDialogOpen(false);
     navigate("/admin/event");
   };
+  const isAddProductEnabled =
+    !!flashSaleData.startTime && !!flashSaleData.endTime;
   return (
     <div className="flex flex-col w-full p-10 bg-gray-100 min-h-screen">
       {/* Sử dụng component FlashSaleInfo */}
@@ -653,7 +648,12 @@ const EventCreate = () => {
 
         <button
           onClick={handleModalOpen}
-          className="w-full border border-mainColor text-mainColor py-2 rounded-md text-center font-medium hover:bg-blue-50"
+          className={`w-full py-2 rounded-md text-center font-medium ${
+            isAddProductEnabled
+              ? "border border-mainColor text-mainColor hover:bg-blue-50"
+              : "border border-gray-300 text-gray-400 cursor-not-allowed"
+          }`}
+          disabled={!isAddProductEnabled}
         >
           + Thêm sản phẩm
         </button>

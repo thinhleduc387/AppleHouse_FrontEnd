@@ -9,12 +9,16 @@ import {
   HiOutlineXCircle,
   HiOutlineCheck,
 } from "react-icons/hi";
-import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+import { AiOutlineLeft, AiOutlineRight, AiOutlineDown } from "react-icons/ai";
+import { formatVND } from "../../../utils";
+import { FaInfoCircle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const ITEMS_PER_PAGE = 8; // Số lượng đơn hàng mỗi trang
 
 const OrderPage = () => {
   const [listOrder, setListOrder] = useState([]); // State cho danh sách đơn hàng
+  console.log("🚀 ~ OrderPage ~ listOrder:", listOrder);
   const [isLoading, setIsLoading] = useState(false); // State cho trạng thái loading
   const [statusCounts, setStatusCounts] = useState({
     confirmed: 0,
@@ -23,9 +27,9 @@ const OrderPage = () => {
     cancelled: 0,
     delivered: 0,
   }); // State đếm trạng thái đơn hàng
-  console.log("🚀 ~ OrderPage ~ statusCounts:", statusCounts)
   const [currentPage, setCurrentPage] = useState(1); // State theo dõi trang hiện tại
-
+  const [activeCollapse, setActiveCollapse] = useState(null); // State collapse cho đơn hàng
+  const navigate = useNavigate(); // Hook for navigation
   useEffect(() => {
     handleGetAllOrder();
     handleGetCountOrderStatus();
@@ -34,17 +38,15 @@ const OrderPage = () => {
   const handleGetCountOrderStatus = async () => {
     try {
       const response = await getCountOrderStatus();
-      console.log("🚀 ~ handleGetCountOrderStatus ~ response:", response);
 
       if (response && Array.isArray(response.metadata)) {
-        // Chuyển dữ liệu API thành đối tượng `statusCounts`
         const counts = response.metadata.reduce(
           (acc, item) => {
-            acc[item._id] = item.count; // Gán số lượng theo trạng thái
+            acc[item._id] = item.count;
             return acc;
           },
           {
-            confirmed: 0, // Mặc định nếu không có trong dữ liệu trả về
+            confirmed: 0,
             processing: 0,
             shipped: 0,
             cancelled: 0,
@@ -52,7 +54,7 @@ const OrderPage = () => {
           }
         );
 
-        setStatusCounts(counts); // Cập nhật state
+        setStatusCounts(counts);
       } else {
         console.error("Dữ liệu trạng thái không hợp lệ.");
       }
@@ -62,7 +64,7 @@ const OrderPage = () => {
   };
 
   const handleGetAllOrder = async () => {
-    setIsLoading(true); // Bật trạng thái loading
+    setIsLoading(true);
     try {
       const response = await getAllOrder();
       if (response && response.metadata) {
@@ -73,28 +75,36 @@ const OrderPage = () => {
     } catch (error) {
       console.error("Lỗi khi lấy đơn hàng:", error);
     } finally {
-      setIsLoading(false); // Tắt trạng thái loading
+      setIsLoading(false);
     }
   };
 
-  const StatusCard = ({ icon: Icon, label, count, color }) => (
-    <div className="flex flex-col justify-between bg-white shadow-md rounded-lg p-4">
-      <div className={`text-4xl ${color} mb-4`}>
-        <Icon />
-      </div>
-      <div className="text-gray-500 text-sm font-medium">{label}</div>
-      <div className="text-gray-800 text-2xl font-bold">{count}</div>
-    </div>
-  );
-
-  // Hàm lấy dữ liệu theo từng trang
   const paginatedOrders = () => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     return listOrder.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   };
 
-  const totalPages = Math.ceil(listOrder.length / ITEMS_PER_PAGE); // Tổng số trang
+  const totalPages = Math.ceil(listOrder.length / ITEMS_PER_PAGE);
 
+  const toggleCollapse = (id) => {
+    setActiveCollapse((prev) => (prev === id ? null : id));
+  };
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "confirmed":
+        return "bg-green-500 text-white";
+      case "processing":
+        return "bg-yellow-500 text-white";
+      case "shipped":
+        return "bg-blue-500 text-white";
+      case "cancelled":
+        return "bg-red-500 text-white";
+      case "delivered":
+        return "bg-purple-500 text-white";
+      default:
+        return "bg-gray-500 text-white";
+    }
+  };
   return (
     <div className="p-6 min-h-screen bg-gray-100">
       {/* Header */}
@@ -102,7 +112,6 @@ const OrderPage = () => {
         <h1 className="text-4xl font-bold text-gray-700">Quản lý đơn hàng</h1>
       </div>
 
-      {/* Loading State */}
       {isLoading ? (
         <div className="flex justify-center items-center min-h-[300px]">
           <Loading />
@@ -143,15 +152,79 @@ const OrderPage = () => {
             />
           </div>
 
-          {/* Orders Table */}
-          <OrderTable
-            listOrder={paginatedOrders()}
-            setListOrder={setListOrder}
-          />
+          {/* Order List for Small Screens */}
+          <div className="md:hidden">
+            {paginatedOrders().map((order) => (
+              <div
+                key={order._id}
+                className="bg-white shadow rounded-lg mb-4 p-4"
+              >
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-semibold text-gray-700">
+                      Order #{order._id}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {new Date(order.createdAt).toLocaleDateString("en-GB")}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <FaInfoCircle
+                      className="text-blue-500 cursor-pointer text-xl"
+                      title="Xem chi tiết sản phẩm"
+                      onClick={() =>
+                        navigate(`/admin/orders/detail/${order._id}`)
+                      }
+                    />
+                    <AiOutlineDown
+                      className={`text-gray-500 ${
+                        activeCollapse === order._id ? "rotate-180" : ""
+                      } transition-transform cursor-pointer text-xl`}
+                      onClick={() => toggleCollapse(order._id)}
+                    />
+                  </div>
+                </div>
+
+                {activeCollapse === order._id && (
+                  <div className="mt-4 bg-gray-50 p-4 rounded-lg shadow-inner">
+                    <p className="font-semibold">
+                      Người đặt: {order.order_userId.usr_name}
+                    </p>
+                    <p className="font-semibold">
+                      Payment: {order.order_payment.payment_method}
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <span className="text-gray-700 font-semibold">
+                        Status:
+                      </span>
+                      <span
+                        className={`px-3 py-1 text-sm rounded-full ${getStatusClass(
+                          order.order_status
+                        )}`}
+                      >
+                        {order.order_status}
+                      </span>
+                    </p>
+                    <p className="font-semibold">
+                      Total Amount:{" "}
+                      {formatVND(order.order_checkout.totalCheckOut)}
+                    </p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Order Table for Larger Screens */}
+          <div className="hidden md:block">
+            <OrderTable
+              listOrder={paginatedOrders()}
+              setListOrder={setListOrder}
+            />
+          </div>
 
           {/* Pagination */}
           <ul className="flex space-x-5 justify-center mt-6">
-            {/* Previous Button */}
             <li
               className={`flex items-center justify-center bg-gray-100 w-9 h-9 rounded-md cursor-pointer ${
                 currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
@@ -161,7 +234,6 @@ const OrderPage = () => {
               <AiOutlineLeft className="text-gray-500" />
             </li>
 
-            {/* Page Numbers */}
             {Array.from({ length: totalPages }, (_, index) => index + 1).map(
               (page) => (
                 <li
@@ -178,7 +250,6 @@ const OrderPage = () => {
               )
             )}
 
-            {/* Next Button */}
             <li
               className={`flex items-center justify-center bg-gray-100 w-9 h-9 rounded-md cursor-pointer ${
                 currentPage === totalPages
@@ -197,5 +268,15 @@ const OrderPage = () => {
     </div>
   );
 };
+
+const StatusCard = ({ icon: Icon, label, count, color }) => (
+  <div className="flex flex-col justify-between bg-white shadow-md rounded-lg p-4">
+    <div className={`text-4xl ${color} mb-4`}>
+      <Icon />
+    </div>
+    <div className="text-gray-500 text-sm font-medium">{label}</div>
+    <div className="text-gray-800 text-2xl font-bold">{count}</div>
+  </div>
+);
 
 export default OrderPage;

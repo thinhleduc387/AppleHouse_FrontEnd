@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { callLogout } from "../../config/api";
-import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineUser } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { setLogoutAction } from "../../redux/slice/accountSlice";
@@ -12,14 +12,14 @@ const ProfileNavBar = ({ userAvatar, userName }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Khai báo useNavigate
+  const navigate = useNavigate();
 
   const handleMouseEnter = () => {
     setDropdownOpen(true);
   };
 
   const handleMouseLeave = () => {
-    setDropdownOpen(false); // Đóng dropdown khi chuột rời khỏi
+    setDropdownOpen(false);
   };
 
   const handleLogOut = async () => {
@@ -29,11 +29,13 @@ const ProfileNavBar = ({ userAvatar, userName }) => {
         dispatch(setLogoutAction());
         dispatch(resetCart());
         navigate("/");
+        toast.success("Logged out successfully!");
       } else {
         toast.error(response.message);
       }
     } catch (error) {
       console.error("Logout error:", error);
+      toast.error("Failed to log out. Please try again.");
     }
   };
 
@@ -58,7 +60,7 @@ const ProfileNavBar = ({ userAvatar, userName }) => {
               alt="User Avatar"
             />
             <span className="text-sm font-semibold text-gray-700">
-              {userName || "Thịnh"}
+              {userName || "User"}
             </span>
           </button>
 
@@ -73,13 +75,19 @@ const ProfileNavBar = ({ userAvatar, userName }) => {
                   to="/profile"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition duration-150"
                 >
-                  Thông tin khách hàng
+                  Profile
+                </Link>
+                <Link
+                  to="/admin/dashboard"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition duration-150"
+                >
+                  Admin Page
                 </Link>
                 <button
                   onClick={handleLogOut}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-500 transition duration-150 w-full text-left"
                 >
-                  Đăng xuất
+                  Log Out
                 </button>
               </div>
             </div>

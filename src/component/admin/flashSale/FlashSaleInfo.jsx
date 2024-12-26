@@ -4,57 +4,46 @@ import ThumbnailUpload from "../addProduct/ThumbnailUpload";
 // Hàm format lại thời gian khi cần
 const formatDate = (dateString) => {
   const date = new Date(dateString);
-  // Định dạng theo kiểu dd/MM/yyyy HH:mm
-  const formattedDate = date.toLocaleString("vi-VN", {
+  return date.toLocaleString("vi-VN", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
   });
-  return formattedDate;
 };
 
 // Hàm chuyển đổi thời gian từ datetime-local sang ISO với múi giờ địa phương
 const convertToISOWithLocalTime = (dateString) => {
   const date = new Date(dateString);
-  // Chuyển đổi thời gian sang ISO với múi giờ địa phương
-  const isoString = new Date(
-    date.getTime() - date.getTimezoneOffset() * 60000
-  ).toISOString();
-  return isoString;
+  return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
 };
 
 // Hàm chuyển đổi thời gian từ ISO sang datetime-local
 const convertToLocalDateTime = (isoString) => {
   const date = new Date(isoString);
-  // Chuyển đổi thời gian sang định dạng datetime-local
   return date.toISOString().slice(0, 16);
 };
 
 const FlashSaleInfo = ({ flashSaleData, setFlashSaleData }) => {
-  console.log("🚀 ~ FlashSaleInfo ~ flashSaleData:", flashSaleData);
-
   const handleStartTimeChange = (value) => {
-    // Chuyển đổi thời gian sang định dạng ISO với múi giờ địa phương và lưu vào flashSaleData
     const isoStartTime = convertToISOWithLocalTime(value);
-    const newFlashSaleData = { ...flashSaleData, startTime: isoStartTime };
-    setFlashSaleData(newFlashSaleData);
+    setFlashSaleData({ ...flashSaleData, startTime: isoStartTime });
   };
 
   const handleEndTimeChange = (value) => {
-    // Chuyển đổi thời gian sang định dạng ISO với múi giờ địa phương và lưu vào flashSaleData
     const isoEndTime = convertToISOWithLocalTime(value);
-    const newFlashSaleData = { ...flashSaleData, endTime: isoEndTime };
-    setFlashSaleData(newFlashSaleData);
+    setFlashSaleData({ ...flashSaleData, endTime: isoEndTime });
   };
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-      <h2 className="text-lg font-bold mb-4">Thông tin cơ bản</h2>
+      <h2 className="text-xl font-bold mb-4 text-gray-800">Thông tin cơ bản</h2>
+
+      {/* Tên Flash Sale */}
       <div className="mb-6">
-        <label className="text-sm font-medium text-gray-700 block mb-2">
-          Tên Flash Sale
+        <label className="text-sm font-bold text-gray-700 block mb-2">
+          Tên Flash Sale <span className="text-red-500">*</span>
         </label>
         <input
           type="text"
@@ -66,10 +55,13 @@ const FlashSaleInfo = ({ flashSaleData, setFlashSaleData }) => {
           value={flashSaleData.prom_name}
         />
       </div>
+
+      {/* Khung thời gian */}
       <div className="grid grid-cols-2 gap-6">
+        {/* Thời gian bắt đầu */}
         <div>
-          <label className="text-sm font-medium text-gray-700 block mb-2">
-            Khung thời gian bắt đầu
+          <label className="text-sm font-bold text-gray-700 block mb-2">
+            Thời gian bắt đầu <span className="text-red-500">*</span>
           </label>
           <input
             type="datetime-local"
@@ -82,9 +74,11 @@ const FlashSaleInfo = ({ flashSaleData, setFlashSaleData }) => {
             }
           />
         </div>
+
+        {/* Thời gian kết thúc */}
         <div>
-          <label className="text-sm font-medium text-gray-700 block mb-2">
-            Khung thời gian kết thúc
+          <label className="text-sm font-bold text-gray-700 block mb-2">
+            Thời gian kết thúc <span className="text-red-500">*</span>
           </label>
           <input
             type="datetime-local"
@@ -99,8 +93,14 @@ const FlashSaleInfo = ({ flashSaleData, setFlashSaleData }) => {
         </div>
       </div>
 
-      {/* Tích hợp ThumbnailUpload */}
+      {/* Ảnh Banner */}
       <div className="mt-6">
+        <label className="text-sm font-bold text-gray-700 block mb-2">
+          Ảnh Banner <span className="text-red-500">*</span>
+        </label>
+        <p className="text-sm text-gray-500 mb-4">
+          Vui lòng tải lên ảnh banner đại diện cho Flash Sale.
+        </p>
         <ThumbnailUpload
           productData={{ thumb: flashSaleData.prom_banner }}
           setProductData={(data) =>

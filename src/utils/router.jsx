@@ -1,14 +1,17 @@
 import {
   FaTachometerAlt,
-  FaBox,
-  FaChartLine,
-  FaStar,
-  FaUser,
-  FaMoneyBillWave,
-  FaCogs,
+  FaBoxOpen,
   FaShoppingCart,
-} from "react-icons/fa"; // For commonly used icons
-import { IoIosPaper, IoIosCart } from "react-icons/io"; // For Pages and Orders
+  FaCommentAlt,
+  FaUsers,
+  FaImage,
+  FaTags,
+  FaBolt,
+  FaGift,
+  FaCog,
+  FaHome,
+} from "react-icons/fa"; // Các biểu tượng đã cập nhật
+import { IoIosPaper } from "react-icons/io";
 
 export const ROUTERS = {
   USER: {
@@ -17,27 +20,28 @@ export const ROUTERS = {
     PRODUCTS: "/products", // Trang danh sách tất cả các sản phẩm
     PRODUCT_DETAIL: (productId = ":productId") => `/products/${productId}`, // Trang chi tiết sản phẩm
     CART: "/cart", // Giỏ hàng
-    PROFILE: "/profile",
-    ORDER_LIST: "/profile/order-list",
+    PROFILE: "/profile", // Hồ sơ người dùng
+    ORDER_LIST: "/profile/order-list", // Danh sách đơn hàng
     ORDER_DETAIL: (orderId = ":orderId") =>
-      `/profile/order-list/detail/${orderId}`,
+      `/profile/order-list/detail/${orderId}`, // Chi tiết đơn hàng
 
-    FAVORITES: "/profile/favorites",
-    ADDRESS: "/profile/address",
+    FAVORITES: "/profile/favorites", // Sản phẩm yêu thích
+    ADDRESS: "/profile/address", // Địa chỉ giao hàng
   },
   ADMIN: [
     {
-      name: "Thông kê doanh số",
+      name: "Thống kê doanh số",
       icon: <FaTachometerAlt />,
-      path: "/admin/sales-analytics",
+      path: "/admin/dashboard",
     },
     {
-      name: "Sản phẩm ",
-      icon: <FaBox />,
+      name: "Sản phẩm",
+      icon: <FaBoxOpen />,
       links: [
         { name: "Nổi bật", path: "/admin/top-products" },
         { name: "Kho hàng", path: "/admin/stock" },
-        { name: "Thêm mới sản phẩm", path: "/admin/products/add" },
+        { name: "Danh mục", path: "/admin/category" },
+        { name: "Thêm sản phẩm mới", path: "/admin/products/add" },
       ],
     },
     {
@@ -47,32 +51,32 @@ export const ROUTERS = {
     },
     {
       name: "Đánh giá",
-      icon: <FaStar />,
+      icon: <FaCommentAlt />,
       path: "/admin/feedback",
     },
     {
-      name: "Khách hàng",
-      icon: <FaUser />,
-      path: "/admin/customers",
+      name: "Người dùng",
+      icon: <FaUsers />,
+      path: "/admin/users",
     },
     {
       name: "Banners",
-      icon: <FaUser />,
-      path: "/admin/customers",
+      icon: <FaImage />,
+      path: "/admin/banners",
     },
     {
       name: "Voucher",
-      icon: <FaUser />,
+      icon: <FaTags />,
       path: "/admin/voucher",
     },
     {
       name: "Flash Sale",
-      icon: <FaUser />,
+      icon: <FaBolt />,
       path: "/admin/flash-sale",
     },
     {
       name: "Sự kiện ưu đãi",
-      icon: <FaUser />,
+      icon: <FaGift />,
       path: "/admin/event",
     },
     {
@@ -81,20 +85,17 @@ export const ROUTERS = {
       path: "/admin/role-permission",
     },
     {
-      name: "Pages",
+      name: "Trang quản trị",
       icon: <IoIosPaper />,
       links: [
-        { name: "Login", path: "/admin/login" },
-        { name: "Page 404", path: "/admin/404" },
+        { name: "Đăng nhập", path: "/admin/login" },
+        { name: "Trang 404", path: "/admin/404" },
       ],
     },
     {
-      name: "Settings",
-      icon: <FaCogs />,
-      links: [
-        { name: "General Settings", path: "/admin/general-settings" },
-        { name: "Connected Apps", path: "/admin/connected-apps" },
-      ],
+      name: "Hồ sơ",
+      icon: <FaCog />,
+      path: "/admin/profile",
     },
   ],
 };
