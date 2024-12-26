@@ -43,6 +43,7 @@ import OrderDetailPage from "./pages/admin/orderDetailPage";
 import PromotionPage from "./pages/user/eventPage";
 import AccessDenied from "./pages/Other/AccessDenyPage";
 import NotFound from "./pages/Other/NotFound";
+import RolePermission from "./pages/admin/rolePermission";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -120,6 +121,8 @@ const RouterCustom = () => {
           />
           <Route path="/admin/stock" element={<StockPage />} />
           <Route path="/admin/feedback" element={<FeedBackPage />} />
+
+          <Route path="/admin/role-permission" element={<RolePermission />} />
         </Route>
 
         <Route path="/order/order-success/:id" element={<OrderSuccess />} />

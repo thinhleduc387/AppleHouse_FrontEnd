@@ -75,7 +75,11 @@ export const ROUTERS = {
       icon: <FaUser />,
       path: "/admin/event",
     },
-
+    {
+      name: "Phân quyền",
+      icon: <FaUser />,
+      path: "/admin/role-permission",
+    },
     {
       name: "Pages",
       icon: <IoIosPaper />,

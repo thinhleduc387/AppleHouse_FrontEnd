@@ -21,7 +21,7 @@ const LoginPage = () => {
   const navigate = useNavigate(); // Khai báo useNavigate
   const dispatch = useDispatch();
 
-  const isAuthenticated = !!localStorage.getItem("access_token");
+  const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
   }

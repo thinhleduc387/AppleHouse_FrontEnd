@@ -70,6 +70,17 @@ const accountSlice = createSlice({
       if (action.payload) {
         state.isAuthenticated = false;
         state.isLoading = true;
+        state.user = {
+          _id: "",
+          email: "",
+          name: "",
+          avatar: "",
+          sex: "",
+          dataOfBirth: "",
+          phone: "",
+          role: "",
+          loyalPoint: 0,
+        };
       }
     });
 
@@ -94,6 +105,17 @@ const accountSlice = createSlice({
       if (action.payload) {
         state.isAuthenticated = false;
         state.isLoading = false;
+        state.user = {
+          _id: "",
+          email: "",
+          name: "",
+          avatar: "",
+          sex: "",
+          dataOfBirth: "",
+          phone: "",
+          role: "",
+          loyalPoint: 0,
+        };
       }
     });
   },

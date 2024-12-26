@@ -343,7 +343,7 @@ export const createOrder = async ({
   isUseLoyalPoint,
   orderNote,
 }) => {
-  return axios.post(`/order/test`, {
+  return axios.post(`/order`, {
     cartId,
     userId,
     products_order,
@@ -407,4 +407,32 @@ export const updateProfile = async ({
     usr_sex,
     usr_date_of_birth,
   });
+};
+
+// role permission
+export const getAllReources = async () => {
+  return axios.get(`/rbac/resources`);
+};
+
+export const getAllRole = async () => {
+  return axios.get(`/rbac/list/roles-for-admin`);
+};
+
+export const createRole = async ({
+  name,
+  slug = null,
+  description,
+  grants = [],
+}) => {
+  return axios.post(`/rbac/role`, { name, slug, description, grants });
+};
+
+export const updateRole = async ({
+  id,
+  name = null,
+  slug = null,
+  description = null,
+  grants,
+}) => {
+  return axios.patch(`/rbac/role`, { id, name, slug, description, grants });
 };

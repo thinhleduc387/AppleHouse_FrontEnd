@@ -39,10 +39,9 @@ instance.interceptors.response.use(
 
     switch (statusCode) {
       case 403:
-        break;
-      case 401:
         window.location.href = "/access-denied";
         break;
+      case 401:
 
       case 404:
         break;
