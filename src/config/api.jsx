@@ -29,6 +29,9 @@ export const getCategoryById = async (id) => {
 export const createCategory = async (newCategory) => {
   return axios.post("/category", { ...newCategory });
 };
+export const deleteCategory = async (id) => {
+  return axios.delete(`/category/${id}`);
+};
 
 /*Product*/
 export const filterProduct = async ({

@@ -1,10 +1,12 @@
 import { memo, useState } from "react";
-import { IoIosMenu, IoIosSearch } from "react-icons/io"; // Import search icon
-import { PiBellSimpleRinging } from "react-icons/pi"; // Import notification icon
-import NotificationMenu from "../../Notification/notificationMenu"; // Notification menu component
+import { IoIosMenu, IoIosSearch } from "react-icons/io";
+import { PiBellSimpleRinging } from "react-icons/pi";
+import { FaHome } from "react-icons/fa"; // Import icon Home
+import NotificationMenu from "../../Notification/notificationMenu";
 import { useSelector } from "react-redux";
-import { motion } from "framer-motion"; // Import framer-motion for animations
-import Search from "../../SearchBox"; // Search component
+import { motion } from "framer-motion";
+import Search from "../../SearchBox";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 
 const Header = ({ setIsSidebarOpen }) => {
   const mockNotifications = [
@@ -15,16 +17,15 @@ const Header = ({ setIsSidebarOpen }) => {
   ];
 
   const [notifyIsOpen, setNotifyIsOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // State to control search dialog visibility
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const userAvatar = useSelector((state) => state.account.user.avatar);
+  const navigate = useNavigate(); // For navigation
 
-  // Variants for overlay
   const overlayVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { duration: 0.3 } },
   };
 
-  // Variants for dialog
   const dialogVariants = {
     hidden: { y: 50, opacity: 0 },
     visible: {
@@ -42,7 +43,7 @@ const Header = ({ setIsSidebarOpen }) => {
         {/* Sidebar Toggle Button */}
         <div className="flex items-center">
           <button
-            onClick={() => setIsSidebarOpen((prevState) => !prevState)} // Toggle sidebar open/close
+            onClick={() => setIsSidebarOpen((prevState) => !prevState)}
             className="text-4xl text-mainColor"
           >
             <IoIosMenu />
@@ -54,11 +55,13 @@ const Header = ({ setIsSidebarOpen }) => {
           <Search />
         </div>
 
-        {/* Notification and Profile Section */}
-        <div className="flex items-center space-x-10">
+        {/* Notification, Home, and Profile Section */}
+        <div className="flex items-center space-x-8">
+          {/* Home Button */}
+
           {/* Mobile Search Button */}
           <button
-            onClick={() => setIsSearchOpen(true)} // Open search dialog on button click
+            onClick={() => setIsSearchOpen(true)}
             className="lg:hidden text-3xl text-mainColor"
           >
             <IoIosSearch />
@@ -74,37 +77,39 @@ const Header = ({ setIsSidebarOpen }) => {
             <span className="absolute top-0 right-0 text-[0.6rem] bg-red-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center">
               {mockNotifications.length}
             </span>
-            {/* Dropdown Menu for Notifications */}
             {notifyIsOpen && (
               <NotificationMenu notifications={mockNotifications} />
             )}
           </div>
 
           {/* User Avatar */}
-          <div className="relative">
+          <Link to="/admin/profile" className="relative">
             <img
               className="h-12 w-12 rounded-full object-cover cursor-pointer"
               src={userAvatar}
               alt="User Avatar"
             />
-          </div>
+          </Link>
+          <FaHome
+            onClick={() => navigate("/")}
+            className="text-2xl cursor-pointer"
+          />
         </div>
       </div>
 
-      {/* Search Dialog (Appears on mobile when the search button is clicked) */}
+      {/* Search Dialog */}
       {isSearchOpen && (
         <motion.div
           className="fixed inset-0 bg-gray-600 bg-opacity-50 z-50 flex justify-center items-center"
-          onClick={() => setIsSearchOpen(false)} // Close when clicking on overlay
+          onClick={() => setIsSearchOpen(false)}
           initial="hidden"
           animate="visible"
           exit="hidden"
           variants={overlayVariants}
         >
-          {/* Prevent closing when clicking inside the search box */}
           <motion.div
             className="bg-white p-4 w-80 rounded-md"
-            onClick={(e) => e.stopPropagation()} // Prevent event bubbling
+            onClick={(e) => e.stopPropagation()}
             initial="hidden"
             animate="visible"
             exit="exit"

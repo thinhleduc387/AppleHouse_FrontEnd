@@ -44,6 +44,8 @@ import OrderDetailPage from "./pages/admin/orderDetailPage";
 import CustomerPage from "./pages/admin/userPage";
 import UserPage from "./pages/admin/userPage";
 import CategoryCreate from "./pages/admin/categoryCreate";
+import CategoryPage from "./pages/admin/categoryPage";
+import AdminProfilePage from "./pages/admin/adminProfilePage";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -92,9 +94,11 @@ const RouterCustom = () => {
 
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
-          <Route path="/admin/sales-analytics" element={<DashBoard />} />
+          <Route path="/admin/profile" element={<AdminProfilePage/>} />
+          <Route path="/admin/dashboard" element={<DashBoard />} />
           <Route path="/admin/products/add" element={<AddProductPage />} />
           <Route path="/admin/products/edit/:id" element={<AddProductPage />} />
+          <Route path="/admin/category" element={<CategoryPage />} />
           <Route path="/admin/category-create" element={<CategoryCreate />} />
           <Route path="/admin/flash-sale" element={<FlashSalePage />} />
           <Route

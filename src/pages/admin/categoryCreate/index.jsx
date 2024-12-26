@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 const CategoryCreate = () => {
   const [description, setDescription] = useState("");
   const [allCategory, setAllCategory] = useState([]);
+  console.log("🚀 ~ CategoryCreate ~ allCategory:", allCategory)
   const [newCategory, setNewCategory] = useState({
     name: "",
     description: "",
