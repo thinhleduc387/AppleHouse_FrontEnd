@@ -3,7 +3,7 @@ import { AiOutlineEdit, AiOutlineCamera } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { callLogout } from "../../../config/api";
-import { setLogoutAction } from "../../../redux/slice/accountSlice"; 
+import { setLogoutAction } from "../../../redux/slice/accountSlice";
 import { useNavigate } from "react-router-dom";
 
 const AdminProfilePage = () => {

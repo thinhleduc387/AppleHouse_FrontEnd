@@ -10,6 +10,7 @@ import {
   FaGift,
   FaCog,
   FaHome,
+  FaUser,
 } from "react-icons/fa"; // Các biểu tượng đã cập nhật
 import { IoIosPaper } from "react-icons/io";
 
