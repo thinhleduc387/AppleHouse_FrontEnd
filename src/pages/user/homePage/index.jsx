@@ -32,16 +32,18 @@ const HomePage = () => {
       const response = await getHomePageProduct();
       if (response && response.metadata) {
         // Định dạng lại sản phẩm
-        const formattedData = response.metadata.map((category) => ({
-          ...category,
-          spusWithPrice: category.spusWithPrice.map((product) => ({
-            id: product._id,
-            name: product?.product_name,
-            imageSrc: product?.product_thumb,
-            productPrice: product?.product_price,
-            link: `/products/${product?.product_slug}`,
-          })),
-        })).filter((category) => category.spusWithPrice.length > 0);
+        const formattedData = response.metadata
+          .map((category) => ({
+            ...category,
+            spusWithPrice: category.spusWithPrice.map((product) => ({
+              id: product._id,
+              name: product?.product_name,
+              imageSrc: product?.product_thumb,
+              productPrice: product?.product_price,
+              link: `/products/${product?.product_slug}`,
+            })),
+          }))
+          .filter((category) => category.spusWithPrice.length > 0);
 
         setHomePageData(formattedData);
 
@@ -118,6 +120,7 @@ const HomePage = () => {
           />
         </div>
       ))}
+      <div className="py-10"></div>
     </div>
   );
 };
