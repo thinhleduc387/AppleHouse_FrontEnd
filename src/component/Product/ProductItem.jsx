@@ -40,26 +40,6 @@ const ProductItem = ({ product, isForShow }) => {
         </a>
       </div>
       <div className="pt-6 flex-grow">
-        <div className="mb-4 flex items-center justify-end">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              className="relative rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900"
-              onMouseEnter={() => setShowTooltipFavorites(true)}
-              onMouseLeave={() => setShowTooltipFavorites(false)}
-            >
-              <span className="sr-only">Add to Favorites</span>
-              <AiOutlineHeart className="h-5 w-5" />
-              {showTooltipFavorites && (
-                <div className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-sm rounded whitespace-nowrap">
-                  Add to favorites
-                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-800 rotate-45" />
-                </div>
-              )}
-            </button>
-          </div>
-        </div>
-
         {/* Sử dụng thẻ <a> với href để điều hướng, thêm điều kiện không cho bấm link khi isEdit */}
         <Link
           to={link}
@@ -75,8 +55,6 @@ const ProductItem = ({ product, isForShow }) => {
               <AiFillStar key={index} className="h-4 w-4 text-yellow-400" />
             ))}
           </div>
-          <p className="text-sm font-medium text-gray-900">5.0</p>
-          <p className="text-sm font-medium text-gray-500">(455)</p>
         </div>
 
         <ul className="mt-2 flex items-center gap-4">
