@@ -63,7 +63,7 @@ const RBACManager = () => {
   };
 
   return (
-    <div className="w-full mx-auto p-6 space-y-6">
+    <div className="w-full mx-auto p-6 gap-y-6">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-3">
           <Shield className="w-8 h-8 text-blue-500" />
@@ -136,7 +136,7 @@ const RBACManager = () => {
 
       {/* Modal remains mostly the same but with enhanced styling */}
       {showRoleModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center ">
           <div className="bg-white rounded-xl shadow-lg w-96 p-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-gray-900">

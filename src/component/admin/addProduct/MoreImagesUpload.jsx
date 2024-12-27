@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { getImageLink } from "../../../config/api";
+import Loading from "../../../component/Loading"; // Import component Loading
 
 const MoreImagesUpload = ({ productData, setProductData }) => {
+  console.log("🚀 ~ MoreImagesUpload ~ productData:", productData);
   const [previewUrls, setPreviewUrls] = useState([]); // State to store preview URLs for multiple images
   const [error, setError] = useState(""); // State to store error message
+  const [isLoading, setIsLoading] = useState(false); // State for loading
+
+  useEffect(() => {
+    if (productData.more_imgs && productData.more_imgs.length > 0)
+      setPreviewUrls(productData.more_imgs);
+  }, []);
 
   const validateImageCount = (count) => {
     if (count < 4) {
@@ -21,6 +29,7 @@ const MoreImagesUpload = ({ productData, setProductData }) => {
       const updatedPreviewUrls = [...previewUrls, ...newPreviewUrls];
       setPreviewUrls(updatedPreviewUrls); // Update preview URLs
 
+      setIsLoading(true); // Bắt đầu loading
       try {
         const responses = await Promise.all(
           files.map(async (file) => {
@@ -44,11 +53,15 @@ const MoreImagesUpload = ({ productData, setProductData }) => {
         validateImageCount(updatedPreviewUrls.length);
       } catch (error) {
         console.error("Error uploading images:", error);
+      } finally {
+        setIsLoading(false); // Kết thúc loading
       }
     }
   };
 
-  const handleRemoveImage = (index) => {
+  const handleRemoveImage = (index, event) => {
+    event.preventDefault(); // Ngăn hành vi mặc định của button
+
     const updatedPreviewUrls = previewUrls.filter((_, i) => i !== index);
     const updatedMoreImgs = productData.more_imgs.filter((_, i) => i !== index);
 
@@ -61,6 +74,14 @@ const MoreImagesUpload = ({ productData, setProductData }) => {
     // Validate image count
     validateImageCount(updatedPreviewUrls.length);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[300px]">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-auto">
@@ -112,7 +133,8 @@ const MoreImagesUpload = ({ productData, setProductData }) => {
               className="w-full h-full object-cover"
             />
             <button
-              onClick={() => handleRemoveImage(index)}
+              type="button" // Chỉ định rõ loại button
+              onClick={(event) => handleRemoveImage(index, event)}
               className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
             >
               <FaTrash />

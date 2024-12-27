@@ -141,7 +141,7 @@ const AddProductPage = () => {
       const response = await editNewProduct(productData, id);
       if (response && response.status === 200) {
         toast.success("Sản phẩm đã được cập nhật thành công!");
-        navigate("/admin/inventory"); // Redirect to "Kho hàng"
+        navigate("/admin/stock"); // Redirect to "Kho hàng"
       } else {
         throw new Error("Đã xảy ra lỗi trong quá trình cập nhật sản phẩm.");
       }
