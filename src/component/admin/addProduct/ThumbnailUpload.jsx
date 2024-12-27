@@ -4,6 +4,7 @@ import { getImageLink } from "../../../config/api";
 import Loading from "../../../component/Loading";
 
 const ThumbnailUpload = ({ productData, setProductData }) => {
+  console.log("🚀 ~ ThumbnailUpload ~ productData:", productData)
   const [previewUrl, setPreviewUrl] = useState(null); // State để lưu URL xem trước hình ảnh
   const [isLoading, setIsLoading] = useState(false); // State để quản lý trạng thái tải lên
 
