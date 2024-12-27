@@ -9,7 +9,10 @@ const CategoryPage = () => {
   const [categories, setCategories] = useState([]);
   const [activeCollapse, setActiveCollapse] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [deleteModal, setDeleteModal] = useState({ isOpen: false, categoryId: null });
+  const [deleteModal, setDeleteModal] = useState({
+    isOpen: false,
+    categoryId: null,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,7 +37,7 @@ const CategoryPage = () => {
   };
 
   const handleEdit = (categoryId) => {
-    toast.info(`Edit category with ID: ${categoryId}`);
+    navigate(`/admin/category-edit/${categoryId}`);
   };
 
   const handleDelete = async (categoryId) => {
@@ -125,7 +128,9 @@ const CategoryPage = () => {
                         <th className="p-5 text-left rounded-tl-lg">Image</th>
                         <th className="p-5 text-left">Category Name</th>
                         <th className="p-5 text-left">Description</th>
-                        <th className="p-5 text-center rounded-tr-lg">Actions</th>
+                        <th className="p-5 text-center rounded-tr-lg">
+                          Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -181,7 +186,9 @@ const CategoryPage = () => {
             </p>
             <div className="flex justify-end mt-6">
               <button
-                onClick={() => setDeleteModal({ isOpen: false, categoryId: null })}
+                onClick={() =>
+                  setDeleteModal({ isOpen: false, categoryId: null })
+                }
                 className="mr-4 text-gray-600 bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
               >
                 Cancel
