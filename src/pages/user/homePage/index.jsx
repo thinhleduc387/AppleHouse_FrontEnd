@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import React, { memo, useEffect, useState } from "react";
 import Banner from "../../../component/Banner";
 import ProductCategory from "../../../component/Product/Category/ProductCategory";
 import DiscountProduct from "../../../component/Product/DiscountProduct";
@@ -7,7 +7,12 @@ import FlashSale from "../../../component/Product/FlashSale";
 import RecommendSection from "../../../component/RecommendSection/RecommendSection";
 import { useSelector } from "react-redux";
 import RecommendSectionTrending from "../../../component/RecommendSection/RecommendSectionTrending";
+import { getHomePageProduct } from "../../../config/api";
+
 const HomePage = () => {
+  const [homePageData, setHomePageData] = useState(null);
+  const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
+
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const userId = queryParams.get("user");
@@ -17,26 +22,47 @@ const HomePage = () => {
       localStorage.setItem("access_token", accessToken);
       localStorage.setItem("user_id", userId);
     }
-  }, [location]);
 
-  const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
+    handleGetHomePageProduct();
+  }, []);
+
+  const handleGetHomePageProduct = async () => {
+    try {
+      const response = await getHomePageProduct();
+      console.log("🚀 ~ handleGetHomePageProduct ~ response:", response)
+      if (response && response.metadata) {
+        setHomePageData(response.metadata);
+      } else {
+        console.error("Failed to fetch home page data.");
+      }
+    } catch (error) {
+      console.error("Error fetching home page data:", error);
+    }
+  };
 
   return (
     <div className="space-y-8">
       {/* Banner */}
-      <div className="">
+      <div>
         <Banner />
       </div>
 
+      {/* Product Categories */}
       <div>
         <ProductCategory />
       </div>
+
+      {/* Flash Sale */}
       <div>
         <FlashSale />
       </div>
+
+      {/* Discounted Products */}
       <div>
         <DiscountProduct />
       </div>
+
+      {/* Recommended Sections */}
       {isAuthenticated ? (
         <div>
           <RecommendSection />
@@ -46,21 +72,17 @@ const HomePage = () => {
           <RecommendSectionTrending />
         </div>
       )}
-      <div>
-        <ProductSection title={"Điện thoại xịn - Công nghệ hàng đầu"} />
-      </div>
-      <div>
-        <ProductSection title={"Macbook ngon - Hiệu suất vượt trội"} />
-      </div>
-      <div>
-        <ProductSection title={"iPad - Đa năng, tiện dụng cho mọi nhu cầu"} />
-      </div>
-      <div>
-        <ProductSection title={"Đồng hồ thông minh - Phong cách và hiện đại"} />
-      </div>
-      <div>
-        <ProductSection title={"Tai nghe cao cấp - Âm thanh chất lượng"} />
-      </div>
+
+      {/* Dynamic Product Sections */}
+      {homePageData &&
+        homePageData.map((category) => (
+          <div key={category._id}>
+            <ProductSection
+              products={category.bestSold}
+              title={`${category.category.category_name} - ${category.category.category_description}`}
+            />
+          </div>
+        ))}
     </div>
   );
 };
