@@ -45,6 +45,9 @@ export const createCategory = async (newCategory) => {
 export const deleteCategory = async (id) => {
   return axios.delete(`/category/${id}`);
 };
+export const updateCategory = async (id, newCategory) => {
+  return axios.patch(`/category/${id}`, { ...newCategory });
+};
 
 /*Product*/
 export const filterProduct = async ({

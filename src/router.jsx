@@ -106,6 +106,7 @@ const RouterCustom = () => {
           <Route path="/admin/products/edit/:id" element={<AddProductPage />} />
           <Route path="/admin/category" element={<CategoryPage />} />
           <Route path="/admin/category-create" element={<CategoryCreate />} />
+          <Route path="/admin/category-edit/:id" element={<CategoryCreate />} />
           <Route path="/admin/top-products" element={<TopProductPage />} />
           <Route path="/admin/flash-sale" element={<FlashSalePage />} />
           <Route
