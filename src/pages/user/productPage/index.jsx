@@ -2,36 +2,40 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import FilterSidebar from "../../../component/Product/FilterSidebar";
 import ProductItem from "../../../component/Product/ProductItem";
-import SortButton from "../../../component/Product/SortButton"; // Import SortButton
-import { SortOptions } from "../../../component/Product/SortButton/sortOption"; // Import constants
+import SortButton from "../../../component/Product/SortButton";
+import { SortOptions } from "../../../component/Product/SortButton/sortOption";
 import { filterProduct } from "../../../config/api";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
-const ITEMS_PER_PAGE = 6; // Số lượng sản phẩm mỗi trang
+const ITEMS_PER_PAGE = 3;
 
 const ProductPage = () => {
   const { categorySlug } = useParams();
-
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(50000000);
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
   const [productList, setProductList] = useState([]);
   const [selectedOption, setSelectedOption] = useState(SortOptions.newest);
   const [loading, setLoading] = useState(true);
-
-  const [currentPage, setCurrentPage] = useState(1); // Thêm state cho trang hiện tại
-  const [totalPages, setTotalPages] = useState(1); // Thêm state cho tổng số trang
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
 
   const handleGetListProduct = async () => {
-    setLoading(true); // Start loading
+    setLoading(true);
+    const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
     const response = await filterProduct({
       categorySlug,
       minPrice,
       maxPrice,
       sortBy: selectedOption,
+      limit: ITEMS_PER_PAGE,
+      offset: offset,
     });
+
     if (response && response.status === 200) {
-      const products = response.metadata.map((product) => ({
+      const products = response.metadata.data.map((product) => ({
         id: product._id,
         name: product?.product_name,
         imageSrc: product?.product_thumb,
@@ -40,27 +44,21 @@ const ProductPage = () => {
       }));
 
       setProductList(products);
-
-      // Cập nhật tổng số trang dựa trên số lượng sản phẩm và số lượng sản phẩm mỗi trang
-      setTotalPages(Math.ceil(products.length / ITEMS_PER_PAGE));
+      setTotal(response.metadata.pagination.total);
+      setTotalPages(
+        Math.ceil(response.metadata.pagination.total / ITEMS_PER_PAGE)
+      );
     }
-    setLoading(false); // Stop loading
+    setLoading(false);
   };
 
-  // Lấy danh sách sản phẩm theo trang
-  const paginatedProducts = () => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return productList.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  };
-
-  // Hàm xử lý mở/đóng dropdown
   const toggleSortDropdown = () => {
     setIsSortDropdownOpen((prev) => !prev);
   };
 
   useEffect(() => {
     handleGetListProduct();
-  }, [categorySlug, minPrice, maxPrice, selectedOption]);
+  }, [categorySlug, minPrice, maxPrice, selectedOption, currentPage]); // Thêm currentPage vào dependencies
 
   return (
     <section className="bg-[#f3f4f6] antialiased">
@@ -95,9 +93,8 @@ const ProductPage = () => {
               </div>
             ) : (
               <>
-                {/* Grid Sản Phẩm */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-2">
-                  {paginatedProducts().map((product) => (
+                  {productList.map((product) => (
                     <ProductItem
                       key={product.id}
                       product={product}
@@ -106,9 +103,7 @@ const ProductPage = () => {
                   ))}
                 </div>
 
-                {/* Phân Trang */}
                 <ul className="flex space-x-5 justify-center mt-6">
-                  {/* Nút Previous */}
                   <li
                     className={`flex items-center justify-center bg-gray-100 w-9 h-9 rounded-md cursor-pointer ${
                       currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
@@ -120,24 +115,23 @@ const ProductPage = () => {
                     <AiOutlineLeft className="text-gray-500" />
                   </li>
 
-                  {/* Số Trang */}
-                  {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-                    (page) => (
-                      <li
-                        key={page}
-                        onClick={() => setCurrentPage(page)}
-                        className={`flex items-center justify-center w-9 h-9 rounded-md cursor-pointer ${
-                          currentPage === page
-                            ? "bg-blue-500 text-white"
-                            : "text-gray-800 hover:bg-gray-200"
-                        }`}
-                      >
-                        {page}
-                      </li>
-                    )
-                  )}
+                  {Array.from(
+                    { length: totalPages },
+                    (_, index) => index + 1
+                  ).map((page) => (
+                    <li
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`flex items-center justify-center w-9 h-9 rounded-md cursor-pointer ${
+                        currentPage === page
+                          ? "bg-blue-500 text-white"
+                          : "text-gray-800 hover:bg-gray-200"
+                      }`}
+                    >
+                      {page}
+                    </li>
+                  ))}
 
-                  {/* Nút Next */}
                   <li
                     className={`flex items-center justify-center bg-gray-100 w-9 h-9 rounded-md cursor-pointer ${
                       currentPage === totalPages
