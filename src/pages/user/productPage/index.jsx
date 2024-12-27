@@ -5,6 +5,9 @@ import ProductItem from "../../../component/Product/ProductItem";
 import SortButton from "../../../component/Product/SortButton"; // Import SortButton
 import { SortOptions } from "../../../component/Product/SortButton/sortOption"; // Import constants
 import { filterProduct } from "../../../config/api";
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+
+const ITEMS_PER_PAGE = 6; // Số lượng sản phẩm mỗi trang
 
 const ProductPage = () => {
   const { categorySlug } = useParams();
@@ -14,7 +17,10 @@ const ProductPage = () => {
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
   const [productList, setProductList] = useState([]);
   const [selectedOption, setSelectedOption] = useState(SortOptions.newest);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
+
+  const [currentPage, setCurrentPage] = useState(1); // Thêm state cho trang hiện tại
+  const [totalPages, setTotalPages] = useState(1); // Thêm state cho tổng số trang
 
   const handleGetListProduct = async () => {
     setLoading(true); // Start loading
@@ -34,8 +40,17 @@ const ProductPage = () => {
       }));
 
       setProductList(products);
+
+      // Cập nhật tổng số trang dựa trên số lượng sản phẩm và số lượng sản phẩm mỗi trang
+      setTotalPages(Math.ceil(products.length / ITEMS_PER_PAGE));
     }
     setLoading(false); // Stop loading
+  };
+
+  // Lấy danh sách sản phẩm theo trang
+  const paginatedProducts = () => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return productList.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   };
 
   // Hàm xử lý mở/đóng dropdown
@@ -79,15 +94,65 @@ const ProductPage = () => {
                 Không tìm thấy sản phẩm nào
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-2">
-                {productList.map((product) => (
-                  <ProductItem
-                    key={product.id}
-                    product={product}
-                    isEdit={false}
-                  />
-                ))}
-              </div>
+              <>
+                {/* Grid Sản Phẩm */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-2">
+                  {paginatedProducts().map((product) => (
+                    <ProductItem
+                      key={product.id}
+                      product={product}
+                      isEdit={false}
+                    />
+                  ))}
+                </div>
+
+                {/* Phân Trang */}
+                <ul className="flex space-x-5 justify-center mt-6">
+                  {/* Nút Previous */}
+                  <li
+                    className={`flex items-center justify-center bg-gray-100 w-9 h-9 rounded-md cursor-pointer ${
+                      currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                    onClick={() =>
+                      currentPage > 1 && setCurrentPage(currentPage - 1)
+                    }
+                  >
+                    <AiOutlineLeft className="text-gray-500" />
+                  </li>
+
+                  {/* Số Trang */}
+                  {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+                    (page) => (
+                      <li
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`flex items-center justify-center w-9 h-9 rounded-md cursor-pointer ${
+                          currentPage === page
+                            ? "bg-blue-500 text-white"
+                            : "text-gray-800 hover:bg-gray-200"
+                        }`}
+                      >
+                        {page}
+                      </li>
+                    )
+                  )}
+
+                  {/* Nút Next */}
+                  <li
+                    className={`flex items-center justify-center bg-gray-100 w-9 h-9 rounded-md cursor-pointer ${
+                      currentPage === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      currentPage < totalPages &&
+                      setCurrentPage(currentPage + 1)
+                    }
+                  >
+                    <AiOutlineRight className="text-gray-500" />
+                  </li>
+                </ul>
+              </>
             )}
           </div>
         </div>
