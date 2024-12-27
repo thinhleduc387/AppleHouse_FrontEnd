@@ -32,7 +32,7 @@ const EventPage = () => {
   };
 
   const formatTimeRange = (startTime, endTime) => {
-    const formatOptions = {
+    const formatOptionsFull = {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -40,11 +40,11 @@ const EventPage = () => {
       minute: "2-digit",
     };
 
-    const start = new Date(startTime).toLocaleString("en-GB", formatOptions);
-    const end = new Date(endTime).toLocaleString("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const start = new Date(startTime).toLocaleString(
+      "en-GB",
+      formatOptionsFull
+    );
+    const end = new Date(endTime).toLocaleString("en-GB", formatOptionsFull);
 
     return `${start} - ${end}`;
   };
@@ -52,7 +52,7 @@ const EventPage = () => {
   const handleGetAllFlashSale = async () => {
     try {
       const response = await getListFlashSale("Custom");
-      console.log("🚀 ~ handleGetAllFlashSale ~ response:", response)
+      console.log("🚀 ~ handleGetAllFlashSale ~ response:", response);
       console.log("🚀 ~ handleGetAllFlashSale ~ response:", response);
       setFlashSales(response.metadata);
     } catch (error) {

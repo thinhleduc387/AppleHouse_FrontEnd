@@ -106,13 +106,6 @@ const Header = () => {
                 <a href={link.link}>{link.name}</a>
               </li>
             ))}
-            {isAuthenticated && (
-              <li className="font-extrabold text-3xl my-7 lg:my-0">
-                <Link to="/favorites">
-                  <AiOutlineHeart />
-                </Link>
-              </li>
-            )}
 
             <li className="font-extrabold text-3xl my-7 lg:my-0 relative">
               <Link to="/cart">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AiOutlineReload } from "react-icons/ai";
 import Loading from "../../../component/Loading"; // Component loading giả định
 import { formatVND } from "../../../utils/format"; // Hàm giả định format tiền tệ
+import { getTopProduct } from "../../../config/api";
 
 const TopProductPage = () => {
   const [isLoading, setIsLoading] = useState(true);

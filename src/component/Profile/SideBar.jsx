@@ -8,6 +8,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { callLogout } from "../../config/api"; // Import API gọi logout
 import { setLogoutAction } from "../../redux/slice/accountSlice"; // Import action logout
+import { RiLockPasswordLine } from "react-icons/ri";
 
 const Sidebar = () => {
   const [activeItem, setActiveItem] = useState();
@@ -22,8 +23,8 @@ const Sidebar = () => {
       path: "/profile/order-list",
     },
     {
-      icon: AiOutlineHeart,
-      text: "Sản phẩm yêu thích",
+      icon: RiLockPasswordLine,
+      text: "Đổi mật khẩu",
       path: "/profile/change-password",
     },
     {

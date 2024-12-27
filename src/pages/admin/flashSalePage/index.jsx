@@ -32,7 +32,7 @@ const FlashSalePage = () => {
   };
 
   const formatTimeRange = (startTime, endTime) => {
-    const formatOptions = {
+    const formatOptionsFull = {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -40,11 +40,11 @@ const FlashSalePage = () => {
       minute: "2-digit",
     };
 
-    const start = new Date(startTime).toLocaleString("en-GB", formatOptions);
-    const end = new Date(endTime).toLocaleString("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const start = new Date(startTime).toLocaleString(
+      "en-GB",
+      formatOptionsFull
+    );
+    const end = new Date(endTime).toLocaleString("en-GB", formatOptionsFull);
 
     return `${start} - ${end}`;
   };
