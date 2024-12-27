@@ -1,13 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineEdit, AiOutlineLock, AiOutlineUnlock } from "react-icons/ai";
+import ConfirmationModal from "./ConfirmationModal";
+import RoleUpdateModal from "./RoleUpdateModal";
 import NoAvatar from "../../NoAvatar";
+import { changeRole } from "../../../config/api";
 
 const UserTable = ({
   users,
   selectedUsers,
   setSelectedUsers,
-  handleToggleLockUser, // Hàm để xử lý khóa/mở khóa user
+  handleToggleLockUser,
+  refreshUsers,
 }) => {
+  const [modalUser, setModalUser] = useState(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
   const areAllPageUsersSelected = users.every((user) =>
     selectedUsers.includes(user._id)
   );
@@ -34,6 +41,17 @@ const UserTable = ({
       setSelectedUsers((prev) => prev.filter((id) => id !== userId));
     } else {
       setSelectedUsers((prev) => [...prev, userId]);
+    }
+  };
+
+  const handleUpdateRole = async (userId, roleId) => {
+    try {
+      const response = await changeRole(userId, roleId);
+      console.log("🚀 ~ handleUpdateRole ~ response:", response);
+      setModalUser(null);
+      await refreshUsers(); // Refresh user table data after role update
+    } catch (error) {
+      console.error("Failed to update role:", error);
     }
   };
 
@@ -96,24 +114,37 @@ const UserTable = ({
               </td>
 
               <td className="p-5 border-b text-center">
-                <div className="flex justify-center items-center text-3xl gap-x-2">
+                <div className="flex justify-center items-center text-3xl gap-x-4">
                   {user.usr_status === "active" ? (
                     <AiOutlineUnlock
                       className="text-green-500 cursor-pointer hover:text-green-700"
-                      onClick={() => handleToggleLockUser(user._id, 'block')}
+                      onClick={() => handleToggleLockUser(user._id, "block")}
                     />
                   ) : (
                     <AiOutlineLock
                       className="text-red-500 cursor-pointer hover:text-red-700"
-                      onClick={() => handleToggleLockUser(user._id, 'active')}
+                      onClick={() => handleToggleLockUser(user._id, "active")}
                     />
                   )}
+
+                  <AiOutlineEdit
+                    className="text-blue-500 cursor-pointer hover:text-blue-700"
+                    onClick={() => setModalUser(user)}
+                  />
                 </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {modalUser && (
+        <RoleUpdateModal
+          user={modalUser}
+          onClose={() => setModalUser(null)}
+          onSave={(userId, roleId) => handleUpdateRole(userId, roleId)}
+        />
+      )}
     </div>
   );
 };

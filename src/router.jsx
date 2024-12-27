@@ -23,7 +23,7 @@ import DashBoard from "./pages/admin/dashBoard";
 import OrderHistory from "./component/Profile/OrderList"; // Thêm trang OrderHistory
 import { ROUTERS } from "./utils/router";
 import Info from "./component/Profile/Info";
-import Favorites from "./component/Profile/Favorites";
+import Favorites from "./component/Profile/ChangePass";
 import Address from "./component/Profile/Address";
 import SearchPage from "./pages/user/searchPage";
 import AddProductPage from "./pages/admin/addProductPage";
@@ -49,6 +49,8 @@ import UserPage from "./pages/admin/userPage";
 import CategoryCreate from "./pages/admin/categoryCreate";
 import CategoryPage from "./pages/admin/categoryPage";
 import AdminProfilePage from "./pages/admin/adminProfilePage";
+import TopProductPage from "./pages/admin/topProductPage";
+import ChangePass from "./component/Profile/ChangePass";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -85,7 +87,7 @@ const RouterCustom = () => {
             <Route index element={<Info />} />
             <Route path="" element={<Info />} />
             <Route path={ROUTERS.USER.ORDER_LIST} element={<OrderHistory />} />
-            <Route path={ROUTERS.USER.FAVORITES} element={<Favorites />} />
+            <Route path={ROUTERS.USER.CHANGE_PASS} element={<ChangePass />} />
             <Route path={ROUTERS.USER.ADDRESS} element={<Address />} />
           </Route>
 
@@ -104,6 +106,7 @@ const RouterCustom = () => {
           <Route path="/admin/products/edit/:id" element={<AddProductPage />} />
           <Route path="/admin/category" element={<CategoryPage />} />
           <Route path="/admin/category-create" element={<CategoryCreate />} />
+          <Route path="/admin/top-products" element={<TopProductPage />} />
           <Route path="/admin/flash-sale" element={<FlashSalePage />} />
           <Route
             path="/admin/flash-sale/create"

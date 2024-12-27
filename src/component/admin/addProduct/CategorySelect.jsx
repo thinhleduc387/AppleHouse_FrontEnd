@@ -148,13 +148,10 @@ const CategorySelect = ({ productData, setProductData }) => {
                   onMouseEnter={() => setSelectedItem(category.id)}
                   className="relative"
                 >
-                  <button
-                    onClick={() => handleCategoryClick(category)}
-                    className="text-sm hover:bg-gray-100 text-gray-700 px-4 py-2 flex items-center w-full text-left"
-                  >
+                  <div className="text-sm hover:bg-gray-100 text-gray-700 px-4 py-2 flex items-center w-full text-left">
                     {getIconForCategory(category.name)}
                     {category.name}
-                  </button>
+                  </div>
                 </li>
               ))}
             </ul>

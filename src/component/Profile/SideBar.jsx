@@ -24,7 +24,7 @@ const Sidebar = () => {
     {
       icon: AiOutlineHeart,
       text: "Sản phẩm yêu thích",
-      path: "/profile/favorites",
+      path: "/profile/change-password",
     },
     {
       icon: FaLocationDot,

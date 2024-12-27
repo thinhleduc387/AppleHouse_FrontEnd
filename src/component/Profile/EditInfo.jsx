@@ -30,6 +30,7 @@ const EditInfo = ({
     usr_email: userEmail || "",
     usr_img: userAvatar || "",
   });
+  console.log("🚀 ~ formData:", formData)
   const dispatch = useDispatch();
 
   const handleChange = (e) => {

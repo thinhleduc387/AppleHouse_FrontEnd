@@ -18,6 +18,19 @@ export const callLoginGG = () => {
 export const callAccount = async () => {
   return axios.get("/auth/account");
 };
+export const changePassword = async (
+  email,
+  currentPassword,
+  newPassword,
+  reNewPassword
+) => {
+  return axios.patch("/user", {
+    email,
+    currentPassword,
+    newPassword,
+    reNewPassword,
+  });
+};
 
 /*Category*/
 export const getAllCategory = async () => {
@@ -196,6 +209,11 @@ export const getAdminAllProduct = async (spuIds) => {
   return axios.post("/product/list-detail-product", { spuIds });
 };
 
+//Top Product
+export const getTopProduct = async () => {
+  return axios.get("/product/top-products");
+};
+
 //FlashSale
 export const creatNewFlashSale = async (flashSaleData) => {
   return axios.post("/promotion", { ...flashSaleData });
@@ -295,7 +313,9 @@ export const ratingCount = async ({ productId }) => {
 export const totalRatingRateComment = async ({ productId }) => {
   return axios.get(`/comment/total-rating-comment/${productId}`);
 };
-
+export const getCommentWithRating = async ({ productId }) => {
+  return axios.get(`/comment/with-rating/${productId}`);
+};
 // flash sale
 
 export const getFlashSaleActive = async () => {
@@ -442,6 +462,10 @@ export const updateRole = async ({
 }) => {
   return axios.patch(`/rbac/role`, { id, name, slug, description, grants });
 };
+export const changeRole = async (userId, roleId) => {
+  return axios.post(`/user/change-role`, { userId, roleId });
+};
+
 //User
 export const getAllUsers = async (query = {}) => {
   return axios.get(`/user/find-all`, { params: query });

@@ -119,7 +119,7 @@ const CheckOut = ({
   };
 
   return (
-    <div className="bg-white rounded-md p-4 md:self-start top-0 shadow-md">
+    <div className="bg-white rounded-md p-4 md:self-start shadow-md sticky top-20">
       {products_order.length > 0 && (
         <div
           className="flex items-center justify-between bg-gray-100 px-4 py-3 rounded-md cursor-pointer"
@@ -159,7 +159,7 @@ const CheckOut = ({
         </div>
       )}
 
-      <ul className="text-gray-800 mt-8 space-y-4">
+      <ul className="text-gray-800 mt-6 space-y-4">
         <li className="flex justify-between text-base">
           Tổng tiền
           <span className="font-bold">

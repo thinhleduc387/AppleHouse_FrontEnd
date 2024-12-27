@@ -26,7 +26,7 @@ export const ROUTERS = {
     ORDER_DETAIL: (orderId = ":orderId") =>
       `/profile/order-list/detail/${orderId}`, // Chi tiết đơn hàng
 
-    FAVORITES: "/profile/favorites", // Sản phẩm yêu thích
+    CHANGE_PASS: "/profile/change-password", // Sản phẩm yêu thích
     ADDRESS: "/profile/address", // Địa chỉ giao hàng
   },
   ADMIN: [

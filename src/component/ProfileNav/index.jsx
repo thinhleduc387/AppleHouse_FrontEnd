@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { callLogout } from "../../config/api";
+import { useRef, useState, useEffect } from "react";
+import { callLogout, getListRole } from "../../config/api";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineUser } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,11 +8,32 @@ import { toast } from "react-toastify";
 import { resetCart } from "../../redux/slice/cartSlice";
 
 const ProfileNavBar = ({ userAvatar, userName }) => {
-  const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
+  const { isAuthenticated } = useSelector((state) => state.account);
+  const roleId = useSelector((state) => state.account.user?.role); // Giả sử account slice lưu thông tin user
+  const [roles, setRoles] = useState([]); // Lưu trữ danh sách role
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await getListRole(); // Lấy danh sách role từ API
+        console.log("🚀 ~ fetchRoles ~ response:", response);
+        if (response && response.metadata) {
+          setRoles(response.metadata); // Lưu danh sách roles vào state
+        }
+      } catch (error) {
+        console.error("Error fetching roles:", error);
+        toast.error("Failed to fetch roles.");
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchRoles(); // Lấy danh sách role khi người dùng đã đăng nhập
+    }
+  }, [isAuthenticated]);
 
   const handleMouseEnter = () => {
     setDropdownOpen(true);
@@ -38,6 +59,11 @@ const ProfileNavBar = ({ userAvatar, userName }) => {
       toast.error("Failed to log out. Please try again.");
     }
   };
+
+  // Tìm role name dựa trên role ID của user
+  const roleName = roles.find((role) => role._id === roleId)?.rol_name;
+  console.log("🚀 ~ ProfileNavBar ~ roles:", roles);
+  console.log("🚀 ~ ProfileNavBar ~ roleName:", roleName);
 
   return (
     <div className="relative">
@@ -65,24 +91,33 @@ const ProfileNavBar = ({ userAvatar, userName }) => {
           </button>
 
           {/* Dropdown Menu */}
-          {dropdownOpen && (
+          {dropdownOpen && roleName && (
             <div
               className="absolute right-0 w-56 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 z-50"
               style={{ animation: "fadeIn 0.2s ease-in-out" }}
             >
               <div className="py-2">
-                <Link
-                  to="/profile"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition duration-150"
-                >
-                  Profile
-                </Link>
-                <Link
-                  to="/admin/dashboard"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition duration-150"
-                >
-                  Admin Page
-                </Link>
+                {/* Show Profile link only for regular users */}
+                {roleName === "user" && (
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition duration-150"
+                  >
+                    Profile
+                  </Link>
+                )}
+
+                {/* Show Admin Page link only for admin or staff */}
+                {(roleName === "admin" || roleName === "staff") && (
+                  <Link
+                    to="/admin/dashboard"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition duration-150"
+                  >
+                    Admin Page
+                  </Link>
+                )}
+
+                {/* Log out button */}
                 <button
                   onClick={handleLogOut}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-500 transition duration-150 w-full text-left"

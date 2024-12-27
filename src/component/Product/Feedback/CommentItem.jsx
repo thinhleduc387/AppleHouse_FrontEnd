@@ -9,6 +9,7 @@ import { formatDistance } from "date-fns";
 import { useSelector } from "react-redux";
 
 const CommentItem = ({ comment, depth = 0 }) => {
+  console.log("🚀 ~ CommentItem ~ comment:", comment);
   const userId = useSelector((state) => state.account?.user?._id);
   const [showReplies, setShowReplies] = useState(false);
   const [showReplyForm, setShowReplyForm] = useState(false);
@@ -78,7 +79,9 @@ const CommentItem = ({ comment, depth = 0 }) => {
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-2">
             <h4 className="text-sm font-semibold text-gray-900 truncate">
-              {comment?.comment_userId?.usr_name}
+              {comment?.isFromSystem
+                ? "Từ hệ thống"
+                : comment?.comment_userId?.usr_name}
             </h4>
             <span className="text-xs text-gray-500">•</span>
             <p className="text-xs text-gray-500">

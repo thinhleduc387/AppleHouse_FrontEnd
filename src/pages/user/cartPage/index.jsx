@@ -95,7 +95,7 @@ const CartPage = () => {
               </button>
             </div>
 
-            <div className=" p-4 mt-3 flex flex-col gap-4 bg-white rounded-md overflow-y-auto">
+            <div className=" p-4 mt-3 flex flex-col gap-4 bg-white rounded-md overflow-x-auto">
               {isCheckout && (
                 <a
                   onClick={() => {
