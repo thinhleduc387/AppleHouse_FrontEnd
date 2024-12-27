@@ -7,10 +7,11 @@ import FlashSale from "../../../component/Product/FlashSale";
 import RecommendSection from "../../../component/RecommendSection/RecommendSection";
 import { useSelector } from "react-redux";
 import RecommendSectionTrending from "../../../component/RecommendSection/RecommendSectionTrending";
-import { getHomePageProduct } from "../../../config/api";
+import { getCategoryById, getHomePageProduct } from "../../../config/api";
 
 const HomePage = () => {
-  const [homePageData, setHomePageData] = useState(null);
+  const [homePageData, setHomePageData] = useState([]);
+  const [categoryNames, setCategoryNames] = useState({});
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
 
   useEffect(() => {
@@ -29,12 +30,42 @@ const HomePage = () => {
   const handleGetHomePageProduct = async () => {
     try {
       const response = await getHomePageProduct();
-      console.log("🚀 ~ handleGetHomePageProduct ~ response:", response)
       if (response && response.metadata) {
-        setHomePageData(response.metadata);
+        // Định dạng lại sản phẩm
+        const formattedData = response.metadata.map((category) => ({
+          ...category,
+          spusWithPrice: category.spusWithPrice.map((product) => ({
+            id: product._id,
+            name: product?.product_name,
+            imageSrc: product?.product_thumb,
+            productPrice: product?.product_price,
+            link: `/products/${product?.product_slug}`,
+          })),
+        })).filter((category) => category.spusWithPrice.length > 0);
+
+        setHomePageData(formattedData);
+
+        // Fetch category names and descriptions
+        const categoryNamePromises = response.metadata.map((category) =>
+          getCategoryById(category.category._id).then((res) => ({
+            id: category.category._id,
+            name: res?.metadata?.category_name || "Unnamed Category",
+            description:
+              res?.metadata?.category_description || "No description",
+          }))
+        );
+
+        const names = await Promise.all(categoryNamePromises);
+        const nameMap = names.reduce((acc, { id, name, description }) => {
+          acc[id] = { name, description }; // Map category ID với name và description
+          return acc;
+        }, {});
+
+        setCategoryNames(nameMap); // Update state với category names và descriptions
       } else {
         console.error("Failed to fetch home page data.");
       }
+      console.log("🚀 ~ handleGetHomePageProduct ~ response:", response);
     } catch (error) {
       console.error("Error fetching home page data:", error);
     }
@@ -74,15 +105,19 @@ const HomePage = () => {
       )}
 
       {/* Dynamic Product Sections */}
-      {homePageData &&
-        homePageData.map((category) => (
-          <div key={category._id}>
-            <ProductSection
-              products={category.bestSold}
-              title={`${category.category.category_name} - ${category.category.category_description}`}
-            />
-          </div>
-        ))}
+      {homePageData.map((category) => (
+        <div key={category._id}>
+          <ProductSection
+            products={category.spusWithPrice}
+            title={`${
+              categoryNames[category.category._id]?.name || "Loading..."
+            } - ${
+              categoryNames[category.category._id]?.description ||
+              "Loading description..."
+            }`}
+          />
+        </div>
+      ))}
     </div>
   );
 };

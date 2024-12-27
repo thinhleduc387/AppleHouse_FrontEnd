@@ -22,6 +22,7 @@ const CategoryCreate = () => {
     parentId: "",
     thumb: "",
   });
+  console.log("🚀 ~ CategoryCreate ~ newCategory:", newCategory)
 
   useEffect(() => {
     handleGetCategory();
