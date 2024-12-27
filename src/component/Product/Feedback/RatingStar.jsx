@@ -15,10 +15,12 @@ const RatingStar = ({ spuId = null, numberOfRating }) => {
     handleCheckPurchase();
     getRatingPercentages(spuId);
   }, []);
+
   const getRatingPercentages = async (productId) => {
     const response = await ratingCount({ productId });
     const ratingCounts = fillMissingScores(response.metadata);
     console.log("🚀 ~ getRatingPercentages ~ ratingCounts:", ratingCounts);
+
     const totalReviews = ratingCounts.reduce(
       (total, rating) => total + rating.count,
       0
@@ -26,7 +28,8 @@ const RatingStar = ({ spuId = null, numberOfRating }) => {
 
     const ratingPercentages = ratingCounts.map((rating) => ({
       score: rating._id,
-      percent: `${(rating.count / totalReviews) * 100}%`,
+      percent:
+        totalReviews !== 0 ? `${(rating.count / totalReviews) * 100}%` : 0,
     }));
 
     setRatingPercentages(ratingPercentages);

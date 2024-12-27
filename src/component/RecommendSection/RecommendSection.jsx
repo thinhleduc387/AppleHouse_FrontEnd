@@ -11,7 +11,6 @@ const ProductSection = ({ title = "Gợi ý hôm nay" }) => {
   const scrollRef = useRef(null);
   const [cardWidth, setCardWidth] = useState(0);
   const [totalProductsToShow, setTotalProductsToShow] = useState(4); // Mặc định 4 sản phẩm trên md
-
   const [listProduct, setListProduct] = useState([]);
 
   useEffect(() => {
@@ -42,13 +41,12 @@ const ProductSection = ({ title = "Gợi ý hôm nay" }) => {
       if (scrollRef.current) {
         const firstCard = scrollRef.current.firstChild;
         if (firstCard) {
-          setCardWidth(firstCard.offsetWidth + 16); // Tính chiều rộng của card và khoảng cách
+          setCardWidth(firstCard.offsetWidth + 16);
         }
       }
     };
 
     const handleResize = () => {
-      // Điều chỉnh số lượng sản phẩm hiển thị dựa vào kích thước màn hình
       if (window.innerWidth < 640) {
         setTotalProductsToShow(1); // Hiển thị 1 sản phẩm
       } else if (window.innerWidth < 800) {

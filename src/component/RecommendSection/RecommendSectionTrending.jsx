@@ -5,21 +5,17 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import ProductItem from "../Product/ProductItem";
-import { getRecommendForDetailProductPage } from "../../config/api";
+import { getRecommendTrending } from "../../config/api";
 
-const RecommendSectionForDetailPage = ({
-  title = "Có thể bạn sẽ thích ",
-  productId,
-}) => {
+const RecommendSectionTrending = ({ title = "Sản phẩm nổi bật" }) => {
   const scrollRef = useRef(null);
   const [cardWidth, setCardWidth] = useState(0);
   const [totalProductsToShow, setTotalProductsToShow] = useState(4); // Mặc định 4 sản phẩm trên md
-
   const [listProduct, setListProduct] = useState([]);
 
   useEffect(() => {
     const handleGetLsitProduct = async () => {
-      const response = await getRecommendForDetailProductPage({ productId });
+      const response = await getRecommendTrending();
       console.log("🚀 ~ handleGetLsitProduct ~ response:", response);
       if (response.status === 200) {
         const productsMap = response.metadata.map((product) => {
@@ -46,13 +42,12 @@ const RecommendSectionForDetailPage = ({
       if (scrollRef.current) {
         const firstCard = scrollRef.current.firstChild;
         if (firstCard) {
-          setCardWidth(firstCard.offsetWidth + 16); // Tính chiều rộng của card và khoảng cách
+          setCardWidth(firstCard.offsetWidth + 16);
         }
       }
     };
 
     const handleResize = () => {
-      // Điều chỉnh số lượng sản phẩm hiển thị dựa vào kích thước màn hình
       if (window.innerWidth < 640) {
         setTotalProductsToShow(1); // Hiển thị 1 sản phẩm
       } else if (window.innerWidth < 800) {
@@ -121,4 +116,4 @@ const RecommendSectionForDetailPage = ({
   );
 };
 
-export default RecommendSectionForDetailPage;
+export default RecommendSectionTrending;

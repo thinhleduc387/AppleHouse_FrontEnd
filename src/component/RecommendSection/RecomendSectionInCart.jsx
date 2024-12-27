@@ -10,7 +10,7 @@ import {
   getRecommendForHomePage,
 } from "../../config/api";
 
-const ProductSectionInCart = ({ title = "Sản phẩm liên quan" }) => {
+const RecommendSectionForCart = ({ title = "Sản phẩm liên quan" }) => {
   const scrollRef = useRef(null);
   const [cardWidth, setCardWidth] = useState(0);
   const [totalProductsToShow, setTotalProductsToShow] = useState(4); // Mặc định 4 sản phẩm trên md
@@ -119,4 +119,4 @@ const ProductSectionInCart = ({ title = "Sản phẩm liên quan" }) => {
   );
 };
 
-export default ProductSectionInCart;
+export default RecommendSectionForCart;

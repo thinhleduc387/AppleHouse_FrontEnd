@@ -10,7 +10,6 @@ const ProfileSection = ({ userName, userAvatar, userEmail }) => {
       />
 
       <div className="ml-4 flex flex-col justify-center">
-        {/* Name and email */}
         <div className="max-w-xs">
           <p className="text-sm font-semibold text-gray-800 overflow-wrap break-word">
             {userName}
@@ -20,7 +19,6 @@ const ProfileSection = ({ userName, userAvatar, userEmail }) => {
           </p>
         </div>
 
-        {/* "Xem hồ sơ" link */}
         <Link
           to="/profile"
           className="text-sm text-mainColor mt-2 hover:underline"

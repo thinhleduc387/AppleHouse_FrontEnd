@@ -1,115 +1,123 @@
-import { useRef, useEffect, useState } from "react";
-import {
-  FaChevronCircleLeft,
-  FaChevronLeft,
-  FaChevronRight,
-} from "react-icons/fa";
+import { useRef, useEffect, useState, useMemo } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import ProductItem from "../Product/ProductItem";
 import { getRecommendForProfilePage } from "../../config/api";
 
-const ProductSectionForProfile = ({ title = "Có thể bạn sẽ thích " }) => {
+const RecommendSectionForProfile = ({ title = "Có thể bạn sẽ thích" }) => {
   const scrollRef = useRef(null);
   const [cardWidth, setCardWidth] = useState(0);
-  const [totalProductsToShow, setTotalProductsToShow] = useState(4); // Mặc định 4 sản phẩm trên md
-
+  const [visibleProducts, setVisibleProducts] = useState(4);
   const [listProduct, setListProduct] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Fetch products
   useEffect(() => {
-    const handleGetLsitProduct = async () => {
-      const response = await getRecommendForProfilePage();
-      if (response.status === 200) {
-        const productsMap = response.metadata.map((product) => {
-          return {
+    const fetchProducts = async () => {
+      try {
+        const response = await getRecommendForProfilePage();
+        if (response.status === 200) {
+          const productsMap = response.metadata.map((product) => ({
             id: product._id,
             imageSrc: product.product_thumb,
-            link: `/products/${product?.product_slug}`,
+            link: `/products/${product.product_slug}`,
             name: product.product_name,
             productPrice: {
               originalPrice: product.product_price.originalPrice,
               priceAfterDiscount: product.product_price.priceAfterDiscount,
               discount: product.product_price.discount,
             },
-          };
-        });
-        setListProduct(productsMap);
-      }
-    };
-    handleGetLsitProduct();
-  }, []);
-
-  useEffect(() => {
-    const updateCardWidth = () => {
-      if (scrollRef.current) {
-        const firstCard = scrollRef.current.firstChild;
-        if (firstCard) {
-          setCardWidth(firstCard.offsetWidth + 16); // Tính chiều rộng của card và khoảng cách
+          }));
+          setListProduct(productsMap);
         }
+      } catch (error) {
+        console.error("Failed to fetch recommendations:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
-
-    const handleResize = () => {
-      // Điều chỉnh số lượng sản phẩm hiển thị dựa vào kích thước màn hình
-      if (window.innerWidth < 640) {
-        setTotalProductsToShow(1); // Hiển thị 1 sản phẩm
-      } else if (window.innerWidth < 800) {
-        setTotalProductsToShow(2); // Hiển thị 2 sản phẩm
-      } else if (window.innerWidth < 1180) {
-        setTotalProductsToShow(3); // Hiển thị 3 sản phẩm
-      } else {
-        setTotalProductsToShow(4); // Hiển thị 4 sản phẩm
-      }
-      updateCardWidth();
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    fetchProducts();
   }, []);
 
-  const scrollLeft = () => {
-    scrollRef.current.scrollBy({
-      left: -cardWidth * totalProductsToShow,
-      behavior: "smooth",
-    });
+  // Handle responsive layout
+  useEffect(() => {
+    const updateLayout = () => {
+      if (scrollRef.current?.firstChild) {
+        setCardWidth(scrollRef.current.firstChild.offsetWidth + 16);
+      }
+
+      const width = window.innerWidth;
+      if (width < 640) setVisibleProducts(1);
+      else if (width < 800) setVisibleProducts(2);
+      else if (width < 1180) setVisibleProducts(3);
+      else setVisibleProducts(4);
+    };
+
+    updateLayout();
+    window.addEventListener("resize", updateLayout);
+    return () => window.removeEventListener("resize", updateLayout);
+  }, []);
+
+  // Calculate card width style
+  const cardStyle = useMemo(
+    () => ({
+      width: `calc((100% - ${
+        16 * (visibleProducts - 1)
+      }px) / ${visibleProducts})`,
+    }),
+    [visibleProducts]
+  );
+
+  // Scroll handlers
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({
+        left: cardWidth * visibleProducts * direction,
+        behavior: "smooth",
+      });
+    }
   };
 
-  const scrollRight = () => {
-    scrollRef.current.scrollBy({
-      left: cardWidth * totalProductsToShow,
-      behavior: "smooth",
-    });
-  };
+  if (isLoading) {
+    return <div className="p-6 bg-white rounded-lg">Loading...</div>;
+  }
+
+  if (listProduct.length === 0) {
+    return null;
+  }
 
   return (
     <div className="p-6 relative shadow-2xl bg-white rounded-lg">
       <h2 className="text-2xl font-bold mb-6 text-black">{title}</h2>
+
       <button
-        onClick={scrollLeft}
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 text-2xl pl-2 z-10"
+        onClick={() => scroll(-1)}
+        className="absolute left-0 top-1/2 -translate-y-1/2 p-2 text-2xl 
+                   hover:bg-gray-100 rounded-full transition-colors"
+        aria-label="Scroll left"
       >
         <FaChevronLeft />
       </button>
-      <div className="flex space-x-4 overflow-hidden px-4" ref={scrollRef}>
-        {listProduct.map((product, index) => (
+
+      <div
+        ref={scrollRef}
+        className="flex space-x-4 overflow-hidden scroll-smooth px-4"
+      >
+        {listProduct.map((product) => (
           <div
-            key={index}
-            className="flex-none"
-            style={{
-              width: `calc((100% - ${
-                16 * (totalProductsToShow - 1)
-              }px) / ${totalProductsToShow})`,
-            }}
+            key={product.id}
+            className="flex-none transition-transform"
+            style={cardStyle}
           >
             <ProductItem product={product} isForShow={true} />
           </div>
         ))}
       </div>
+
       <button
-        onClick={scrollRight}
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 text-2xl pr-2"
+        onClick={() => scroll(1)}
+        className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-2xl 
+                   hover:bg-gray-100 rounded-full transition-colors"
+        aria-label="Scroll right"
       >
         <FaChevronRight />
       </button>
@@ -117,4 +125,4 @@ const ProductSectionForProfile = ({ title = "Có thể bạn sẽ thích " }) =>
   );
 };
 
-export default ProductSectionForProfile;
+export default RecommendSectionForProfile;
