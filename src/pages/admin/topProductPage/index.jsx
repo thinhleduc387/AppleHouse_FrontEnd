@@ -45,7 +45,9 @@ const TopProductPage = () => {
         <div className="space-y-6">
           {/* Top Sales by Categories */}
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-lg font-extrabold mb-4">Top Sales by Categories</h2>
+            <h2 className="text-lg font-extrabold mb-4">
+              Top Sales by Categories
+            </h2>
             <div className="space-y-4">
               {categoriesWithProducts.map((category, index) => (
                 <div key={index} className="space-y-2">
@@ -59,24 +61,6 @@ const TopProductPage = () => {
                     </span>
                   </div>
                   {/* Thanh tiến trình */}
-                  <div className="w-full">
-                    <div
-                      className={`${
-                        index % 4 === 0
-                          ? "bg-blue-500"
-                          : index % 4 === 1
-                          ? "bg-red-500"
-                          : index % 4 === 2
-                          ? "bg-black"
-                          : "bg-yellow-500"
-                      } h-2 rounded-full`}
-                      style={{
-                        width: `${
-                          ((category.totalRevenue || 0) / 100000) * 100
-                        }%`,
-                      }}
-                    ></div>
-                  </div>
                 </div>
               ))}
             </div>
