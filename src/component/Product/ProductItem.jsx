@@ -42,7 +42,7 @@ const ProductItem = ({ product, isForShow }) => {
       </div>
       <div className="pt-6 flex flex-col flex-grow justify-between">
         <div>
-          <div className="mb-4 flex items-center justify-end">
+          {/* <div className="mb-4 flex items-center justify-end">
             <div className="flex items-center gap-2">
               <button
                 type="button"
@@ -60,7 +60,7 @@ const ProductItem = ({ product, isForShow }) => {
                 )}
               </button>
             </div>
-          </div>
+          </div> */}
 
           <Link
             to={link}

@@ -45,7 +45,7 @@ const StockPage = () => {
   const [draftCount, setDraftCount] = useState(0);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [deleteProductIds, setDeleteProductIds] = useState([]); // Sản phẩm sẽ được xóa
+  const [deleteProductIds, setDeleteProductIds] = useState([]);
 
   useEffect(() => {
     fetchTabCounts();
@@ -68,7 +68,6 @@ const StockPage = () => {
       const draftResponse = await getDraftProduct();
       setDraftCount(draftResponse?.metadata?.length || 0);
     } catch (error) {
-      console.error("Error fetching counts:", error);
     } finally {
       setIsLoading(false);
     }
@@ -88,7 +87,6 @@ const StockPage = () => {
         setCurrentPage(1);
       }
     } catch (error) {
-      console.error("Error fetching products:", error);
     } finally {
       setIsLoading(false);
     }
@@ -114,7 +112,9 @@ const StockPage = () => {
     try {
       setIsLoading(true);
       await Promise.all(
-        productsToPublish.map(async (id) => await ublishProcduct(id))
+        productsToPublish.map(
+          async (product) => await publishProcduct(product._id)
+        )
       );
       toast.success("Selected products published successfully!");
       await fetchTabData(); // Ensure data is refreshed
@@ -122,7 +122,6 @@ const StockPage = () => {
       setSelectedProducts([]);
     } catch (error) {
       toast.error("Error publishing products. Please try again.");
-      console.error("Error publishing products:", error);
     } finally {
       setIsLoading(false);
     }
@@ -147,7 +146,9 @@ const StockPage = () => {
     try {
       setIsLoading(true);
       await Promise.all(
-        productsToUnpublish.map(async (id) => await unPublishProcduct(id))
+        productsToUnpublish.map(
+          async (product) => await unPublishProcduct(product._id)
+        )
       );
       toast.success("Selected products unpublished successfully!");
       await fetchTabData(); // Ensure data is refreshed
@@ -155,7 +156,6 @@ const StockPage = () => {
       setSelectedProducts([]);
     } catch (error) {
       toast.error("Error unpublishing products. Please try again.");
-      console.error("Error unpublishing products:", error);
     } finally {
       setIsLoading(false);
     }
@@ -183,7 +183,6 @@ const StockPage = () => {
       setSelectedProducts([]); // Clear selected products
     } catch (error) {
       toast.error("Error deleting products. Please try again.");
-      console.error("Error deleting products:", error);
     } finally {
       setIsLoading(false);
       setIsDeleteModalOpen(false); // Close the delete modal

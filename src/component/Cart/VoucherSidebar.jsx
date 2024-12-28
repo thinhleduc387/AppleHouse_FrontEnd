@@ -185,7 +185,7 @@ const VoucherSideBar = ({
             onClick={handleClose}
           />
 
-          <div className="fixed right-0 top-0 h-full w-full sm:w-[480px] bg-white shadow-2xl flex flex-col">
+          <div className="fixed right-0 top-0 h-full w-full sm:w-[480px] bg-white shadow-2xl flex flex-col z-50 ">
             {/* Header - Always visible */}
             <div className="flex items-center justify-between p-4 border-b bg-white">
               <h2 className="text-lg font-semibold">Khuyến mãi và ưu đãi</h2>

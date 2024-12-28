@@ -78,7 +78,7 @@ const Header = () => {
           {/* Logo and Menu */}
           <div className="flex items-center justify-between w-full lg:w-auto">
             <a href="/" className="font-bold text-3xl">
-              AppleHouse
+              Apple house
             </a>
             {/* Desktop Dropdown Menu */}
             <div className="hidden lg:block">
@@ -117,7 +117,7 @@ const Header = () => {
                 )}
               </Link>
             </li>
-            {isAuthenticated && (
+            {/* {isAuthenticated && (
               <li
                 onMouseEnter={() => setNotifyIsOpen(true)}
                 onMouseLeave={() => setNotifyIsOpen(false)}
@@ -134,7 +134,7 @@ const Header = () => {
                   <NotificationMenu notifications={mockNotifications} />
                 )}
               </li>
-            )}
+            )} */}
             {/* Profile Section with Dropdown */}
             <li className="my-7 lg:my-0">
               <ProfileNavBar userAvatar={userAvatar} userName={userName} />
