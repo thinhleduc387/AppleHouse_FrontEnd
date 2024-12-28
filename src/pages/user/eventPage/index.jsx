@@ -81,6 +81,7 @@ const PromotionPage = () => {
           </div>
         </div>
       </div>
+      <div className="py-10"></div>
     </section>
   );
 };
