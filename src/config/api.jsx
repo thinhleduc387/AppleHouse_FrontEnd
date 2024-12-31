@@ -188,15 +188,31 @@ export const getImageLink = async (formData) => {
 };
 
 //ProductStock
-export const getAllProduct = async () => {
-  return axios.get("/product/spu/get-all");
+export const getAllProduct = async ({ limit, page }) => {
+  return axios.get("/product/spu/get-all", {
+    params: {
+      limit,
+      page,
+    },
+  });
 };
-export const getPublishedProduct = async () => {
-  return axios.get("/product/spu/get-published");
+export const getPublishedProduct = async ({ limit, page }) => {
+  return axios.get("/product/spu/get-published", {
+    params: {
+      limit,
+      page,
+    },
+  });
 };
-export const getDraftProduct = async () => {
-  return axios.get("/product/spu/get-draft");
+export const getDraftProduct = async ({ limit, page }) => {
+  return axios.get("/product/spu/get-draft", {
+    params: {
+      limit,
+      page,
+    },
+  });
 };
+
 export const publishProcduct = async (id) => {
   return axios.get(`/product/publish/${id}`);
 };
@@ -278,8 +294,18 @@ export const editVoucher = async (voucherData, id) => {
 };
 
 //Order
-export const getAllOrder = async () => {
-  return axios.get("/order/get-all-for-admin");
+export const getAllOrder = async ({
+  limit = 10,
+  page = 1,
+  order_status = null,
+}) => {
+  return axios.get("/order/get-all-for-admin", {
+    params: {
+      limit,
+      page,
+      order_status,
+    },
+  });
 };
 
 export const changeOrderStatus = async (orderId, status) => {
