@@ -61,7 +61,7 @@ export const filterProduct = async ({
   categorySlug,
   sortBy,
   limit = 10,
-  skip = 0,
+  page = 0,
 }) => {
   return axios.get("/product/spu/filter", {
     params: {
@@ -72,7 +72,7 @@ export const filterProduct = async ({
       categorySlug,
       sortBy,
       limit,
-      skip,
+      page,
     },
   });
 };
@@ -96,12 +96,16 @@ export const searchProduct = async ({
   minPrice,
   maxPrice,
   sortBy,
+  page,
+  limit,
 }) => {
   return axios.get("/full-text-search", {
     params: {
       textSearch,
       minPrice,
       maxPrice,
+      page,
+      limit,
       sortBy,
     },
   });
