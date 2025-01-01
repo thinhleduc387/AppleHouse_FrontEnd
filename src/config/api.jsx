@@ -250,8 +250,22 @@ export const EditFlashSale = async (flashSaleData, promId) => {
 export const getFlashSale = async (promId) => {
   return axios.get(`/promotion/get-one/${promId}`);
 };
-export const getListFlashSale = async (eventType) => {
-  return axios.post("/promotion/get-list", { eventType });
+export const getListFlashSale = async ({
+  eventType,
+  status = null,
+  page = 1,
+  limit = 10,
+  dateRange = null,
+}) => {
+  return axios.get("/promotion/get-list", {
+    params: {
+      eventType,
+      status,
+      page,
+      limit,
+      dateRange,
+    },
+  });
 };
 export const toggleFlashSale = async (promId) => {
   return axios.patch(`/promotion/toggle-disable/${promId}`);
@@ -547,4 +561,8 @@ export const getRecommendForCartPage = async () => {
 
 export const getRecommendForProfilePage = async () => {
   return axios.get(`/product/recommendations/profile`);
+};
+
+export const getStatisticPromotion = async (promotionId) => {
+  return axios.get(`/promotion/statictis/${promotionId}`);
 };

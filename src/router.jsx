@@ -51,6 +51,7 @@ import CategoryPage from "./pages/admin/categoryPage";
 import AdminProfilePage from "./pages/admin/adminProfilePage";
 import TopProductPage from "./pages/admin/topProductPage";
 import ChangePass from "./component/Profile/ChangePass";
+import StatictisPage from "./pages/admin/StatisticPromotions";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -119,6 +120,10 @@ const RouterCustom = () => {
           />
           <Route path="/admin/event" element={<EventPage />} />
           <Route path="/admin/event/create" element={<EventCreate />} />
+          <Route
+            path="/admin/event/statistic/:id"
+            element={<StatictisPage />}
+          />
           <Route path="/admin/event/edit/:id" element={<EventCreate />} />
           <Route path="/admin/voucher" element={<VoucherPage />} />
           <Route

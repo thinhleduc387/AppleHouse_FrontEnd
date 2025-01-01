@@ -69,10 +69,11 @@ const ProductTable = ({
         await fetchTabData();
         await fetchTabCounts();
         toast.success("Product deleted successfully!");
+      } else {
+        toast.error(response.message);
       }
     } catch (error) {
-      console.log("🚀 ~ handleDeleteOneById ~ error:", error);
-      toast.error("Failed to delete the product. Please try again.");
+      toast.error(response.message);
     }
   };
 
