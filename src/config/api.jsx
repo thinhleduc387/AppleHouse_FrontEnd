@@ -575,3 +575,7 @@ export const getStatisticPromotion = async (promotionId) => {
 export const getUserRole = async () => {
   return axios.get(`/user/role`);
 };
+
+export const deleteRole = async (id) => {
+  return axios.delete(`rbac/role/${id}`);
+};
