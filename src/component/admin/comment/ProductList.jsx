@@ -39,7 +39,7 @@ const ProductList = ({ selectedProduct, setSelectedProduct }) => {
         className="w-full mb-4 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
       />
       {/* Danh sách sản phẩm */}
-      <ul className="space-y-4 max-h-[700px] overflow-y-auto">
+      <ul className="space-y-4 max-h-[80%] overflow-y-auto">
         {productList.map((product) => (
           <li
             key={product._id}

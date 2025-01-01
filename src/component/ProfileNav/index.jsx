@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLogoutAction } from "../../redux/slice/accountSlice";
 import { toast } from "react-toastify";
 import { resetCart } from "../../redux/slice/cartSlice";
+import { clearRoleData } from "../../redux/slice/rbacSlice";
 
 const ProfileNavBar = ({ userAvatar, userName }) => {
   const { isAuthenticated } = useSelector((state) => state.account);
@@ -48,6 +49,7 @@ const ProfileNavBar = ({ userAvatar, userName }) => {
       const response = await callLogout();
       if (response.status === 200 && response.metadata) {
         dispatch(setLogoutAction());
+        dispatch(clearRoleData());
         dispatch(resetCart());
         navigate("/");
         toast.success("Logged out successfully!");
@@ -108,7 +110,7 @@ const ProfileNavBar = ({ userAvatar, userName }) => {
                 {/* Show Admin Page link only for admin or staff */}
                 {
                   <Link
-                    to="/admin/dashboard"
+                    to="/admin/profile"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition duration-150"
                   >
                     Admin Page

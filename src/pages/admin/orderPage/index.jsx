@@ -15,7 +15,7 @@ import { FaInfoCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../../component/Pagiantion";
 
-const ITEMS_PER_PAGE = 8; // Số lượng đơn hàng mỗi trang
+const ITEMS_PER_PAGE = 7; // Số lượng đơn hàng mỗi trang
 
 const OrderPage = () => {
   const [listOrder, setListOrder] = useState([]); // State cho danh sách đơn hàng
@@ -231,12 +231,13 @@ const OrderPage = () => {
           <div className="hidden md:block">
             <OrderTable listOrder={listOrder} setListOrder={setListOrder} />
           </div>
-
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          )}
         </>
       )}
     </div>

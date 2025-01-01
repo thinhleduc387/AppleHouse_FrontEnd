@@ -216,7 +216,7 @@ const CartPage = () => {
       ) : (
         <CartEmpty />
       )}
-      {!isCheckout && userId && (
+      {!isCheckout && userId && cartItems.length > 0 && (
         <div className="py-14">
           <RecommendSectionForCart />
         </div>

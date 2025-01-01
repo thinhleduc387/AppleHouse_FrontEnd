@@ -406,8 +406,13 @@ export const geLisPromotionEvent = async () => {
 };
 
 //voucher
-export const getListVoucher = async () => {
-  return axios.get(`/discount/find-all`);
+export const getListVoucher = async ({ page, limit }) => {
+  return axios.get(`/discount/find-all`, {
+    params: {
+      page,
+      limit,
+    },
+  });
 };
 
 export const getListVoucherAvailable = async ({ userId, products }) => {
@@ -565,4 +570,8 @@ export const getRecommendForProfilePage = async () => {
 
 export const getStatisticPromotion = async (promotionId) => {
   return axios.get(`/promotion/statictis/${promotionId}`);
+};
+
+export const getUserRole = async () => {
+  return axios.get(`/user/role`);
 };
