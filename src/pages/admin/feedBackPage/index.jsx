@@ -9,7 +9,6 @@ const FeedBackPage = () => {
   });
 
   useEffect(() => {
-    // Lưu trạng thái vào sessionStorage khi selectedProduct thay đổi
     if (selectedProduct) {
       sessionStorage.setItem("selectedProduct", selectedProduct);
     } else {
@@ -30,7 +29,7 @@ const FeedBackPage = () => {
           setSelectedProduct={setSelectedProduct}
         />
       </div>
-      <div className="md:col-span-2 w-full">
+      <div className="md:col-span-2 w-full h-full">
         <ProductComments
           productId={selectedProduct} // Pass selected product _id
         />

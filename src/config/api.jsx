@@ -320,15 +320,15 @@ export const checkPurchase = async ({ userId, spuId }) => {
 export const getListCommentBySpuId = async ({
   productId,
   parentCommentId = null,
-  limit = 50,
-  offset = 0,
+  limit = 10,
+  page = 0,
 }) => {
   return axios.get("/comment", {
     params: {
       productId,
       parentCommentId,
       limit,
-      offset,
+      page,
     },
   });
 };
