@@ -23,7 +23,6 @@ import DashBoard from "./pages/admin/dashBoard";
 import OrderHistory from "./component/Profile/OrderList"; // Thêm trang OrderHistory
 import { ROUTERS } from "./utils/router";
 import Info from "./component/Profile/Info";
-import Favorites from "./component/Profile/ChangePass";
 import Address from "./component/Profile/Address";
 import SearchPage from "./pages/user/searchPage";
 import AddProductPage from "./pages/admin/addProductPage";

@@ -4,7 +4,6 @@ import ProductComments from "../../../component/admin/comment/ProductComment";
 
 const FeedBackPage = () => {
   const [selectedProduct, setSelectedProduct] = useState(() => {
-    // Lấy giá trị từ sessionStorage khi khởi tạo
     return sessionStorage.getItem("selectedProduct") || null;
   });
 

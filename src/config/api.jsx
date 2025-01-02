@@ -188,9 +188,10 @@ export const getImageLink = async (formData) => {
 };
 
 //ProductStock
-export const getAllProduct = async ({ limit, page }) => {
+export const getAllProduct = async ({ limit, page, search }) => {
   return axios.get("/product/spu/get-all", {
     params: {
+      search,
       limit,
       page,
     },
