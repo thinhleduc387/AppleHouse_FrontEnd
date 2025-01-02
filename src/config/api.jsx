@@ -579,3 +579,13 @@ export const getUserRole = async () => {
 export const deleteRole = async (id) => {
   return axios.delete(`rbac/role/${id}`);
 };
+
+export const getOrderStatistic = async (timeRange) => {
+  return axios.get(`order/statistic/value`, {
+    params: { timeRange },
+  });
+};
+
+export const getUserStatistic = async () => {
+  return axios.get(`/user/statistic`);
+};
