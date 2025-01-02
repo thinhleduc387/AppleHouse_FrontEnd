@@ -57,14 +57,6 @@ const Address = () => {
                   <p className="text-gray-600">{address.phone}</p>
                   <p className="text-gray-600 mt-1">{address.fullAddress}</p>
                 </div>
-                <div className="flex gap-3">
-                  <button className="text-red-500 hover:text-red-600">
-                    Sửa
-                  </button>
-                  <button className="text-gray-600 hover:text-gray-700">
-                    Xoá
-                  </button>
-                </div>
               </div>
             </div>
           </div>

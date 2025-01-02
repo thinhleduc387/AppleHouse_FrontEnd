@@ -243,17 +243,23 @@ const VoucherSideBar = ({
                 <h3 className="text-base font-semibold mb-4">
                   Voucher khả dụng
                 </h3>
-                <div className="space-y-3 mb-6">
-                  {vouchers.map((voucher) => (
-                    <VoucherItem
-                      key={voucher._id}
-                      voucher={voucher}
-                      isAvailable={
-                        !unAvailableVoucher.some((uv) => uv._id === voucher._id)
-                      }
-                    />
-                  ))}
-                </div>
+                {vouchers.length > 0 ? (
+                  <div className="space-y-3 mb-6">
+                    {vouchers.map((voucher) => (
+                      <VoucherItem
+                        key={voucher._id}
+                        voucher={voucher}
+                        isAvailable={
+                          !unAvailableVoucher.some(
+                            (uv) => uv._id === voucher._id
+                          )
+                        }
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div>Hiện tại chưa có voucher nào </div>
+                )}
 
                 {unAvailableVoucher.length > 0 && (
                   <>
