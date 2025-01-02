@@ -10,6 +10,7 @@ const Address = () => {
   const [addresses, setAddresses] = useState([]);
   const fetchListAddress = async () => {
     const response = await getListUserAddress({ id: userId });
+    console.log("🚀 ~ fetchListAddress ~ response:", response);
     if (response.status === 200) {
       setAddresses(response.metadata);
     }
@@ -20,6 +21,12 @@ const Address = () => {
 
     fetchListAddress();
   }, [userId]);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    fetchListAddress();
+  }, []);
 
   return (
     <div className=" max-w-6xl mx-auto">
@@ -34,7 +41,7 @@ const Address = () => {
         </button>
       </div>
       <div className="space-y-4">
-        {addresses.map((address, index) => (
+        {addresses?.map((address, index) => (
           <div
             key={index}
             className="bg-white rounded-lg shadow p-4 flex items-start gap-4"

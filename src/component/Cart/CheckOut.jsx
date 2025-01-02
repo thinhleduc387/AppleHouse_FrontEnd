@@ -99,7 +99,7 @@ const CheckOut = ({
       const { sessionId, order } = response.metadata;
 
       if (!sessionId) {
-        navigate(`/order-success/${order._id}`);
+        navigate(`/order/order-success/${order._id}`);
         return;
       }
 
