@@ -101,12 +101,6 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <ul className="hidden lg:flex pl-9 lg:pl-0 justify-end items-center space-x-8 ml-4">
-            {Links.map((link, index) => (
-              <li key={index} className="font-extralight my-7 lg:my-0 text-lg">
-                <a href={link.link}>{link.name}</a>
-              </li>
-            ))}
-
             <li className="font-extrabold text-3xl my-7 lg:my-0 relative">
               <Link to="/cart">
                 <IoCartOutline />

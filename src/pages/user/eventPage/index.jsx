@@ -24,6 +24,8 @@ const PromotionPage = () => {
         imageSrc: product?.product_thumb,
         productPrice: product?.product_price,
         link: `/products/${product?.product_slug}`,
+        rating: product?.product_ratingAverage,
+        tags: product?.product_tags,
       }));
       console.log("🚀 ~ products ~ products:", products);
 
