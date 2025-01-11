@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Information */}
           <div>
-            <h2 className="text-2xl font-bold mb-4">PQT shop</h2>
+            <h2 className="text-2xl font-bold mb-4">Apple Shop</h2>
             <p className="mb-4">
               Trường Đại học Công nghệ thông tin - Đại học Quốc gia TP.Hồ Chí
               Minh
@@ -99,7 +99,7 @@ const Footer = () => {
 
       {/* Footer Bottom */}
       <div className="border-t border-gray-700 mt-8 pt-4 text-center text-sm">
-        <p>© 2024 PQT shop. All rights reserved.</p>
+        <p>© 2024 Apple Shop. All rights reserved.</p>
       </div>
     </div>
   );

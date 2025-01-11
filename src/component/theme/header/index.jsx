@@ -78,7 +78,7 @@ const Header = () => {
           {/* Logo and Menu */}
           <div className="flex items-center justify-between w-full lg:w-auto">
             <a href="/" className="font-bold text-3xl">
-              PQT shop
+              Apple Shop
             </a>
             {/* Desktop Dropdown Menu */}
             <div className="hidden lg:block">
