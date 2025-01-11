@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Home, Plus, Building2, X } from "lucide-react";
 import AddressForm from "./AddressForm";
-import { getListUserAddress } from "../../../config/api";
+import { deleteUserAddress, getListUserAddress } from "../../../config/api";
 import { useSelector } from "react-redux";
-
+import { toast } from "react-toastify";
 const Address = () => {
   const [isOpen, setIsOpen] = useState(false);
   const userId = useSelector((state) => state.account?.user?._id);
@@ -16,6 +16,8 @@ const Address = () => {
     }
   };
 
+  const [selectedAddress, setSelectedAddress] = useState(null);
+
   useEffect(() => {
     if (!userId) return;
 
@@ -27,6 +29,21 @@ const Address = () => {
 
     fetchListAddress();
   }, []);
+
+  const handleEditAddress = (address) => {
+    setSelectedAddress(address);
+    setIsOpen(true);
+  };
+
+  const handleDelteAdress = async (address) => {
+    const res = await deleteUserAddress(address._id);
+    if (res.status === 200) {
+      toast.success("Xóa thành công");
+      fetchListAddress();
+    } else {
+      toast.error("Xóa thất bại");
+    }
+  };
 
   return (
     <div className=" max-w-6xl mx-auto">
@@ -57,14 +74,31 @@ const Address = () => {
                   <p className="text-gray-600">{address.phone}</p>
                   <p className="text-gray-600 mt-1">{address.fullAddress}</p>
                 </div>
+                <div className="flex gap-3">
+                  <button
+                    className="text-red-500 hover:text-red-600"
+                    onClick={() => handleEditAddress(address)}
+                  >
+                    Sửa
+                  </button>
+                  <button
+                    className="text-gray-600 hover:text-gray-700"
+                    onClick={() => handleDelteAdress(address)}
+                  >
+                    Xoá
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         ))}
       </div>
+
       <AddressForm
         isOpen={isOpen}
         setIsOpen={setIsOpen}
+        selectedAddress={selectedAddress}
+        setSelectedAddress={setSelectedAddress}
         fetchListAddress={fetchListAddress}
       />
     </div>

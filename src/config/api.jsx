@@ -510,6 +510,18 @@ export const getUserDefaultAddress = async ({ id }) => {
   return axios.get(`/user/default/address/${id}`);
 };
 
+export const updateUserAddress = async ({ addressId, updatedAddress }) => {
+  return axios.put(`/user/address/${addressId}`, { ...updatedAddress });
+};
+
+export const deleteUserAddress = async (addressId) => {
+  return axios.delete(`/user/address/${addressId}`);
+};
+
+export const changeDefaultAddress = async ({ addressId }) => {
+  return axios.patch(`/user/update-default-address/${addressId}`);
+};
+
 export const updateProfile = async ({
   usr_name,
   usr_phone,
