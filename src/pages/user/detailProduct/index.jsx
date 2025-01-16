@@ -5,7 +5,6 @@ import ProductSideBar from "../../../component/Product/ProductSideBar";
 import CommentSection from "../../../component/Product/Feedback/CommentSection";
 import {
   addToCart,
-  checkPurchase,
   getProduct,
   totalRatingRateComment,
 } from "../../../config/api";
@@ -26,7 +25,6 @@ const DetailProduct = () => {
   const [loading, setLoading] = useState(true);
   const [skus, setSkus] = useState([]);
   const [spu, setSpu] = useState(null);
-  console.log("🚀 ~ DetailProduct ~ spu:", spu)
   const [selectedVariants, setSelectedVariants] = useState(
     skus.find((sku) => sku.sku_default)?.sku_index || [0, 0]
   );
@@ -42,12 +40,15 @@ const DetailProduct = () => {
   const collectProductImages = (product) => {
     const moreImgs = product.product_more_imgs || [];
     const variationImgs =
-      product.product_variations?.flatMap(
-        (variation) => variation.images || []
+      product.product_variations?.flatMap((variation) =>
+        variation.images
+          ? variation.images.filter((img) => img && img.length > 0) // Only include valid, non-empty items
+          : []
       ) || [];
     const allImages = [...new Set([...moreImgs, ...variationImgs])];
     return allImages;
   };
+
   const getToTalReviewAndComment = async () => {
     const response = await totalRatingRateComment({ productId });
     if (response.status === 200) {
@@ -251,19 +252,28 @@ const DetailProduct = () => {
                                   variationIndex,
                                   optionIndex
                                 );
-                                if (variation?.images?.length > 0) {
+                                if (
+                                  variation.images[optionIndex]?.length !== 0 &&
+                                  variation.images[optionIndex] &&
+                                  variation?.images?.length > 0
+                                ) {
                                   setSelectedImage(
                                     variation.images[optionIndex]
                                   );
                                 }
                               }}
                             >
-                              {variation?.images.length > 0 && (
-                                <img
-                                  src={variation.images[optionIndex]}
-                                  className="w-8 h-8"
-                                />
-                              )}
+                              {variation.images[optionIndex]?.length !== 0 &&
+                                variation.images[optionIndex] &&
+                                variation?.images.length > 0 && (
+                                  <img
+                                    src={
+                                      variation.images[optionIndex]?.length !==
+                                        0 && variation.images[optionIndex]
+                                    }
+                                    className="w-8 h-8"
+                                  />
+                                )}
                               <span className="text-base font-semibold text-gray-800 p-2">
                                 {option}
                               </span>
