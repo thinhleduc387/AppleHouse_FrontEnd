@@ -10,10 +10,8 @@ import {
 import { getCategoryById } from "../../../config/api";
 
 const AddAttributesInfo = ({ category, productData, onUpdateAttributes }) => {
-  console.log(
-    "🚀 ~ AddAttributesInfo ~ category:",
-    category && productData.attributes.length <= 0
-  );
+  console.log("🚀 ~ AddAttributesInfo ~ productData:", productData)
+  console.log("🚀 ~ AddAttributesInfo ~ category:", category);
   const [attributes, setAttributes] = useState([]); // Danh sách bộ attributes
   const [expandedGroups, setExpandedGroups] = useState([]); // Nhóm đang mở
   const [defaultLength, setDefaultLength] = useState(0); // Số nhóm cố định
@@ -74,20 +72,29 @@ const AddAttributesInfo = ({ category, productData, onUpdateAttributes }) => {
     }
   };
 
-  // Khi category thay đổi, lấy thông tin category_name và cập nhật attributes
   useEffect(() => {
-    if (JSON.stringify(productData.attributes) !== JSON.stringify(attributes)) {
-      if (productData.attributes && productData.attributes.length > 0) {
-        setAttributes(productData.attributes);
-        setDefaultLength(0);
-      } else if (category && productData.attributes.length <= 0) {
-        handleGetCategory();
-      } else {
-        setAttributes([]);
-        setDefaultLength(0);
-      }
+    const isAttributesEmpty =
+      !productData.attributes || productData.attributes.length === 0;
+
+    // Gọi lại handleGetCategory nếu category thay đổi
+    if (category || isAttributesEmpty) {
+      console.log(
+        "🚀 ~ useEffect ~ category changed or attributes are empty:",
+        category,
+        isAttributesEmpty
+      );
+      console.log("🚀 ~ Calling handleGetCategory...");
+      handleGetCategory();
+    } else if (isAttributesEmpty) {
+      console.log("🚀 ~ Setting empty attributes...");
+      setAttributes([]);
+      setDefaultLength(0);
+    } else if (productData.attributes && productData.attributes.length > 0) {
+      console.log("🚀 ~ Setting product attributes...");
+      setAttributes(productData.attributes);
+      setDefaultLength(0);
     }
-  }, [category, JSON.stringify(productData.attributes)]);
+  }, [category]);
 
   const handleToggleGroup = (groupName) => {
     setExpandedGroups((prev) =>

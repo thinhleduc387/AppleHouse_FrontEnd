@@ -177,13 +177,13 @@ const AddProductPage = () => {
             />
           </div>
 
-          {/* <div className="mt-10">
+          <div className="mt-10">
             <AddAttributesInfo
               category={productData.category}
               productData={productData}
               onUpdateAttributes={handleUpdateAttributes}
             />
-          </div> */}
+          </div>
 
           <div className="flex justify-end mt-5">
             <button
