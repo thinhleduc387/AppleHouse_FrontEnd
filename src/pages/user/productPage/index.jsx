@@ -41,6 +41,8 @@ const ProductPage = () => {
         imageSrc: product?.product_thumb,
         productPrice: product?.product_price,
         link: `/products/${product?.product_slug}`,
+        rating: product?.product_ratingAverage,
+        tags: product?.product_tags,
       }));
 
       setProductList(products);
@@ -74,9 +76,7 @@ const ProductPage = () => {
           />
           <div className="flex-1">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
-                {categorySlug}
-              </h3>
+              <h3 className="text-lg font-semibold text-gray-900"></h3>
               <SortButton
                 isSortDropdownOpen={isSortDropdownOpen}
                 toggleSortDropdown={toggleSortDropdown}

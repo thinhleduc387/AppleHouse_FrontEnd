@@ -70,7 +70,7 @@ const VoucherPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="border rounded-lg p-4 shadow-md hover:shadow-lg transition">
             <h2 className="font-bold text-base md:text-lg mb-2">
-              Voucher toàn Shop
+              Voucher sản phẩm
             </h2>
             <p className="text-gray-500 text-sm mb-4">
               Voucher áp dụng cho tất cả sản phẩm trong Shop của bạn.
@@ -84,7 +84,7 @@ const VoucherPage = () => {
           </div>
           <div className="border rounded-lg p-4 shadow-md hover:shadow-lg transition">
             <h2 className="font-bold text-base md:text-lg mb-2">
-              Voucher sản phẩm
+              Voucher toàn shop
             </h2>
             <p className="text-gray-500 text-sm mb-4">
               Voucher chỉ áp dụng cho những sản phẩm nhất định mà Shop chọn.

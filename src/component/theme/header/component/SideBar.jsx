@@ -125,7 +125,9 @@ const SideBar = ({ isOpen, setIsOpen }) => {
         </div>
         {selectedItem && (
           <div className="p-8">
-            <Link to={selectedItem.link} className="sidebar-title">{selectedItem.name}</Link>
+            <Link to={selectedItem.link} className="sidebar-title">
+              {selectedItem.name}
+            </Link>
             <div className="flex flex-col gap-4 mt-5">
               {selectedItem.subItems.length > 0 ? (
                 selectedItem.subItems.map((subItem, subIndex) => (

@@ -188,27 +188,50 @@ export const getImageLink = async (formData) => {
 };
 
 //ProductStock
-export const getAllProduct = async ({ limit, page }) => {
+export const getAllProduct = async ({
+  limit,
+  page,
+  search,
+  stockStatus = null,
+  categoryId = null,
+}) => {
   return axios.get("/product/spu/get-all", {
     params: {
+      search,
       limit,
       page,
+      stockStatus,
+      categoryId,
     },
   });
 };
-export const getPublishedProduct = async ({ limit, page }) => {
+export const getPublishedProduct = async ({
+  limit,
+  page,
+  stockStatus = null,
+  categoryId = null,
+}) => {
   return axios.get("/product/spu/get-published", {
     params: {
       limit,
       page,
+      stockStatus,
+      categoryId,
     },
   });
 };
-export const getDraftProduct = async ({ limit, page }) => {
+export const getDraftProduct = async ({
+  limit,
+  page,
+  stockStatus = null,
+  categoryId = null,
+}) => {
   return axios.get("/product/spu/get-draft", {
     params: {
       limit,
       page,
+      stockStatus,
+      categoryId,
     },
   });
 };
@@ -485,6 +508,18 @@ export const getListUserAddress = async ({ id }) => {
 
 export const getUserDefaultAddress = async ({ id }) => {
   return axios.get(`/user/default/address/${id}`);
+};
+
+export const updateUserAddress = async ({ addressId, updatedAddress }) => {
+  return axios.put(`/user/address/${addressId}`, { ...updatedAddress });
+};
+
+export const deleteUserAddress = async (addressId) => {
+  return axios.delete(`/user/address/${addressId}`);
+};
+
+export const changeDefaultAddress = async ({ addressId }) => {
+  return axios.patch(`/user/update-default-address/${addressId}`);
 };
 
 export const updateProfile = async ({

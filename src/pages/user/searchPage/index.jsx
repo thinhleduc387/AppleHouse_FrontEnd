@@ -45,6 +45,8 @@ const SearchPage = () => {
         imageSrc: product?.product_thumb,
         productPrice: product?.product_price,
         link: `/products/${product?.product_slug}`,
+        rating: product?.product_ratingAverage,
+        tags: product?.product_tags,
       }));
 
       setProductList(products);
