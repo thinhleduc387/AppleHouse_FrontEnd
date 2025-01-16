@@ -33,6 +33,7 @@ const OrderDashboard = () => {
       try {
         setIsLoading(true);
         const response = await getOrderStatistic(timeRange);
+        console.log("🚀 ~ fetchData ~ response.metadata:", response.metadata);
         setData(response.metadata);
       } catch (error) {
         console.error("Error fetching data:", error);

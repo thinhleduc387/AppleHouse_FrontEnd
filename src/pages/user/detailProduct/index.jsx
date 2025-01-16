@@ -31,6 +31,8 @@ const DetailProduct = () => {
   const [totalreviews, setTotalReviews] = useState({});
   const [selectedImage, setSelectedImage] = useState();
   const [moreImgs, setMoreImgs] = useState();
+
+  const [haveNewRating, setHaveNewRating] = useState(false);
   const commentSectionRef = useRef(null);
   const ratingStatRef = useRef(null);
 
@@ -65,6 +67,10 @@ const DetailProduct = () => {
     const response = await getProduct(productId);
     if (response.metadata && response.status === 200) {
       setSkus(response.metadata.sku_list);
+      console.log(
+        "🚀 ~ handleGetProduct ~ response.metadata.spu_info:",
+        response.metadata.spu_info
+      );
       setSpu(response.metadata.spu_info);
       setMoreImgs(collectProductImages(response.metadata.spu_info));
       setSelectedImage(collectProductImages(response.metadata.spu_info)[0]);
@@ -113,6 +119,10 @@ const DetailProduct = () => {
     handleGetProduct();
     getToTalReviewAndComment();
   }, [productId]);
+
+  useEffect(() => {
+    getToTalReviewAndComment();
+  }, [haveNewRating]);
 
   useEffect(() => {
     if (selectedSku?.sku_imgs?.length > 0) {
@@ -346,10 +356,15 @@ const DetailProduct = () => {
                 <RatingStar
                   numberOfRating={totalreviews.numberOfRating}
                   spuId={spu._id}
+                  haveNewRating={haveNewRating}
+                  setHaveNewRating={setHaveNewRating}
                 />
               </div>
               <div ref={commentSectionRef}>
-                <CommentSection productId={productId} />
+                <CommentSection
+                  productId={productId}
+                  setHaveNewRating={setHaveNewRating}
+                />
               </div>
             </div>
 
