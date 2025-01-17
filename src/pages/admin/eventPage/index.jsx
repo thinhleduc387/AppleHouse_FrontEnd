@@ -234,8 +234,11 @@ const EventPage = () => {
                     </td>
                     <td className="px-4 py-2 border-b flex gap-2">
                       <button
-                        className="text-blue-500 cursor-not-allowed opacity-50"
+                        className={`text-blue-500 opacity-100 ${
+                          isEnded ? " cursor-not-allowed" : " cursor-pointer"
+                        }`}
                         disabled={isEnded}
+                        onClick={() => handleEditFlashSale(sale._id)}
                       >
                         <FaEdit size={18} />
                       </button>
