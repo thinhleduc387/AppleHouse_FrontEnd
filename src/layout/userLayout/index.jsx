@@ -2,6 +2,7 @@ import { memo } from "react";
 import Header from "../../component/theme/header";
 import Footer from "../../component/theme/footer";
 import { Outlet } from "react-router-dom";
+import ChatBox from "../../component/Chat/ChatBox";
 
 const MasterLayout = ({ ...props }) => {
   return (
@@ -11,12 +12,11 @@ const MasterLayout = ({ ...props }) => {
       </div>
 
       <main className="flex-grow w-full mt-[100px]">
-        {" "}
         <div className="mx-4 sm:mx-6 md:mx-12 lg:mx-28" {...props}>
           <Outlet />
         </div>
       </main>
-
+      <ChatBox />
       <Footer />
     </div>
   );

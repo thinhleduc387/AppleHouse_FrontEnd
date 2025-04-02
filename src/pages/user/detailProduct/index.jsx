@@ -21,7 +21,7 @@ const DetailProduct = () => {
   const userId = useSelector((state) => state.account?.user?._id);
   const dispatch = useDispatch();
 
-  const [isSidebarOpen, setSidebarOpen] = useState(false); // State cho Sidebar
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [skus, setSkus] = useState([]);
   const [spu, setSpu] = useState(null);
@@ -44,7 +44,7 @@ const DetailProduct = () => {
     const variationImgs =
       product.product_variations?.flatMap((variation) =>
         variation.images
-          ? variation.images.filter((img) => img && img.length > 0) // Only include valid, non-empty items
+          ? variation.images.filter((img) => img && img.length > 0)
           : []
       ) || [];
     const allImages = [...new Set([...moreImgs, ...variationImgs])];
@@ -65,12 +65,10 @@ const DetailProduct = () => {
   const handleGetProduct = async () => {
     setLoading(true);
     const response = await getProduct(productId);
+    console.log("🚀 ~ handleGetProduct ~ response:", response);
     if (response.metadata && response.status === 200) {
       setSkus(response.metadata.sku_list);
-      console.log(
-        "🚀 ~ handleGetProduct ~ response.metadata.spu_info:",
-        response.metadata.spu_info
-      );
+
       setSpu(response.metadata.spu_info);
       setMoreImgs(collectProductImages(response.metadata.spu_info));
       setSelectedImage(collectProductImages(response.metadata.spu_info)[0]);
@@ -175,7 +173,7 @@ const DetailProduct = () => {
                 </div>
 
                 <div className="mt-6 flex flex-wrap justify-center gap-6 mx-auto">
-                  {moreImgs.map((src, index) => (
+                  {moreImgs?.map((src, index) => (
                     <div
                       key={index}
                       className={`w-24 h-20 flex items-center justify-center rounded-lg p-4 cursor-pointer transition-all duration-300 ${
@@ -355,7 +353,7 @@ const DetailProduct = () => {
               <div ref={ratingStatRef}>
                 <RatingStar
                   numberOfRating={totalreviews.numberOfRating}
-                  spuId={spu._id}
+                  spuId={spu?._id}
                   haveNewRating={haveNewRating}
                   setHaveNewRating={setHaveNewRating}
                 />

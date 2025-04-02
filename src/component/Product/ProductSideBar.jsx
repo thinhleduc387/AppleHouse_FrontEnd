@@ -111,7 +111,7 @@ const ProductSideBar = ({ productAttributes, isOpen, setIsOpen }) => {
           onMouseUp={stopDrag}
           onMouseLeave={stopDrag}
         >
-          {productAttributes.map((group, index) => (
+          {productAttributes?.map((group, index) => (
             <button
               key={index}
               onClick={() => scrollToGroup(index)}
@@ -143,7 +143,7 @@ const ProductSideBar = ({ productAttributes, isOpen, setIsOpen }) => {
           className="mr-5 ml-5 sidebar-content overflow-y-auto"
           style={{ height: "calc(100vh - 180px)" }}
         >
-          {productAttributes.map((group, index) => (
+          {productAttributes?.map((group, index) => (
             <div
               key={index}
               className="mt-6"
