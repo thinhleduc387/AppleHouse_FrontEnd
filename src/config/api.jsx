@@ -624,3 +624,8 @@ export const getOrderStatistic = async (timeRange) => {
 export const getUserStatistic = async () => {
   return axios.get(`/user/statistic`);
 };
+
+// chat bot api
+export const getChatBotResponse = async (message) => {
+  return axios.post(`/chat-bot`, { userMessage: message });
+};

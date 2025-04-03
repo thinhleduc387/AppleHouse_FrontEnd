@@ -1,12 +1,58 @@
 import { useState } from "react";
-import ChatHeader from "./components/ChatHeader";
 import ChatMessages from "./components/ChatMessages";
 import ChatInput from "./components/ChatInput";
 import ProductSection from "./components/ProductSection";
+import ChatHeader from "./components/chatheader";
+import { getChatBotResponse } from "../../config/api";
 
 const ChatBox = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [messages, setMessages] = useState([
+    {
+      role: "model",
+      content:
+        "Xin chào! Mình là trợ lý AI của shop. Mình có thể giúp gì cho bạn?",
+    },
+  ]);
+  console.log("🚀 ~ ChatBox ~ messages:", messages);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const callApiChat = async (message) => {
+    try {
+      const response = await getChatBotResponse(message);
+      console.log("🚀 ~ callApiChat ~ response?.metedata:", response?.metadata);
+      return response?.metadata;
+    } catch (error) {
+      console.error("Chat error:", error);
+      throw error;
+    }
+  };
+
+  const handleSendMessage = async (message) => {
+    try {
+      setIsLoading(true);
+      setMessages((prev) => [...prev, { role: "user", content: message }]);
+
+      const response = await callApiChat(message);
+
+      setMessages((prev) => [
+        ...prev,
+        { role: "model", content: response?.reply },
+      ]);
+    } catch (error) {
+      console.error("Error sending message:", error);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "model",
+          content: "Xin lỗi, có lỗi xảy ra. Vui lòng thử lại sau.",
+        },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -28,7 +74,8 @@ const ChatBox = () => {
           <ChatHeader
             onExpand={() => setIsExpanded(!isExpanded)}
             onClose={() => {
-              setIsChatOpen(false), setIsExpanded(false);
+              setIsChatOpen(false);
+              setIsExpanded(false);
             }}
           />
 
@@ -38,8 +85,8 @@ const ChatBox = () => {
                 isExpanded ? "w-full md:w-1/2" : "w-full"
               }`}
             >
-              <ChatMessages />
-              <ChatInput />
+              <ChatMessages messages={messages} />
+              <ChatInput onSendMessage={handleSendMessage} />
             </div>
 
             {isExpanded && (
