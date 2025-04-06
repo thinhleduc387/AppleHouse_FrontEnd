@@ -38,7 +38,9 @@ const accountSlice = createSlice({
       state.user.email = action.payload.usr_email;
       state.user.name = action.payload.usr_name;
       state.user.role = action?.payload?.usr_role;
-      state.user.avatar = action?.payload?.usr_avatar;
+      state.user.avatar = action?.payload?.usr_avatar
+        ? action?.payload?.usr_avatar
+        : "https://i.sstatic.net/l60Hf.png";
       state.user.loyalPoint = action?.payload?.usr_loyalPoint;
       state.user.sex = action?.payload?.usr_sex;
       state.user.dataOfBirth = action?.payload?.usr_date_of_birth;
