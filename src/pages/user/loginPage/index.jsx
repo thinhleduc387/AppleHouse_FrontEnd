@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUserLoginInfo } from "../../../redux/slice/accountSlice";
 import { toast } from "react-toastify";
 import { clearLocalCart, fetchCart } from "../../../redux/slice/cartSlice";
+import { registerUser } from "../../../socket";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -22,7 +23,10 @@ const LoginPage = () => {
   const dispatch = useDispatch();
 
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
-  if (isAuthenticated) {
+  const userId = useSelector((state) => state.account?.user?._id);
+
+  if (isAuthenticat) {
+    registerUser(userId);
     return <Navigate to="/" replace />;
   }
 

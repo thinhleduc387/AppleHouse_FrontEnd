@@ -46,7 +46,7 @@ const Address = () => {
   };
 
   return (
-    <div className=" max-w-6xl mx-auto">
+    <div className=" max-w-6xl mx-auto min-h-1">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">Sổ địa chỉ nhận hàng</h1>
         <button
@@ -58,40 +58,54 @@ const Address = () => {
         </button>
       </div>
       <div className="space-y-4">
-        {addresses?.map((address, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-lg shadow p-4 flex items-start gap-4"
-          >
-            <div className="bg-gray-100 p-2 rounded-lg">
-              <Home className="w-6 h-6 text-gray-600" />
-            </div>
+        {addresses && addresses.length > 0 ? (
+          addresses?.map((address, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-lg shadow p-4 flex items-start gap-4"
+            >
+              <div className="bg-gray-100 p-2 rounded-lg">
+                <Home className="w-6 h-6 text-gray-600" />
+              </div>
 
-            <div className="flex-grow">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="font-medium">{address.fullName}</h3>
-                  <p className="text-gray-600">{address.phone}</p>
-                  <p className="text-gray-600 mt-1">{address.fullAddress}</p>
-                </div>
-                <div className="flex gap-3">
-                  <button
-                    className="text-red-500 hover:text-red-600"
-                    onClick={() => handleEditAddress(address)}
-                  >
-                    Sửa
-                  </button>
-                  <button
-                    className="text-gray-600 hover:text-gray-700"
-                    onClick={() => handleDelteAdress(address)}
-                  >
-                    Xoá
-                  </button>
+              <div className="flex-grow">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-medium">{address.fullName}</h3>
+                    <p className="text-gray-600">{address.phone}</p>
+                    <p className="text-gray-600 mt-1">{address.fullAddress}</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <button
+                      className="text-red-500 hover:text-red-600"
+                      onClick={() => handleEditAddress(address)}
+                    >
+                      Sửa
+                    </button>
+                    <button
+                      className="text-gray-600 hover:text-gray-700"
+                      onClick={() => handleDelteAdress(address)}
+                    >
+                      Xoá
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
+          ))
+        ) : (
+          <div className="text-center py-16 bg-white rounded-lg shadow-sm ">
+            <div className="mb-6">
+              <Building2 className="w-20 h-20 mx-auto text-gray-400" />
+            </div>
+            <h3 className="text-xl font-medium text-gray-900 mb-2">
+              Chưa có địa chỉ nào
+            </h3>
+            <p className="text-gray-500 mb-6">
+              Vui lòng thêm địa chỉ để thuận tiện cho việc giao hàng
+            </p>
           </div>
-        ))}
+        )}
       </div>
 
       <AddressForm

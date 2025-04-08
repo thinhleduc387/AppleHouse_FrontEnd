@@ -40,7 +40,7 @@ const OrderList = () => {
       : orders.filter((order) => statusMap[order.order_status] === activeTab);
 
   return (
-    <div className="md:p-4 min-h-screen">
+    <div className="md:p-4 min-h-1">
       <h1 className="text-xl font-semibold mb-4">Đơn hàng của tôi</h1>
       <div className="flex items-center justify-start bg-white border-b border-gray-200 pt-4 mb-4 rounded-lg">
         {tabs.map((tab) => (
@@ -64,7 +64,24 @@ const OrderList = () => {
             <OrderItem key={order.id} order={order} statusMap={statusMap} />
           ))
         ) : (
-          <p className="text-gray-600">Không có đơn hàng nào.</p>
+          <div className="text-center py-16 bg-white rounded-lg shadow-sm">
+            <img
+              src="../../src/assets/no-order.png"
+              alt="No Orders"
+              className="w-48 h-48 mx-auto mb-6 opacity-75"
+            />
+            <h3 className="text-xl font-medium text-gray-900 mb-2">
+              Chưa có đơn hàng nào
+            </h3>
+            <p className="text-gray-500 mb-6">
+              Bạn chưa có đơn hàng{" "}
+              <span>
+                {" "}
+                <b> {activeTab.toLocaleLowerCase()} </b>
+              </span>
+              nào trong danh sách này
+            </p>
+          </div>
         )}
       </div>
     </div>

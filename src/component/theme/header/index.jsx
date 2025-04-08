@@ -11,6 +11,7 @@ import DropdownMenu from "./component/DropdownMenu";
 import { Link } from "react-router-dom";
 import NotificationMenu from "../../Notification/notificationMenu";
 import { fetchCart } from "../../../redux/slice/cartSlice";
+import socket from "../../../socket";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -27,12 +28,7 @@ const Header = () => {
   const cart_products = useSelector((state) => state.cart.cart_products);
   const localCartItems = useSelector((state) => state.cart.localCartItems);
 
-  const mockNotifications = [
-    { message: "Your order has been shipped.", time: "2 minutes ago" },
-    { message: "New message from customer support.", time: "1 hour ago" },
-    { message: "Product back in stock: iPhone 13", time: "3 hours ago" },
-    { message: "Flash Sale starting soon!", time: "1 day ago" },
-  ];
+  const [notifications, setNotifications] = useState([]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -56,6 +52,23 @@ const Header = () => {
       dispatch(fetchCart(userId));
     }
 
+    socket.on("notification", (notification) => {
+      setNotifications((prev) => [...prev, notification]);
+    });
+
+    // Lắng nghe thông báo cập nhật (mark as read)
+    socket.on("notification_updated", (updatedNotification) => {
+      setNotifications((prev) =>
+        prev.map((notif) =>
+          notif._id === updatedNotification._id ? updatedNotification : notif
+        )
+      );
+    });
+
+    // Xử lý lỗi từ server
+    socket.on("error", (error) => {
+      console.error("Socket error:", error.message);
+    });
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -68,6 +81,9 @@ const Header = () => {
     };
   }, [isOpen]);
 
+  const markAsRead = (notificationId) => {
+    socket.emit("mark_as_read", { userId, notificationId });
+  };
   return (
     <>
       <div className="w-full top-0 left-0 z-10 sticky shadow-md ">
@@ -111,7 +127,7 @@ const Header = () => {
                 )}
               </Link>
             </li>
-            {/* {isAuthenticated && (
+            {isAuthenticated && (
               <li
                 onMouseEnter={() => setNotifyIsOpen(true)}
                 onMouseLeave={() => setNotifyIsOpen(false)}
@@ -120,15 +136,18 @@ const Header = () => {
                 <Link to="/">
                   <PiBellSimpleRinging />
                   <span className="absolute top-0 right-0 text-[0.6rem] bg-red-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center">
-                    {mockNotifications.length}
+                    {notifications.length}
                   </span>
                 </Link>
 
                 {notifyIsOpen && (
-                  <NotificationMenu notifications={mockNotifications} />
+                  <NotificationMenu
+                    notifications={notifications}
+                    markAsRead={markAsRead}
+                  />
                 )}
               </li>
-            )} */}
+            )}
             {/* Profile Section with Dropdown */}
             <li className="my-7 lg:my-0">
               <ProfileNavBar userAvatar={userAvatar} userName={userName} />
