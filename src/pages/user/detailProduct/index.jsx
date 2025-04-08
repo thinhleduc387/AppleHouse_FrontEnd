@@ -69,6 +69,7 @@ const DetailProduct = () => {
   const handleGetProduct = async () => {
     setLoading(true);
     const response = await getProduct(productId);
+    console.log("🚀 ~ handleGetProduct ~ response:", response);
     if (response.metadata && response.status === 200) {
       setSkus(response.metadata.sku_list);
       setSpu(response.metadata.spu_info);
@@ -175,7 +176,7 @@ const DetailProduct = () => {
                 </div>
 
                 <div className="mt-6 flex flex-wrap justify-center gap-6 mx-auto">
-                  {moreImgs.map((src, index) => (
+                  {moreImgs?.map((src, index) => (
                     <div
                       key={index}
                       className={`w-24 h-20 flex items-center justify-center rounded-lg p-4 cursor-pointer transition-all duration-300 ${
@@ -355,7 +356,7 @@ const DetailProduct = () => {
               <div ref={ratingStatRef}>
                 <RatingStar
                   numberOfRating={totalreviews.numberOfRating}
-                  spuId={spu._id}
+                  spuId={spu?._id}
                   haveNewRating={haveNewRating}
                   setHaveNewRating={setHaveNewRating}
                 />

@@ -10,7 +10,6 @@ const FlashSale = () => {
   const [totalProductsToShow, setTotalProductsToShow] = useState(4);
   const [timeLeft, setTimeLeft] = useState(3600);
   const [products, setProducts] = useState([]);
-  console.log("🚀 ~ FlashSale ~ products:", products);
   const [isUpcoming, setIsUpcoming] = useState();
   const [flashSaleName, setFlashSaleName] = useState("");
   const handleGetFlashSale = async () => {
