@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { checkPurchase, createComment, ratingCount } from "../../../config/api";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next"; // Import useTranslation từ react-i18next
 
 const RatingStar = ({ spuId = null, numberOfRating, haveNewRating }) => {
+  const { t } = useTranslation("detailProduct"); // Sử dụng hook useTranslation để lấy hàm t
   const [hasPurchased, setHasPurchased] = useState(false);
   const [ratingPercentages, setRatingPercentages] = useState([]);
+  const userId = useSelector((state) => state.account?.user?._id);
+
   const handleCheckPurchase = async () => {
     const response = await checkPurchase({ userId, spuId });
     setHasPurchased(response.metadata);
   };
-  const userId = useSelector((state) => state.account?.user?._id);
 
   useEffect(() => {
     handleCheckPurchase();
@@ -39,6 +42,7 @@ const RatingStar = ({ spuId = null, numberOfRating, haveNewRating }) => {
 
     setRatingPercentages(ratingPercentages);
   };
+
   const fillMissingScores = (ratingCounts) => {
     const allPossibleScores = [1, 2, 3, 4, 5];
     const filledRatingCounts = allPossibleScores.map((score) => {
@@ -56,11 +60,14 @@ const RatingStar = ({ spuId = null, numberOfRating, haveNewRating }) => {
     <div className="flex flex-col p-6 bg-white rounded-xl w-full mx-auto">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-2xl font-bold text-gray-800">
-          Đánh giá <span className="text-blue-600">({numberOfRating})</span>
+          {t("ratings")}{" "}
+          <span className="text-blue-600">({numberOfRating})</span>{" "}
+          {/* Dịch "Đánh giá" */}
         </h3>
         {!hasPurchased && (
           <span className="text-sm text-gray-500 italic">
-            *Chỉ khách hàng đã mua mới có thể đánh giá
+            {t("onlyPurchasedCanRate")}{" "}
+            {/* Dịch "*Chỉ khách hàng đã mua mới có thể đánh giá" */}
           </span>
         )}
       </div>

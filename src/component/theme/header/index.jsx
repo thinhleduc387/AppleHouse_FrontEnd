@@ -11,10 +11,12 @@ import DropdownMenu from "./component/DropdownMenu";
 import { Link } from "react-router-dom";
 import NotificationMenu from "../../Notification/notificationMenu";
 import { fetchCart } from "../../../redux/slice/cartSlice";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../../LanguageSwitcher";
 
 const Header = () => {
   const dispatch = useDispatch();
-
+  const { t } = useTranslation();
   const Links = [
     { name: "About", link: "/" },
     { name: "Contact", link: "/profile" },
@@ -78,7 +80,7 @@ const Header = () => {
           {/* Logo and Menu */}
           <div className="flex items-center justify-between w-full lg:w-auto">
             <a href="/" className="font-bold text-3xl">
-              Apple Shop
+              AppleHouse
             </a>
             {/* Desktop Dropdown Menu */}
             <div className="hidden lg:block">
@@ -110,6 +112,9 @@ const Header = () => {
                   </span>
                 )}
               </Link>
+            </li>
+            <li className="font-extrabold text-3xl my-7 lg:my-0 relative">
+              <LanguageSwitcher />
             </li>
             {/* {isAuthenticated && (
               <li

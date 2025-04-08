@@ -1,0 +1,16 @@
+{
+  "programList": "Program List",
+  "all": "All",
+  "ongoing": "Ongoing",
+  "upcoming": "Upcoming",
+  "ended": "Ended",
+  "timeSlot": "Time Slot",
+  "selectTimeSlot": "Select Time Slot",
+  "filter": "Filter",
+  "product": "Product",
+  "status": "Status",
+  "toggle": "Toggle",
+  "action": "Action",
+  "create": "Create",
+  "noData": "No Data"
+}

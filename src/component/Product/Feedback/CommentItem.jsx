@@ -7,8 +7,10 @@ import {
 } from "../../../config/api";
 import { useSelector } from "react-redux";
 import { formatTimeAgo } from "../../../utils";
+import { useTranslation } from "react-i18next"; // Import useTranslation từ react-i18next
 
 const CommentItem = ({ comment, depth = 0 }) => {
+  const { t } = useTranslation("comment"); // Sử dụng hook useTranslation để lấy hàm t
   console.log("🚀 ~ CommentItem ~ comment:", comment);
   const userId = useSelector((state) => state.account?.user?._id);
   const [showReplies, setShowReplies] = useState(false);
@@ -98,12 +100,14 @@ const CommentItem = ({ comment, depth = 0 }) => {
           <div className="flex items-center space-x-2">
             <h4 className="text-sm font-semibold text-gray-900 truncate">
               {comment?.isFromSystem
-                ? "Từ hệ thống"
+                ? t("fromSystem") // Dịch "Từ hệ thống" thành "From System"
                 : comment?.comment_userId?.usr_name}
             </h4>
             <span className="text-xs text-gray-500">•</span>
             <p className="text-xs text-gray-500">
-              {formatTimeAgo(comment.createdAt)}
+              {comment.createdAt === new Date().toISOString()
+                ? t("justNow") // Dịch "Vừa xong" thành "Just Now" nếu thời gian là hiện tại
+                : formatTimeAgo(comment.createdAt)}
             </p>
           </div>
 
@@ -148,7 +152,7 @@ const CommentItem = ({ comment, depth = 0 }) => {
               className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all duration-200"
             >
               <Reply className="w-4 h-4 mr-1.5" />
-              <span>Trả lời</span>
+              <span>{t("reply")}</span> {/* Dịch "Trả lời" thành "Reply" */}
             </button>
           </div>
 
@@ -157,7 +161,7 @@ const CommentItem = ({ comment, depth = 0 }) => {
               <textarea
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
-                placeholder="Nhập phản hồi của bạn..."
+                placeholder={t("enterYourReply")} // Thêm key mới cho "Nhập phản hồi của bạn..."
                 className="w-full p-3 text-sm text-gray-700 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 min-h-[100px] resize-none"
               />
               <div className="flex justify-end space-x-2">
@@ -165,13 +169,13 @@ const CommentItem = ({ comment, depth = 0 }) => {
                   onClick={() => setShowReplyForm(false)}
                   className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200"
                 >
-                  Hủy
+                  {t("cancel")} {/* Thêm key mới cho "Hủy" */}
                 </button>
                 <button
                   onClick={handleReplySubmit}
                   className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200"
                 >
-                  Gửi
+                  {t("send")} {/* Thêm key mới cho "Gửi" */}
                 </button>
               </div>
             </div>
@@ -187,7 +191,8 @@ const CommentItem = ({ comment, depth = 0 }) => {
                   showReplies ? "rotate-180" : ""
                 }`}
               />
-              {showReplies ? "Ẩn" : "Xem"} phản hồi
+              {showReplies ? t("hide") : t("view")} {t("reply").toLowerCase()}{" "}
+              {/* Dịch "Ẩn" và "Xem phản hồi" */}
             </button>
           )}
         </div>

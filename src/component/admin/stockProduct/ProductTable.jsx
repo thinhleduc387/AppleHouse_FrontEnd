@@ -3,6 +3,8 @@ import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { formatVND } from "../../../utils/format";
 import { deleteProduct } from "../../../config/api";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next"; // Import useTranslation
+
 const ProductTable = ({
   products,
   selectedProducts,
@@ -11,6 +13,7 @@ const ProductTable = ({
   fetchTabCounts,
   fetchTabData,
 }) => {
+  const { t } = useTranslation("stock"); // Use the "stock" namespace
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
 
@@ -48,13 +51,13 @@ const ProductTable = ({
               onClick={onClose}
               className="mr-4 text-gray-600 bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
             >
-              Cancel
+              {t("Cancel")}
             </button>
             <button
               onClick={() => onConfirm()}
               className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
             >
-              Delete
+              {t("Delete")}
             </button>
           </div>
         </div>
@@ -110,7 +113,9 @@ const ProductTable = ({
     <div className="hidden md:block">
       {products.length === 0 ? (
         <div className="text-center p-5">
-          <p className="text-gray-500 font-semibold">Không có sản phẩm</p>
+          <p className="text-gray-500 font-semibold">
+            {t("No products available")}
+          </p>
         </div>
       ) : (
         <table className="w-full bg-white table-auto shadow-md rounded-lg">
@@ -124,16 +129,20 @@ const ProductTable = ({
                   onChange={handleSelectAllOnPage}
                 />
               </th>
-              <th className="p-5 text-left">Image</th>
-              <th className="p-5 text-left w-[30%]">Product Name</th>
-              <th className="p-5 text-left">Stock</th>
-              <th className="p-5 text-left">Price</th>
-              <th className="p-5 text-left">Category</th>
-              <th className="p-5 text-left hidden lg:table-cell">Tags</th>
-              <th className="p-5 text-left hidden lg:table-cell">Review</th>
-              <th className="p-5 text-left">Date</th>
-              <th className="p-5 text-left">Published</th>
-              <th className="p-5 text-center rounded-tr-lg">Actions</th>
+              <th className="p-5 text-left">{t("Image")}</th>
+              <th className="p-5 text-left w-[30%]">{t("Product Name")}</th>
+              <th className="p-5 text-left">{t("Stock")}</th>
+              <th className="p-5 text-left">{t("Price")}</th>
+              <th className="p-5 text-left">{t("Category")}</th>
+              <th className="p-5 text-left hidden lg:table-cell">
+                {t("Tags")}
+              </th>
+              <th className="p-5 text-left hidden lg:table-cell">
+                {t("Review")}
+              </th>
+              <th className="p-5 text-left">{t("Date")}</th>
+              <th className="p-5 text-left">{t("Published")}</th>
+              <th className="p-5 text-center rounded-tr-lg">{t("Actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -202,9 +211,9 @@ const ProductTable = ({
                 </td>
                 <td className="p-5 border-b text-center font-semibold">
                   {product.isPublished ? (
-                    <span className="text-green-500">Yes</span>
+                    <span className="text-green-500">{t("Yes")}</span>
                   ) : (
-                    <span className="text-red-500">No</span>
+                    <span className="text-red-500">{t("No")}</span>
                   )}
                 </td>
                 <td className="p-5 border-b text-center">

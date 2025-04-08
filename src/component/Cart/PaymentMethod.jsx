@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { FaMoneyBillWaveAlt } from "react-icons/fa";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const PaymentMethod = ({ orderMethodPayment, setOrderMethodPayment }) => {
+  const { t } = useTranslation("cart"); // Sử dụng hook useTranslation để lấy hàm t
+
   // Handle selecting a payment method
   const handlePaymentSelect = (method) => {
     setOrderMethodPayment(method);
@@ -10,7 +13,7 @@ const PaymentMethod = ({ orderMethodPayment, setOrderMethodPayment }) => {
   return (
     <div className="p-6 bg-white rounded-md shadow-md">
       <h3 className="text-lg font-semibold text-gray-800">
-        Chọn phương thức thanh toán
+        {t("selectPaymentMethod")} {/* Dịch "Chọn phương thức thanh toán" */}
       </h3>
 
       {/* Payment options */}
@@ -38,7 +41,7 @@ const PaymentMethod = ({ orderMethodPayment, setOrderMethodPayment }) => {
                 : "text-gray-800"
             }`}
           >
-            Thanh toán bằng Stripe
+            {t("payWithStripe")} {/* Dịch "Thanh toán bằng Stripe" */}
           </span>
         </div>
 
@@ -63,7 +66,7 @@ const PaymentMethod = ({ orderMethodPayment, setOrderMethodPayment }) => {
                 : "text-gray-800"
             }`}
           >
-            Thanh toán khi nhận hàng (COD)
+            {t("payWithCOD")} {/* Dịch "Thanh toán khi nhận hàng (COD)" */}
           </span>
         </div>
       </div>

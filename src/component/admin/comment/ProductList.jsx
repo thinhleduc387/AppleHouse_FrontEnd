@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { getAllProduct } from "../../../config/api";
 import Pagination from "../../Pagiantion";
 import { AiFillStar } from "react-icons/ai";
+import { useTranslation } from "react-i18next"; // Import useTranslation từ react-i18next
 
 const ITEMS_PER_PAGE = 6;
 
 const ProductList = ({ selectedProduct, setSelectedProduct }) => {
+  const { t } = useTranslation("comment"); // Sử dụng hook useTranslation để lấy hàm t
   const [productList, setProductList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,7 +16,7 @@ const ProductList = ({ selectedProduct, setSelectedProduct }) => {
 
   useEffect(() => {
     handleGetAllProduct();
-  }, [searchQuery, currentPage]); // Lắng nghe cả searchQuery và currentPage
+  }, [searchQuery, currentPage]);
 
   const handleGetAllProduct = async () => {
     try {
@@ -39,7 +41,7 @@ const ProductList = ({ selectedProduct, setSelectedProduct }) => {
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
-    setCurrentPage(1); // Reset về trang đầu khi tìm kiếm mới
+    setCurrentPage(1);
   };
 
   const handlePageChange = (newPage) => {
@@ -47,26 +49,19 @@ const ProductList = ({ selectedProduct, setSelectedProduct }) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(price);
-  };
-
   return (
     <div className="flex flex-col h-screen bg-white rounded-lg shadow-lg">
       {/* Header Section */}
       <div className="p-6 border-b">
         <h2 className="text-xl font-bold text-gray-800 mb-4">
-          Danh sách sản phẩm
+          {t("productList")}
         </h2>
         <div className="relative">
           <input
             type="text"
             value={searchQuery}
-            onChange={handleSearchChange} // Thay đổi hàm xử lý
-            placeholder="Tìm kiếm theo tên sản phẩm..."
+            onChange={handleSearchChange}
+            placeholder={t("searchByProductName")}
             className="w-full pl-4 pr-10 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-gray-50"
           />
           <svg
@@ -120,7 +115,10 @@ const ProductList = ({ selectedProduct, setSelectedProduct }) => {
                   </h3>
                   <div className="mt-1 flex items-center text-sm text-gray-500">
                     <span className="mx-2">•</span>
-                    <span>Đã bán: {product.product_quantitySold}</span>
+                    <span>
+                      {t("sold")}: {product.product_quantitySold}{" "}
+                      {/* Dịch "Sold" */}
+                    </span>
                   </div>
                   <div className="mt-1 flex items-center">
                     <div className="flex items-center text-yellow-400">
@@ -131,7 +129,8 @@ const ProductList = ({ selectedProduct, setSelectedProduct }) => {
                     </div>
                     {product.product_ratingCount > 0 && (
                       <span className="ml-2 text-sm text-gray-500">
-                        ({product.product_ratingCount} đánh giá)
+                        ({product.product_ratingCount} {t("review")}){" "}
+                        {/* Dịch "Review" */}
                       </span>
                     )}
                   </div>

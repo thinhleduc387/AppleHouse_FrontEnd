@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const stripePromise = loadStripe(
   "pk_test_51QIm5tAz954xg8ieJMNAloyxbeBbsLt9YaVak4sFrSh93vs4vTJfNlWbbA0wcOWXZSK2vVvw2bqewWpPbiC8WSaK00xz976rWR"
@@ -33,6 +34,7 @@ const CheckOut = ({
   orderAddress,
   orderNote,
 }) => {
+  const { t } = useTranslation("cart"); // Sử dụng hook useTranslation để lấy hàm t
   const navigate = useNavigate();
   const [checkoutValue, setCheckOutValue] = useState(initCheckOutValue);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -51,7 +53,6 @@ const CheckOut = ({
     isUseLoyalPoint: useLoyalPoints,
     orderNote,
   };
-  console.log("🚀 ~ handleCheckout ~ data:", data);
 
   useEffect(() => {
     const handleCheckOut = async () => {
@@ -82,8 +83,6 @@ const CheckOut = ({
 
     try {
       setIsProcessing(true);
-
-      // Tạo order
       const response = await createOrder({
         cartId,
         userId,
@@ -112,7 +111,7 @@ const CheckOut = ({
         throw new Error(error.message);
       }
     } catch (error) {
-      toast.error(error.message || "Có lỗi xảy ra khi xử lý thanh toán");
+      toast.error(error.message || t("paymentError")); // Dịch "Có lỗi xảy ra khi xử lý thanh toán"
     } finally {
       setIsProcessing(false);
     }
@@ -129,7 +128,7 @@ const CheckOut = ({
             <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs">
               %
             </span>
-            Chọn hoặc nhập ưu đãi
+            {t("selectOrEnterOffer")} {/* Dịch "Chọn hoặc nhập ưu đãi" */}
           </span>
           <FaChevronRight className="text-gray-500" />
         </div>
@@ -140,8 +139,11 @@ const CheckOut = ({
           <div className="flex items-center gap-3">
             <BsCoin size={24} color="#E5A624" />
             <span className="text-gray-600 text-sm font-medium">
-              Sử dụng {accLoyalPoint} điểm (~
-              {formatVND(accLoyalPoint)})
+              {t("usePoints", {
+                points: accLoyalPoint,
+                amount: formatVND(accLoyalPoint),
+              })}{" "}
+              {/* Dịch "Sử dụng {points} điểm (~{amount})" */}
             </span>
           </div>
           <div
@@ -161,33 +163,33 @@ const CheckOut = ({
 
       <ul className="text-gray-800 mt-6 space-y-4">
         <li className="flex justify-between text-base">
-          Tổng tiền
+          {t("totalPrice")} {/* Dịch "Tổng tiền" */}
           <span className="font-bold">
             {formatVND(checkoutValue.totalPrice)}
           </span>
         </li>
         <hr />
         <li className="flex justify-between text-base">
-          Khuyến mãi sản phẩm
+          {t("productDiscount")} {/* Dịch "Khuyến mãi sản phẩm" */}
           <span className="font-bold">
             {formatVND(checkoutValue.productDiscount)}
           </span>
         </li>
         <hr />
         <li className="flex justify-between text-base">
-          Khuyến mãi voucher
+          {t("voucherDiscount")} {/* Dịch "Khuyến mãi voucher" */}
           <span className="font-bold">
             {formatVND(checkoutValue.voucherDiscount)}
           </span>
         </li>
         <hr />
         <li className="flex justify-between text-base">
-          Vận chuyển
+          {t("shippingFee")} {/* Dịch "Vận chuyển" */}
           <span className="font-bold">{formatVND(checkoutValue.feeShip)}</span>
         </li>
         <hr />
         <li className="flex justify-between text-base">
-          Điểm thành viên
+          {t("loyaltyPoints")} {/* Dịch "Điểm thành viên" */}
           <span className="font-bold flex items-center">
             <BsCoin color="#e5a624" className="mr-2" />+
             <span className="ml-1">
@@ -196,8 +198,8 @@ const CheckOut = ({
           </span>
         </li>
         <hr />
-        <li className="flex justify-between text-base ">
-          Cần thanh toán
+        <li className="flex justify-between text-base">
+          {t("amountToPay")} {/* Dịch "Cần thanh toán" */}
           <span className="text-red-500 font-bold">
             {formatVND(checkoutValue.totalCheckOut)}
           </span>
@@ -216,7 +218,8 @@ const CheckOut = ({
                 : "bg-blue-600 hover:bg-blue-700 text-white"
             }`}
           >
-            {isProcessing ? "Đang xử lý..." : "Đặt hàng"}
+            {isProcessing ? t("processing") : t("placeOrder")}
+            {/* Dịch "Đang xử lý..." hoặc "Đặt hàng" */}
           </button>
         ) : (
           <button
@@ -229,7 +232,7 @@ const CheckOut = ({
                 : "bg-blue-600 hover:bg-blue-700 text-white"
             }`}
           >
-            Xác nhận đơn
+            {t("confirmOrder")} {/* Dịch "Xác nhận đơn" */}
           </button>
         )}
         <button
@@ -237,7 +240,7 @@ const CheckOut = ({
           onClick={onContinueShopping}
           className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-transparent text-gray-800 border border-gray-300 rounded-md hover:bg-gray-100"
         >
-          Tiếp tục mua sắm
+          {t("continueShopping")} {/* Dịch "Tiếp tục mua sắm" */}
         </button>
       </div>
 

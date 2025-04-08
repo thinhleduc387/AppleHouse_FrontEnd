@@ -3,8 +3,10 @@ import { AiOutlineReload } from "react-icons/ai";
 import Loading from "../../../component/Loading"; // Component loading giả định
 import { formatVND } from "../../../utils/format"; // Hàm giả định format tiền tệ
 import { getTopProduct } from "../../../config/api";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const TopProductPage = () => {
+  const { t } = useTranslation("topProduct"); // Use the "topProduct" namespace
   const [isLoading, setIsLoading] = useState(true);
   const [categoriesWithProducts, setCategoriesWithProducts] = useState([]);
 
@@ -33,7 +35,7 @@ const TopProductPage = () => {
     <div className="p-6 min-h-screen">
       {/* Header */}
       <div className="flex justify-between items-center bg-white px-6 py-4 rounded-lg shadow-md mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Top Products</h1>
+        <h1 className="text-3xl font-bold text-gray-800">{t("topProducts")}</h1>
       </div>
 
       {/* Loading State */}
@@ -46,12 +48,12 @@ const TopProductPage = () => {
           {/* Top Sales by Categories */}
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-lg font-extrabold mb-4">
-              Top Sales by Categories
+              {t("topSalesByCategories")}
             </h2>
             <div className="space-y-4">
               {categoriesWithProducts.map((category, index) => (
                 <div key={index} className="space-y-2">
-                  {/* Tên danh mục và giá trị */}
+                  {/* Category Name and Value */}
                   <div className="flex justify-between">
                     <span className="text-gray-800 text-lg font-medium">
                       {category.category?.category_name || "Unknown Category"}
@@ -60,7 +62,7 @@ const TopProductPage = () => {
                       {formatVND(category.totalRevenue || 0)}
                     </span>
                   </div>
-                  {/* Thanh tiến trình */}
+                  {/* Progress Bar */}
                 </div>
               ))}
             </div>
@@ -69,7 +71,7 @@ const TopProductPage = () => {
           {/* Best Sold Products By Category */}
           <div>
             {categoriesWithProducts
-              .filter((category) => category.bestSold?.length > 0) // Lọc danh mục có sản phẩm
+              .filter((category) => category.bestSold?.length > 0) // Filter categories with products
               .map((category, index) => (
                 <div key={index} className=" mt-3">
                   {/* Category Info */}
@@ -100,10 +102,10 @@ const TopProductPage = () => {
                           {product.product_name}
                         </h3>
                         <p className="font-bold text-green-600">
-                          Available: {product.product_quantity}
+                          {t("available")}: {product.product_quantity}
                         </p>
                         <p className="font-bold text-blue-600">
-                          Sold: {product.product_quantitySold}
+                          {t("sold")}: {product.product_quantitySold}
                         </p>
                       </div>
                     ))}

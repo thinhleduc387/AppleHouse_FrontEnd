@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { MdNavigateNext } from "react-icons/md";
+import { useTranslation } from "react-i18next"; // Import useTranslation từ react-i18next
 
 const ProductDescription = ({ description, onClickThongSo }) => {
+  const { t } = useTranslation("detailProduct"); // Sử dụng hook useTranslation để lấy hàm t
   const [isExpanded, setIsExpanded] = useState(false);
   const [shouldShowMore, setShouldShowMore] = useState(false);
   const paragraphRef = useRef(null);
@@ -37,14 +39,14 @@ const ProductDescription = ({ description, onClickThongSo }) => {
     <div className="mt-16 bg-white border-2 rounded-lg p-6 space-y-8">
       <div className="flex flex-row justify-between">
         <h1 className="text-lg md:text-xl lg:text-2xl font-bold">
-          Thông tin sản phẩm
+          {t("productInfo")} {/* Dịch "Thông tin sản phẩm" */}
         </h1>
         <a
           className="text-mainColor cursor-pointer flex items-center hover:text-blue-900"
           onClick={onClickThongSo}
         >
           <span className="text-sm md:text-base font-medium">
-            Thông số kỹ thuật
+            {t("technicalSpecs")} {/* Dịch "Thông số kỹ thuật" */}
           </span>
           <MdNavigateNext className="text-xl" />
         </a>
@@ -53,7 +55,7 @@ const ProductDescription = ({ description, onClickThongSo }) => {
       <div
         className={`relative overflow-hidden ${
           !isExpanded ? "max-h-[20rem]" : ""
-        }`} // Giới hạn chiều cao
+        }`}
       >
         <div
           ref={paragraphRef}
@@ -61,28 +63,25 @@ const ProductDescription = ({ description, onClickThongSo }) => {
           className="prose max-w-none"
         />
 
-        {/* Lớp phủ mờ đục nằm ngay dưới */}
         {!isExpanded && shouldShowMore && (
           <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-white to-transparent opacity-90 z-10 flex justify-center items-center">
-            {/* Nút xem thêm nằm trên lớp phủ */}
             <button
               className="text-blue-500 bg-white font-bold hover:underline border border-gray-300 rounded-full px-4 py-2 mt-5"
               onClick={toggleExpand}
             >
-              Xem thêm
+              {t("showMore")} {/* Dịch "Xem thêm" */}
             </button>
           </div>
         )}
       </div>
 
-      {/* Nút thu gọn khi mở rộng */}
       {isExpanded && shouldShowMore && (
         <div className="flex justify-center mt-4">
           <button
             className="text-blue-500 font-bold hover:underline border border-gray-300 rounded-full px-4 py-2"
             onClick={toggleExpand}
           >
-            Thu gọn
+            {t("collapse")} {/* Dịch "Thu gọn" */}
           </button>
         </div>
       )}

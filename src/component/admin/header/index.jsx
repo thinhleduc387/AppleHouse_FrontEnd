@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import Search from "../../SearchBox";
 import { Link, useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import LanguageSwitcher from "../../LanguageSwitcher";
 
 const Header = ({ setIsSidebarOpen }) => {
   const mockNotifications = [
@@ -79,7 +80,7 @@ const Header = ({ setIsSidebarOpen }) => {
               <NotificationMenu notifications={mockNotifications} />
             )}
           </div> */}
-
+          <LanguageSwitcher />
           {/* User Avatar */}
           <Link to="/admin/profile" className="relative">
             <img

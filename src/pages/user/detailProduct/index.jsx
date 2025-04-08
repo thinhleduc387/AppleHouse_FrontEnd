@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import ProductPrice from "../../../component/Product/ProductPrice"; // Import PromotionComponent
+import ProductPrice from "../../../component/Product/ProductPrice";
 import ProductSideBar from "../../../component/Product/ProductSideBar";
 import CommentSection from "../../../component/Product/Feedback/CommentSection";
 import {
@@ -15,13 +15,15 @@ import { toast } from "react-toastify";
 import { fetchCart, addToLocalCart } from "../../../redux/slice/cartSlice";
 import RatingStar from "../../../component/Product/Feedback/RatingStar";
 import RecommendSectionForDetailPage from "../../../component/RecommendSection/RecommendSectionDetailProruct";
+import { useTranslation } from "react-i18next"; // Import useTranslation từ react-i18next
 
 const DetailProduct = () => {
+  const { t } = useTranslation("detailProduct"); // Sử dụng hook useTranslation để lấy hàm t
   const { productId } = useParams();
   const userId = useSelector((state) => state.account?.user?._id);
   const dispatch = useDispatch();
 
-  const [isSidebarOpen, setSidebarOpen] = useState(false); // State cho Sidebar
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [skus, setSkus] = useState([]);
   const [spu, setSpu] = useState(null);
@@ -39,12 +41,13 @@ const DetailProduct = () => {
   const selectedSku = skus.find((sku) =>
     sku.sku_index.every((index, i) => index === selectedVariants[i])
   );
+
   const collectProductImages = (product) => {
     const moreImgs = product.product_more_imgs || [];
     const variationImgs =
       product.product_variations?.flatMap((variation) =>
         variation.images
-          ? variation.images.filter((img) => img && img.length > 0) // Only include valid, non-empty items
+          ? variation.images.filter((img) => img && img.length > 0)
           : []
       ) || [];
     const allImages = [...new Set([...moreImgs, ...variationImgs])];
@@ -62,15 +65,12 @@ const DetailProduct = () => {
       });
     }
   };
+
   const handleGetProduct = async () => {
     setLoading(true);
     const response = await getProduct(productId);
     if (response.metadata && response.status === 200) {
       setSkus(response.metadata.sku_list);
-      console.log(
-        "🚀 ~ handleGetProduct ~ response.metadata.spu_info:",
-        response.metadata.spu_info
-      );
       setSpu(response.metadata.spu_info);
       setMoreImgs(collectProductImages(response.metadata.spu_info));
       setSelectedImage(collectProductImages(response.metadata.spu_info)[0]);
@@ -104,14 +104,14 @@ const DetailProduct = () => {
     if (userId) {
       const response = await addToCart({ userId, skuId: selectedSku._id });
       if (response.status === 200) {
-        toast.success("Add to cart success");
-        dispatch(fetchCart(userId)); // Fetch giỏ hàng từ server
+        toast.success(t("addToCartSuccess")); // Dịch thông báo thành công
+        dispatch(fetchCart(userId));
       } else {
-        toast.error("Failed to add to cart");
+        toast.error(t("addToCartFailed")); // Dịch thông báo thất bại
       }
     } else {
       dispatch(addToLocalCart(newItem));
-      toast.success("Add to cart success");
+      toast.success(t("addToCartSuccess")); // Dịch thông báo thành công
     }
   };
 
@@ -149,10 +149,10 @@ const DetailProduct = () => {
           <div className="border-t-4 border-blue-600 border-solid rounded-full w-12 h-12 animate-spin"></div>
         </div>
       ) : (
-        <div className="font-sans ">
+        <div className="font-sans">
           <div className="p-4 lg:max-w-7xl max-w-4xl mx-auto">
             <div className="grid items-start grid-cols-1 lg:grid-cols-6 gap-12 p-6 rounded-lg bg-white">
-              <div className="lg:col-span-3 w-full lg:sticky top-0 text-center ">
+              <div className="lg:col-span-3 w-full lg:sticky top-0 text-center">
                 <div className="px-4 py-10 rounded-lg relative">
                   <img
                     src={selectedImage}
@@ -218,18 +218,19 @@ const DetailProduct = () => {
                     className="text-mainColor cursor-pointer"
                     onClick={scrollToRatingStat}
                   >
-                    {totalreviews.numberOfRating} đánh giá
+                    {totalreviews.numberOfRating} {t("reviews")}{" "}
+                    {/* Dịch "đánh giá" */}
                   </span>
                   <span className="text-gray-600">|</span>
                   <span
                     className="text-mainColor cursor-pointer"
                     onClick={scrollToComments}
                   >
-                    {totalreviews.numberOfComment} bình luận
+                    {totalreviews.numberOfComment} {t("comments")}{" "}
+                    {/* Dịch "bình luận" */}
                   </span>
                 </div>
 
-                {/* Variations */}
                 <div className="space-y-10 min-h-[100px] mt-9">
                   {spu?.product_variations.map((variation, variationIndex) => (
                     <div key={variationIndex}>
@@ -313,7 +314,6 @@ const DetailProduct = () => {
                   ))}
                 </div>
 
-                {/* Khuyến mãi */}
                 <div className="flex flex-wrap gap-4 mt-8">
                   <ProductPrice
                     priceAfterDiscount={
@@ -333,14 +333,14 @@ const DetailProduct = () => {
                     type="button"
                     className="min-w-[200px] px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded"
                   >
-                    Buy now
+                    {t("buyNow")} {/* Dịch "Buy now" */}
                   </button>
                   <button
                     type="button"
                     className="min-w-[200px] px-4 py-2.5 border border-blue-600 bg-transparent hover:bg-gray-50 text-gray-800 text-sm font-semibold rounded"
                     onClick={handleAddToCart}
                   >
-                    Add to cart
+                    {t("addToCart")} {/* Dịch "Add to cart" */}
                   </button>
                 </div>
               </div>
@@ -351,7 +351,7 @@ const DetailProduct = () => {
               onClickThongSo={() => setSidebarOpen(true)}
             />
 
-            <div className="mt-16 bg-white border-2  rounded-lg p-6 space-y-10">
+            <div className="mt-16 bg-white border-2 rounded-lg p-6 space-y-10">
               <div ref={ratingStatRef}>
                 <RatingStar
                   numberOfRating={totalreviews.numberOfRating}

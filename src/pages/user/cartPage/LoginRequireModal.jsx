@@ -1,8 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
-// Login Required Modal Component
 const LoginRequiredModal = ({ isOpen, onClose }) => {
+  const { t } = useTranslation("cart"); // Sử dụng hook useTranslation để lấy hàm t
   const navigate = useNavigate();
 
   if (!isOpen) return null;
@@ -11,7 +12,6 @@ const LoginRequiredModal = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 relative">
         <div className="text-center">
-          {/* Icon or illustration could go here */}
           <div className="mb-4 text-yellow-500">
             <svg
               className="mx-auto h-12 w-12"
@@ -28,24 +28,23 @@ const LoginRequiredModal = ({ isOpen, onClose }) => {
             </svg>
           </div>
           <h2 className="text-xl font-bold mb-4 text-gray-800">
-            Đăng nhập để tiếp tục
+            {t("loginToContinue")} {/* Dịch "Đăng nhập để tiếp tục" */}
           </h2>
           <p className="text-gray-600 mb-6">
-            Bạn cần đăng nhập để có thể tiến hành thanh toán và theo dõi đơn
-            hàng của mình.
+            {t("loginPrompt")} {/* Dịch "Bạn cần đăng nhập để..." */}
           </p>
           <div className="flex flex-col gap-3">
             <button
               onClick={() => navigate("/login")}
               className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200"
             >
-              Đăng nhập
+              {t("login")} {/* Dịch "Đăng nhập" */}
             </button>
             <button
               onClick={onClose}
               className="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-50 transition duration-200"
             >
-              Để sau
+              {t("later")} {/* Dịch "Để sau" */}
             </button>
           </div>
         </div>

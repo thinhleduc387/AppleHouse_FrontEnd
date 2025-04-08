@@ -1,0 +1,11 @@
+{
+  "settings": "Settings",
+  "logout": "Log out",
+  "myProfileDetails": "My profile details",
+  "name": "Name",
+  "email": "Email",
+  "phoneNumber": "Phone Number",
+  "dateOfBirth": "Date of Birth",
+  "gender": "Gender",
+  "updateProfile": "Update Profile"
+}

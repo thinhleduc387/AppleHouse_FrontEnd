@@ -1,0 +1,32 @@
+{
+  "totalOrders": "Total Orders",
+  "totalRevenue": "Total Revenue",
+  "avgOrderValue": "Avg Order Value",
+  "shippingFees": "Shipping Fees",
+  "totalDiscount": "Total Discount",
+  "dailyOrdersTrend": "Daily Orders Trend",
+  "ordersByStatus": "Orders by Status",
+  "orders": "Orders",
+  "revenue": "Revenue",
+  "paymentMethods": "Payment Methods",
+  "topProducts": "Top Products",
+  "totalUsers": "Total Users",
+  "activeUsers": "Active Users",
+  "blockedUsers": "Blocked Users",
+  "googleUsers": "Google Users",
+  "monthlyRegistrations": "Monthly Registrations",
+  "genderDistribution": "Gender Distribution",
+  "topLoyalUsers": "Top Loyal Users",
+  "usersByCity": "Users by City",
+  "user": "User",
+  "points": "Points",
+  "email": "Email",
+  "users": "Users",
+  "newUsers": "New Users",
+  "timeRange": {
+    "today": "Today",
+    "month": "Month",
+    "week": "Week",
+    "year": "Year"
+  }
+}

@@ -4,6 +4,7 @@ import ConfirmationModal from "./ConfirmationModal";
 import RoleUpdateModal from "./RoleUpdateModal";
 import NoAvatar from "../../NoAvatar";
 import { changeRole } from "../../../config/api";
+import { useTranslation } from "react-i18next"; // Import useTranslation từ react-i18next
 
 const UserTable = ({
   users,
@@ -12,6 +13,7 @@ const UserTable = ({
   handleToggleLockUser,
   refreshUsers,
 }) => {
+  const { t } = useTranslation("userManagement"); // Sử dụng hook useTranslation để lấy hàm t
   const [modalUser, setModalUser] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -68,11 +70,17 @@ const UserTable = ({
                 onChange={handleSelectAllOnPage}
               />
             </th>
-            <th className="p-5 text-left">Họ tên</th>
-            <th className="p-5 text-left">Email</th>
-            <th className="p-5 text-left">Ngày đăng ký</th>
-            <th className="p-5 text-left">Vai trò</th>
-            <th className="p-5 text-center rounded-tr-lg">Actions</th>
+            <th className="p-5 text-left">{t("Full Name")}</th>{" "}
+            {/* Dịch "Họ tên" */}
+            <th className="p-5 text-left">{t("Email")}</th> {/* Dịch "Email" */}
+            <th className="p-5 text-left">{t("Registration Date")}</th>{" "}
+            {/* Dịch "Ngày đăng ký" */}
+            <th className="p-5 text-left">{t("Role")}</th>{" "}
+            {/* Dịch "Vai trò" */}
+            <th className="p-5 text-center rounded-tr-lg">
+              {t("Actions")}
+            </th>{" "}
+            {/* Dịch "Hành động" */}
           </tr>
         </thead>
         <tbody>

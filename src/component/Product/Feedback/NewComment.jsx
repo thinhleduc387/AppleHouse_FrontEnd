@@ -6,7 +6,10 @@ import {
 } from "../../../config/api";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next"; // Import useTranslation từ react-i18next
+
 const NewComment = ({ spuId, handleGetListComment, setHaveNewRating }) => {
+  const { t } = useTranslation("detailProduct"); // Sử dụng hook useTranslation để lấy hàm t
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -16,6 +19,8 @@ const NewComment = ({ spuId, handleGetListComment, setHaveNewRating }) => {
 
   const [hasPurchased, setHasPurchased] = useState(false);
   const [isCommented, setIsCommented] = useState(false);
+
+  const userId = useSelector((state) => state.account?.user?._id);
 
   const handleCheckPurchase = async () => {
     const response = await checkPurchase({ userId, spuId });
@@ -29,7 +34,6 @@ const NewComment = ({ spuId, handleGetListComment, setHaveNewRating }) => {
     });
     setIsCommented(response.metadata);
   };
-  const userId = useSelector((state) => state.account?.user?._id);
 
   const handleRatingChange = (score) => {
     if (!hasPurchased) {
@@ -58,7 +62,7 @@ const NewComment = ({ spuId, handleGetListComment, setHaveNewRating }) => {
 
   const handleSubmit = async () => {
     if (!comment.trim()) {
-      alert("Vui lòng chia sẻ đánh giá của bạn về sản phẩm.");
+      alert(t("pleaseShareRating")); // Dịch thông báo "Vui lòng chia sẻ đánh giá của bạn về sản phẩm."
       return;
     }
 
@@ -72,9 +76,9 @@ const NewComment = ({ spuId, handleGetListComment, setHaveNewRating }) => {
     if (newComment && newComment.metadata) {
       await handleGetListComment();
       setHaveNewRating((prev) => !prev);
-      toast.success("Gửi đánh giá thành công");
+      toast.success(t("submitRatingSuccess")); // Dịch "Gửi đánh giá thành công"
     } else {
-      toast.error("Lỗi không thể gửi bình luận lúc này ");
+      toast.error(t("submitRatingError")); // Dịch "Lỗi không thể gửi bình luận lúc này"
     }
 
     // Reset form
@@ -94,7 +98,7 @@ const NewComment = ({ spuId, handleGetListComment, setHaveNewRating }) => {
         {hasPurchased && !isCommented && (
           <div className="flex items-center flex-wrap">
             <p className="text-lg font-semibold text-gray-800 mr-4">
-              Đánh giá của bạn:
+              {t("yourRating")}: {/* Dịch "Đánh giá của bạn" */}
             </p>
             <div className="flex space-x-1">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -122,27 +126,25 @@ const NewComment = ({ spuId, handleGetListComment, setHaveNewRating }) => {
           </div>
         )}
 
-        {
-          <div className="space-y-2">
-            <label
-              htmlFor="comment"
-              className="text-lg font-semibold text-gray-800"
-            >
-              Chia sẻ đánh giá của bạn:
-            </label>
-            <textarea
-              id="comment"
-              rows="4"
-              value={comment}
-              onChange={handleCommentChange}
-              placeholder={"Hãy chia sẻ trải nghiệm của bạn về sản phẩm..."}
-              className={`w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 resize-none transition-colors duration-200`}
-            />
-            <div className="flex justify-end text-sm text-gray-500">
-              {characterCount}/{maxLength} ký tự
-            </div>
+        <div className="space-y-2">
+          <label
+            htmlFor="comment"
+            className="text-lg font-semibold text-gray-800"
+          >
+            {t("shareYourRating")}: {/* Dịch "Chia sẻ đánh giá của bạn" */}
+          </label>
+          <textarea
+            id="comment"
+            rows="4"
+            value={comment}
+            onChange={handleCommentChange}
+            placeholder={t("placeholderComment")}
+            className={`w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 resize-none transition-colors duration-200`}
+          />
+          <div className="flex justify-end text-sm text-gray-500">
+            {characterCount}/{maxLength} {t("characters")} {/* Dịch "ký tự" */}
           </div>
-        }
+        </div>
       </div>
       <div className="flex justify-end">
         <button
@@ -152,7 +154,7 @@ const NewComment = ({ spuId, handleGetListComment, setHaveNewRating }) => {
               focus:outline-none focus:ring-2 focus:ring-offset-2 bg-blue-600 hover:bg-blue-700 text-white hover:shadow-lg focus:ring-blue-500 cursor-pointer
              `}
         >
-          Gửi đánh giá
+          {t("submitRating")} {/* Dịch "Gửi đánh giá" */}
         </button>
       </div>
     </div>

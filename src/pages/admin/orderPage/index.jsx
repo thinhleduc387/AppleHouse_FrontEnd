@@ -14,10 +14,12 @@ import { formatVND } from "../../../utils";
 import { FaInfoCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../../component/Pagiantion";
+import { useTranslation } from "react-i18next"; // Import hook for translation
 
 const ITEMS_PER_PAGE = 7; // Số lượng đơn hàng mỗi trang
 
 const OrderPage = () => {
+  const { t } = useTranslation("order"); // Initialize translation hook
   const [listOrder, setListOrder] = useState([]); // State cho danh sách đơn hàng
   const [isLoading, setIsLoading] = useState(false); // State cho trạng thái loading
   const [statusCounts, setStatusCounts] = useState({
@@ -31,6 +33,7 @@ const OrderPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [activeCollapse, setActiveCollapse] = useState(null); // State collapse cho đơn hàng
   const navigate = useNavigate(); // Hook for navigation
+
   useEffect(() => {
     handleGetAllOrder();
     handleGetCountOrderStatus();
@@ -101,6 +104,7 @@ const OrderPage = () => {
   const toggleCollapse = (id) => {
     setActiveCollapse((prev) => (prev === id ? null : id));
   };
+
   const getStatusClass = (status) => {
     switch (status) {
       case "confirmed":
@@ -117,11 +121,14 @@ const OrderPage = () => {
         return "bg-gray-500 text-white";
     }
   };
+
   return (
     <div className="p-6 min-h-screen bg-gray-100">
       {/* Header */}
       <div className="flex justify-between bg-white px-6 py-8 rounded-lg items-center mb-6">
-        <h1 className="text-4xl font-bold text-gray-700">Quản lý đơn hàng</h1>
+        <h1 className="text-4xl font-bold text-gray-700">
+          {t("orderManagement")}
+        </h1>
       </div>
 
       {isLoading ? (
@@ -134,31 +141,31 @@ const OrderPage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
             <StatusCard
               icon={HiOutlineCheckCircle}
-              label="Đã xác nhận"
+              label={t("confirmed")}
               count={statusCounts.confirmed}
               color="text-green-500"
             />
             <StatusCard
               icon={HiOutlineClipboardList}
-              label="Đang xử lý"
+              label={t("processing")}
               count={statusCounts.processing}
               color="text-yellow-500"
             />
             <StatusCard
               icon={HiOutlineTruck}
-              label="Đang giao hàng"
+              label={t("shipping")}
               count={statusCounts.shipped}
               color="text-blue-500"
             />
             <StatusCard
               icon={HiOutlineXCircle}
-              label="Đã hủy"
+              label={t("canceled")}
               count={statusCounts.cancelled}
               color="text-red-500"
             />
             <StatusCard
               icon={HiOutlineCheck}
-              label="Đã giao hàng"
+              label={t("delivered")}
               count={statusCounts.delivered}
               color="text-purple-500"
             />
@@ -174,7 +181,7 @@ const OrderPage = () => {
                 <div className="flex justify-between items-center">
                   <div>
                     <p className="font-semibold text-gray-700">
-                      Order #{order._id}
+                      {t("orderID")}: #{order._id}
                     </p>
                     <p className="text-sm text-gray-500">
                       {new Date(order.createdAt).toLocaleDateString("en-GB")}
@@ -183,7 +190,7 @@ const OrderPage = () => {
                   <div className="flex items-center gap-3">
                     <FaInfoCircle
                       className="text-blue-500 cursor-pointer text-xl"
-                      title="Xem chi tiết sản phẩm"
+                      title={t("details")}
                       onClick={() =>
                         navigate(`/admin/orders/detail/${order._id}`)
                       }
@@ -200,25 +207,25 @@ const OrderPage = () => {
                 {activeCollapse === order._id && (
                   <div className="mt-4 bg-gray-50 p-4 rounded-lg shadow-inner">
                     <p className="font-semibold">
-                      Người đặt: {order.order_userId.usr_name}
+                      {t("customer")}: {order.order_userId.usr_name}
                     </p>
                     <p className="font-semibold">
-                      Payment: {order.order_payment.payment_method}
+                      {t("payment")}: {order.order_payment.payment_method}
                     </p>
                     <p className="flex items-center gap-2">
                       <span className="text-gray-700 font-semibold">
-                        Status:
+                        {t("status")}:
                       </span>
                       <span
                         className={`px-3 py-1 text-sm rounded-full ${getStatusClass(
                           order.order_status
                         )}`}
                       >
-                        {order.order_status}
+                        {t(order.order_status)}
                       </span>
                     </p>
                     <p className="font-semibold">
-                      Total Amount:{" "}
+                      {t("totalAmount")}:{" "}
                       {formatVND(order.order_checkout.totalCheckOut)}
                     </p>
                   </div>

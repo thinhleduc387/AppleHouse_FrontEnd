@@ -3,12 +3,15 @@ import { FaBitcoin } from "react-icons/fa";
 import { formatVND } from "../../utils";
 import { findOnePromotion } from "../../config/api";
 import FlashSaleBanner from "../DetailPage/FlashSaleBanner";
+import { useTranslation } from "react-i18next"; // Import useTranslation từ react-i18next
+
 const ProductPrice = ({
   originalPrice,
   priceAfterDiscount,
   points,
   promotionId = null,
 }) => {
+  const { t } = useTranslation("detailProduct"); // Sử dụng hook useTranslation để lấy hàm t
   const [promotion, setPromotion] = useState(null);
   console.log("🚀 ~ promotion:", promotion);
 
@@ -55,7 +58,7 @@ const ProductPrice = ({
               <div className="grid grid-cols-3 justify-center">
                 <div className="flex flex-col">
                   <span className="text-sm text-gray-600">
-                    Mua ngay với giá
+                    {t("buyNowWithPrice")} {/* Dịch "Mua ngay với giá" */}
                   </span>
                   <span className="text-2xl font-bold text-gray-800">
                     {formatVND(priceAfterDiscount)}
@@ -73,7 +76,7 @@ const ProductPrice = ({
               <div className="flex items-center justify-start mt-2 bg-[#fffbe5] rounded-full px-3 py-2 w-max">
                 <FaBitcoin />
                 <span className="ml-1 text-sm font-bold text-gray-600">
-                  +{points} Điểm thưởng
+                  +{points} {t("discountPoints")} {/* Dịch "Điểm thưởng" */}
                 </span>
               </div>
             </div>
