@@ -21,73 +21,74 @@ const NotificationMenu = ({ notifications, markAsRead }) => {
   return (
     <div className="absolute right-0 bg-white shadow-2xl rounded-lg w-96 max-h-[32rem] overflow-y-auto p-4 border border-gray-200 font-sans">
       <div className="flex justify-between items-center mb-4 sticky top-0 bg-white pb-2 border-b">
-        <h3 className=" text-lg">Thông báo</h3>
-        <button className="text-sm text-blue-600 hover:text-blue-800">
+        <h3 className="text-lg font-semibold text-gray-800">Thông báo</h3>
+        <button className="text-sm text-blue-600 hover:text-blue-800 font-medium">
           Đánh dấu tất cả đã đọc
         </button>
       </div>
 
-      <ul className="space-y-3">
+      <ul className="space-y-2">
         {notifications.length > 0 ? (
           notifications.map((notification, index) => (
             <li
               key={notification._id || index}
-              className={`p-3 rounded-lg transition-all duration-200 ${
-                !notification.isRead
-                  ? "bg-blue-50 hover:bg-blue-100"
-                  : "hover:bg-gray-50"
-              }`}
+              className={`relative p-3 rounded-lg transition-all duration-200 border cursor-pointer
+                ${
+                  !notification?.isRead
+                    ? "bg-blue-50 border-blue-100 hover:bg-blue-100 hover:shadow-md"
+                    : "bg-white border-gray-100 hover:bg-gray-50 hover:shadow-sm"
+                }`}
             >
-              <div className="flex items-start gap-3">
-                <div className="relative">
+              <div className="flex items-start gap-2">
+                <div className="relative flex-shrink-0">
                   <img
                     src={
                       notification.metadata?.imageUrl ||
                       "/default-notification.png"
                     }
                     alt="Notification"
-                    className="w-12 h-12 rounded-full object-cover"
+                    className="w-10 h-10 rounded-full object-cover border border-gray-200"
                   />
                   {!notification.isRead && (
-                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-blue-600 rounded-full"></span>
+                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-blue-600 rounded-full border-2 border-white"></span>
                   )}
                 </div>
 
-                <div className="flex-1">
-                  <div className="flex justify-between items-start">
-                    <h4 className="font-medium text-gray-900">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <p className="text-sm font-semibold text-gray-900 truncate">
                       {notification.title}
-                    </h4>
-                    <span className="text-xs text-gray-500">
+                    </p>
+                    <span className="text-xs  flex-shrink-0">
                       {formatNotificationDate(notification.createdAt)}
                     </span>
                   </div>
 
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="text-xs text-gray-500 line-clamp-1">
                     {notification.message}
                   </p>
 
                   {notification.actionUrl && (
                     <a
                       href={notification.actionUrl}
-                      className="inline-block mt-2 text-sm text-blue-600 hover:text-blue-800"
+                      className="inline-flex items-center mt-1 text-xs text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                      onClick={() => markAsRead(notification._id)}
                     >
-                      Xem chi tiết →
+                      Xem chi tiết
+                      <span className="ml-1">→</span>
                     </a>
                   )}
 
                   {notification.metadata && (
-                    <div className="mt-2 p-2 bg-gray-50 rounded-md text-xs text-gray-600">
+                    <div className="mt-1 p-1 bg-gray-100/50 rounded text-xs text-gray-700 border border-gray-200">
                       {notification.type.includes("ORDER") && (
                         <p>
-                          Mã đơn hàng:{" "}
-                          {notification.metadata.order?.orderNumber}
+                          Mã đơn: {notification.metadata.order?.orderNumber}
                         </p>
                       )}
                       {notification.type.includes("PROMOTION") && (
                         <p>
-                          Mã giảm giá:{" "}
-                          {notification.metadata.promotion?.promoCode}
+                          Mã giảm: {notification.metadata.promotion?.promoCode}
                         </p>
                       )}
                     </div>
@@ -120,7 +121,7 @@ const NotificationMenu = ({ notifications, markAsRead }) => {
 
       {notifications.length > 0 && (
         <div className="mt-4 text-center">
-          <button className="text-sm text-blue-600 hover:text-blue-800">
+          <button className="text-sm text-blue-600 hover:text-blue-800 font-medium">
             Xem tất cả thông báo
           </button>
         </div>

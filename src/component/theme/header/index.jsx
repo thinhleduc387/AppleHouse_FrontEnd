@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import NotificationMenu from "../../Notification/notificationMenu";
 import { fetchCart } from "../../../redux/slice/cartSlice";
 import socket from "../../../socket";
+import { getListNotification } from "../../../config/api";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -41,8 +42,21 @@ const Header = () => {
     }
   };
 
+  const handleGetListNotification = async () => {
+    try {
+      const response = await getListNotification({ userId });
+
+      console.log("🚀 ~ handleGetListNotification ~ userId:", userId);
+      console.log("🚀 ~ handleGetListNotification ~ response:", response);
+      if (response && response?.metadata && response?.metadata.length > 0) {
+        setNotifications(response?.metadata);
+      }
+    } catch (error) {}
+  };
   useEffect(() => {
     // Update header height when component mounts or on resize
+
+    handleGetListNotification();
     if (headerRef.current) {
       setHeaderHeight(headerRef.current.offsetHeight);
     }
@@ -82,8 +96,10 @@ const Header = () => {
   }, [isOpen]);
 
   const markAsRead = (notificationId) => {
-    socket.emit("mark_as_read", { userId, notificationId });
+    console.log("🚀 ~ markAsRead ~ notificationId:", notificationId);
+    socket.emit("mark_as_read", { notificationId });
   };
+
   return (
     <>
       <div className="w-full top-0 left-0 z-10 sticky shadow-md ">
@@ -131,14 +147,12 @@ const Header = () => {
               <li
                 onMouseEnter={() => setNotifyIsOpen(true)}
                 onMouseLeave={() => setNotifyIsOpen(false)}
-                className="font-extrabold text-3xl my-7 lg:my-0 relative"
+                className=" my-7 lg:my-0 relative"
               >
-                <Link to="/">
-                  <PiBellSimpleRinging />
-                  <span className="absolute top-0 right-0 text-[0.6rem] bg-red-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center">
-                    {notifications.length}
-                  </span>
-                </Link>
+                <PiBellSimpleRinging className="cursor-pointer font-extrabold text-3xl" />
+                <span className="absolute top-0 right-0 text-[0.6rem] bg-red-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center">
+                  {notifications.length}
+                </span>
 
                 {notifyIsOpen && (
                   <NotificationMenu

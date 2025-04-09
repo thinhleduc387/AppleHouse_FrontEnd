@@ -629,3 +629,8 @@ export const getUserStatistic = async () => {
 export const getChatBotResponse = async (message) => {
   return axios.post(`/chat-bot`, { userMessage: message });
 };
+
+// notification
+export const getListNotification = async ({ userId }) => {
+  return axios.post(`/notification`, { userId });
+};
