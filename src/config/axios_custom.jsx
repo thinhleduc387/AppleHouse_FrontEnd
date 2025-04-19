@@ -67,17 +67,19 @@ instance.interceptors.response.use(
           ) {
             originalRequest._retry = true;
             const response = await instance.get("/auth/handleRefreshToken");
-            const newToken = response.metadata.accessToken;
+            console.log("🚀 ~ response:", response);
+            const newToken = response?.metadata?.accessToken;
+            const userId = response?.metadata?.user._id;
             if (newToken) {
               // store.dispatch(setUserLoginInfo(response.metadata.user));
               error.config.headers["Authorization"] = `Beaer ${newToken}`;
               localStorage.setItem("access_token", newToken);
-              localStorage.setItem("user_id", newToken);
+              localStorage.setItem("user_id", userId);
               return instance.request(originalRequest);
             }
           }
         } catch (e) {
-          // Handle refresh token error or redirect to login
+          console.log("🚀 ~ e:", e);
         }
         break;
 

@@ -11,7 +11,7 @@ import DropdownMenu from "./component/DropdownMenu";
 import { Link } from "react-router-dom";
 import NotificationMenu from "../../Notification/notificationMenu";
 import { fetchCart } from "../../../redux/slice/cartSlice";
-import socket from "../../../socket";
+import socket, { registerUser } from "../../../socket";
 import { getListNotification } from "../../../config/api";
 
 const Header = () => {
@@ -30,7 +30,10 @@ const Header = () => {
   const localCartItems = useSelector((state) => state.cart.localCartItems);
 
   const [notifications, setNotifications] = useState([]);
-
+  console.log("🚀 ~ Header ~ notifications:", notifications);
+  const unReadNotifications = notifications.filter(
+    (value) => value.isRead === false
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
   const [notifyIsOpen, setNotifyIsOpen] = useState(false);
@@ -46,17 +49,14 @@ const Header = () => {
     try {
       const response = await getListNotification({ userId });
 
-      console.log("🚀 ~ handleGetListNotification ~ userId:", userId);
-      console.log("🚀 ~ handleGetListNotification ~ response:", response);
       if (response && response?.metadata && response?.metadata.length > 0) {
         setNotifications(response?.metadata);
       }
     } catch (error) {}
   };
   useEffect(() => {
-    // Update header height when component mounts or on resize
-
     handleGetListNotification();
+
     if (headerRef.current) {
       setHeaderHeight(headerRef.current.offsetHeight);
     }
@@ -64,13 +64,13 @@ const Header = () => {
 
     if (userId) {
       dispatch(fetchCart(userId));
+      registerUser(userId);
     }
 
     socket.on("notification", (notification) => {
       setNotifications((prev) => [...prev, notification]);
     });
 
-    // Lắng nghe thông báo cập nhật (mark as read)
     socket.on("notification_updated", (updatedNotification) => {
       setNotifications((prev) =>
         prev.map((notif) =>
@@ -96,7 +96,6 @@ const Header = () => {
   }, [isOpen]);
 
   const markAsRead = (notificationId) => {
-    console.log("🚀 ~ markAsRead ~ notificationId:", notificationId);
     socket.emit("mark_as_read", { notificationId });
   };
 
@@ -105,14 +104,13 @@ const Header = () => {
       <div className="w-full top-0 left-0 z-10 sticky shadow-md ">
         <div
           className="py-4 px-4 sm:px-6 md:px-12 lg:px-16  lg:flex justify-between items-center bg-[#f3f4f6] relative"
-          ref={headerRef} // Attach ref to the header
+          ref={headerRef}
         >
-          {/* Logo and Menu */}
           <div className="flex items-center justify-between w-full lg:w-auto">
             <a href="/" className="font-bold text-3xl">
               Apple Shop
             </a>
-            {/* Desktop Dropdown Menu */}
+
             <div className="hidden lg:block">
               <DropdownMenu headerHeight={headerHeight} />
             </div>
@@ -150,9 +148,14 @@ const Header = () => {
                 className=" my-7 lg:my-0 relative"
               >
                 <PiBellSimpleRinging className="cursor-pointer font-extrabold text-3xl" />
-                <span className="absolute top-0 right-0 text-[0.6rem] bg-red-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center">
-                  {notifications.length}
-                </span>
+                {unReadNotifications?.length > 0 && (
+                  <>
+                    {" "}
+                    <span className="absolute top-0 right-0 text-[0.6rem] bg-red-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center">
+                      {unReadNotifications?.length}
+                    </span>
+                  </>
+                )}
 
                 {notifyIsOpen && (
                   <NotificationMenu

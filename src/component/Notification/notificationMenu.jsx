@@ -32,6 +32,7 @@ const NotificationMenu = ({ notifications, markAsRead }) => {
           notifications.map((notification, index) => (
             <li
               key={notification._id || index}
+              onClick={() => markAsRead(notification._id)}
               className={`relative p-3 rounded-lg transition-all duration-200 border cursor-pointer
                 ${
                   !notification?.isRead
@@ -44,7 +45,7 @@ const NotificationMenu = ({ notifications, markAsRead }) => {
                   <img
                     src={
                       notification.metadata?.imageUrl ||
-                      "/default-notification.png"
+                      "https://cdn-icons-png.flaticon.com/512/5738/5738102.png"
                     }
                     alt="Notification"
                     className="w-10 h-10 rounded-full object-cover border border-gray-200"
@@ -77,21 +78,6 @@ const NotificationMenu = ({ notifications, markAsRead }) => {
                       Xem chi tiết
                       <span className="ml-1">→</span>
                     </a>
-                  )}
-
-                  {notification.metadata && (
-                    <div className="mt-1 p-1 bg-gray-100/50 rounded text-xs text-gray-700 border border-gray-200">
-                      {notification.type.includes("ORDER") && (
-                        <p>
-                          Mã đơn: {notification.metadata.order?.orderNumber}
-                        </p>
-                      )}
-                      {notification.type.includes("PROMOTION") && (
-                        <p>
-                          Mã giảm: {notification.metadata.promotion?.promoCode}
-                        </p>
-                      )}
-                    </div>
                   )}
                 </div>
               </div>

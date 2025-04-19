@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { callAccount } from "../../config/api";
 
 export const fetchAccount = createAsyncThunk(
   "product/fetchProduct",

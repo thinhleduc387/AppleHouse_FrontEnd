@@ -25,8 +25,7 @@ const LoginPage = () => {
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const userId = useSelector((state) => state.account?.user?._id);
 
-  if (isAuthenticat) {
-    registerUser(userId);
+  if (isAuthenticated) {
     return <Navigate to="/" replace />;
   }
 
