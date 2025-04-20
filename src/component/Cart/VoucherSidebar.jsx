@@ -6,17 +6,17 @@ import {
   getListVoucherPrivate,
 } from "../../config/api";
 import VoucherDetailsModal from "./VoucherDetailsModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { formatVND } from "../../utils";
+import { setSelectedVoucher } from "../../redux/slices/checkoutSlice";
 
 const VoucherSideBar = ({
   isOpen,
   setIsOpen,
   products_order,
-  selectedVoucher,
-  setSelectedVoucher,
   isUseLoyalPoint,
 }) => {
+  const dispatch = useDispatch();
   const [vouchers, setVouchers] = useState([]);
   const [unAvailableVoucher, setUnAvailableVoucher] = useState([]);
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -25,6 +25,10 @@ const VoucherSideBar = ({
   const [previewCheckout, setPreviewCheckout] = useState({});
   const [codeSearch, setCodeSearch] = useState();
   const [privateVouchers, setPrivateVouchers] = useState([]);
+  const selectedVoucher = useSelector(
+    (state) => state.checkout.selectedVoucher
+  );
+  console.log("🚀 ~ selectedVoucher:", selectedVoucher);
   const handleCheckOut = async (products_order, userId, shop_discount) => {
     if (!products_order.length) {
       return;
@@ -71,9 +75,11 @@ const VoucherSideBar = ({
 
   const handleOfferToggle = async (voucherId) => {
     if (selectedVoucher.includes(voucherId)) {
-      setSelectedVoucher(selectedVoucher.filter((id) => id !== voucherId));
+      dispatch(
+        setSelectedVoucher(selectedVoucher.filter((id) => id !== voucherId))
+      );
     } else {
-      setSelectedVoucher([...selectedVoucher, voucherId]);
+      dispatch(setSelectedVoucher([...selectedVoucher, voucherId]));
     }
   };
 
@@ -89,7 +95,7 @@ const VoucherSideBar = ({
   };
 
   const handleClose = () => {
-    setSelectedVoucher([]); // Reset selected vouchers
+    dispatch(setSelectedVoucher([])); // Reset selected vouchers
     setIsOpen(false);
   };
 

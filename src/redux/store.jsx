@@ -5,6 +5,8 @@ import cartReducer from "./slices/cartSlice";
 import flashSaleReducer from "./slices/flashSaleSlice";
 import rbacReducer from "./slices/rbacSlice";
 import chatBotReducer from "./slices/chatBotSlice";
+import checkoutReducer from "./slices/checkoutSlice";
+
 const store = configureStore({
   reducer: {
     account: accountReducer,
@@ -13,6 +15,7 @@ const store = configureStore({
     flashSale: flashSaleReducer,
     rbac: rbacReducer,
     chatBot: chatBotReducer,
+    checkout: checkoutReducer,
   },
 });
 

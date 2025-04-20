@@ -9,20 +9,11 @@ import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { setHiddenChatBot } from "../../redux/slices/chatBotSlice";
+import { setCheckoutValue } from "../../redux/slices/checkoutSlice";
 
 const stripePromise = loadStripe(
   "pk_test_51QIm5tAz954xg8ieJMNAloyxbeBbsLt9YaVak4sFrSh93vs4vTJfNlWbbA0wcOWXZSK2vVvw2bqewWpPbiC8WSaK00xz976rWR"
 );
-
-const initCheckOutValue = {
-  accLoyalPoint: 0,
-  feeShip: 0,
-  productDiscount: 0,
-  totalCheckOut: 0,
-  totalPrice: 0,
-  voucherDiscount: 0,
-  availableLoyalPoints: 0,
-};
 
 const CheckOut = ({
   products_order,
@@ -30,18 +21,23 @@ const CheckOut = ({
   onCheckout,
   onContinueShopping,
   isCheckout,
-  orderMethodPayment,
-  orderAddress,
-  orderNote,
 }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [checkoutValue, setCheckOutValue] = useState(initCheckOutValue);
+
+  // const [checkoutValue, setCheckOutValue] = useState(initCheckOutValue);
+  const checkoutValue = useSelector((state) => state.checkout.checkoutValue);
   const [isProcessing, setIsProcessing] = useState(false);
   const accLoyalPoint = useSelector((state) => state.account?.user?.loyalPoint);
   const [useLoyalPoints, setUseLoyalPoints] = useState(false);
-  const [selectedVoucher, setSelectedVoucher] = useState([]);
+  const selectedVoucher = useSelector(
+    (state) => state.checkout.selectedVoucher
+  );
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const cartId = useSelector((state) => state.cart._id);
+  const { orderMethodPayment, orderAddress, orderNote } = useSelector(
+    (state) => state.checkout
+  );
   const data = {
     cartId,
     userId,
@@ -52,8 +48,7 @@ const CheckOut = ({
     isUseLoyalPoint: useLoyalPoints,
     orderNote,
   };
-
-  const dispatch = useDispatch();
+  console.log("🚀 ~ data:", data);
 
   const toggleOpenSideBar = (value) => {
     setSidebarOpen(value);
@@ -62,10 +57,6 @@ const CheckOut = ({
 
   useEffect(() => {
     const handleCheckOut = async () => {
-      if (!products_order.length) {
-        setCheckOutValue(initCheckOutValue);
-        return;
-      }
       try {
         const response = await getCheckout({
           products_order,
@@ -74,7 +65,7 @@ const CheckOut = ({
           isUseLoyalPoint: useLoyalPoints,
         });
         if (response.status === 200) {
-          setCheckOutValue(response.metadata.checkOut_order);
+          dispatch(setCheckoutValue(response.metadata.checkOut_order));
         }
       } catch (error) {
         console.error("Failed to fetch checkout data:", error.message);
@@ -252,8 +243,6 @@ const CheckOut = ({
         isOpen={isSidebarOpen}
         setIsOpen={toggleOpenSideBar}
         products_order={products_order}
-        selectedVoucher={selectedVoucher}
-        setSelectedVoucher={setSelectedVoucher}
         isUseLoyalPoint={useLoyalPoints}
       />
     </div>
