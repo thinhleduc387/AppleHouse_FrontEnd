@@ -10,7 +10,7 @@ import ProfileNavBar from "../../../component/ProfileNav";
 import DropdownMenu from "./component/DropdownMenu";
 import { Link } from "react-router-dom";
 import NotificationMenu from "../../Notification/notificationMenu";
-import { fetchCart } from "../../../redux/slice/cartSlice";
+import { fetchCart } from "../../../redux/slices/cartSlice";
 import socket, { registerUser } from "../../../socket";
 import { getListNotification } from "../../../config/api";
 

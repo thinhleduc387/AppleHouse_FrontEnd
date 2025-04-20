@@ -6,10 +6,10 @@ import { callLogout, updateProfile, getImageLink } from "../../../config/api";
 import {
   setLogoutAction,
   fetchAccount,
-} from "../../../redux/slice/accountSlice";
+} from "../../../redux/slices/accountSlice";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../../component/Loading";
-import { clearRoleData } from "../../../redux/slice/rbacSlice";
+import { clearRoleData } from "../../../redux/slices/rbacSlice";
 
 const AdminProfilePage = () => {
   const dispatch = useDispatch();

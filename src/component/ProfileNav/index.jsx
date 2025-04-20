@@ -3,10 +3,10 @@ import { callLogout, getListRole } from "../../config/api";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineUser } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { setLogoutAction } from "../../redux/slice/accountSlice";
+import { setLogoutAction } from "../../redux/slices/accountSlice";
 import { toast } from "react-toastify";
-import { resetCart } from "../../redux/slice/cartSlice";
-import { clearRoleData } from "../../redux/slice/rbacSlice";
+import { resetCart } from "../../redux/slices/cartSlice";
+import { clearRoleData } from "../../redux/slices/rbacSlice";
 
 const ProfileNavBar = ({ userAvatar, userName }) => {
   const { isAuthenticated } = useSelector((state) => state.account);

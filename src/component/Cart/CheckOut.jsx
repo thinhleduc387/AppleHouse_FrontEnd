@@ -4,10 +4,11 @@ import { createOrder, getCheckout } from "../../config/api";
 import { BsCoin } from "react-icons/bs";
 import { FaChevronRight } from "react-icons/fa";
 import VoucherSideBar from "./VoucherSidebar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { setHiddenChatBot } from "../../redux/slices/chatBotSlice";
 
 const stripePromise = loadStripe(
   "pk_test_51QIm5tAz954xg8ieJMNAloyxbeBbsLt9YaVak4sFrSh93vs4vTJfNlWbbA0wcOWXZSK2vVvw2bqewWpPbiC8WSaK00xz976rWR"
@@ -51,7 +52,13 @@ const CheckOut = ({
     isUseLoyalPoint: useLoyalPoints,
     orderNote,
   };
-  console.log("🚀 ~ handleCheckout ~ data:", data);
+
+  const dispatch = useDispatch();
+
+  const toggleOpenSideBar = (value) => {
+    setSidebarOpen(value);
+    dispatch(setHiddenChatBot(value));
+  };
 
   useEffect(() => {
     const handleCheckOut = async () => {
@@ -123,7 +130,7 @@ const CheckOut = ({
       {products_order.length > 0 && (
         <div
           className="flex items-center justify-between bg-gray-100 px-4 py-3 rounded-md cursor-pointer"
-          onClick={() => setSidebarOpen(true)}
+          onClick={() => toggleOpenSideBar(true)}
         >
           <span className="text-gray-800 text-sm font-medium flex items-center gap-2">
             <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs">
@@ -243,7 +250,7 @@ const CheckOut = ({
 
       <VoucherSideBar
         isOpen={isSidebarOpen}
-        setIsOpen={setSidebarOpen}
+        setIsOpen={toggleOpenSideBar}
         products_order={products_order}
         selectedVoucher={selectedVoucher}
         setSelectedVoucher={setSelectedVoucher}

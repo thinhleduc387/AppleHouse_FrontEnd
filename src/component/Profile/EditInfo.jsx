@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { Camera, X, Upload, Pencil } from "lucide-react";
 import { getImageLink, updateProfile } from "../../config/api";
 import { toast } from "react-toastify";
-import { fetchAccount } from "../../redux/slice/accountSlice";
+import { fetchAccount } from "../../redux/slices/accountSlice";
 import { useDispatch, useSelector } from "react-redux";
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -30,7 +30,7 @@ const EditInfo = ({
     usr_email: userEmail || "",
     usr_img: userAvatar || "",
   });
-  console.log("🚀 ~ formData:", formData)
+  console.log("🚀 ~ formData:", formData);
   const dispatch = useDispatch();
 
   const handleChange = (e) => {

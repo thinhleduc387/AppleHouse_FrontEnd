@@ -12,7 +12,7 @@ import { FaCheck } from "react-icons/fa";
 import ProductDescription from "../../../component/Product/ProductDescription";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { fetchCart, addToLocalCart } from "../../../redux/slice/cartSlice";
+import { fetchCart, addToLocalCart } from "../../../redux/slices/cartSlice";
 import RatingStar from "../../../component/Product/Feedback/RatingStar";
 import RecommendSectionForDetailPage from "../../../component/RecommendSection/RecommendSectionDetailProruct";
 

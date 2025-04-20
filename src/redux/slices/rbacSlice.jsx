@@ -7,7 +7,6 @@ export const fetchUserRole = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getUserRole();
-      console.log("🚀 ~ response:", response);
 
       if (response.status !== 200) {
         throw new Error("Failed to fetch role");

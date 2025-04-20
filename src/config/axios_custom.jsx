@@ -1,6 +1,6 @@
 import axios from "axios";
 // import store from "../redux/store";
-// import { setUserLoginInfo } from "../redux/slice/accountSlice";
+// import { setUserLoginInfo } from "../redux/slices/accountSlice";
 const instance = axios.create({
   baseURL: "http://localhost:8000/api/v1",
   withCredentials: true,
@@ -67,7 +67,6 @@ instance.interceptors.response.use(
           ) {
             originalRequest._retry = true;
             const response = await instance.get("/auth/handleRefreshToken");
-            console.log("🚀 ~ response:", response);
             const newToken = response?.metadata?.accessToken;
             const userId = response?.metadata?.user._id;
             if (newToken) {

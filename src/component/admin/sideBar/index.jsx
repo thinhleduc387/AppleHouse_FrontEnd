@@ -8,7 +8,7 @@ import {
   selectUserRole,
   selectRbacLoading,
   fetchUserRole,
-} from "../../../redux/slice/rbacSlice";
+} from "../../../redux/slices/rbacSlice";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const dispatch = useDispatch();

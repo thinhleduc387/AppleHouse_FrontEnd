@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getUserDefaultAddress } from "../../config/api";
 import ChangeAddressForm from "./ChangeAddressForm";
+import { setHiddenChatBot } from "../../redux/slices/chatBotSlice";
 
 const CheckoutInfo = ({
   onSubmit,
@@ -12,6 +13,13 @@ const CheckoutInfo = ({
   const userId = useSelector((state) => state.account?.user?._id);
   const [address, setAddress] = useState();
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+
+  const toggleOpenSideBar = (value) => {
+    setIsOpen(value);
+    dispatch(setHiddenChatBot(value));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData); // Gửi dữ liệu form lên cho cha
@@ -34,6 +42,7 @@ const CheckoutInfo = ({
 
   const handleOnChangeAddress = async () => {
     setIsOpen(true);
+    dispatch(setHiddenChatBot(true));
   };
 
   return (
@@ -78,7 +87,7 @@ const CheckoutInfo = ({
       {isOpen && (
         <ChangeAddressForm
           isOpen={isOpen}
-          setIsOpen={setIsOpen}
+          setIsOpen={toggleOpenSideBar}
           setAddress={setAddress}
         />
       )}

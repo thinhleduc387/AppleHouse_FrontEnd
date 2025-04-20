@@ -8,10 +8,9 @@ import {
 import SignUpDialog from "../../../component/Auth/SignUp";
 import FloatingInput from "../../../component/FloatingInput";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserLoginInfo } from "../../../redux/slice/accountSlice";
+import { setUserLoginInfo } from "../../../redux/slices/accountSlice";
 import { toast } from "react-toastify";
-import { clearLocalCart, fetchCart } from "../../../redux/slice/cartSlice";
-import { registerUser } from "../../../socket";
+import { clearLocalCart, fetchCart } from "../../../redux/slices/cartSlice";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");

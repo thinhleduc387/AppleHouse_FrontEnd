@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import accountReducer from "./slice/accountSlice";
-import productReducer from "./slice/productSlice";
-import cartReducer from "./slice/cartSlice";
-import flashSaleReducer from "./slice/flashSaleSlice";
-import rbacReducer from "./slice/rbacSlice";
-
+import accountReducer from "./slices/accountSlice";
+import productReducer from "./slices/productSlice";
+import cartReducer from "./slices/cartSlice";
+import flashSaleReducer from "./slices/flashSaleSlice";
+import rbacReducer from "./slices/rbacSlice";
+import chatBotReducer from "./slices/chatBotSlice";
 const store = configureStore({
   reducer: {
     account: accountReducer,
@@ -12,6 +12,7 @@ const store = configureStore({
     cart: cartReducer,
     flashSale: flashSaleReducer,
     rbac: rbacReducer,
+    chatBot: chatBotReducer,
   },
 });
 

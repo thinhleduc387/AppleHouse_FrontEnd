@@ -6,7 +6,7 @@ import { Home, X } from "lucide-react";
 const ChangeAddressForm = ({ isOpen, setIsOpen, setAddress }) => {
   const userId = useSelector((state) => state.account?.user?._id);
   const [addresses, setAddresses] = useState([]);
-  const [selectedAddress, setSelectedAddress] = useState(null); // State for selected address
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
   const fetchListAddress = async () => {
     const response = await getListUserAddress({ id: userId });
@@ -22,13 +22,13 @@ const ChangeAddressForm = ({ isOpen, setIsOpen, setAddress }) => {
 
   const handleSubmit = () => {
     if (selectedAddress) {
-      setAddress(selectedAddress); // Pass the selected address to the parent component
-      setIsOpen(false); // Close the form after selecting the address
+      setAddress(selectedAddress);
+      setIsOpen(false);
     }
   };
 
   const handleAddressSelect = (address) => {
-    setSelectedAddress(address); // Update the selected address
+    setSelectedAddress(address);
   };
 
   return (

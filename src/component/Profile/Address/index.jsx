@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Home, Plus, Building2, X } from "lucide-react";
 import AddressForm from "./AddressForm";
 import { deleteUserAddress, getListUserAddress } from "../../../config/api";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { setHiddenChatBot } from "../../../redux/slices/chatBotSlice";
 const Address = () => {
   const [isOpen, setIsOpen] = useState(false);
   const userId = useSelector((state) => state.account?.user?._id);
@@ -17,6 +18,13 @@ const Address = () => {
   };
 
   const [selectedAddress, setSelectedAddress] = useState(null);
+
+  const dispatch = useDispatch();
+
+  const toggleOpenSideBar = (value) => {
+    setIsOpen(value);
+    dispatch(setHiddenChatBot(value));
+  };
 
   useEffect(() => {
     if (!userId) return;
@@ -32,7 +40,7 @@ const Address = () => {
 
   const handleEditAddress = (address) => {
     setSelectedAddress(address);
-    setIsOpen(true);
+    toggleOpenSideBar(true);
   };
 
   const handleDelteAdress = async (address) => {
@@ -50,7 +58,7 @@ const Address = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">Sổ địa chỉ nhận hàng</h1>
         <button
-          onClick={() => setIsOpen(true)}
+          onClick={() => toggleOpenSideBar(true)}
           className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
         >
           <Plus className="w-5 h-5" />
@@ -110,7 +118,7 @@ const Address = () => {
 
       <AddressForm
         isOpen={isOpen}
-        setIsOpen={setIsOpen}
+        setIsOpen={toggleOpenSideBar}
         selectedAddress={selectedAddress}
         setSelectedAddress={setSelectedAddress}
         fetchListAddress={fetchListAddress}
