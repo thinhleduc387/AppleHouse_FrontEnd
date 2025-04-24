@@ -45,8 +45,8 @@ const PaymentMethod = () => {
             }`}
           >
             <div className="flex-1 flex items-center gap-4">
-              <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full">
-                <FaCreditCard className={`w-6 h-6 text-blue-600`} />
+              <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full">
+                <FaCreditCard className={`w-5 h-5 text-blue-600`} />
               </div>
               <div>
                 <p className="font-medium text-gray-900">
@@ -87,8 +87,8 @@ const PaymentMethod = () => {
             }`}
           >
             <div className="flex-1 flex items-center gap-4">
-              <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-full">
-                <FaMoneyBillWaveAlt className={`w-6 h-6 text-green-600`} />
+              <div className="flex items-center justify-center w-10 h-10 bg-green-100 rounded-full">
+                <FaMoneyBillWaveAlt className={`w-5 h-5 text-green-600`} />
               </div>
               <div>
                 <p className="font-medium text-gray-900">

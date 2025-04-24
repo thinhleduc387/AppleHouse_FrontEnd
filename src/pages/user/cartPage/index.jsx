@@ -9,10 +9,13 @@ import { IoIosArrowBack } from "react-icons/io";
 import PaymentMethod from "../../../component/Cart/PaymentMethod";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import CartItemCheckout from "../../../component/Cart/CartItemCheckout";
-import LoginRequiredModal from "./LoginRequireModal";
 import CartBookerInformation from "../../../component/Cart/CartBookerInformation";
 const CartPage = () => {
   const userId = useSelector((state) => state.account?.user?._id);
+  const isAuthenticated = useSelector(
+    (state) => state.account?.isAuthenticated
+  );
+
   const user = useSelector((state) => state.account?.user);
 
   const [cartItems, setCartItems] = useState([]);
@@ -22,7 +25,6 @@ const CartPage = () => {
   const [isCheckout, setIsCheckout] = useState(false);
   const localCartItems = useSelector((state) => state.cart?.localCartItems);
   const [cartItemSelected, setCartItemsSelected] = useState([]);
-  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     if (isCheckout !== false) {
@@ -54,13 +56,6 @@ const CartPage = () => {
   };
   const handleCheckAll = () => {
     setIsSelectAll((prev) => !prev);
-  };
-  const handleCheckoutAuth = () => {
-    if (userId) {
-      setIsCheckout(true);
-    } else {
-      setShowLoginModal(true);
-    }
   };
 
   return (
@@ -123,7 +118,7 @@ const CartPage = () => {
             </div>
             {isCheckout && (
               <>
-                {userId && <CartBookerInformation />}
+                <CartBookerInformation />
 
                 <div className="mt-4">
                   <CheckoutInfo onSubmit={handleCheckout} />
@@ -135,15 +130,12 @@ const CartPage = () => {
               </>
             )}
           </div>
-          <LoginRequiredModal
-            isOpen={showLoginModal}
-            onClose={() => setShowLoginModal(false)}
-          />
+
           {cartItems.length > 0 && (
             <CheckOut
               products_order={cartItemSelected}
               userId={userId}
-              onCheckout={() => handleCheckoutAuth()}
+              onCheckout={setIsCheckout}
               onContinueShopping={() => setIsCheckout(false)}
               isCheckout={isCheckout}
             />

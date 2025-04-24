@@ -24,9 +24,9 @@ const CheckOut = ({
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // const [checkoutValue, setCheckOutValue] = useState(initCheckOutValue);
-  const checkoutValue = useSelector((state) => state.checkout.checkoutValue);
+  const { checkoutValue, guestInformation } = useSelector(
+    (state) => state.checkout
+  );
   const [isProcessing, setIsProcessing] = useState(false);
   const accLoyalPoint = useSelector((state) => state.account?.user?.loyalPoint);
   const [useLoyalPoints, setUseLoyalPoints] = useState(false);
@@ -78,11 +78,17 @@ const CheckOut = ({
   const handleCheckout = async () => {
     if (isProcessing) return;
 
+    if (!orderAddress) {
+      toast.error("Vui lòng chọn địa chỉ giao hàng");
+      return;
+    }
+
     try {
       setIsProcessing(true);
 
       // Tạo order
       const response = await createOrder({
+        guestInformation,
         cartId,
         userId,
         products_order,
@@ -96,8 +102,20 @@ const CheckOut = ({
 
       const { sessionId, order } = response.metadata;
 
-      if (!sessionId) {
-        navigate(`/order/order-success/${order._id}`);
+      if (!sessionId && order) {
+        // xóa hàng ở local storage
+        if (!userId) {
+          let cart = JSON.parse(localStorage.getItem("cart"));
+          const purchasedSkuIds = order.order_products.map(
+            (item) => item.skuId
+          );
+          const updatedCart = cart.filter(
+            (item) => !purchasedSkuIds.includes(item.skuId)
+          );
+          localStorage.setItem("cart", JSON.stringify(updatedCart));
+        }
+
+        navigate(`/order/order-success/${order?.order_trackingNumber}`);
         return;
       }
 

@@ -453,6 +453,7 @@ export const getDiscountAmmountV2 = async (discountId, products) => {
 // order
 export const createOrder = async ({
   cartId,
+  guestInformation,
   userId,
   products_order,
   shop_discount,
@@ -463,6 +464,7 @@ export const createOrder = async ({
   orderNote,
 }) => {
   return axios.post(`/order`, {
+    guestInformation,
     cartId,
     userId,
     products_order,
@@ -485,6 +487,10 @@ export const getListOrder = async ({ userId, status }) => {
 
 export const getOneOrder = async ({ orderId }) => {
   return axios.get(`/order/${orderId}`);
+};
+
+export const getOneOrderByTrackinNumber = async ({ trackingNumber }) => {
+  return axios.get(`/order/${trackingNumber}/tracking`);
 };
 
 export const cancelOrder = async ({ orderId }) => {

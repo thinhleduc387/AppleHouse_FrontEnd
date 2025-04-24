@@ -29,7 +29,6 @@ const CartItem = ({
   };
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(product.quantity);
-  const [selectedColor, setSelectedColor] = useState("256 GB");
   const [isChecked, setIsChecked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const userId = useSelector((state) => state.account?.user?._id);
@@ -51,7 +50,6 @@ const CartItem = ({
         cartItem,
       ]);
     } else {
-      // Nếu bỏ Check All, xóa sản phẩm khỏi danh sách
       setSelectedProducts((prev) =>
         prev.filter((item) => item.skuId !== cartItem.skuId)
       );

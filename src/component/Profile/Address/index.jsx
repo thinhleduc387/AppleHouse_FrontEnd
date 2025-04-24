@@ -7,13 +7,22 @@ import { toast } from "react-toastify";
 import { setHiddenChatBot } from "../../../redux/slices/chatBotSlice";
 const Address = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const userId = useSelector((state) => state.account?.user?._id);
   const [addresses, setAddresses] = useState([]);
+
   const fetchListAddress = async () => {
-    const response = await getListUserAddress({ id: userId });
-    console.log("🚀 ~ fetchListAddress ~ response:", response);
-    if (response.status === 200) {
-      setAddresses(response.metadata);
+    try {
+      setIsLoading(true);
+      const response = await getListUserAddress({ id: userId });
+      if (response.status === 200) {
+        setAddresses(response.metadata);
+      }
+    } catch (error) {
+      console.error("Failed to fetch addresses:", error);
+      toast.error("Không thể tải danh sách địa chỉ");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -54,7 +63,7 @@ const Address = () => {
   };
 
   return (
-    <div className=" max-w-6xl mx-auto min-h-1">
+    <div className="max-w-6xl mx-auto min-h-1">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">Sổ địa chỉ nhận hàng</h1>
         <button
@@ -65,8 +74,32 @@ const Address = () => {
           <span>Thêm địa chỉ mới</span>
         </button>
       </div>
+
       <div className="space-y-4">
-        {addresses && addresses.length > 0 ? (
+        {isLoading ? (
+          <div className="space-y-4">
+            {[1, 2].map((item) => (
+              <div key={item} className="bg-white rounded-lg shadow p-4">
+                <div className="animate-pulse flex items-start gap-4">
+                  <div className="bg-gray-200 p-2 rounded-lg w-10 h-10"></div>
+                  <div className="flex-grow">
+                    <div className="flex justify-between items-start">
+                      <div className="space-y-3 w-full">
+                        <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                        <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                        <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                      </div>
+                      <div className="flex gap-3">
+                        <div className="h-4 bg-gray-200 rounded w-12"></div>
+                        <div className="h-4 bg-gray-200 rounded w-12"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : addresses && addresses.length > 0 ? (
           addresses?.map((address, index) => (
             <div
               key={index}
@@ -102,7 +135,7 @@ const Address = () => {
             </div>
           ))
         ) : (
-          <div className="text-center py-16 bg-white rounded-lg shadow-sm ">
+          <div className="text-center py-16 bg-white rounded-lg shadow-sm">
             <div className="mb-6">
               <Building2 className="w-20 h-20 mx-auto text-gray-400" />
             </div>

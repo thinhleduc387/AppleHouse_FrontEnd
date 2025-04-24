@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
-import OrderItem from "../OrderItem"; // Import component OrderItem
+import OrderItem from "../OrderItem";
 import { getListOrder } from "../../../config/api";
 import { useSelector } from "react-redux";
+
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
-  const [activeTab, setActiveTab] = useState("Tất cả"); // Quản lý tab đang chọn
+  const [activeTab, setActiveTab] = useState("Tất cả");
+  const [isLoading, setIsLoading] = useState(true);
   const userId = useSelector((state) => state.account?.user?._id);
 
   const fetchListOrder = async () => {
-    const response = await getListOrder({ userId, status: "all" });
-    if (response.status === 200) {
-      setOrders(response.metadata);
+    try {
+      setIsLoading(true);
+      const response = await getListOrder({ userId, status: "all" });
+      if (response.status === 200) {
+        setOrders(response.metadata);
+      }
+    } catch (error) {
+      console.error("Failed to fetch orders:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -59,7 +68,24 @@ const OrderList = () => {
       </div>
 
       <div className="space-y-4">
-        {filteredOrders.length > 0 ? (
+        {isLoading ? (
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="animate-pulse space-y-4">
+              {[1, 2, 3].map((item) => (
+                <div key={item} className="bg-gray-100 rounded-lg p-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-20 h-20 bg-gray-200 rounded"></div>
+                    <div className="flex-1 space-y-3">
+                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                      <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : filteredOrders.length > 0 ? (
           filteredOrders.map((order) => (
             <OrderItem key={order.id} order={order} statusMap={statusMap} />
           ))
@@ -76,9 +102,8 @@ const OrderList = () => {
             <p className="text-gray-500 mb-6">
               Bạn chưa có đơn hàng{" "}
               <span>
-                {" "}
-                <b> {activeTab.toLocaleLowerCase()} </b>
-              </span>
+                <b>{activeTab.toLocaleLowerCase()}</b>
+              </span>{" "}
               nào trong danh sách này
             </p>
           </div>

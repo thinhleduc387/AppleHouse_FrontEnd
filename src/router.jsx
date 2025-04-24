@@ -142,7 +142,10 @@ const RouterCustom = () => {
           <Route path="/admin/users" element={<UserPage />} />
         </Route>
 
-        <Route path="/order/order-success/:id" element={<OrderSuccess />} />
+        <Route
+          path="/order/order-success/:trackingNumber"
+          element={<OrderSuccess />}
+        />
         <Route path="/order/order-failed" element={<OrderFailed />} />
 
         <Route path="/access-denied" element={<AccessDenied />} />

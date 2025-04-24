@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  guestInformation: {
+    name: "",
+    phone: "",
+    email: "",
+  },
   checkoutValue: {
     accLoyalPoint: 0,
     feeShip: 0,
@@ -11,7 +16,7 @@ const initialState = {
     availableLoyalPoints: 0,
   },
   selectedVoucher: [],
-  orderAddress: "",
+  orderAddress: {},
   orderMethodPayment: "STRIPE",
   orderNote: "",
   useLoyalPoints: false,
@@ -43,6 +48,9 @@ const checkoutSlice = createSlice({
     setIsProcessing: (state, action) => {
       state.isProcessing = action.payload;
     },
+    setGuestInformation: (state, action) => {
+      state.guestInformation = action.payload;
+    },
   },
 });
 
@@ -54,6 +62,7 @@ export const {
   setSelectedVoucher,
   setUseLoyalPoints,
   setIsProcessing,
+  setGuestInformation,
 } = checkoutSlice.actions;
 
 export default checkoutSlice.reducer;

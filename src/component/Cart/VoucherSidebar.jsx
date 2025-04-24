@@ -9,6 +9,7 @@ import VoucherDetailsModal from "./VoucherDetailsModal";
 import { useDispatch, useSelector } from "react-redux";
 import { formatVND } from "../../utils";
 import { setSelectedVoucher } from "../../redux/slices/checkoutSlice";
+import { useNavigate } from "react-router-dom";
 
 const VoucherSideBar = ({
   isOpen,
@@ -17,6 +18,7 @@ const VoucherSideBar = ({
   isUseLoyalPoint,
 }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [vouchers, setVouchers] = useState([]);
   const [unAvailableVoucher, setUnAvailableVoucher] = useState([]);
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -28,7 +30,11 @@ const VoucherSideBar = ({
   const selectedVoucher = useSelector(
     (state) => state.checkout.selectedVoucher
   );
-  console.log("🚀 ~ selectedVoucher:", selectedVoucher);
+
+  const isAuthenticated = useSelector(
+    (state) => state.account?.isAuthenticated
+  );
+
   const handleCheckOut = async (products_order, userId, shop_discount) => {
     if (!products_order.length) {
       return;
@@ -205,25 +211,27 @@ const VoucherSideBar = ({
 
             {/* Search Section - Scrolls with content but sticks at top */}
             <div className="flex-1 overflow-y-auto">
-              <div className="sticky top-0 z-10 bg-white p-4">
-                <div className="bg-gray-50 rounded-lg p-4 shadow-sm">
-                  <div className="flex items-center justify-between">
-                    <input
-                      type="text"
-                      value={codeSearch}
-                      onChange={(e) => setCodeSearch(e.target.value)}
-                      placeholder="Nhập mã giảm giá của bạn tại đây nhé"
-                      className="w-full bg-transparent text-sm placeholder:text-gray-500 focus:outline-none"
-                    />
-                    <button
-                      onClick={handleFindVoucher}
-                      className="px-4 py-2 text-xs font-medium text-white bg-red-500 rounded-r-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
-                    >
-                      Tìm kiếm
-                    </button>
+              {isAuthenticated && (
+                <div className="sticky top-0 z-10 bg-white p-4">
+                  <div className="bg-gray-50 rounded-lg p-4 shadow-sm">
+                    <div className="flex items-center justify-between">
+                      <input
+                        type="text"
+                        value={codeSearch}
+                        onChange={(e) => setCodeSearch(e.target.value)}
+                        placeholder="Nhập mã giảm giá của bạn tại đây nhé"
+                        className="w-full bg-transparent text-sm placeholder:text-gray-500 focus:outline-none"
+                      />
+                      <button
+                        onClick={handleFindVoucher}
+                        className="px-4 py-2 text-xs font-medium text-white bg-red-500 rounded-r-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+                      >
+                        Tìm kiếm
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* Scrollable Content */}
               <div className="px-4 pb-4">
@@ -246,9 +254,11 @@ const VoucherSideBar = ({
                   </>
                 )}
 
-                <h3 className="text-base font-semibold mb-4">
-                  Voucher khả dụng
-                </h3>
+                {isAuthenticated && (
+                  <h3 className="text-base font-semibold mb-4">
+                    Voucher khả dụng
+                  </h3>
+                )}
                 {vouchers.length > 0 ? (
                   <div className="space-y-3 mb-6">
                     {vouchers.map((voucher) => (
@@ -264,7 +274,51 @@ const VoucherSideBar = ({
                     ))}
                   </div>
                 ) : (
-                  <div>Hiện tại chưa có voucher nào </div>
+                  <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                    {isAuthenticated ? (
+                      <>
+                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                          <AlertTriangle className="w-8 h-8 text-gray-400" />
+                        </div>
+                        <p className="text-gray-600 font-medium text-center">
+                          Hiện tại chưa có voucher nào
+                        </p>
+                        <p className="text-sm text-gray-500 mt-1 text-center">
+                          Vui lòng quay lại sau để nhận thêm ưu đãi
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-4">
+                          <svg
+                            className="w-8 h-8 text-red-500"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                            />
+                          </svg>
+                        </div>
+                        <p className="text-gray-600 font-medium text-center">
+                          Đăng nhập để xem voucher
+                        </p>
+                        <p className="text-sm text-gray-500 mt-1 text-center">
+                          Nhận ngay ưu đãi hấp dẫn cho đơn hàng của bạn
+                        </p>
+                        <button
+                          onClick={() => navigate("/login")}
+                          className="mt-4 px-6 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors duration-200 shadow-sm hover:shadow-md"
+                        >
+                          Đăng nhập ngay
+                        </button>
+                      </>
+                    )}
+                  </div>
                 )}
 
                 {unAvailableVoucher.length > 0 && (
