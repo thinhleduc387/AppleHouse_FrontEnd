@@ -54,11 +54,13 @@ const ProductSection = ({ title, products }) => {
   };
 
   return (
-    <div className="p-6 relative shadow-2xl bg-white rounded-lg">
-      <h2 className="text-2xl font-bold mb-6 text-black">{title}</h2>
+    <div className="p-6 relative shadow-2xl bg-white dark:bg-gray-800 rounded-lg">
+      <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
+        {title}
+      </h2>
       <button
         onClick={scrollLeft}
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 text-2xl pl-2 z-10"
+        className="absolute left-0 top-1/2 transform -translate-y-1/2 text-2xl pl-2 z-10 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
       >
         <FaChevronLeft />
       </button>
@@ -79,7 +81,7 @@ const ProductSection = ({ title, products }) => {
       </div>
       <button
         onClick={scrollRight}
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 text-2xl pr-2"
+        className="absolute right-0 top-1/2 transform -translate-y-1/2 text-2xl pr-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
       >
         <FaChevronRight />
       </button>

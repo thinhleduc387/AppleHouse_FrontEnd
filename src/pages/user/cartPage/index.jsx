@@ -11,10 +11,10 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import CartItemCheckout from "../../../component/Cart/CartItemCheckout";
 import LoginRequiredModal from "./LoginRequireModal";
 import RecommendSectionForCart from "../../../component/RecommendSection/RecomendSectionInCart";
-import { useTranslation } from "react-i18next"; // Import useTranslation
+import { useTranslation } from "react-i18next";
 
 const CartPage = () => {
-  const { t } = useTranslation("cart"); // Sử dụng hook useTranslation để lấy hàm t
+  const { t } = useTranslation("cart");
   const userId = useSelector((state) => state.account?.user?._id);
   const user = useSelector((state) => state.account?.user);
 
@@ -74,40 +74,42 @@ const CartPage = () => {
   };
 
   return (
-    <div className="py-4">
+    <div className="py-4 bg-[#f3f4f6] dark:bg-gray-900">
       {loading ? (
         <div className="flex items-center justify-center h-[50vh]">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 dark:border-blue-400 border-solid"></div>
         </div>
       ) : cartItems.length > 0 ? (
         <div className="grid md:grid-cols-3 gap-4">
           <div className="md:col-span-2">
-            <div className="p-4 flex justify-between gap-4 bg-white rounded-md font-bold overflow-y-auto">
+            <div className="p-4 flex justify-between gap-4 bg-white dark:bg-gray-800 rounded-md font-bold overflow-y-auto">
               <div className="flex items-center gap-4">
                 <input
                   type="checkbox"
                   checked={isSelectAll}
                   onChange={() => handleCheckAll()}
-                  className="w-4 h-4 cursor-pointer"
+                  className="w-4 h-4 cursor-pointer text-blue-500 dark:text-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400"
                 />
-                {t("selectAll")} ({selectedProducts.length}/{cartItems.length})
-                {/* Dịch "Chọn tất cả" */}
+                <span className="text-gray-800 dark:text-gray-100">
+                  {t("selectAll")} ({selectedProducts.length}/{cartItems.length}
+                  )
+                </span>
               </div>
-              <button className="text-gray-600 hover:text-red-600">
+              <button className="text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400">
                 <RiDeleteBin6Line className="w-6 h-6" />
               </button>
             </div>
 
-            <div className="p-4 mt-3 flex flex-col gap-4 bg-white rounded-md overflow-x-auto">
+            <div className="p-4 mt-3 flex flex-col gap-4 bg-white dark:bg-gray-800 rounded-md overflow-x-auto">
               {isCheckout && (
                 <a
                   onClick={() => {
                     setIsCheckout(false);
                   }}
-                  className="text-mainColor flex flex-row items-center cursor-pointer"
+                  className="text-blue-500 dark:text-blue-400 flex flex-row items-center cursor-pointer hover:text-blue-600 dark:hover:text-blue-300"
                 >
-                  <IoIosArrowBack />
-                  {t("backToCart")} {/* Dịch "Quay lại giỏ hàng" */}
+                  <IoIosArrowBack className="text-blue-500 dark:text-blue-400" />
+                  <span>{t("backToCart")}</span>
                 </a>
               )}
               <div className="space-y-4">
@@ -133,45 +135,45 @@ const CartPage = () => {
               <>
                 {userId && (
                   <div className="mt-6">
-                    <div className="p-6 bg-white rounded-lg shadow-md">
-                      <h2 className="text-xl font-semibold text-gray-800 border-b pb-2 mb-4">
-                        {t("customerInfo")} {/* Dịch "Thông tin người đặt" */}
+                    <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                      <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 border-b border-gray-200 dark:border-gray-700 pb-2 mb-4">
+                        {t("customerInfo")}
                       </h2>
                       <div className="space-y-2">
                         <div>
-                          <label className="block text-sm font-medium text-gray-600">
-                            {t("fullName")} {/* Dịch "Họ và tên" */}
+                          <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                            {t("fullName")}
                           </label>
                           <input
                             type="text"
                             name="phone"
                             disabled
                             value={user?.name}
-                            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 hover:border-blue-500 transition-all"
+                            className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 hover:border-blue-500 dark:hover:border-blue-400 transition-all"
                             required
                           />
                         </div>
                         {user?.email && (
                           <div>
-                            <label className="block text-sm font-medium text-gray-600">
-                              {t("email")} {/* Dịch "Email" */}
+                            <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                              {t("email")}
                             </label>
                             <input
                               type="text"
                               name="phone"
                               disabled
                               value={user?.email}
-                              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 hover:border-blue-500 transition-all"
+                              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 hover:border-blue-500 dark:hover:border-blue-400 transition-all"
                               required
                             />
                           </div>
                         )}
                         {user?.phone && (
                           <div>
-                            <label className="block text-sm font-medium text-gray-600">
-                              {t("phoneNumber")}: {/* Dịch "Số điện thoại" */}
+                            <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                              {t("phoneNumber")}:
                             </label>
-                            <p className="text-base font-medium text-gray-800">
+                            <p className="text-base font-medium text-gray-800 dark:text-gray-100">
                               {user?.phone}
                             </p>
                           </div>
@@ -220,11 +222,11 @@ const CartPage = () => {
         <CartEmpty />
       )}
       {!isCheckout && userId && cartItems.length > 0 && (
-        <div className="py-14">
+        <div className="py-14 bg-[#f3f4f6] dark:bg-gray-900">
           <RecommendSectionForCart />
         </div>
       )}
-      <div className="py-5"></div>
+      <div className="py-5 bg-[#f3f4f6] dark:bg-gray-900"></div>
     </div>
   );
 };

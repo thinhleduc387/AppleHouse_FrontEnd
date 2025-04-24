@@ -1,5 +1,6 @@
 import { X, ChevronRight, Plus, Check, Info } from "lucide-react";
 import { formatDate } from "../../utils";
+
 const VoucherDetailsModal = ({ isOpen, onClose, voucher }) => {
   if (!isOpen || !voucher) return null;
 
@@ -7,44 +8,52 @@ const VoucherDetailsModal = ({ isOpen, onClose, voucher }) => {
     <div className="fixed inset-0 z-[60] flex items-center justify-center">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+        className="fixed inset-0 bg-black/50 dark:bg-black/75 backdrop-blur-sm"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-md bg-white rounded-lg shadow-xl p-6 mx-4 z-10">
+      <div className="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 mx-4 z-10">
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 p-1 hover:bg-gray-100 rounded-full transition-colors"
+          className="absolute right-4 top-4 p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
         >
-          <X className="w-5 h-5 text-gray-500" />
+          <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
         </button>
 
         {/* Content */}
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-red-500 font-medium text-lg">%</span>
+            <div className="w-10 h-10 bg-red-50 dark:bg-red-900/50 rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="text-red-500 dark:text-red-400 font-medium text-lg">
+                %
+              </span>
             </div>
             <div>
-              <h3 className="font-semibold">{voucher.discount_name}</h3>
-              <p className="text-sm text-gray-500">
+              <h3 className="font-semibold text-gray-800 dark:text-gray-100">
+                {voucher.discount_name}
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 Mã: {voucher.discount_code}
               </p>
             </div>
           </div>
 
           <div>
-            <h4 className="font-medium mb-2">Mô tả</h4>
-            <p className="text-sm text-gray-600">
+            <h4 className="font-medium text-gray-800 dark:text-gray-100 mb-2">
+              Mô tả
+            </h4>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
               {voucher.discount_description}
             </p>
           </div>
 
           <div>
-            <h4 className="font-medium mb-2">Điều kiện áp dụng</h4>
-            <ul className="text-sm text-gray-600 space-y-2">
+            <h4 className="font-medium text-gray-800 dark:text-gray-100 mb-2">
+              Điều kiện áp dụng
+            </h4>
+            <ul className="text-sm text-gray-600 dark:text-gray-300 space-y-2">
               {voucher.discount_max_uses_per_user && (
                 <li>
                   • Số lượt sử dụng tối đa: {voucher.discount_max_uses_per_user}
@@ -55,13 +64,15 @@ const VoucherDetailsModal = ({ isOpen, onClose, voucher }) => {
                   • Giá trị đơn hàng tối thiểu:{" "}
                   {voucher.discount_min_order_value}
                 </li>
-              )}{" "}
+              )}
             </ul>
           </div>
 
           <div>
-            <h4 className="font-medium mb-2">Thời gian sử dụng</h4>
-            <p className="text-sm text-gray-600">
+            <h4 className="font-medium text-gray-800 dark:text-gray-100 mb-2">
+              Thời gian sử dụng
+            </h4>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
               Từ {formatDate(voucher.discount_start)} đến{" "}
               {formatDate(voucher.discount_end)}
             </p>
@@ -71,4 +82,5 @@ const VoucherDetailsModal = ({ isOpen, onClose, voucher }) => {
     </div>
   );
 };
+
 export default VoucherDetailsModal;

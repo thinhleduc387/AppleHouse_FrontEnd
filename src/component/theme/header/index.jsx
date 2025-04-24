@@ -13,6 +13,7 @@ import NotificationMenu from "../../Notification/notificationMenu";
 import { fetchCart } from "../../../redux/slice/cartSlice";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "../../LanguageSwitcher";
+import ThemeToggle from "../../themeToggle";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -48,7 +49,6 @@ const Header = () => {
   };
 
   useEffect(() => {
-    // Update header height when component mounts or on resize
     if (headerRef.current) {
       setHeaderHeight(headerRef.current.offsetHeight);
     }
@@ -72,14 +72,14 @@ const Header = () => {
 
   return (
     <>
-      <div className="w-full top-0 left-0 z-10 sticky shadow-md ">
+      <div className="w-full top-0 left-0 z-10 sticky shadow-md dark:bg-gray-800">
         <div
-          className="py-4 px-4 sm:px-6 md:px-12 lg:px-16  lg:flex justify-between items-center bg-[#f3f4f6] relative"
-          ref={headerRef} // Attach ref to the header
+          className="py-4 px-4 sm:px-6 md:px-12 lg:px-16 lg:flex justify-between items-center bg-[#f3f4f6] dark:bg-gray-900 relative"
+          ref={headerRef}
         >
           {/* Logo and Menu */}
           <div className="flex items-center justify-between w-full lg:w-auto">
-            <a href="/" className="font-bold text-3xl">
+            <a href="/" className="font-bold text-3xl dark:text-white">
               AppleHouse
             </a>
             {/* Desktop Dropdown Menu */}
@@ -88,7 +88,7 @@ const Header = () => {
             </div>
             <div
               onClick={() => setIsOpen(!isOpen)}
-              className="w-7 h-7 lg:hidden cursor-pointer"
+              className="w-7 h-7 lg:hidden cursor-pointer dark:text-white"
             >
               <Bars3BottomRightIcon />
             </div>
@@ -103,7 +103,7 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <ul className="hidden lg:flex pl-9 lg:pl-0 justify-end items-center space-x-8 ml-4">
-            <li className="font-extrabold text-3xl my-7 lg:my-0 relative">
+            <li className="font-extrabold text-3xl my-7 lg:my-0 relative dark:text-white">
               <Link to="/cart">
                 <IoCartOutline />
                 {(cart_products.length > 0 || localCartItems.length > 0) && (
@@ -113,28 +113,12 @@ const Header = () => {
                 )}
               </Link>
             </li>
-            <li className="font-extrabold text-3xl my-7 lg:my-0 relative">
+            <li className="font-extrabold text-3xl my-7 lg:my-0 relative dark:text-white">
+              <ThemeToggle />
+            </li>
+            <li className="font-extrabold text-3xl my-7 lg:my-0 relative dark:text-white">
               <LanguageSwitcher />
             </li>
-            {/* {isAuthenticated && (
-              <li
-                onMouseEnter={() => setNotifyIsOpen(true)}
-                onMouseLeave={() => setNotifyIsOpen(false)}
-                className="font-extrabold text-3xl my-7 lg:my-0 relative"
-              >
-                <Link to="/">
-                  <PiBellSimpleRinging />
-                  <span className="absolute top-0 right-0 text-[0.6rem] bg-red-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center">
-                    {mockNotifications.length}
-                  </span>
-                </Link>
-
-                {notifyIsOpen && (
-                  <NotificationMenu notifications={mockNotifications} />
-                )}
-              </li>
-            )} */}
-            {/* Profile Section with Dropdown */}
             <li className="my-7 lg:my-0">
               <ProfileNavBar userAvatar={userAvatar} userName={userName} />
             </li>

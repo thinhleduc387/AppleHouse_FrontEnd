@@ -5,23 +5,23 @@ import RecommendSectionForProfile from "../../../component/RecommendSection/Reco
 
 const ProfilePage = () => {
   return (
-    <div>
+    <div className="bg-[#f3f4f6] dark:bg-gray-900">
       <div className="block md:hidden">
         <Sidebar />
       </div>
 
       <div className="flex overflow-hidden mt-6">
-        <div className="hidden md:block w-64 text-white h-fit z-1 sticky top-0">
+        <div className="hidden md:block w-64 text-white dark:text-gray-100 h-fit z-1 sticky top-0">
           <Sidebar />
         </div>
 
         <div className="flex-1 flex flex-col overflow-y-auto">
-          <main className="px-0 md:px-6 2xl:px-10 h-full">
+          <main className="px-0 md:px-6 2xl:px-10 h-full bg-[#f3f4f6] dark:bg-gray-900">
             <Outlet />
           </main>
         </div>
       </div>
-      <div className="py-10">
+      <div className="py-10 bg-[#f3f4f6] dark:bg-gray-900">
         <RecommendSectionForProfile />
       </div>
     </div>

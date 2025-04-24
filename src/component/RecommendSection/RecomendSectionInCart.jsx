@@ -112,15 +112,17 @@ const RecommendSectionForCart = ({ title = "Sản phẩm liên quan" }) => {
   };
 
   return (
-    <div className="flex flex-col bg-white rounded-lg shadow-2xl p-6">
-      <h2 className="text-2xl font-bold mb-6 text-black">{title}</h2>
+    <div className="flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-6">
+      <h2 className="text-2xl font-bold mb-6 text-black dark:text-gray-100">
+        {title}
+      </h2>
 
       <div className="flex items-center">
         <button
           onClick={scrollLeft}
           className={`flex-none p-2 mr-2 transition-opacity duration-200 ${
             canScrollLeft ? "opacity-100" : "opacity-100"
-          }`}
+          } text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100`}
         >
           <FaChevronLeft className="text-2xl" />
         </button>
@@ -147,7 +149,7 @@ const RecommendSectionForCart = ({ title = "Sản phẩm liên quan" }) => {
           onClick={scrollRight}
           className={`flex-none p-2 ml-2 transition-opacity duration-200 ${
             canScrollRight ? "opacity-100" : "opacity-100"
-          }`}
+          } text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100`}
         >
           <FaChevronRight className="text-2xl" />
         </button>

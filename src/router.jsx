@@ -51,10 +51,19 @@ import AdminProfilePage from "./pages/admin/adminProfilePage";
 import TopProductPage from "./pages/admin/topProductPage";
 import ChangePass from "./component/Profile/ChangePass";
 import StatictisPage from "./pages/admin/StatisticPromotions";
+import { setTheme } from "./redux/slice/themeSlice";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
   const account = useSelector((state) => state.account);
+  const { theme } = useSelector((state) => state.theme);
+
+  useEffect(() => {
+    // Áp dụng theme từ localStorage khi tải ứng dụng
+    const savedTheme = localStorage.getItem("theme") || "light";
+    dispatch(setTheme(savedTheme));
+  }, [dispatch]);
+
   useEffect(() => {
     if (!account || !account.id) {
       dispatch(fetchAccount());

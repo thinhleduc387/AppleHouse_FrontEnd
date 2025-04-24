@@ -9,7 +9,7 @@ import {
   removeFromLocalCart,
   updateLocalCartQuantity,
 } from "../../redux/slice/cartSlice";
-import { useTranslation } from "react-i18next"; // Import useTranslation
+import { useTranslation } from "react-i18next";
 
 const CartItem = ({
   isSelectAll,
@@ -18,7 +18,7 @@ const CartItem = ({
   setCartItems,
   setCartItemsSelected,
 }) => {
-  const { t } = useTranslation("cart"); // Sử dụng hook useTranslation để lấy hàm t
+  const { t } = useTranslation("cart");
   const product = {
     skuId: cartItem.skuId,
     spuId: cartItem.spuId,
@@ -103,7 +103,7 @@ const CartItem = ({
     if (userId) {
       const response = await deleteItemInCart({ userId, skuId: product.skuId });
       if (response.metadata.modifiedCount !== 0) {
-        toast.success(t("deleteSuccess")); // Dịch "Delete successful"
+        toast.success(t("deleteSuccess"));
         setCartItems((prevItems) =>
           prevItems.filter((item) => item.skuId !== product.skuId)
         );
@@ -195,22 +195,22 @@ const CartItem = ({
     if (response.status === 200) {
       return 1;
     } else {
-      toast.error(t("updateQuantityFailed")); // Dịch "Câp nhật số lượng thất bại"
+      toast.error(t("updateQuantityFailed"));
     }
   };
 
   return (
-    <div className="grid grid-cols-3 items-center">
+    <div className="grid grid-cols-3 items-center bg-white dark:bg-gray-800 p-4 rounded-md">
       <div className="col-span-2 flex items-center gap-4">
         <input
           type="checkbox"
           name=""
           id=""
           checked={isChecked}
-          className="w-4 h-4 cursor-pointer"
+          className="w-4 h-4 cursor-pointer text-blue-500 dark:text-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400"
           onChange={handleCheckboxChange}
         />
-        <div className="w-24 h-24 shrink-0 bg-white p-2 rounded-md border border-gray-300">
+        <div className="w-24 h-24 shrink-0 bg-white dark:bg-gray-900 p-2 rounded-md border border-gray-300 dark:border-gray-700">
           <img
             src={product.imageUrl}
             className="w-full h-full object-contain"
@@ -219,7 +219,7 @@ const CartItem = ({
         </div>
 
         <div className="flex flex-col justify-between">
-          <h3 className="lg:text-base md:text-sm text-xs font-bold text-gray-800">
+          <h3 className="lg:text-base md:text-sm text-xs font-bold text-gray-800 dark:text-gray-100">
             {product.name}
           </h3>
         </div>
@@ -227,7 +227,7 @@ const CartItem = ({
 
       <div className="flex flex-col md:flex-row items-center justify-between w-full md:w-auto space-y-4 md:space-y-0 md:space-x-7">
         <div className="flex flex-col items-end">
-          <span className="text-base font-bold text-gray-800">
+          <span className="text-base font-bold text-gray-800 dark:text-gray-100">
             {product.price.toLocaleString("vi-VN", {
               style: "currency",
               currency: "VND",
@@ -235,7 +235,7 @@ const CartItem = ({
           </span>
 
           {product.discountPrice && (
-            <span className="text-xs text-gray-500 line-through">
+            <span className="text-xs text-gray-500 dark:text-gray-400 line-through">
               {product.discountPrice.toLocaleString("vi-VN", {
                 style: "currency",
                 currency: "VND",
@@ -248,7 +248,7 @@ const CartItem = ({
           <div className="flex items-center space-x-4 pr-2">
             <button
               type="button"
-              className="flex items-center justify-center w-8 h-8 border border-gray-300 rounded-full text-gray-600 hover:text-red-500 hover:border-red-500"
+              className="flex items-center justify-center w-8 h-8 border border-gray-300 dark:border-gray-700 rounded-full text-gray-600 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 hover:border-red-500 dark:hover:border-red-400"
               onClick={() => {
                 handleDecreaseQuantity();
               }}
@@ -263,13 +263,13 @@ const CartItem = ({
               </svg>
             </button>
 
-            <span className="text-base font-semibold text-gray-800 w-6 text-center">
+            <span className="text-base font-semibold text-gray-800 dark:text-gray-100 w-6 text-center">
               {quantity}
             </span>
 
             <button
               type="button"
-              className="flex items-center justify-center w-8 h-8 border border-gray-300 rounded-full text-gray-600 hover:text-green-500 hover:border-green-500"
+              className="flex items-center justify-center w-8 h-8 border border-gray-300 dark:border-gray-700 rounded-full text-gray-600 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400 hover:border-green-500 dark:hover:border-green-400"
               onClick={() => {
                 handleIncreaseQuantity();
               }}
@@ -285,34 +285,32 @@ const CartItem = ({
             </button>
           </div>
           <button
-            className="text-gray-600 hover:text-red-600"
+            className="text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400"
             onClick={() => setIsModalOpen(true)}
           >
             <RiDeleteBin6Line className="w-6 h-6" />
           </button>
           {isModalOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-              <div className="bg-white p-6 rounded-md shadow-md">
-                <h3 className="text-lg font-semibold text-gray-800">
-                  {t("confirmDeleteProduct")}{" "}
-                  {/* Dịch "Xác nhận xóa sản phẩm" */}
+            <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-75 flex justify-center items-center z-50">
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-md shadow-md">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+                  {t("confirmDeleteProduct")}
                 </h3>
-                <p className="text-sm text-gray-600 my-4">
-                  {t("deleteConfirmationMessage")}{" "}
-                  {/* Dịch "Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?" */}
+                <p className="text-sm text-gray-600 dark:text-gray-300 my-4">
+                  {t("deleteConfirmationMessage")}
                 </p>
                 <div className="flex justify-end space-x-4">
                   <button
-                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                    className="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-100 rounded-md hover:bg-gray-400 dark:hover:bg-gray-600"
                     onClick={() => setIsModalOpen(false)}
                   >
-                    {t("cancel")} {/* Dịch "Hủy" */}
+                    {t("cancel")}
                   </button>
                   <button
-                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                    className="px-4 py-2 bg-red-500 dark:bg-red-600 text-white rounded-md hover:bg-red-600 dark:hover:bg-red-700"
                     onClick={handleDeleteCart}
                   >
-                    {t("delete")} {/* Dịch "Xóa" */}
+                    {t("delete")}
                   </button>
                 </div>
               </div>

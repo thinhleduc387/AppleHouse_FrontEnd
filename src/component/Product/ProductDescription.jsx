@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { MdNavigateNext } from "react-icons/md";
-import { useTranslation } from "react-i18next"; // Import useTranslation từ react-i18next
+import { useTranslation } from "react-i18next";
 
 const ProductDescription = ({ description, onClickThongSo }) => {
-  const { t } = useTranslation("detailProduct"); // Sử dụng hook useTranslation để lấy hàm t
+  const { t } = useTranslation("detailProduct");
   const [isExpanded, setIsExpanded] = useState(false);
   const [shouldShowMore, setShouldShowMore] = useState(false);
   const paragraphRef = useRef(null);
 
-  const maxLines = 5; // Số dòng tối đa bạn muốn hiển thị
+  const maxLines = 5;
 
   useEffect(() => {
     const checkNumberOfLines = () => {
@@ -19,15 +19,15 @@ const ProductDescription = ({ description, onClickThongSo }) => {
         );
         const totalHeight = paragraphRef.current.scrollHeight;
         const lines = Math.floor(totalHeight / lineHeight);
-        setShouldShowMore(lines > maxLines); // Hiển thị "Xem thêm" nếu số dòng vượt quá maxLines
+        setShouldShowMore(lines > maxLines);
       }
     };
 
-    checkNumberOfLines(); // Kiểm tra số dòng ngay khi component render
-    window.addEventListener("resize", checkNumberOfLines); // Cập nhật khi thay đổi kích thước cửa sổ
+    checkNumberOfLines();
+    window.addEventListener("resize", checkNumberOfLines);
 
     return () => {
-      window.removeEventListener("resize", checkNumberOfLines); // Clean up listener
+      window.removeEventListener("resize", checkNumberOfLines);
     };
   }, []);
 
@@ -36,17 +36,17 @@ const ProductDescription = ({ description, onClickThongSo }) => {
   };
 
   return (
-    <div className="mt-16 bg-white border-2 rounded-lg p-6 space-y-8">
+    <div className="mt-16 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-lg p-6 space-y-8">
       <div className="flex flex-row justify-between">
-        <h1 className="text-lg md:text-xl lg:text-2xl font-bold">
-          {t("productInfo")} {/* Dịch "Thông tin sản phẩm" */}
+        <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-800 dark:text-gray-100">
+          {t("productInfo")}
         </h1>
         <a
-          className="text-mainColor cursor-pointer flex items-center hover:text-blue-900"
+          className="text-blue-500 dark:text-blue-400 cursor-pointer flex items-center hover:text-blue-700 dark:hover:text-blue-300"
           onClick={onClickThongSo}
         >
           <span className="text-sm md:text-base font-medium">
-            {t("technicalSpecs")} {/* Dịch "Thông số kỹ thuật" */}
+            {t("technicalSpecs")}
           </span>
           <MdNavigateNext className="text-xl" />
         </a>
@@ -60,16 +60,16 @@ const ProductDescription = ({ description, onClickThongSo }) => {
         <div
           ref={paragraphRef}
           dangerouslySetInnerHTML={{ __html: description }}
-          className="prose max-w-none"
+          className="prose max-w-none text-gray-800 dark:text-gray-100"
         />
 
         {!isExpanded && shouldShowMore && (
-          <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-white to-transparent opacity-90 z-10 flex justify-center items-center">
+          <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-white dark:from-gray-800 to-transparent opacity-90 z-10 flex justify-center items-center">
             <button
-              className="text-blue-500 bg-white font-bold hover:underline border border-gray-300 rounded-full px-4 py-2 mt-5"
+              className="text-blue-500 dark:text-blue-400 bg-white dark:bg-gray-800 font-bold hover:underline border border-gray-300 dark:border-gray-700 rounded-full px-4 py-2 mt-5"
               onClick={toggleExpand}
             >
-              {t("showMore")} {/* Dịch "Xem thêm" */}
+              {t("showMore")}
             </button>
           </div>
         )}
@@ -78,10 +78,10 @@ const ProductDescription = ({ description, onClickThongSo }) => {
       {isExpanded && shouldShowMore && (
         <div className="flex justify-center mt-4">
           <button
-            className="text-blue-500 font-bold hover:underline border border-gray-300 rounded-full px-4 py-2"
+            className="text-blue-500 dark:text-blue-400 font-bold hover:underline border border-gray-300 dark:border-gray-700 rounded-full px-4 py-2"
             onClick={toggleExpand}
           >
-            {t("collapse")} {/* Dịch "Thu gọn" */}
+            {t("collapse")}
           </button>
         </div>
       )}
