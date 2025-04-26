@@ -51,6 +51,7 @@ import AdminProfilePage from "./pages/admin/adminProfilePage";
 import TopProductPage from "./pages/admin/topProductPage";
 import ChangePass from "./component/Profile/ChangePass";
 import StatictisPage from "./pages/admin/StatisticPromotions";
+import ReviewPage from "./pages/admin/reviewPage";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -136,7 +137,7 @@ const RouterCustom = () => {
             element={<OrderDetailPage />}
           />
           <Route path="/admin/stock" element={<StockPage />} />
-          <Route path="/admin/feedback" element={<FeedBackPage />} />
+          <Route path="/admin/feedback" element={<ReviewPage />} />
 
           <Route path="/admin/role-permission" element={<RolePermission />} />
           <Route path="/admin/users" element={<UserPage />} />

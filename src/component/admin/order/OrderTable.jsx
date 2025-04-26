@@ -80,11 +80,14 @@ const OrderTable = ({ listOrder, setListOrder }) => {
               <td className="p-5 border-b text-gray-700 font-semibold">
                 <div className="flex items-center gap-4">
                   <img
-                    src={order.order_userId.usr_avatar || "https://via.placeholder.com/50"}
-                    alt={order.order_userId.usr_name}
+                    src={
+                      order?.order_userId?.usr_avatar ||
+                      "https://via.placeholder.com/50"
+                    }
+                    alt={order?.order_userId?.usr_name}
                     className="w-10 h-10 rounded-full"
                   />
-                  <span>{order.order_userId.usr_name}</span>
+                  <span>{order?.order_userId?.usr_name}</span>
                 </div>
               </td>
               <td className="p-5 border-b text-gray-700 font-semibold">

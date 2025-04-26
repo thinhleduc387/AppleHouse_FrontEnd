@@ -127,9 +127,7 @@ const AdminProfilePage = () => {
         <h1 className="text-4xl font-bold text-gray-700">Settings</h1>
       </div>
 
-      {/* Profile Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Profile Image and Info */}
         <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center">
           <div className="relative">
             <div
