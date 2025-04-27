@@ -6,7 +6,11 @@ import ReviewModal from "../../../component/admin/review/ReviewModal";
 import ReviewList from "../../../component/admin/review/ReviewList";
 import PageHeader from "../../../layout/adminLayout/PageHeader";
 import RatingDistribution from "../../../component/admin/review/RatingDistribution";
-import { createComment, getListCommentByAdmin } from "../../../config/api";
+import {
+  createComment,
+  getListCommentByAdmin,
+  getStatistisReview,
+} from "../../../config/api";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import ViewDetailsModal from "../../../component/admin/review/ViewDetailsModal";
@@ -28,13 +32,7 @@ const getProductById = async (productId) => {
 const ITEMS_PER_PAGE = 7;
 
 const ReviewPage = () => {
-  const [ratingDistribution] = useState([
-    { stars: 5, percentage: 31 },
-    { stars: 4, percentage: 43 },
-    { stars: 3, percentage: 19 },
-    { stars: 2, percentage: 0 },
-    { stars: 1, percentage: 7 },
-  ]);
+  const [ratingDistribution, setRatingDistribution] = useState([]);
 
   const userId = useSelector((state) => state.account?.user?._id);
   const [reviews, setReviews] = useState(null);
@@ -51,7 +49,8 @@ const ReviewPage = () => {
   const [replyAllMessage, setReplyAllMessage] = useState("");
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const [isLoadingReply, setIsLoadingReply] = useState(false);
-  const [productDetails, setProductDetails] = useState(null);
+  const [statisticReview, setStatisticReview] = useState();
+  console.log("🚀 ~ ReviewPage ~ statisticReview:", statisticReview);
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -170,19 +169,8 @@ const ReviewPage = () => {
         openReplyPopup(review);
         break;
       case "view":
-        try {
-          const productResponse = await getProductById(
-            review.comment_productId
-          );
-          if (productResponse && productResponse.metadata) {
-            openViewDetailsPopup(review, productResponse.metadata);
-          } else {
-            toast.error("Failed to load product details.");
-          }
-        } catch (error) {
-          console.error("Error fetching product details:", error);
-          toast.error("Failed to load product details.");
-        }
+        openViewDetailsPopup(review);
+
         break;
       default:
         break;
@@ -209,63 +197,102 @@ const ReviewPage = () => {
     getListReview();
   }, [sort, currentPage]);
 
+  useEffect(() => {
+    const getStatisticReview = async () => {
+      setLoading(true);
+      const response = await getStatistisReview();
+
+      if (response && response.metadata) {
+        setStatisticReview(response.metadata);
+        const { ratingDistribution, totalRatedReview } = response.metadata;
+
+        const distributionArray = [5, 4, 3, 2, 1].map((star) => {
+          const count = ratingDistribution[star] || 0;
+          const percentage =
+            totalRatedReview > 0
+              ? parseFloat(((count / totalRatedReview) * 100).toFixed(1))
+              : 0;
+
+          return { stars: star, percentage };
+        });
+        console.log(
+          "🚀 ~ distributionArray ~ distributionArray:",
+          distributionArray
+        );
+
+        setRatingDistribution(distributionArray);
+      }
+    };
+
+    getStatisticReview();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50/50">
       <PageHeader title="Reviews" />
 
-      <div className="p-4 md:p-6 space-y-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6">
-          <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
-            <ReviewsScore score={4.5} />
-          </div>
-          <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
-            <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
-              <CustomersInfobox
-                label="Total"
-                count={348}
-                color="green"
-                icon={FaUserAlt}
-              />
-            </div>
-            <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
-              <CustomersInfobox
-                label="New"
-                count={25}
-                suffix="%"
-                iconClass="user-plus-solid"
-                icon={FaUserAlt}
-              />
-            </div>
-            <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
-              <CustomersInfobox
-                label="Regular"
-                count={75}
-                suffix="%"
-                color="red"
-                iconClass="user-group-crown-solid"
-                icon={FaUserAlt}
-              />
-            </div>
-          </div>
-          <RatingDistribution distribution={ratingDistribution} />
+      {loading ? (
+        <div className="flex flex-col items-center justify-center min-h-[70vh]">
+          <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
+          <p className="mt-4 text-lg text-gray-600 font-medium">
+            Loading reviews...
+          </p>
         </div>
+      ) : (
+        <div className="p-4 md:p-6 space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6">
+            <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
+              <ReviewsScore score={statisticReview?.averageRating} />
+            </div>
+            <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+              <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
+                <CustomersInfobox
+                  label="Total"
+                  count={statisticReview?.totalRatedReview}
+                  color="green"
+                  icon={FaUserAlt}
+                />
+              </div>
+              <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
+                <CustomersInfobox
+                  label="New"
+                  count={statisticReview?.newRatingPercentage}
+                  suffix="%"
+                  iconClass="user-plus-solid"
+                  icon={FaUserAlt}
+                />
+              </div>
+              <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
+                <CustomersInfobox
+                  label="Regular"
+                  count={statisticReview?.regularRatingPercentage}
+                  suffix="%"
+                  color="red"
+                  iconClass="user-group-crown-solid"
+                  icon={FaUserAlt}
+                />
+              </div>
+            </div>
+            <RatingDistribution distribution={ratingDistribution} />
+          </div>
 
-        {reviews && (
-          <ReviewList
-            reviews={reviews}
-            selectedReviews={selectedReviews}
-            onSelectReview={handleSelectReview}
-            onSelectAll={handleSelectAll}
-            onReplyAll={openReplyAllPopup}
-            onOpenPopup={openReplyPopup}
-            onToggleDropdown={toggleDropdown}
-            onAction={handleAction}
-            openDropdownId={openDropdownId}
-            setSort={setSort}
-            loading={loading}
-          />
-        )}
-      </div>
+          {reviews && (
+            <ReviewList
+              reviews={reviews}
+              selectedReviews={selectedReviews}
+              onSelectReview={handleSelectReview}
+              onSelectAll={handleSelectAll}
+              onReplyAll={openReplyAllPopup}
+              onOpenPopup={openReplyPopup}
+              onToggleDropdown={toggleDropdown}
+              onAction={handleAction}
+              openDropdownId={openDropdownId}
+              setSort={setSort}
+              loading={loading}
+            />
+          )}
+        </div>
+      )}
 
       <ReviewModal
         isOpen={isReplyPopupOpen}

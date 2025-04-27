@@ -417,8 +417,13 @@ export const ratingCount = async ({ productId }) => {
 export const totalRatingRateComment = async ({ productId }) => {
   return axios.get(`/comment/total-rating-comment/${productId}`);
 };
+
 export const getCommentWithRating = async ({ productId }) => {
   return axios.get(`/comment/with-rating/${productId}`);
+};
+
+export const getStatistisReview = async () => {
+  return axios.get(`/comment/reviews/statistic`);
 };
 // flash sale
 
