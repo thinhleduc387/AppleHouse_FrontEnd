@@ -370,6 +370,22 @@ export const getListCommentBySpuId = async ({
   });
 };
 
+export const getListCommentByAdmin = async ({
+  parentCommentId = null,
+  sort,
+  limit = 10,
+  page = 0,
+}) => {
+  return axios.get("/comment/reviews", {
+    params: {
+      parentCommentId,
+      sort,
+      limit,
+      page,
+    },
+  });
+};
+
 export const createComment = async ({
   productId,
   userId,

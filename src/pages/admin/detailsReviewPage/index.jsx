@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProductList from "../../../component/admin/comment/ProductList";
 import ProductComments from "../../../component/admin/comment/ProductComment";
 
-const FeedBackPage = () => {
+const DetailsReviewPage = () => {
   const [selectedProduct, setSelectedProduct] = useState(() => {
     return sessionStorage.getItem("selectedProduct") || null;
   });
@@ -37,4 +37,4 @@ const FeedBackPage = () => {
   );
 };
 
-export default FeedBackPage;
+export default DetailsReviewPage;

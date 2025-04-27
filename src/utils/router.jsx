@@ -84,7 +84,7 @@ export const ROUTERS = {
     {
       name: "Đánh giá",
       icon: <FaCommentAlt />,
-      path: "/admin/feedback",
+      path: "/admin/review",
       permission: {
         resourceId: "comment",
         action: "read:any",

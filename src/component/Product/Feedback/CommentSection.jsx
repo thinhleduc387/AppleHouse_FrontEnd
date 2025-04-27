@@ -9,6 +9,7 @@ const ITEMS_PER_PAGE = 7;
 
 const CommentSection = ({ productId, setHaveNewRating }) => {
   const [comments, setComments] = useState([]);
+  console.log("🚀 ~ CommentSection ~ comments:", comments);
   const userId = useSelector((state) => state.account?.user?._id);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);

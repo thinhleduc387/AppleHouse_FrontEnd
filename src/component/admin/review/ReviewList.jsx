@@ -1,5 +1,6 @@
 import React from "react";
 import { MoreVertical, Star, Copy } from "lucide-react";
+import { format } from "date-fns";
 
 const ReviewList = ({
   reviews,
@@ -11,7 +12,13 @@ const ReviewList = ({
   onToggleDropdown,
   onAction,
   openDropdownId,
+  setSort,
+  loading, // Already passed from parent
 }) => {
+  const handleSortChange = (e) => {
+    setSort(e.target.value.toLowerCase());
+  };
+
   return (
     <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between p-6 border-b border-gray-100">
@@ -19,11 +26,14 @@ const ReviewList = ({
           Latest Accepted Reviews
         </h2>
         <div className="flex flex-wrap items-center gap-4">
-          <select className="px-4 py-2 border border-gray-200 rounded-xl text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            <option>Recent</option>
-            <option>Oldest</option>
-            <option>Highest Rating</option>
-            <option>Lowest Rating</option>
+          <select
+            className="px-4 py-2 border border-gray-200 rounded-xl text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            onChange={handleSortChange}
+          >
+            <option value="recent">Recent</option>
+            <option value="oldest">Oldest</option>
+            <option value="highest">Highest Rating</option>
+            <option value="lowest">Lowest Rating</option>
           </select>
           <div className="flex items-center gap-3">
             <input
@@ -47,20 +57,32 @@ const ReviewList = ({
         </div>
       </div>
 
-      <div className="divide-y divide-gray-100">
-        {reviews.map((review) => (
-          <ReviewItem
-            key={review.id}
-            review={review}
-            isSelected={selectedReviews.includes(review.id)}
-            onSelect={() => onSelectReview(review.id)}
-            onOpenPopup={onOpenPopup}
-            onToggleDropdown={onToggleDropdown}
-            onAction={onAction}
-            isDropdownOpen={openDropdownId === review.id}
-          />
-        ))}
-      </div>
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-blue-500"></div>
+        </div>
+      ) : (
+        <div className="divide-y divide-gray-100">
+          {reviews.length > 0 ? (
+            reviews.map((review) => (
+              <ReviewItem
+                key={review._id}
+                review={review}
+                isSelected={selectedReviews.includes(review._id)}
+                onSelect={() => onSelectReview(review._id)}
+                onOpenPopup={onOpenPopup}
+                onToggleDropdown={onToggleDropdown}
+                onAction={onAction}
+                isDropdownOpen={openDropdownId === review._id}
+              />
+            ))
+          ) : (
+            <div className="p-6 text-center text-gray-500">
+              No reviews available.
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
@@ -74,6 +96,8 @@ const ReviewItem = ({
   onAction,
   isDropdownOpen,
 }) => {
+  const { comment_content, comment_productId, comment_userId } = review;
+  const { usr_avatar, usr_email, usr_name } = comment_userId;
   return (
     <div className="p-6 hover:bg-gray-50/50 transition-colors duration-200">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -86,14 +110,14 @@ const ReviewItem = ({
             className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
           />
           <img
-            src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${review.name}`}
-            alt={review.name}
+            src={usr_avatar}
+            alt={usr_name}
             className="w-12 h-12 rounded-full ring-2 ring-gray-100"
           />
           <div>
-            <h3 className="font-medium text-gray-800">{review.name}</h3>
+            <h3 className="font-medium text-gray-800">{usr_name}</h3>
             <p className="text-sm text-blue-500 hover:text-blue-600">
-              {review.email}
+              {usr_email}
             </p>
           </div>
         </div>
@@ -101,13 +125,11 @@ const ReviewItem = ({
         {/* Comment section */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 bg-gray-50 rounded-xl px-4 py-3">
-            <p className="text-gray-600 line-clamp-1">{review.comment}</p>
+            <p className="text-gray-600 line-clamp-1">{comment_content}</p>
             <button
-              onClick={() => onOpenPopup(review.comment, review.id)}
+              onClick={() => onOpenPopup(comment_content, review._id)}
               className="text-blue-500 hover:text-blue-600 transition-colors duration-200"
-            >
-              <Copy className="w-4 h-4" />
-            </button>
+            ></button>
           </div>
         </div>
 
@@ -129,6 +151,11 @@ const ReviewActions = ({
   onAction,
   isDropdownOpen,
 }) => {
+  const { comment_rating, createdAt } = review;
+
+  const date = format(new Date(createdAt), "MMM d, yyyy");
+  const time = format(new Date(createdAt), "h:mm a");
+
   return (
     <div className="flex items-center gap-6">
       <div className="flex items-center gap-1">
@@ -136,7 +163,7 @@ const ReviewActions = ({
           <Star
             key={i}
             className={`w-4 h-4 ${
-              i < review.rating
+              i < comment_rating
                 ? "fill-yellow-400 text-yellow-400"
                 : "text-gray-200"
             }`}
@@ -145,13 +172,13 @@ const ReviewActions = ({
       </div>
 
       <div className="text-sm text-gray-500 text-right">
-        <div>{review.date}</div>
-        <div>at {review.time}</div>
+        <div>{date}</div>
+        <div>at {time}</div>
       </div>
 
       <div className="relative">
         <button
-          onClick={() => onToggleDropdown(review.id)}
+          onClick={() => onToggleDropdown(review._id)}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
         >
           <MoreVertical className="w-5 h-5 text-gray-400" />
@@ -164,11 +191,12 @@ const ReviewActions = ({
             >
               Reply
             </button>
+
             <button
-              onClick={() => onAction("delete", review)}
-              className="block w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200"
+              onClick={() => onAction("view", review)}
+              className="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
             >
-              Delete
+              View details
             </button>
           </div>
         )}

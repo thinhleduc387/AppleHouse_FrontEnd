@@ -128,12 +128,12 @@ const UserPage = () => {
     <div className="p-6 min-h-screen">
       <div className="flex justify-between bg-white px-6 py-8 rounded-lg items-center mb-6">
         <h1 className="text-4xl font-bold text-gray-700">User Management</h1>
-        <Link
+        {/* <Link
           to="/admin/users/add"
           className="ml-4 flex items-center bg-mainColor text-white px-4 py-2 rounded hover:bg-blue-700 shadow-md"
         >
           Add User
-        </Link>
+        </Link> */}
       </div>
 
       <div className="flex gap-4 items-center mb-6">

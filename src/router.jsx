@@ -34,7 +34,7 @@ import EventCreate from "./pages/admin/eventCreate";
 import VoucherPage from "./pages/admin/voucherPage";
 import VoucherCreate from "./pages/admin/voucherCreate";
 import OrderPage from "./pages/admin/orderPage";
-import FeedBackPage from "./pages/admin/feedBackPage";
+import DetailsReviewPage from "./pages/admin/detailsReviewPage";
 import OrderDetails from "./component/Profile/OrderDetails";
 import OrderSuccess from "./pages/user/order/OrderSuccess";
 import OrderFailed from "./pages/user/order/OrderFailed";
@@ -137,8 +137,8 @@ const RouterCustom = () => {
             element={<OrderDetailPage />}
           />
           <Route path="/admin/stock" element={<StockPage />} />
-          <Route path="/admin/feedback" element={<ReviewPage />} />
-
+          <Route path="/admin/review" element={<ReviewPage />} />
+          <Route path="/admin/review-details" element={<DetailsReviewPage />} />
           <Route path="/admin/role-permission" element={<RolePermission />} />
           <Route path="/admin/users" element={<UserPage />} />
         </Route>
