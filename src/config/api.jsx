@@ -177,7 +177,7 @@ export const getImageLink = async (formData) => {
   try {
     const response = await axios.post("upload/product/thumb", formData, {
       headers: {
-        "Content-Type": "multipart/form-data", // Đảm bảo content-type là multipart/form-data
+        "Content-Type": "multipart/form-data",
       },
     });
     return response;
@@ -453,6 +453,7 @@ export const getDiscountAmmountV2 = async (discountId, products) => {
 // order
 export const createOrder = async ({
   cartId,
+  guestInformation,
   userId,
   products_order,
   shop_discount,
@@ -463,6 +464,7 @@ export const createOrder = async ({
   orderNote,
 }) => {
   return axios.post(`/order`, {
+    guestInformation,
     cartId,
     userId,
     products_order,
@@ -485,6 +487,10 @@ export const getListOrder = async ({ userId, status }) => {
 
 export const getOneOrder = async ({ orderId }) => {
   return axios.get(`/order/${orderId}`);
+};
+
+export const getOneOrderByTrackinNumber = async ({ trackingNumber }) => {
+  return axios.get(`/order/${trackingNumber}/tracking`);
 };
 
 export const cancelOrder = async ({ orderId }) => {
@@ -623,4 +629,14 @@ export const getOrderStatistic = async (timeRange) => {
 
 export const getUserStatistic = async () => {
   return axios.get(`/user/statistic`);
+};
+
+// chat bot api
+export const getChatBotResponse = async (message) => {
+  return axios.post(`/chat-bot`, { userMessage: message });
+};
+
+// notification
+export const getListNotification = async ({ userId }) => {
+  return axios.post(`/notification`, { userId });
 };

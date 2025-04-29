@@ -6,11 +6,15 @@ import { callLogout, updateProfile, getImageLink } from "../../../config/api";
 import {
   setLogoutAction,
   fetchAccount,
-} from "../../../redux/slice/accountSlice";
+} from "../../../redux/slices/accountSlice";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../../component/Loading";
+<<<<<<< HEAD
 import { clearRoleData } from "../../../redux/slice/rbacSlice";
 import { useTranslation } from "react-i18next";
+=======
+import { clearRoleData } from "../../../redux/slices/rbacSlice";
+>>>>>>> chatBox
 
 const AdminProfilePage = () => {
   const { t } = useTranslation("profileAdmin");

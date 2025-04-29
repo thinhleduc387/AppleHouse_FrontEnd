@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   CheckCircle,
   Clock,
@@ -9,10 +9,28 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getOneOrder, getOneOrderByTrackinNumber } from "../../../config/api";
 
 export default function OrderSuccess() {
-  const { id } = useParams();
+  const { trackingNumber } = useParams();
+  const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const navigate = useNavigate();
+  const [order, setOrder] = useState({});
+
+  useEffect(() => {
+    const handleGetOrder = async () => {
+      const response = await getOneOrderByTrackinNumber({
+        trackingNumber,
+      });
+      if (response && response.metadata) {
+        setOrder(response.metadata);
+      } else {
+        console.log("🚀 ~ handleGetOrder ~ response:", response);
+      }
+    };
+    handleGetOrder();
+  }, []);
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-3xl mx-auto px-4">
@@ -27,6 +45,11 @@ export default function OrderSuccess() {
             Cảm ơn bạn đã đặt hàng.Chúng tôi sẽ xử lý đơn hàng của bạn trong
             thời gian sớm nhất.
           </p>
+          {!isAuthenticated && (
+            <p className="text-center text-red-600 ">
+              Chú ý: Thông tin chi tiết về đơn hàng đã được gửi qua mail
+            </p>
+          )}
         </div>
         {/* Order Info Section */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
@@ -36,7 +59,7 @@ export default function OrderSuccess() {
             </div>
             <div>
               <h2 className="text-lg font-semibold text-gray-800">
-                Đơn hàng #{id}
+                Mã đơn hàng #{trackingNumber}
               </h2>
             </div>
           </div>
@@ -60,13 +83,16 @@ export default function OrderSuccess() {
             <ArrowLeft className="w-5 h-5" />
             Tiếp tục mua sắm
           </button>
-          <button
-            onClick={() => navigate("/profile/order-list")}
-            className="flex items-center gap-2 px-6 py-3 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
-          >
-            Xem chi tiết đơn hàng
-            <ArrowRight className="w-5 h-5" />
-          </button>
+
+          {isAuthenticated && (
+            <button
+              onClick={() => navigate("/profile/order-list")}
+              className="flex items-center gap-2 px-6 py-3 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              Xem chi tiết đơn hàng
+              <ArrowRight className="w-5 h-5" />
+            </button>
+          )}
         </div>
       </div>
     </div>

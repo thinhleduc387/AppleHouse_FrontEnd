@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Đảm bảo bạn đã import CSS
+import "react-toastify/dist/ReactToastify.css";
 import { changePassword } from "../../../config/api";
+import { KeyRound, Eye, EyeOff } from "lucide-react";
 
 const ChangePass = () => {
   const userEmail = useSelector((state) => state.account?.user?.email);
@@ -10,6 +11,11 @@ const ChangePass = () => {
     currentPassword: "",
     newPassword: "",
     reNewPassword: "",
+  });
+  const [showPasswords, setShowPasswords] = useState({
+    currentPassword: false,
+    newPassword: false,
+    reNewPassword: false,
   });
 
   const handleChangePassword = async (e) => {
@@ -47,63 +53,92 @@ const ChangePass = () => {
     }));
   };
 
+  const togglePasswordVisibility = (field) => {
+    setShowPasswords((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
+
   return (
-    <div className="flex justify-center w-full mb-2">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full">
-        <h1 className="text-2xl font-bold text-gray-700 mb-6">Đổi Mật Khẩu</h1>
-        <form onSubmit={handleChangePassword}>
-          <div className="mb-4">
-            <label
-              htmlFor="current-password"
-              className="block text-gray-600 mb-2"
-            >
-              Mật khẩu hiện tại
-            </label>
-            <input
-              type="password"
-              id="currentPassword"
-              value={passwordData.currentPassword}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Nhập mật khẩu hiện tại"
-            />
+    <div className="md:p-4 min-h-1">
+      <h1 className="text-xl font-semibold mb-4">Đổi mật khẩu</h1>
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="max-w-xl mx-auto">
+          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200">
+            <div className="p-3 bg-red-50 rounded-full">
+              <KeyRound className="w-6 h-6 text-red-500" />
+            </div>
+            <div>
+              <h2 className="text-lg font-medium text-gray-900">
+                Cập nhật mật khẩu
+              </h2>
+              <p className="text-gray-500 text-sm">
+                Để bảo mật tài khoản, vui lòng không chia sẻ mật khẩu cho người
+                khác
+              </p>
+            </div>
           </div>
-          <div className="mb-4">
-            <label htmlFor="new-password" className="block text-gray-600 mb-2">
-              Mật khẩu mới
-            </label>
-            <input
-              type="password"
-              id="newPassword"
-              value={passwordData.newPassword}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Nhập mật khẩu mới"
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              htmlFor="confirm-password"
-              className="block text-gray-600 mb-2"
-            >
-              Xác nhận mật khẩu mới
-            </label>
-            <input
-              type="password"
-              id="reNewPassword"
-              value={passwordData.reNewPassword}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Xác nhận mật khẩu mới"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-mainColor text-white py-2 px-4 rounded-lg hover:bg-blue-700"
-          >
-            Cập nhật mật khẩu
-          </button>
-        </form>
+
+          <form onSubmit={handleChangePassword} className="space-y-6">
+            {[
+              {
+                id: "currentPassword",
+                label: "Mật khẩu hiện tại",
+                placeholder: "Nhập mật khẩu hiện tại",
+              },
+              {
+                id: "newPassword",
+                label: "Mật khẩu mới",
+                placeholder: "Nhập mật khẩu mới",
+              },
+              {
+                id: "reNewPassword",
+                label: "Xác nhận mật khẩu mới",
+                placeholder: "Xác nhận mật khẩu mới",
+              },
+            ].map((field) => (
+              <div key={field.id}>
+                <label
+                  htmlFor={field.id}
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  {field.label}
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPasswords[field.id] ? "text" : "password"}
+                    id={field.id}
+                    value={passwordData[field.id]}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    placeholder={field.placeholder}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => togglePasswordVisibility(field.id)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    {showPasswords[field.id] ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            <div className="pt-4">
+              <button
+                type="submit"
+                className="w-full bg-red-500 text-white py-2.5 px-4 rounded-lg hover:bg-red-600 transition-colors font-medium"
+              >
+                Cập nhật mật khẩu
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

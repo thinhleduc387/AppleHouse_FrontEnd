@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAccount } from "./redux/slice/accountSlice";
+import { fetchAccount } from "./redux/slices/accountSlice";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -151,7 +151,10 @@ const RouterCustom = () => {
           <Route path="/admin/users" element={<UserPage />} />
         </Route>
 
-        <Route path="/order/order-success/:id" element={<OrderSuccess />} />
+        <Route
+          path="/order/order-success/:trackingNumber"
+          element={<OrderSuccess />}
+        />
         <Route path="/order/order-failed" element={<OrderFailed />} />
 
         <Route path="/access-denied" element={<AccessDenied />} />

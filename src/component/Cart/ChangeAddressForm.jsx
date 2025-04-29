@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { getListUserAddress } from "../../config/api";
-import { Home, X } from "lucide-react";
+import { Home, X, Plus } from "lucide-react";
+import AddressForm from "../Profile/Address/AddressForm";
 
 const ChangeAddressForm = ({ isOpen, setIsOpen, setAddress }) => {
+  const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
   const userId = useSelector((state) => state.account?.user?._id);
   const [addresses, setAddresses] = useState([]);
-  const [selectedAddress, setSelectedAddress] = useState(null); // State for selected address
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
   const fetchListAddress = async () => {
     const response = await getListUserAddress({ id: userId });
@@ -22,13 +24,13 @@ const ChangeAddressForm = ({ isOpen, setIsOpen, setAddress }) => {
 
   const handleSubmit = () => {
     if (selectedAddress) {
-      setAddress(selectedAddress); // Pass the selected address to the parent component
-      setIsOpen(false); // Close the form after selecting the address
+      setAddress(selectedAddress);
+      setIsOpen(false);
     }
   };
 
   const handleAddressSelect = (address) => {
-    setSelectedAddress(address); // Update the selected address
+    setSelectedAddress(address);
   };
 
   return (
@@ -42,7 +44,7 @@ const ChangeAddressForm = ({ isOpen, setIsOpen, setAddress }) => {
 
       <div
         className={`fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-lg transform transition-transform duration-300 ease-out z-50 ${
-          isOpen ? "translate-x-0" : "translate-x-full "
+          isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="h-full flex flex-col">
@@ -60,7 +62,7 @@ const ChangeAddressForm = ({ isOpen, setIsOpen, setAddress }) => {
                   key={index}
                   className={`bg-white rounded-lg shadow p-4 flex items-start gap-4 cursor-pointer ${
                     selectedAddress === address
-                      ? "border-2 border-blue-500" // Highlight selected address
+                      ? "border-2 border-red-500" // Highlight selected address
                       : ""
                   }`}
                   onClick={() => handleAddressSelect(address)} // Select the address
@@ -82,6 +84,14 @@ const ChangeAddressForm = ({ isOpen, setIsOpen, setAddress }) => {
                   </div>
                 </div>
               ))}
+
+              <button
+                onClick={() => setIsAddressFormOpen(true)}
+                className="w-full mb-6 bg-gray-100 hover:bg-gray-200 text-gray-700 p-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
+              >
+                <Plus className="w-5 h-5" />
+                <span>Thêm địa chỉ mới</span>
+              </button>
             </div>
           </div>
 
@@ -89,13 +99,21 @@ const ChangeAddressForm = ({ isOpen, setIsOpen, setAddress }) => {
             <button
               className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600"
               onClick={handleSubmit}
-              disabled={!selectedAddress} // Disable button if no address is selected
+              disabled={!selectedAddress}
             >
               Xác nhận
             </button>
           </div>
         </div>
       </div>
+
+      <AddressForm
+        isOpen={isAddressFormOpen}
+        setIsOpen={setIsAddressFormOpen}
+        fetchListAddress={fetchListAddress}
+        selectedAddress={null}
+        setSelectedAddress={() => {}}
+      />
     </>
   );
 };

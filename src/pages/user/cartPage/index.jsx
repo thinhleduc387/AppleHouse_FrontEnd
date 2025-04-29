@@ -9,13 +9,21 @@ import { IoIosArrowBack } from "react-icons/io";
 import PaymentMethod from "../../../component/Cart/PaymentMethod";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import CartItemCheckout from "../../../component/Cart/CartItemCheckout";
+<<<<<<< HEAD
 import LoginRequiredModal from "./LoginRequireModal";
 import RecommendSectionForCart from "../../../component/RecommendSection/RecomendSectionInCart";
 import { useTranslation } from "react-i18next";
 
+=======
+import CartBookerInformation from "../../../component/Cart/CartBookerInformation";
+>>>>>>> chatBox
 const CartPage = () => {
   const { t } = useTranslation("cart");
   const userId = useSelector((state) => state.account?.user?._id);
+  const isAuthenticated = useSelector(
+    (state) => state.account?.isAuthenticated
+  );
+
   const user = useSelector((state) => state.account?.user);
 
   const [cartItems, setCartItems] = useState([]);
@@ -23,6 +31,7 @@ const CartPage = () => {
   const [isSelectAll, setIsSelectAll] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isCheckout, setIsCheckout] = useState(false);
+<<<<<<< HEAD
   const [error, setError] = useState(null);
   const localCartItems = useSelector((state) => state.cart?.localCartItems);
   const [cartItemSelected, setCartItemsSelected] = useState([]);
@@ -30,6 +39,10 @@ const CartPage = () => {
   const [orderAddress, setOrderAddress] = useState("");
   const [orderMethodPayment, setOrderMethodPayment] = useState("");
   const [orderNote, setOrderNote] = useState("");
+=======
+  const localCartItems = useSelector((state) => state.cart?.localCartItems);
+  const [cartItemSelected, setCartItemsSelected] = useState([]);
+>>>>>>> chatBox
 
   useEffect(() => {
     if (isCheckout !== false) {
@@ -48,7 +61,6 @@ const CartPage = () => {
           throw new Error("Failed to fetch cart items");
         }
       } catch (err) {
-        setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -57,13 +69,14 @@ const CartPage = () => {
     getShowCart();
   }, [userId, localCartItems, isCheckout]);
 
-  const handleCheckout = (formData) => {
+  const handleCheckout = () => {
     setIsCheckout(false);
   };
 
   const handleCheckAll = () => {
     setIsSelectAll((prev) => !prev);
   };
+<<<<<<< HEAD
 
   const handleCheckoutAuth = () => {
     if (userId) {
@@ -72,6 +85,8 @@ const CartPage = () => {
       setShowLoginModal(true);
     }
   };
+=======
+>>>>>>> chatBox
 
   return (
     <div className="py-4 bg-[#f3f4f6] dark:bg-gray-900">
@@ -82,6 +97,7 @@ const CartPage = () => {
       ) : cartItems.length > 0 ? (
         <div className="grid md:grid-cols-3 gap-4">
           <div className="md:col-span-2">
+<<<<<<< HEAD
             <div className="p-4 flex justify-between gap-4 bg-white dark:bg-gray-800 rounded-md font-bold overflow-y-auto">
               <div className="flex items-center gap-4">
                 <input
@@ -102,6 +118,25 @@ const CartPage = () => {
 
             <div className="p-4 mt-3 flex flex-col gap-4 bg-white dark:bg-gray-800 rounded-md overflow-x-auto">
               {isCheckout && (
+=======
+            <div className=" p-4 flex justify-between gap-4 bg-white rounded-md font-bold overflow-y-auto">
+              {!isCheckout ? (
+                <>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="checkbox"
+                      checked={isSelectAll}
+                      onChange={() => handleCheckAll()}
+                      className="w-4 h-4 cursor-pointer"
+                    />
+                    Chọn tất cả ({selectedProducts.length}/{cartItems.length})
+                  </div>
+                  <button className="text-gray-600 hover:text-red-600">
+                    <RiDeleteBin6Line className="w-6 h-6" />
+                  </button>
+                </>
+              ) : (
+>>>>>>> chatBox
                 <a
                   onClick={() => {
                     setIsCheckout(false);
@@ -112,7 +147,14 @@ const CartPage = () => {
                   <span>{t("backToCart")}</span>
                 </a>
               )}
+<<<<<<< HEAD
               <div className="space-y-4">
+=======
+            </div>
+
+            <div className=" p-4 mt-3 flex flex-col gap-4 bg-white rounded-md overflow-x-auto">
+              <div className="space-y-4 ">
+>>>>>>> chatBox
                 {!isCheckout &&
                   cartItems.map((cartItem) => (
                     <CartItem
@@ -133,6 +175,7 @@ const CartPage = () => {
             </div>
             {isCheckout && (
               <>
+<<<<<<< HEAD
                 {userId && (
                   <div className="mt-6">
                     <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
@@ -197,36 +240,54 @@ const CartPage = () => {
                     orderMethodPayment={orderMethodPayment}
                     setOrderMethodPayment={setOrderMethodPayment}
                   />
+=======
+                <CartBookerInformation />
+
+                <div className="mt-4">
+                  <CheckoutInfo onSubmit={handleCheckout} />
+                </div>
+
+                <div className="mt-4 ">
+                  <PaymentMethod />
+>>>>>>> chatBox
                 </div>
               </>
             )}
           </div>
-          <LoginRequiredModal
-            isOpen={showLoginModal}
-            onClose={() => setShowLoginModal(false)}
-          />
+
           {cartItems.length > 0 && (
             <CheckOut
               products_order={cartItemSelected}
               userId={userId}
+<<<<<<< HEAD
               onCheckout={() => handleCheckoutAuth()}
               onContinueShopping={() => setIsCheckout(false)}
               isCheckout={isCheckout}
               orderMethodPayment={orderMethodPayment}
               orderAddress={orderAddress}
               orderNote={orderNote}
+=======
+              onCheckout={setIsCheckout}
+              onContinueShopping={() => setIsCheckout(false)}
+              isCheckout={isCheckout}
+>>>>>>> chatBox
             />
           )}
         </div>
       ) : (
         <CartEmpty />
       )}
+<<<<<<< HEAD
       {!isCheckout && userId && cartItems.length > 0 && (
         <div className="py-14 bg-[#f3f4f6] dark:bg-gray-900">
           <RecommendSectionForCart />
         </div>
       )}
       <div className="py-5 bg-[#f3f4f6] dark:bg-gray-900"></div>
+=======
+
+      <div className="py-5"></div>
+>>>>>>> chatBox
     </div>
   );
 };

@@ -8,9 +8,9 @@ import {
 import SignUpDialog from "../../../component/Auth/SignUp";
 import FloatingInput from "../../../component/FloatingInput";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserLoginInfo } from "../../../redux/slice/accountSlice";
+import { setUserLoginInfo } from "../../../redux/slices/accountSlice";
 import { toast } from "react-toastify";
-import { clearLocalCart, fetchCart } from "../../../redux/slice/cartSlice";
+import { clearLocalCart, fetchCart } from "../../../redux/slices/cartSlice";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -22,6 +22,8 @@ const LoginPage = () => {
   const dispatch = useDispatch();
 
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
+  const userId = useSelector((state) => state.account?.user?._id);
+
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
   }

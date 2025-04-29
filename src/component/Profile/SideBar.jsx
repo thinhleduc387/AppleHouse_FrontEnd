@@ -1,15 +1,19 @@
 import { useState, useEffect } from "react";
-import { FaTachometerAlt, FaBox, FaMoneyBillWave } from "react-icons/fa";
 import { AiOutlineHeart, AiOutlineOrderedList } from "react-icons/ai";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileSection from "./ProfileSection";
 import { FaLocationDot } from "react-icons/fa6";
 import { RiLogoutBoxLine } from "react-icons/ri";
+<<<<<<< HEAD
 import { callLogout } from "../../config/api";
 import { setLogoutAction } from "../../redux/slice/accountSlice";
+=======
+import { callLogout } from "../../config/api"; // Import API gọi logout
+import { setLogoutAction } from "../../redux/slices/accountSlice"; // Import action logout
+>>>>>>> chatBox
 import { RiLockPasswordLine } from "react-icons/ri";
-import { clearRoleData } from "../../redux/slice/rbacSlice";
+import { clearRoleData } from "../../redux/slices/rbacSlice";
 
 const Sidebar = () => {
   const [activeItem, setActiveItem] = useState();

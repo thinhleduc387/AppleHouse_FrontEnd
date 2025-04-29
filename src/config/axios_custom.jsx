@@ -1,6 +1,6 @@
 import axios from "axios";
 // import store from "../redux/store";
-// import { setUserLoginInfo } from "../redux/slice/accountSlice";
+// import { setUserLoginInfo } from "../redux/slices/accountSlice";
 const instance = axios.create({
   baseURL: "http://localhost:8000/api/v1",
   withCredentials: true,
@@ -67,17 +67,18 @@ instance.interceptors.response.use(
           ) {
             originalRequest._retry = true;
             const response = await instance.get("/auth/handleRefreshToken");
-            const newToken = response.metadata.accessToken;
+            const newToken = response?.metadata?.accessToken;
+            const userId = response?.metadata?.user._id;
             if (newToken) {
               // store.dispatch(setUserLoginInfo(response.metadata.user));
               error.config.headers["Authorization"] = `Beaer ${newToken}`;
               localStorage.setItem("access_token", newToken);
-              localStorage.setItem("user_id", newToken);
+              localStorage.setItem("user_id", userId);
               return instance.request(originalRequest);
             }
           }
         } catch (e) {
-          // Handle refresh token error or redirect to login
+          console.log("🚀 ~ e:", e);
         }
         break;
 

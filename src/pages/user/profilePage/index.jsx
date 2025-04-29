@@ -1,7 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../../../component/Profile/SideBar";
-import RecommendSectionForProfile from "../../../component/RecommendSection/RecommendSectionInProfile";
 
 const ProfilePage = () => {
   return (
@@ -21,9 +20,13 @@ const ProfilePage = () => {
           </main>
         </div>
       </div>
+<<<<<<< HEAD
       <div className="py-10 bg-[#f3f4f6] dark:bg-gray-900">
         <RecommendSectionForProfile />
       </div>
+=======
+      <div className="py-10"></div>
+>>>>>>> chatBox
     </div>
   );
 };

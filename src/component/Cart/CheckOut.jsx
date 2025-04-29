@@ -4,25 +4,20 @@ import { createOrder, getCheckout } from "../../config/api";
 import { BsCoin } from "react-icons/bs";
 import { FaChevronRight } from "react-icons/fa";
 import VoucherSideBar from "./VoucherSidebar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import { useTranslation } from "react-i18next";
+=======
+import { setHiddenChatBot } from "../../redux/slices/chatBotSlice";
+import { setCheckoutValue } from "../../redux/slices/checkoutSlice";
+>>>>>>> chatBox
 
 const stripePromise = loadStripe(
   "pk_test_51QIm5tAz954xg8ieJMNAloyxbeBbsLt9YaVak4sFrSh93vs4vTJfNlWbbA0wcOWXZSK2vVvw2bqewWpPbiC8WSaK00xz976rWR"
 );
-
-const initCheckOutValue = {
-  accLoyalPoint: 0,
-  feeShip: 0,
-  productDiscount: 0,
-  totalCheckOut: 0,
-  totalPrice: 0,
-  voucherDiscount: 0,
-  availableLoyalPoints: 0,
-};
 
 const CheckOut = ({
   products_order,
@@ -30,19 +25,27 @@ const CheckOut = ({
   onCheckout,
   onContinueShopping,
   isCheckout,
-  orderMethodPayment,
-  orderAddress,
-  orderNote,
 }) => {
+<<<<<<< HEAD
   const { t } = useTranslation("cart");
+=======
+  const dispatch = useDispatch();
+>>>>>>> chatBox
   const navigate = useNavigate();
-  const [checkoutValue, setCheckOutValue] = useState(initCheckOutValue);
+  const { checkoutValue, guestInformation } = useSelector(
+    (state) => state.checkout
+  );
   const [isProcessing, setIsProcessing] = useState(false);
   const accLoyalPoint = useSelector((state) => state.account?.user?.loyalPoint);
   const [useLoyalPoints, setUseLoyalPoints] = useState(false);
-  const [selectedVoucher, setSelectedVoucher] = useState([]);
+  const selectedVoucher = useSelector(
+    (state) => state.checkout.selectedVoucher
+  );
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const cartId = useSelector((state) => state.cart._id);
+  const { orderMethodPayment, orderAddress, orderNote } = useSelector(
+    (state) => state.checkout
+  );
   const data = {
     cartId,
     userId,
@@ -53,13 +56,18 @@ const CheckOut = ({
     isUseLoyalPoint: useLoyalPoints,
     orderNote,
   };
+<<<<<<< HEAD
+=======
+  console.log("🚀 ~ data:", data);
+
+  const toggleOpenSideBar = (value) => {
+    setSidebarOpen(value);
+    dispatch(setHiddenChatBot(value));
+  };
+>>>>>>> chatBox
 
   useEffect(() => {
     const handleCheckOut = async () => {
-      if (!products_order.length) {
-        setCheckOutValue(initCheckOutValue);
-        return;
-      }
       try {
         const response = await getCheckout({
           products_order,
@@ -68,7 +76,7 @@ const CheckOut = ({
           isUseLoyalPoint: useLoyalPoints,
         });
         if (response.status === 200) {
-          setCheckOutValue(response.metadata.checkOut_order);
+          dispatch(setCheckoutValue(response.metadata.checkOut_order));
         }
       } catch (error) {
         console.error("Failed to fetch checkout data:", error.message);
@@ -81,9 +89,15 @@ const CheckOut = ({
   const handleCheckout = async () => {
     if (isProcessing) return;
 
+    if (!orderAddress) {
+      toast.error("Vui lòng chọn địa chỉ giao hàng");
+      return;
+    }
+
     try {
       setIsProcessing(true);
       const response = await createOrder({
+        guestInformation,
         cartId,
         userId,
         products_order,
@@ -97,8 +111,20 @@ const CheckOut = ({
 
       const { sessionId, order } = response.metadata;
 
-      if (!sessionId) {
-        navigate(`/order/order-success/${order._id}`);
+      if (!sessionId && order) {
+        // xóa hàng ở local storage
+        if (!userId) {
+          let cart = JSON.parse(localStorage.getItem("cart"));
+          const purchasedSkuIds = order.order_products.map(
+            (item) => item.skuId
+          );
+          const updatedCart = cart.filter(
+            (item) => !purchasedSkuIds.includes(item.skuId)
+          );
+          localStorage.setItem("cart", JSON.stringify(updatedCart));
+        }
+
+        navigate(`/order/order-success/${order?.order_trackingNumber}`);
         return;
       }
 
@@ -121,8 +147,13 @@ const CheckOut = ({
     <div className="bg-white dark:bg-gray-800 rounded-md p-4 md:self-start shadow-md top-20">
       {products_order.length > 0 && (
         <div
+<<<<<<< HEAD
           className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 px-4 py-3 rounded-md cursor-pointer"
           onClick={() => setSidebarOpen(true)}
+=======
+          className="flex items-center justify-between bg-gray-100 px-4 py-3 rounded-md cursor-pointer"
+          onClick={() => toggleOpenSideBar(true)}
+>>>>>>> chatBox
         >
           <span className="text-gray-800 dark:text-gray-100 text-sm font-medium flex items-center gap-2">
             <span className="bg-red-500 dark:bg-red-600 text-white px-2 py-1 rounded-full text-xs">
@@ -246,10 +277,8 @@ const CheckOut = ({
 
       <VoucherSideBar
         isOpen={isSidebarOpen}
-        setIsOpen={setSidebarOpen}
+        setIsOpen={toggleOpenSideBar}
         products_order={products_order}
-        selectedVoucher={selectedVoucher}
-        setSelectedVoucher={setSelectedVoucher}
         isUseLoyalPoint={useLoyalPoints}
       />
     </div>

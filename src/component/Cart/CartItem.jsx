@@ -8,8 +8,12 @@ import {
   fetchCart,
   removeFromLocalCart,
   updateLocalCartQuantity,
+<<<<<<< HEAD
 } from "../../redux/slice/cartSlice";
 import { useTranslation } from "react-i18next";
+=======
+} from "../../redux/slices/cartSlice";
+>>>>>>> chatBox
 
 const CartItem = ({
   isSelectAll,
@@ -31,7 +35,6 @@ const CartItem = ({
   };
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(product.quantity);
-  const [selectedColor, setSelectedColor] = useState("256 GB");
   const [isChecked, setIsChecked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const userId = useSelector((state) => state.account?.user?._id);
