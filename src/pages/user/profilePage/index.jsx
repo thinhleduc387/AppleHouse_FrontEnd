@@ -20,13 +20,7 @@ const ProfilePage = () => {
           </main>
         </div>
       </div>
-<<<<<<< HEAD
-      <div className="py-10 bg-[#f3f4f6] dark:bg-gray-900">
-        <RecommendSectionForProfile />
-      </div>
-=======
       <div className="py-10"></div>
->>>>>>> chatBox
     </div>
   );
 };

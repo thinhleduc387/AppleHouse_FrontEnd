@@ -6,10 +6,7 @@ import { useSelector } from "react-redux";
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
   const [activeTab, setActiveTab] = useState("Tất cả");
-<<<<<<< HEAD
-=======
   const [isLoading, setIsLoading] = useState(true);
->>>>>>> chatBox
   const userId = useSelector((state) => state.account?.user?._id);
 
   const fetchListOrder = async () => {
