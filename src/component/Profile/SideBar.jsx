@@ -5,13 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import ProfileSection from "./ProfileSection";
 import { FaLocationDot } from "react-icons/fa6";
 import { RiLogoutBoxLine } from "react-icons/ri";
-<<<<<<< HEAD
-import { callLogout } from "../../config/api";
-import { setLogoutAction } from "../../redux/slice/accountSlice";
-=======
 import { callLogout } from "../../config/api"; // Import API gọi logout
 import { setLogoutAction } from "../../redux/slices/accountSlice"; // Import action logout
->>>>>>> chatBox
 import { RiLockPasswordLine } from "react-icons/ri";
 import { clearRoleData } from "../../redux/slices/rbacSlice";
 

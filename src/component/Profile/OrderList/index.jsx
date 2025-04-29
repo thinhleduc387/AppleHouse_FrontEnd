@@ -50,17 +50,11 @@ const OrderList = () => {
       : orders.filter((order) => statusMap[order.order_status] === activeTab);
 
   return (
-<<<<<<< HEAD
     <div className="md:p-4 min-h-screen bg-[#f3f4f6] dark:bg-gray-900">
       <h1 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
         Đơn hàng của tôi
       </h1>
       <div className="flex items-center justify-start bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 pt-4 mb-4 rounded-lg">
-=======
-    <div className="md:p-4 min-h-1">
-      <h1 className="text-xl font-semibold mb-4">Đơn hàng của tôi</h1>
-      <div className="flex items-center justify-start bg-white border-b border-gray-200 pt-4 mb-4 rounded-lg">
->>>>>>> chatBox
         {tabs.map((tab) => (
           <button
             key={tab}
@@ -99,11 +93,6 @@ const OrderList = () => {
             <OrderItem key={order.id} order={order} statusMap={statusMap} />
           ))
         ) : (
-<<<<<<< HEAD
-          <p className="text-gray-600 dark:text-gray-300">
-            Không có đơn hàng nào.
-          </p>
-=======
           <div className="text-center py-16 bg-white rounded-lg shadow-sm">
             <img
               src="../../src/assets/no-order.png"
@@ -121,7 +110,6 @@ const OrderList = () => {
               nào trong danh sách này
             </p>
           </div>
->>>>>>> chatBox
         )}
       </div>
     </div>

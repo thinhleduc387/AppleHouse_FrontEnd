@@ -8,12 +8,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
 import { useTranslation } from "react-i18next";
-=======
 import { setHiddenChatBot } from "../../redux/slices/chatBotSlice";
 import { setCheckoutValue } from "../../redux/slices/checkoutSlice";
->>>>>>> chatBox
 
 const stripePromise = loadStripe(
   "pk_test_51QIm5tAz954xg8ieJMNAloyxbeBbsLt9YaVak4sFrSh93vs4vTJfNlWbbA0wcOWXZSK2vVvw2bqewWpPbiC8WSaK00xz976rWR"
@@ -26,11 +23,8 @@ const CheckOut = ({
   onContinueShopping,
   isCheckout,
 }) => {
-<<<<<<< HEAD
   const { t } = useTranslation("cart");
-=======
   const dispatch = useDispatch();
->>>>>>> chatBox
   const navigate = useNavigate();
   const { checkoutValue, guestInformation } = useSelector(
     (state) => state.checkout
@@ -56,15 +50,12 @@ const CheckOut = ({
     isUseLoyalPoint: useLoyalPoints,
     orderNote,
   };
-<<<<<<< HEAD
-=======
   console.log("🚀 ~ data:", data);
 
   const toggleOpenSideBar = (value) => {
     setSidebarOpen(value);
     dispatch(setHiddenChatBot(value));
   };
->>>>>>> chatBox
 
   useEffect(() => {
     const handleCheckOut = async () => {
@@ -147,13 +138,8 @@ const CheckOut = ({
     <div className="bg-white dark:bg-gray-800 rounded-md p-4 md:self-start shadow-md top-20">
       {products_order.length > 0 && (
         <div
-<<<<<<< HEAD
           className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 px-4 py-3 rounded-md cursor-pointer"
-          onClick={() => setSidebarOpen(true)}
-=======
-          className="flex items-center justify-between bg-gray-100 px-4 py-3 rounded-md cursor-pointer"
           onClick={() => toggleOpenSideBar(true)}
->>>>>>> chatBox
         >
           <span className="text-gray-800 dark:text-gray-100 text-sm font-medium flex items-center gap-2">
             <span className="bg-red-500 dark:bg-red-600 text-white px-2 py-1 rounded-full text-xs">

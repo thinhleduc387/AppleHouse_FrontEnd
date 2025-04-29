@@ -8,12 +8,8 @@ import {
   fetchCart,
   removeFromLocalCart,
   updateLocalCartQuantity,
-<<<<<<< HEAD
 } from "../../redux/slice/cartSlice";
 import { useTranslation } from "react-i18next";
-=======
-} from "../../redux/slices/cartSlice";
->>>>>>> chatBox
 
 const CartItem = ({
   isSelectAll,
