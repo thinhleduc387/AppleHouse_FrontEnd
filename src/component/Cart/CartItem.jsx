@@ -8,7 +8,7 @@ import {
   fetchCart,
   removeFromLocalCart,
   updateLocalCartQuantity,
-} from "../../redux/slice/cartSlice";
+} from "../../redux/slices/cartSlice";
 import { useTranslation } from "react-i18next";
 
 const CartItem = ({

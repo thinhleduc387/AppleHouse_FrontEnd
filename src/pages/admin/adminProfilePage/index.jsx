@@ -9,7 +9,7 @@ import {
 } from "../../../redux/slices/accountSlice";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../../component/Loading";
-import { clearRoleData } from "../../../redux/slice/rbacSlice";
+import { clearRoleData } from "../../../redux/slices/rbacSlice";
 import { useTranslation } from "react-i18next";
 
 const AdminProfilePage = () => {

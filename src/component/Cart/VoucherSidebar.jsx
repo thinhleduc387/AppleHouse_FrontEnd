@@ -27,8 +27,6 @@ const VoucherSideBar = ({
   const [previewCheckout, setPreviewCheckout] = useState({});
   const [codeSearch, setCodeSearch] = useState();
   const [privateVouchers, setPrivateVouchers] = useState([]);
-<<<<<<< HEAD
-=======
   const selectedVoucher = useSelector(
     (state) => state.checkout.selectedVoucher
   );
@@ -36,7 +34,6 @@ const VoucherSideBar = ({
   const isAuthenticated = useSelector(
     (state) => state.account?.isAuthenticated
   );
->>>>>>> chatBox
 
   const handleCheckOut = async (products_order, userId, shop_discount) => {
     if (!products_order.length) {
@@ -217,24 +214,6 @@ const VoucherSideBar = ({
 
             {/* Search Section - Scrolls with content but sticks at top */}
             <div className="flex-1 overflow-y-auto">
-<<<<<<< HEAD
-              <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 p-4">
-                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 shadow-sm">
-                  <div className="flex items-center justify-between">
-                    <input
-                      type="text"
-                      value={codeSearch}
-                      onChange={(e) => setCodeSearch(e.target.value)}
-                      placeholder="Nhập mã giảm giá của bạn tại đây nhé"
-                      className="w-full bg-transparent text-sm placeholder:text-gray-500 dark:placeholder:text-gray-400 text-gray-800 dark:text-gray-100 focus:outline-none"
-                    />
-                    <button
-                      onClick={handleFindVoucher}
-                      className="px-4 py-2 text-xs font-medium text-white bg-red-500 dark:bg-red-600 hover:bg-red-600 dark:hover:bg-red-700 rounded-r-md focus:outline-none focus:ring-2 focus:ring-red-400 dark:focus:ring-red-300"
-                    >
-                      Tìm kiếm
-                    </button>
-=======
               {isAuthenticated && (
                 <div className="sticky top-0 z-10 bg-white p-4">
                   <div className="bg-gray-50 rounded-lg p-4 shadow-sm">
@@ -253,7 +232,6 @@ const VoucherSideBar = ({
                         Tìm kiếm
                       </button>
                     </div>
->>>>>>> chatBox
                   </div>
                 </div>
               )}
@@ -281,17 +259,11 @@ const VoucherSideBar = ({
                   </>
                 )}
 
-<<<<<<< HEAD
-                <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4">
-                  Voucher khả dụng
-                </h3>
-=======
                 {isAuthenticated && (
                   <h3 className="text-base font-semibold mb-4">
                     Voucher khả dụng
                   </h3>
                 )}
->>>>>>> chatBox
                 {vouchers.length > 0 ? (
                   <div className="space-y-3 mb-6">
                     {vouchers.map((voucher) => (
@@ -307,10 +279,6 @@ const VoucherSideBar = ({
                     ))}
                   </div>
                 ) : (
-<<<<<<< HEAD
-                  <div className="text-gray-600 dark:text-gray-300">
-                    Hiện tại chưa có voucher nào
-=======
                   <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 rounded-xl border border-dashed border-gray-200">
                     {isAuthenticated ? (
                       <>
@@ -355,7 +323,6 @@ const VoucherSideBar = ({
                         </button>
                       </>
                     )}
->>>>>>> chatBox
                   </div>
                 )}
 
