@@ -3,11 +3,12 @@ import { formatVND } from "../../../utils/format";
 import { changeOrderStatus } from "../../../config/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next"; // Import hook for translation
+import { useTranslation } from "react-i18next";
 
 const OrderTable = ({ listOrder, setListOrder }) => {
-  const { t } = useTranslation("order"); // Initialize translation hook
-  const navigate = useNavigate(); // Hook for navigation
+  console.log("🚀 ~ OrderTable ~ listOrder:", listOrder);
+  const { t } = useTranslation("order");
+  const navigate = useNavigate();
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -41,7 +42,6 @@ const OrderTable = ({ listOrder, setListOrder }) => {
       if (response.status === 200) {
         toast.success("Status updated successfully!");
 
-        // Update order status in listOrder
         setListOrder((prevOrders) =>
           prevOrders.map((order) =>
             order._id === orderId
@@ -57,7 +57,7 @@ const OrderTable = ({ listOrder, setListOrder }) => {
   };
 
   const handleViewDetails = (orderId) => {
-    navigate(`/admin/orders/detail/${orderId}`); // Navigate to detail page
+    navigate(`/admin/orders/detail/${orderId}`);
   };
 
   return (
@@ -83,13 +83,15 @@ const OrderTable = ({ listOrder, setListOrder }) => {
                 <div className="flex items-center gap-4">
                   <img
                     src={
-                      order.order_userId.usr_avatar ||
+                      order.order_userId?.usr_avatar ||
                       "https://via.placeholder.com/50"
                     }
-                    alt={order.order_userId.usr_name}
+                    alt={order.order_userId?.usr_name || "Khách không xác định"}
                     className="w-10 h-10 rounded-full"
                   />
-                  <span>{order.order_userId.usr_name}</span>
+                  <span>
+                    {order.order_userId?.usr_name || "Khách không xác định"}
+                  </span>
                 </div>
               </td>
               <td className="p-5 border-b text-gray-700 font-semibold">
@@ -110,8 +112,8 @@ const OrderTable = ({ listOrder, setListOrder }) => {
                       key={option.value}
                       value={option.value}
                       style={{
-                        backgroundColor: "white", // Dropdown background color
-                        color: "black", // Dropdown text color
+                        backgroundColor: "white",
+                        color: "black",
                       }}
                     >
                       {option.label}
@@ -124,7 +126,7 @@ const OrderTable = ({ listOrder, setListOrder }) => {
               </td>
               <td className="p-5 border-b text-center">
                 <div
-                  onClick={() => handleViewDetails(order._id)} // Handle click to navigate
+                  onClick={() => handleViewDetails(order._id)}
                   className="flex border cursor-pointer border-mainColor text-mainColor hover:bg-blue-100 rounded-full justify-center items-center gap-x-2 px-3 py-2"
                 >
                   {t("details")}

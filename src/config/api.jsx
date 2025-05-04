@@ -486,7 +486,9 @@ export const getListOrder = async ({ userId, status }) => {
 export const getOneOrder = async ({ orderId }) => {
   return axios.get(`/order/${orderId}`);
 };
-
+export const getOneOrderByTrackinNumber = async ({ trackingNumber }) => {
+  return axios.get(`/order/${trackingNumber}/tracking`);
+};
 export const cancelOrder = async ({ orderId }) => {
   return axios.delete(`/order/${orderId}`);
 };

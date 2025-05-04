@@ -52,6 +52,7 @@ import TopProductPage from "./pages/admin/topProductPage";
 import ChangePass from "./component/Profile/ChangePass";
 import StatictisPage from "./pages/admin/StatisticPromotions";
 import { setTheme } from "./redux/slice/themeSlice";
+import OrderGuest from "./pages/user/orderGuest";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -105,6 +106,7 @@ const RouterCustom = () => {
             element={<DetailProduct />}
           />
           <Route path={"/promotion/:id"} element={<PromotionPage />} />
+          <Route path={"/order-guest"} element={<OrderGuest />} />
         </Route>
 
         {/* Admin Routes */}
