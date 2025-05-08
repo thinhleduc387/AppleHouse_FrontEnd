@@ -1,0 +1,21 @@
+/* Đảm bảo section chiếm toàn bộ chiều cao màn hình */
+section {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+/* Hiệu ứng hover cho nút */
+button {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Tối ưu cho thiết bị di động */
+@media (max-width: 768px) {
+  .max-w-md {
+    max-width: 90%;
+  }
+  section {
+    min-height: 70vh;
+  }
+}

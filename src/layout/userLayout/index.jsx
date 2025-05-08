@@ -12,9 +12,7 @@ const MasterLayout = ({ ...props }) => {
       </div>
 
       <main className="flex-grow w-full mt-[100px]">
-        <div className="mx-4 sm:mx-6 md:mx-12 lg:mx-28" {...props}>
-          <Outlet />
-        </div>
+        <Outlet />
       </main>
       <ChatBox />
       <Footer />
