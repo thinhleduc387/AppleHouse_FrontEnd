@@ -661,3 +661,12 @@ export const getChatBotResponse = async (message) => {
 export const getListNotification = async ({ userId }) => {
   return axios.post(`/notification`, { userId });
 };
+
+// product view history
+
+export const trackingSpuView = async ({ spu_id, user_id }) => {
+  return axios.post(`/spu-view`, {
+    spu_id,
+    user_id,
+  });
+};

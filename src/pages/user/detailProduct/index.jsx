@@ -7,6 +7,7 @@ import {
   addToCart,
   getProduct,
   totalRatingRateComment,
+  trackingSpuView,
 } from "../../../config/api";
 import { FaCheck } from "react-icons/fa";
 import ProductDescription from "../../../component/Product/ProductDescription";
@@ -36,6 +37,25 @@ const DetailProduct = () => {
   const commentSectionRef = useRef(null);
   const ratingStatRef = useRef(null);
 
+  // Tracking view
+  // Hàm gọi API trackingSpuView
+  const trackView = async () => {
+    console.log("🚀 ~ trackView ~ userId:", userId);
+    await trackingSpuView({
+      spu_id: productId,
+      user_id: userId || "guest",
+    });
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      trackView();
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [productId, userId]);
+
+  //
   const selectedSku = skus.find((sku) =>
     sku.sku_index.every((index, i) => index === selectedVariants[i])
   );

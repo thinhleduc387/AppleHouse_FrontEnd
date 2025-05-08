@@ -168,17 +168,24 @@ const AddVariationsInfo = ({
       generateSkuList();
     }
   }, [variationsList]);
-  const handleImageUpload = async (variationIndex, optionIndex, file) => {
-    if (!file) return;
-
+  const handleImageUpload = async (
+    variationIndex,
+    optionIndex,
+    fileOrUrl,
+    isUrl = false
+  ) => {
     try {
-      // Upload file và lấy link ảnh từ API
-      const formData = new FormData();
-      formData.append("file", file);
-      const response = await getImageLink(formData);
-      const uploadedImageUrl = response.metadata.image_url; // Lấy link ảnh từ API
+      let uploadedImageUrl;
 
-      // Cập nhật trường images của variation
+      if (isUrl) {
+        uploadedImageUrl = fileOrUrl;
+      } else {
+        const formData = new FormData();
+        formData.append("file", fileOrUrl);
+        const response = await getImageLink(formData);
+        uploadedImageUrl = response.metadata.image_url;
+      }
+
       const updatedVariations = variationsList.map((variation, i) => {
         if (i === variationIndex) {
           const updatedImages = [...(variation.images || [])];
@@ -190,14 +197,15 @@ const AddVariationsInfo = ({
 
       setVariationsListAndUpdate(updatedVariations);
     } catch (error) {
-      console.error("Error uploading image:", error);
+      console.error("Error handling image upload:", error);
+      toast.error("Failed to upload image. Please try again.");
     }
   };
   const handleRemoveImage = (variationIndex, optionIndex) => {
     const updatedVariations = variationsList.map((variation, i) => {
       if (i === variationIndex) {
         const updatedImages = [...(variation.images || [])];
-        updatedImages[optionIndex] = ""; // Xóa ảnh tại vị trí optionIndex
+        updatedImages[optionIndex] = "";
         return { ...variation, images: updatedImages };
       }
       return variation;

@@ -19,21 +19,18 @@ const AddSPUInfo = ({
         <form onSubmit={handleSubmit} className="w-full pr-4 space-y-5">
           <h2 className="text-xl font-bold mb-4">Thông tin sản phẩm</h2>
 
-          {/* AddProductForm: Nhập tên và mô tả sản phẩm */}
           <AddProductForm
             productData={productData}
             handleChange={handleChange}
             setProductData={setProductData}
           />
 
-          {/* CategorySelect: Chọn danh mục sản phẩm */}
           <CategorySelect
             productData={productData}
             handleChange={handleChange}
             setProductData={setProductData}
           />
 
-          {/* TagInput: Thêm thẻ cho sản phẩm */}
           <TagInput productData={productData} setProductData={setProductData} />
           <MoreImagesUpload
             productData={productData}
@@ -41,7 +38,6 @@ const AddSPUInfo = ({
           />
         </form>
 
-        {/* ThumbnailUpload: Upload ảnh thumbnail */}
         <ThumbnailUpload
           productData={productData}
           setProductData={setProductData}
