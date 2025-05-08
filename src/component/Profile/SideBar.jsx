@@ -9,7 +9,7 @@ import { callLogout } from "../../config/api"; // Import API gọi logout
 import { setLogoutAction } from "../../redux/slices/accountSlice"; // Import action logout
 import { RiLockPasswordLine } from "react-icons/ri";
 import { clearRoleData } from "../../redux/slices/rbacSlice";
-
+import { CiDiscount1 } from "react-icons/ci";
 const Sidebar = () => {
   const [activeItem, setActiveItem] = useState();
   const navigate = useNavigate(); // Khai báo useNavigate
@@ -31,6 +31,11 @@ const Sidebar = () => {
       icon: FaLocationDot,
       text: "Địa chỉ nhận hàng",
       path: "/profile/address",
+    },
+    {
+      icon: CiDiscount1,
+      text: "Kho voucher",
+      path: "/profile/voucher",
     },
     { icon: RiLogoutBoxLine, text: "Đăng xuất", path: "/profile/order-list" }, // Giữ path là "/logout"
   ];

@@ -450,11 +450,26 @@ export const geLisPromotionEvent = async () => {
 };
 
 //voucher
-export const getListVoucher = async ({ page, limit }) => {
+export const getListVoucher = async ({ page, limit, isPublic }) => {
   return axios.get(`/discount/find-all`, {
     params: {
       page,
       limit,
+      isPublic,
+    },
+  });
+};
+
+export const getListVoucherForStorageVoucher = async ({
+  page,
+  limit,
+  isPublic,
+}) => {
+  return axios.get(`/discount/find-for-user`, {
+    params: {
+      page,
+      limit,
+      isPublic,
     },
   });
 };

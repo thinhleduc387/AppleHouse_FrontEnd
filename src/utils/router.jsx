@@ -27,6 +27,7 @@ export const ROUTERS = {
 
     CHANGE_PASS: "/profile/change-password",
     ADDRESS: "/profile/address",
+    VOUCHER: "/profile/voucher",
   },
   ADMIN: [
     {

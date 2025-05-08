@@ -63,16 +63,21 @@ const Address = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto min-h-1">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Sổ địa chỉ nhận hàng</h1>
-        <button
-          onClick={() => toggleOpenSideBar(true)}
-          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-        >
-          <Plus className="w-5 h-5" />
-          <span>Thêm địa chỉ mới</span>
-        </button>
+    <div className="max-w-6xl mx-auto min-h-1 p-6 bg-white rounded-lg shadow-sm">
+      <div className="mb-6">
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-800">Địa chỉ</h1>
+            <p className="text-gray-600 mt-1">Quản lý địa chỉ nhận hàng</p>
+          </div>
+          <button
+            onClick={() => toggleOpenSideBar(true)}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          >
+            <Plus className="w-5 h-5" />
+            <span>Thêm địa chỉ mới</span>
+          </button>
+        </div>
       </div>
 
       <div className="space-y-4">

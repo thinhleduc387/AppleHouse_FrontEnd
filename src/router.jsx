@@ -52,6 +52,7 @@ import TopProductPage from "./pages/admin/topProductPage";
 import ChangePass from "./component/Profile/ChangePass";
 import StatictisPage from "./pages/admin/StatisticPromotions";
 import ReviewPage from "./pages/admin/reviewPage";
+import StorageVoucher from "./component/Profile/StorageVoucher";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -90,6 +91,7 @@ const RouterCustom = () => {
             <Route path={ROUTERS.USER.ORDER_LIST} element={<OrderHistory />} />
             <Route path={ROUTERS.USER.CHANGE_PASS} element={<ChangePass />} />
             <Route path={ROUTERS.USER.ADDRESS} element={<Address />} />
+            <Route path={ROUTERS.USER.VOUCHER} element={<StorageVoucher />} />
           </Route>
 
           <Route
