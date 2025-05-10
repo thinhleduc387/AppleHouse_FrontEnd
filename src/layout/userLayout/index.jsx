@@ -3,6 +3,8 @@ import Header from "../../component/theme/header";
 import Footer from "../../component/theme/footer";
 import { Outlet } from "react-router-dom";
 import ChatBox from "../../component/Chat/ChatBox";
+import ThemeToggle from "../../component/themeToggle";
+import LanguageSwitcher from "../../component/LanguageSwitcher";
 
 const MasterLayout = ({ ...props }) => {
   return (
@@ -16,6 +18,10 @@ const MasterLayout = ({ ...props }) => {
       </main>
       <ChatBox />
       <Footer />
+
+      {/* ThemeToggle và LanguageSwitcher sẽ tự định vị qua fixed trong component riêng */}
+      <ThemeToggle />
+      <LanguageSwitcher />
     </div>
   );
 };

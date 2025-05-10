@@ -1,4 +1,3 @@
-// src/components/ThemeToggle.jsx
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../redux/slice/themeSlice";
 
@@ -7,7 +6,7 @@ const ThemeToggle = () => {
   const dispatch = useDispatch();
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center fixed bottom-6 left-6 w-24 h-24">
       {/* Nút Dark Mode (hiển thị khi theme là light) */}
       <button
         type="button"
@@ -17,12 +16,12 @@ const ThemeToggle = () => {
         } font-medium text-gray-800 rounded-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200`}
         aria-label="Switch to dark mode"
       >
-        <span className="group inline-flex shrink-0 justify-center items-center size-9">
+        <span className="group inline-flex shrink-0 justify-center items-center size-12">
           <svg
-            className="shrink-0 size-4"
+            className="shrink-0 size-6"
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width="32"
+            height="32"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -44,12 +43,12 @@ const ThemeToggle = () => {
         } font-medium text-gray-800 dark:text-gray-200 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:bg-gray-200 dark:focus:bg-gray-700`}
         aria-label="Switch to light mode"
       >
-        <span className="group inline-flex shrink-0 justify-center items-center size-9">
+        <span className="group inline-flex shrink-0 justify-center items-center size-12">
           <svg
-            className="shrink-0 size-4"
+            className="shrink-0 size-6"
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width="32"
+            height="32"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
