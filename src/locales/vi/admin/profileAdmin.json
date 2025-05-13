@@ -1,0 +1,11 @@
+{
+  "settings": "Cài đặt",
+  "logout": "Đăng xuất",
+  "myProfileDetails": "Chi tiết hồ sơ của tôi",
+  "name": "Tên",
+  "email": "Email",
+  "phoneNumber": "Số điện thoại",
+  "dateOfBirth": "Ngày sinh",
+  "gender": "Giới tính",
+  "updateProfile": "Cập nhật hồ sơ"
+}

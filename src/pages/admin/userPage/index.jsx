@@ -18,10 +18,12 @@ import {
   AiOutlineUnlock,
 } from "react-icons/ai";
 import Pagination from "../../../component/Pagiantion";
+import { useTranslation } from "react-i18next"; // Import useTranslation từ react-i18next
 
 const ITEMS_PER_PAGE = 4;
 
 const UserPage = () => {
+  const { t } = useTranslation("userManagement"); // Sử dụng hook useTranslation để lấy hàm t
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -37,11 +39,6 @@ const UserPage = () => {
     fetchRoles();
     fetchUsers();
   }, [filters, currentPage]);
-
-  useEffect(() => {
-    fetchRoles();
-    fetchUsers();
-  }, []);
 
   const fetchRoles = async () => {
     try {
@@ -142,12 +139,12 @@ const UserPage = () => {
           name="name"
           value={filters.name}
           onChange={(e) => setFilters({ ...filters, name: e.target.value })}
-          placeholder="Search by name"
+          placeholder={t("Search by name")}
           className="px-4 py-2 border rounded-lg w-1/3"
         />
         <CustomSelect
           options={[
-            { value: "", label: "All Roles" },
+            { value: "", label: t("All roles") }, // Dịch "All roles"
             ...roles.map((role) => ({ value: role._id, label: role.rol_name })),
           ]}
           value={filters.role}
@@ -216,13 +213,16 @@ const UserPage = () => {
                 {activeCollapse === user._id && (
                   <div className="p-4 bg-gray-50">
                     <p>
-                      <strong>Email:</strong> {user.usr_email}
+                      <strong>{t("Email")}:</strong> {user.usr_email}{" "}
+                      {/* Dịch "Email" */}
                     </p>
                     <p>
-                      <strong>Role:</strong> {user.usr_role.rol_name}
+                      <strong>{t("Role")}:</strong> {user.usr_role.rol_name}{" "}
+                      {/* Dịch "Role" */}
                     </p>
                     <p>
-                      <strong>Status:</strong> {user.usr_status}
+                      <strong>{t("Status")}:</strong> {user.usr_status}{" "}
+                      {/* Thêm key "Status" nếu cần */}
                     </p>
                   </div>
                 )}

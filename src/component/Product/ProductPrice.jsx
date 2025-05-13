@@ -3,14 +3,16 @@ import { FaBitcoin } from "react-icons/fa";
 import { formatVND } from "../../utils";
 import { findOnePromotion } from "../../config/api";
 import FlashSaleBanner from "../DetailPage/FlashSaleBanner";
+import { useTranslation } from "react-i18next";
+
 const ProductPrice = ({
   originalPrice,
   priceAfterDiscount,
   points,
   promotionId = null,
 }) => {
+  const { t } = useTranslation("detailProduct");
   const [promotion, setPromotion] = useState(null);
-  console.log("🚀 ~ promotion:", promotion);
 
   const calculateDiscount = () => {
     const discount =
@@ -22,7 +24,6 @@ const ProductPrice = ({
     if (promotionId && promotionId !== "") {
       try {
         const response = await findOnePromotion(promotionId);
-        console.log("🚀 ~ getPromotion ~ response:", response);
         if (response.metadata.eventType === "Custom") return;
         setPromotion(response.metadata);
       } catch (error) {
@@ -48,20 +49,20 @@ const ProductPrice = ({
           points={points}
         />
       ) : (
-        <div className="bg-white p-4 rounded-lg shadow-md w-full">
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md w-full">
           <div className="flex items-center">
             {/* Price Section */}
             <div className="flex flex-col mr-4">
               <div className="grid grid-cols-3 justify-center">
                 <div className="flex flex-col">
-                  <span className="text-sm text-gray-600">
-                    Mua ngay với giá
+                  <span className="text-sm text-gray-600 dark:text-gray-300">
+                    {t("buyNowWithPrice")}
                   </span>
-                  <span className="text-2xl font-bold text-gray-800">
+                  <span className="text-2xl font-bold text-gray-800 dark:text-gray-100">
                     {formatVND(priceAfterDiscount)}
                   </span>
                   <div className="flex items-center">
-                    <span className="text-sm text-gray-500 line-through">
+                    <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
                       {formatVND(originalPrice)}
                     </span>
                     <span className="text-sm text-red-600 ml-2">
@@ -70,10 +71,10 @@ const ProductPrice = ({
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-start mt-2 bg-[#fffbe5] rounded-full px-3 py-2 w-max">
-                <FaBitcoin />
-                <span className="ml-1 text-sm font-bold text-gray-600">
-                  +{points} Điểm thưởng
+              <div className="flex items-center justify-start mt-2 bg-[#fffbe5] dark:bg-gray-700 rounded-full px-3 py-2 w-max">
+                <FaBitcoin className="text-gray-600 dark:text-gray-300" />
+                <span className="ml-1 text-sm font-bold text-gray-600 dark:text-gray-300">
+                  +{points} {t("discountPoints")}
                 </span>
               </div>
             </div>

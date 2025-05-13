@@ -65,7 +65,7 @@ const ProductPage = () => {
   }, [categorySlug, minPrice, maxPrice, selectedOption, currentPage]);
 
   return (
-    <section className="bg-[#f3f4f6] antialiased min-h-[800px]">
+    <section className="bg-[#f3f4f6] dark:bg-gray-900 antialiased min-h-[800px]">
       <div className="mx-auto max-w-screen-xl">
         <div className="flex gap-6">
           <FilterSidebar
@@ -76,7 +76,7 @@ const ProductPage = () => {
           />
           <div className="flex-1">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900"></h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100"></h3>
               <SortButton
                 isSortDropdownOpen={isSortDropdownOpen}
                 toggleSortDropdown={toggleSortDropdown}
@@ -90,7 +90,7 @@ const ProductPage = () => {
                 <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
               </div>
             ) : productList.length === 0 ? (
-              <div className="text-center text-lg text-gray-600">
+              <div className="text-center text-lg text-gray-600 dark:text-gray-300">
                 Không tìm thấy sản phẩm nào
               </div>
             ) : (

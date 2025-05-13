@@ -7,8 +7,10 @@ import {
 } from "../../../config/api";
 import { useSelector } from "react-redux";
 import { formatTimeAgo } from "../../../utils";
+import { useTranslation } from "react-i18next";
 
 const CommentItem = ({ comment, depth = 0 }) => {
+  const { t } = useTranslation("comment");
   const userId = useSelector((state) => state.account?.user?._id);
   const [showReplies, setShowReplies] = useState(false);
   const [showReplyForm, setShowReplyForm] = useState(false);
@@ -47,7 +49,6 @@ const CommentItem = ({ comment, depth = 0 }) => {
     });
 
     if (response.status === 200) {
-      console.log("🚀 ~ handleGetListComment ~ response:", response);
       setReplies(response.metadata.comments);
     }
   };
@@ -96,7 +97,7 @@ const CommentItem = ({ comment, depth = 0 }) => {
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-2">
-            <h4 className="text-sm font-semibold text-gray-900 truncate">
+            <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
               {comment?.isFromSystem
                 ? "Hệ thống"
                 : comment?.comment_userId?.usr_name || "Khách"}
@@ -114,8 +115,8 @@ const CommentItem = ({ comment, depth = 0 }) => {
                   key={i}
                   className={`w-3.5 h-3.5 ${
                     i < comment.comment_rating
-                      ? "text-yellow-400"
-                      : "text-gray-200"
+                      ? "text-yellow-400 dark:text-yellow-300"
+                      : "text-gray-300 dark:text-gray-600"
                   }`}
                   fill={i < comment.comment_rating ? "currentColor" : "none"}
                 />
@@ -123,22 +124,24 @@ const CommentItem = ({ comment, depth = 0 }) => {
             </div>
           )}
 
-          <p className="mt-2 text-sm text-gray-700 leading-relaxed whitespace-pre-line">
-            {comment?.comment_content || "Không có nội dung"}
+          <p className="mt-2 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">
+            {comment?.comment_content}
           </p>
 
           <div className="flex items-center space-x-2 mt-3">
             <button
               onClick={handleLikeComment}
-              className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium transition-all duration-200 ${
-                isLiked
-                  ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-              aria-label={isLiked ? "Unlike comment" : "Like comment"}
+              className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200
+                ${
+                  isLiked
+                    ? "bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900"
+                    : "bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600"
+                }`}
             >
               <ThumbsUp
-                className={`w-3.5 h-3.5 mr-1 ${isLiked ? "fill-blue-700" : ""}`}
+                className={`w-4 h-4 mr-1.5 ${
+                  isLiked ? "fill-blue-600 dark:fill-blue-400" : ""
+                }`}
               />
               <span>{likeCount}</span>
             </button>
@@ -149,7 +152,7 @@ const CommentItem = ({ comment, depth = 0 }) => {
               aria-label="Reply to comment"
             >
               <Reply className="w-3.5 h-3.5 mr-1" />
-              <span>Trả lời</span>
+              <span>{t("reply")}</span>
             </button>
           </div>
 
@@ -158,17 +161,16 @@ const CommentItem = ({ comment, depth = 0 }) => {
               <textarea
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
-                placeholder="Nhập phản hồi của bạn..."
+                placeholder={t("enterYourReply")}
                 className="w-full p-3 text-sm text-gray-700 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 min-h-[80px] resize-none shadow-sm"
                 aria-label="Reply text"
               />
               <div className="flex justify-end space-x-2">
                 <button
                   onClick={() => setShowReplyForm(false)}
-                  className="px-3 py-1.5 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all duration-200"
-                  aria-label="Cancel reply"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
                 >
-                  Hủy
+                  {t("cancel")}
                 </button>
                 <button
                   onClick={handleReplySubmit}
@@ -176,7 +178,7 @@ const CommentItem = ({ comment, depth = 0 }) => {
                   disabled={!replyText.trim()}
                   aria-label="Submit reply"
                 >
-                  Gửi
+                  {t("send")}
                 </button>
               </div>
             </div>
@@ -185,7 +187,7 @@ const CommentItem = ({ comment, depth = 0 }) => {
           {haveReplyComment && (
             <button
               onClick={handleGetListComment}
-              className="inline-flex items-center mt-3 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200"
+              className="inline-flex items-center mt-3 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200"
               aria-label={showReplies ? "Hide replies" : "Show replies"}
             >
               <ChevronDown
@@ -193,7 +195,7 @@ const CommentItem = ({ comment, depth = 0 }) => {
                   showReplies ? "rotate-180" : ""
                 }`}
               />
-              {showReplies ? "Ẩn phản hồi" : "Xem phản hồi"}
+              {showReplies ? t("hide") : t("view")} {t("reply").toLowerCase()}
             </button>
           )}
         </div>

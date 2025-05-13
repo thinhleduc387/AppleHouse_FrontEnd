@@ -8,8 +8,9 @@ import {
   setOrderAddress,
   setOrderNotes,
 } from "../../redux/slices/checkoutSlice";
-
+import { useTranslation } from "react-i18next";
 const CheckoutInfo = ({ onSubmit }) => {
+  const { t } = useTranslation("cart");
   const userId = useSelector((state) => state.account?.user?._id);
   const [address, setAddress] = useState();
   const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +32,6 @@ const CheckoutInfo = ({ onSubmit }) => {
     setIsOpen(value);
     dispatch(setHiddenChatBot(value));
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!address) {

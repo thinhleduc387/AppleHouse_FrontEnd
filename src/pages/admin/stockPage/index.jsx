@@ -23,10 +23,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { formatDate } from "../../../utils";
 import Pagination from "../../../component/Pagiantion";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const ITEMS_PER_PAGE = 8;
 
 const StockPage = () => {
+  const { t } = useTranslation("stock"); // Use the "stock" namespace
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -286,7 +288,7 @@ const StockPage = () => {
               onClick={() => onConfirm()}
               className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
             >
-              Delete
+              {t("Delete")}
             </button>
           </div>
         </div>
@@ -297,14 +299,16 @@ const StockPage = () => {
     <div className="p-6 min-h-screen">
       {/* Header */}
       <div className="flex justify-between bg-white px-6 py-8 rounded-lg items-center mb-6">
-        <h1 className="text-4xl font-bold text-gray-700">Product Management</h1>
+        <h1 className="text-4xl font-bold text-gray-700">
+          {t("Product Management")}
+        </h1>
         <div className="flex gap-4">
           {/* Create Category Button */}
           <Link
             to="/admin/category-create"
             className="flex items-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 shadow-md"
           >
-            <BiPlus className="mr-2 text-xl" /> Create Category
+            <BiPlus className="mr-2 text-xl" /> {t("Create Category")}
           </Link>
 
           {/* Add Product Button */}
@@ -312,7 +316,7 @@ const StockPage = () => {
             to="/admin/products/add"
             className="flex items-center bg-mainColor text-white px-4 py-2 rounded hover:bg-blue-700 shadow-md"
           >
-            <BiPlus className="mr-2 text-xl" /> Add Product
+            <BiPlus className="mr-2 text-xl" /> {t("Add Product")}
           </Link>
         </div>
       </div>
@@ -326,9 +330,13 @@ const StockPage = () => {
           {/* Tabs */}
           <div className="flex gap-4 mb-4 border-b pb-2">
             {[
-              { label: "All", value: "all", count: allCount },
-              { label: "Published", value: "published", count: publishedCount },
-              { label: "Draft", value: "draft", count: draftCount },
+              { label: t("All"), value: "all", count: allCount },
+              {
+                label: t("Published"),
+                value: "published",
+                count: publishedCount,
+              },
+              { label: t("Draft"), value: "draft", count: draftCount },
             ].map((tab) => (
               <button
                 key={tab.value}
@@ -360,19 +368,19 @@ const StockPage = () => {
                 onClick={handleUnpublishSelected}
                 className="flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 shadow-md"
               >
-                Unpublish
+                {t("Unpublish")}
               </button>
               <button
                 onClick={handlePublishSelected}
                 className="flex items-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 shadow-md"
               >
-                Publish
+                {t("Publish")}
               </button>
               <button
                 onClick={handleDeleteSelected}
                 className="flex items-center bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 shadow-md"
               >
-                Delete
+                {t("Delete")}
               </button>
             </div>
           </div>
@@ -386,6 +394,7 @@ const StockPage = () => {
               handleEditProduct={handleEditProduct}
               fetchTabCounts={fetchTabCounts}
               fetchTabData={fetchTabData}
+              t={t} // Pass translation function to ProductTable
             />
           </div>
 
@@ -399,7 +408,7 @@ const StockPage = () => {
                 )}
                 onChange={handleSelectAll}
               />
-              <label>Select All</label>
+              <label>{t("All status")}</label>
             </div>
             {paginatedProducts().map((product) => (
               <div
@@ -448,17 +457,27 @@ const StockPage = () => {
                 {/* Collapse content */}
                 {activeCollapse === product._id && (
                   <div className="mt-4 bg-gray-50 p-4 rounded-lg shadow-inner">
-                    <p>Stock: {product.product_quantity}</p>
-                    <p>Price: {formatVND(product.product_price)}</p>
                     <p>
-                      Category:{" "}
+                      {t("Stock")}: {product.product_quantity}
+                    </p>
+                    <p>
+                      {t("Price")}: {formatVND(product.product_price)}
+                    </p>
+                    <p>
+                      {t("Category")}:{" "}
                       {product.product_category
                         .map((c) => c.category_name)
                         .join(", ")}
                     </p>
-                    <p>Tags: {product.product_tags.join(", ")}</p>
-                    <p>Review: {product.product_ratingAverage} &#9733;</p>
-                    <p>Date Created: {formatDate(product.createdAt)}</p>
+                    <p>
+                      {t("Tags")}: {product.product_tags.join(", ")}
+                    </p>
+                    <p>
+                      {t("Review")}: {product.product_ratingAverage} &#9733;
+                    </p>
+                    <p>
+                      {t("Date")}: {formatDate(product.createdAt)}
+                    </p>
                   </div>
                 )}
               </div>

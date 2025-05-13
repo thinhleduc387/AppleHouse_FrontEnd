@@ -14,7 +14,9 @@ import { Link } from "react-router-dom";
 const ProductItem = ({ product, isForShow }) => {
   if (!product) {
     return (
-      <div className="p-6 text-center text-gray-500">Product not available</div>
+      <div className="p-6 text-center text-gray-500 dark:text-gray-400">
+        Product not available
+      </div>
     );
   }
 
@@ -57,7 +59,10 @@ const ProductItem = ({ product, isForShow }) => {
     const emptyStars = 5 - Math.ceil(rating);
     for (let i = 0; i < emptyStars; i++) {
       stars.push(
-        <AiOutlineStar key={`empty-${i}`} className="text-gray-300 h-4 w-4" />
+        <AiOutlineStar
+          key={`empty-${i}`}
+          className="text-gray-300 dark:text-gray-600 h-4 w-4"
+        />
       );
     }
 
@@ -65,7 +70,7 @@ const ProductItem = ({ product, isForShow }) => {
   };
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm h-full flex flex-col">
+    <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4 shadow-sm h-full flex flex-col">
       <div className="h-56 w-full">
         <a href={ROUTERS.USER.PRODUCT_DETAIL(id)} className="cursor-default">
           <img
@@ -79,7 +84,7 @@ const ProductItem = ({ product, isForShow }) => {
         <div className="text-center">
           <Link
             to={link}
-            className="text-lg font-semibold leading-tight text-gray-900 hover:underline cursor-pointer"
+            className="text-lg font-semibold leading-tight text-gray-900 dark:text-gray-100 hover:underline cursor-pointer"
           >
             {name}
           </Link>
@@ -88,7 +93,9 @@ const ProductItem = ({ product, isForShow }) => {
         {/* Rating display */}
         <div className="flex items-center justify-center mt-2 space-x-1">
           {renderStars(rating)}
-          <span className="ml-1 text-sm text-gray-500">({rating})</span>
+          <span className="ml-1 text-sm text-gray-500 dark:text-gray-400">
+            ({rating})
+          </span>
         </div>
 
         {/* Tags display */}
@@ -97,7 +104,7 @@ const ProductItem = ({ product, isForShow }) => {
             {tags.map((tag, index) => (
               <span
                 key={index}
-                className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full"
+                className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full"
               >
                 {tag}
               </span>
@@ -108,20 +115,20 @@ const ProductItem = ({ product, isForShow }) => {
         <div className="text-center">
           {productPrice.originalPrice !== productPrice.priceAfterDiscount ? (
             <div className="mt-5">
-              <p className="text-sm text-slate-900">
+              <p className="text-sm text-slate-900 dark:text-gray-100">
                 <span className="line-through">
                   {formatVND(productPrice.originalPrice)}
                 </span>
                 <span className="font-light underline">đ</span>{" "}
                 <span className="text-red-600">-{calculateDiscount()}%</span>
               </p>
-              <p className="text-2xl font-bold mt-2 text-slate-900">
+              <p className="text-2xl font-bold mt-2 text-slate-900 dark:text-gray-100">
                 {formatVND(productPrice.priceAfterDiscount)}
               </p>
             </div>
           ) : (
             <div>
-              <p className="text-2xl font-bold text-slate-900">
+              <p className="text-2xl font-bold text-slate-900 dark:text-gray-100">
                 {formatVND(productPrice.priceAfterDiscount)}
               </p>
             </div>

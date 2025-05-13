@@ -29,7 +29,7 @@ const ProductCategory = () => {
   };
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-8 lg:flex lg:justify-around lg:gap-0">
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-8 lg:flex lg:justify-around lg:gap-0 ">
       {categoryList.map((category) => (
         <Link key={category.id} to={category.link}>
           <CategorySection

@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { getListCommentBySpuId } from "../../../config/api";
 import CommentItem from "../../Product/Feedback/CommentItem";
 import Pagination from "../../Pagiantion";
+import { useTranslation } from "react-i18next"; // Import useTranslation từ react-i18next
 
 const ProductComments = ({ productId }) => {
+  const { t } = useTranslation("comment"); // Sử dụng hook useTranslation để lấy hàm t
   const [comments, setComments] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -11,7 +13,7 @@ const ProductComments = ({ productId }) => {
 
   useEffect(() => {
     handleGetListComment();
-  }, [productId]);
+  }, [productId, currentPage]); // Gộp cả productId và currentPage để tránh lặp useEffect
 
   const handleGetListComment = async () => {
     const response = await getListCommentBySpuId({
@@ -25,10 +27,6 @@ const ProductComments = ({ productId }) => {
     }
   };
 
-  useEffect(() => {
-    handleGetListComment();
-  }, [currentPage]);
-
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
@@ -36,7 +34,7 @@ const ProductComments = ({ productId }) => {
   return (
     <div className="w-full ml-6 h-screen rounded-lg shadow-lg p-6 bg-white">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">
-        Đánh giá
+        {t("review")} {/* Dịch "Đánh giá" thành "Review" */}
       </h2>
       <div className="flex flex-col justify-between max-h-[85%]">
         {/* Danh sách comment */}
@@ -47,7 +45,10 @@ const ProductComments = ({ productId }) => {
             ))}
 
           {comments.length === 0 && (
-            <div className="text-center text-xl">Chưa có đánh giá nào</div>
+            <div className="text-center text-xl">
+              {t("noReviewsYet")}{" "}
+              {/* Thêm key mới nếu cần, vì "Chưa có đánh giá nào" không có trong JSON */}
+            </div>
           )}
         </div>
         {comments.length > 0 && totalPages > 1 && (

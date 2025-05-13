@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import ProductPrice from "../../../component/Product/ProductPrice"; // Import PromotionComponent
+import ProductPrice from "../../../component/Product/ProductPrice";
 import ProductSideBar from "../../../component/Product/ProductSideBar";
 import CommentSection from "../../../component/Product/Feedback/CommentSection";
 import {
@@ -16,8 +16,10 @@ import { toast } from "react-toastify";
 import { fetchCart, addToLocalCart } from "../../../redux/slices/cartSlice";
 import RatingStar from "../../../component/Product/Feedback/RatingStar";
 import RecommendSectionForDetailPage from "../../../component/RecommendSection/RecommendSectionDetailProruct";
+import { useTranslation } from "react-i18next";
 
 const DetailProduct = () => {
+  const { t } = useTranslation("detailProduct");
   const { productId } = useParams();
   const userId = useSelector((state) => state.account?.user?._id);
   const dispatch = useDispatch();
@@ -59,6 +61,7 @@ const DetailProduct = () => {
   const selectedSku = skus.find((sku) =>
     sku.sku_index.every((index, i) => index === selectedVariants[i])
   );
+
   const collectProductImages = (product) => {
     const moreImgs = product.product_more_imgs || [];
     const variationImgs =
@@ -82,13 +85,12 @@ const DetailProduct = () => {
       });
     }
   };
+
   const handleGetProduct = async () => {
     setLoading(true);
     const response = await getProduct(productId);
-    console.log("🚀 ~ handleGetProduct ~ response:", response);
     if (response.metadata && response.status === 200) {
       setSkus(response.metadata.sku_list);
-
       setSpu(response.metadata.spu_info);
       setMoreImgs(collectProductImages(response.metadata.spu_info));
       setSelectedImage(collectProductImages(response.metadata.spu_info)[0]);
@@ -122,14 +124,14 @@ const DetailProduct = () => {
     if (userId) {
       const response = await addToCart({ userId, skuId: selectedSku._id });
       if (response.status === 200) {
-        toast.success("Add to cart success");
-        dispatch(fetchCart(userId)); // Fetch giỏ hàng từ server
+        toast.success(t("addToCartSuccess"));
+        dispatch(fetchCart(userId));
       } else {
-        toast.error("Failed to add to cart");
+        toast.error(t("addToCartFailed"));
       }
     } else {
       dispatch(addToLocalCart(newItem));
-      toast.success("Add to cart success");
+      toast.success(t("addToCartSuccess"));
     }
   };
 
@@ -163,25 +165,28 @@ const DetailProduct = () => {
   return (
     <>
       {loading ? (
-        <div className="fixed inset-0 flex items-center justify-center">
-          <div className="border-t-4 border-blue-600 border-solid rounded-full w-12 h-12 animate-spin"></div>
+        <div className="fixed inset-0 flex items-center justify-center bg-white dark:bg-gray-900">
+          <div className="border-t-4 border-blue-600 dark:border-blue-400 border-solid rounded-full w-12 h-12 animate-spin"></div>
         </div>
       ) : (
-        <div className="font-sans ">
+        <div className="font-sans bg-[#f3f4f6] dark:bg-gray-900">
           <div className="p-4 lg:max-w-7xl max-w-4xl mx-auto">
-            <div className="grid items-start grid-cols-1 lg:grid-cols-6 gap-12 p-6 rounded-lg bg-white">
-              <div className="lg:col-span-3 w-full lg:sticky top-0 text-center ">
+            <div className="grid items-start grid-cols-1 lg:grid-cols-6 gap-12 p-6 rounded-lg bg-white dark:bg-gray-800">
+              <div className="lg:col-span-3 w-full lg:sticky top-0 text-center">
                 <div className="px-4 py-10 rounded-lg relative">
                   <img
                     src={selectedImage}
                     className="w-10/12 rounded object-cover mx-auto"
                   />
-                  <button type="button" className="absolute top-4 right-4">
+                  <button
+                    type="button"
+                    className="absolute top-4 right-4 text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-gray-100"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20px"
-                      fill="#ccc"
-                      className="mr-1 hover:fill-[#333]"
+                      fill="currentColor"
+                      className="mr-1"
                       viewBox="0 0 64 64"
                     >
                       <path
@@ -198,7 +203,7 @@ const DetailProduct = () => {
                       key={index}
                       className={`w-24 h-20 flex items-center justify-center rounded-lg p-4 cursor-pointer transition-all duration-300 ${
                         selectedImage === src
-                          ? "shadow-[0_2px_10px_-3px_rgba(6,81,237,0.6)] border-2 border-mainColor scale-110"
+                          ? "shadow-[0_2px_10px_-3px_rgba(6,81,237,0.6)] border-2 border-blue-500 dark:border-blue-400 scale-110"
                           : "shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] hover:shadow-[0_2px_10px_-3px_rgba(6,81,237,0.5)] hover:scale-105"
                       }`}
                     >
@@ -218,40 +223,41 @@ const DetailProduct = () => {
                   {spu?.product_tags.map((value, index) => (
                     <div
                       key={index}
-                      className="bg-mainColor text-white rounded-full px-4 py-1 flex items-center justify-center text-sm font-semibold shadow-md hover:shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer"
+                      className="bg-blue-500 dark:bg-blue-400 text-white rounded-full px-4 py-1 flex items-center justify-center text-sm font-semibold shadow-md hover:shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105 cursor-pointer"
                     >
                       {value}
                     </div>
                   ))}
                 </div>
 
-                <h2 className="text-2xl font-extrabold text-gray-800 mt-4">
+                <h2 className="text-2xl font-extrabold text-gray-800 dark:text-gray-100 mt-4">
                   {selectedSku?.sku_name}
                 </h2>
 
                 <div className="flex items-center space-x-2 mt-4">
-                  <span className="text-gray-600">No.{selectedSku?._id}</span>
-                  <span className="text-gray-600">|</span>
+                  <span className="text-gray-600 dark:text-gray-300">
+                    No.{selectedSku?._id}
+                  </span>
+                  <span className="text-gray-600 dark:text-gray-300">|</span>
                   <span
-                    className="text-mainColor cursor-pointer"
+                    className="text-blue-500 dark:text-blue-400 cursor-pointer"
                     onClick={scrollToRatingStat}
                   >
-                    {totalreviews.numberOfRating} đánh giá
+                    {totalreviews.numberOfRating} {t("reviews")}
                   </span>
-                  <span className="text-gray-600">|</span>
+                  <span className="text-gray-600 dark:text-gray-300">|</span>
                   <span
-                    className="text-mainColor cursor-pointer"
+                    className="text-blue-500 dark:text-blue-400 cursor-pointer"
                     onClick={scrollToComments}
                   >
-                    {totalreviews.numberOfComment} bình luận
+                    {totalreviews.numberOfComment} {t("comments")}
                   </span>
                 </div>
 
-                {/* Variations */}
                 <div className="space-y-10 min-h-[100px] mt-9">
                   {spu?.product_variations.map((variation, variationIndex) => (
                     <div key={variationIndex}>
-                      <h3 className="text-xl font-bold text-gray-800">
+                      <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">
                         {variation.name}
                       </h3>
                       <div className="flex flex-wrap gap-4 mt-4">
@@ -271,8 +277,8 @@ const DetailProduct = () => {
                           }
                           ${
                             selectedVariants[variationIndex] === optionIndex
-                              ? "border-mainColor"
-                              : "border-gray-300"
+                              ? "border-blue-500 dark:border-blue-400"
+                              : "border-gray-300 dark:border-gray-700"
                           }`}
                               disabled={!isAvailable}
                               onClick={() => {
@@ -302,13 +308,13 @@ const DetailProduct = () => {
                                     className="w-8 h-8"
                                   />
                                 )}
-                              <span className="text-base font-semibold text-gray-800 p-2">
+                              <span className="text-base font-semibold text-gray-800 dark:text-gray-100 p-2">
                                 {option}
                               </span>
                               {selectedVariants[variationIndex] ===
                                 optionIndex && (
                                 <span
-                                  className="absolute top-0 right-0 w-7 h-7 bg-mainColor flex items-center justify-center rounded-tr-lg"
+                                  className="absolute top-0 right-0 w-7 h-7 bg-blue-500 dark:bg-blue-400 flex items-center justify-center rounded-tr-lg"
                                   style={{
                                     clipPath:
                                       "polygon(100% 0, 0% 0, 100% 100%)",
@@ -331,7 +337,6 @@ const DetailProduct = () => {
                   ))}
                 </div>
 
-                {/* Khuyến mãi */}
                 <div className="flex flex-wrap gap-4 mt-8">
                   <ProductPrice
                     priceAfterDiscount={
@@ -349,16 +354,16 @@ const DetailProduct = () => {
                 <div className="flex flex-wrap gap-4 mt-8">
                   <button
                     type="button"
-                    className="min-w-[200px] px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded"
+                    className="min-w-[200px] px-4 py-3 bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white text-sm font-semibold rounded"
                   >
-                    Buy now
+                    {t("buyNow")}
                   </button>
                   <button
                     type="button"
-                    className="min-w-[200px] px-4 py-2.5 border border-blue-600 bg-transparent hover:bg-gray-50 text-gray-800 text-sm font-semibold rounded"
+                    className="min-w-[200px] px-4 py-2.5 border border-blue-600 dark:border-blue-500 bg-transparent hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-100 text-sm font-semibold rounded"
                     onClick={handleAddToCart}
                   >
-                    Add to cart
+                    {t("addToCart")}
                   </button>
                 </div>
               </div>
@@ -369,7 +374,7 @@ const DetailProduct = () => {
               onClickThongSo={() => setSidebarOpen(true)}
             />
 
-            <div className="mt-16 bg-white border-2  rounded-lg p-6 space-y-10">
+            <div className="mt-16 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-lg p-6 space-y-10">
               <div ref={ratingStatRef}>
                 <RatingStar
                   numberOfRating={totalreviews.numberOfRating}
@@ -394,7 +399,7 @@ const DetailProduct = () => {
           </div>
         </div>
       )}
-      <div className="py-10">
+      <div className="py-10 bg-[#f3f4f6] dark:bg-gray-900">
         <RecommendSectionForDetailPage productId={productId} />
       </div>
     </>

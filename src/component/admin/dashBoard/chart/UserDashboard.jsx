@@ -14,10 +14,12 @@ import {
 } from "recharts";
 import { Users, UserCheck, UserX, Mail } from "lucide-react";
 import { getUserStatistic } from "../../../../config/api";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const COLORS = ["#2563eb", "#16a34a", "#dc2626", "#9333ea", "#eab308"];
 
 const UserDashboard = () => {
+  const { t } = useTranslation("dashBoard"); // Use the "userDashBoard" namespace
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -54,7 +56,7 @@ const UserDashboard = () => {
             <Users className="h-6 w-6 text-blue-600" />
           </div>
           <div>
-            <p className="text-sm text-gray-600">Total Users</p>
+            <p className="text-sm text-gray-600">{t("totalUsers")}</p>
             <p className="text-xl font-bold">{data.overview.totalUsers}</p>
           </div>
         </div>
@@ -64,7 +66,7 @@ const UserDashboard = () => {
             <UserCheck className="h-6 w-6 text-green-600" />
           </div>
           <div>
-            <p className="text-sm text-gray-600">Active Users</p>
+            <p className="text-sm text-gray-600">{t("activeUsers")}</p>
             <p className="text-xl font-bold">{data.overview.activeUsers}</p>
           </div>
         </div>
@@ -74,7 +76,7 @@ const UserDashboard = () => {
             <UserX className="h-6 w-6 text-red-600" />
           </div>
           <div>
-            <p className="text-sm text-gray-600">Blocked Users</p>
+            <p className="text-sm text-gray-600">{t("blockedUsers")}</p>
             <p className="text-xl font-bold">{data.overview.blockedUsers}</p>
           </div>
         </div>
@@ -84,7 +86,7 @@ const UserDashboard = () => {
             <Mail className="h-6 w-6 text-purple-600" />
           </div>
           <div>
-            <p className="text-sm text-gray-600">Google Users</p>
+            <p className="text-sm text-gray-600">{t("googleUsers")}</p>
             <p className="text-xl font-bold">{data.overview.googleUsers}</p>
           </div>
         </div>
@@ -94,7 +96,9 @@ const UserDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Monthly Registrations */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Monthly Registrations</h2>
+          <h2 className="text-lg font-semibold mb-4">
+            {t("monthlyRegistrations")}
+          </h2>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data.monthlyRegistrations}>
@@ -103,7 +107,7 @@ const UserDashboard = () => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="count" fill="#2563eb" name="New Users" />
+                <Bar dataKey="count" fill="#2563eb" name={t("newUsers")} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -111,7 +115,9 @@ const UserDashboard = () => {
 
         {/* Gender Distribution */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Gender Distribution</h2>
+          <h2 className="text-lg font-semibold mb-4">
+            {t("genderDistribution")}
+          </h2>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -140,19 +146,19 @@ const UserDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top Loyal Users */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Top Loyal Users</h2>
+          <h2 className="text-lg font-semibold mb-4">{t("topLoyalUsers")}</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full">
               <thead>
                 <tr className="bg-gray-50">
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    User
+                    {t("user")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Points
+                    {t("points")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Email
+                    {t("email")}
                   </th>
                 </tr>
               </thead>
@@ -177,7 +183,7 @@ const UserDashboard = () => {
 
         {/* City Distribution */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Users by City</h2>
+          <h2 className="text-lg font-semibold mb-4">{t("usersByCity")}</h2>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data.cityDistribution} layout="vertical">
@@ -186,7 +192,7 @@ const UserDashboard = () => {
                 <YAxis dataKey="_id" type="category" />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="count" fill="#2563eb" name="Users" />
+                <Bar dataKey="count" fill="#2563eb" name={t("users")} />
               </BarChart>
             </ResponsiveContainer>
           </div>

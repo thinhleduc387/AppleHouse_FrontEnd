@@ -4,10 +4,12 @@ import Loading from "../../../component/Loading";
 import { deleteCategory, getAllCategory } from "../../../config/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next"; // Import hook for translation
 
 const CategoryPage = () => {
+  const { t } = useTranslation("category"); // Initialize translation hook
   const [categories, setCategories] = useState([]);
-  console.log("🚀 ~ CategoryPage ~ categories:", categories)
+  console.log("🚀 ~ CategoryPage ~ categories:", categories);
   const [activeCollapse, setActiveCollapse] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState({
@@ -67,13 +69,13 @@ const CategoryPage = () => {
       {/* Header */}
       <div className="flex justify-between bg-white px-6 py-8 rounded-lg items-center mb-6">
         <h1 className="text-5xl font-bold text-gray-700">
-          Category Management
+          {t("CategoryManagement")}
         </h1>
         <button
           onClick={handleCreate}
           className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 shadow-md"
         >
-          + Create Category
+          + {t("CreateCategory")}
         </button>
       </div>
 
@@ -126,11 +128,13 @@ const CategoryPage = () => {
                   <table className="w-full bg-white table-auto shadow-md rounded-lg overflow-x-auto">
                     <thead>
                       <tr className="bg-gray-100">
-                        <th className="p-5 text-left rounded-tl-lg">Image</th>
-                        <th className="p-5 text-left">Category Name</th>
-                        <th className="p-5 text-left">Description</th>
+                        <th className="p-5 text-left rounded-tl-lg">
+                          {t("Image")}
+                        </th>
+                        <th className="p-5 text-left">{t("CategoryName")}</th>
+                        <th className="p-5 text-left">{t("Description")}</th>
                         <th className="p-5 text-center rounded-tr-lg">
-                          Actions
+                          {t("Actions")}
                         </th>
                       </tr>
                     </thead>
@@ -192,13 +196,13 @@ const CategoryPage = () => {
                 }
                 className="mr-4 text-gray-600 bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
               >
-                Cancel
+                {t("Cancel")}
               </button>
               <button
                 onClick={confirmDelete}
                 className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
               >
-                Delete
+                {t("Delete")}
               </button>
             </div>
           </div>

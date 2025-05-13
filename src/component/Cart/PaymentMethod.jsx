@@ -1,9 +1,13 @@
 import { FaMoneyBillWaveAlt, FaCreditCard } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { setOrderMethodPayment } from "../../redux/slices/checkoutSlice";
+import { useState } from "react";
+import { FaMoneyBillWaveAlt } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const PaymentMethod = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation("cart");
   const orderMethodPayment = useSelector(
     (state) => state.checkout.orderMethodPayment
   );
@@ -22,9 +26,7 @@ const PaymentMethod = () => {
           <h2 className="text-lg font-medium text-gray-900">
             Phương thức thanh toán
           </h2>
-          <p className="text-sm text-gray-500">
-            Chọn phương thức thanh toán phù hợp với bạn
-          </p>
+          <p className="text-sm text-gray-500">{t("selectPaymentMethod")}</p>
         </div>
       </div>
 
@@ -50,7 +52,7 @@ const PaymentMethod = () => {
               </div>
               <div>
                 <p className="font-medium text-gray-900">
-                  Thanh toán bằng Stripe
+                  {t("payWithStripe")}
                 </p>
                 <p className="text-sm text-gray-500">
                   Thanh toán an toàn qua cổng Stripe

@@ -10,8 +10,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import Loading from "../../../component/Loading";
 import { clearRoleData } from "../../../redux/slices/rbacSlice";
+import { useTranslation } from "react-i18next";
 
 const AdminProfilePage = () => {
+  const { t } = useTranslation("profileAdmin");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.account?.user);
@@ -34,12 +36,12 @@ const AdminProfilePage = () => {
       usr_sex: user?.sex || "",
       usr_img: user?.avatar || "",
     });
-  }, [user]);
+  }, [user, t]);
 
   const [formData, setFormData] = useState({
-    usr_name: user?.name || "Maria Smith",
-    usr_email: user?.email || "maria@email.com",
-    usr_phone: user?.phone || "(123) 456-7890",
+    usr_name: user?.name || t("defaultName"),
+    usr_email: user?.email || t("defaultEmail"),
+    usr_phone: user?.phone || t("defaultPhone"),
     usr_date_of_birth: user?.dataOfBirth || "1990-01-01",
     usr_sex: user?.sex || "",
     usr_img: user?.avatar || "",
@@ -84,14 +86,14 @@ const AdminProfilePage = () => {
     try {
       const response = await updateProfile({ ...formData });
       if (response.status === 200) {
-        toast.success("Profile updated successfully!");
+        toast.success(t("updateSuccess"));
         dispatch(fetchAccount());
       } else {
-        toast.error("Failed to update profile.");
+        toast.error(t("updateFail"));
       }
     } catch (error) {
       console.error("Error updating profile:", error);
-      toast.error("Failed to update profile.");
+      toast.error(t("updateFail"));
     }
   };
 
@@ -102,13 +104,13 @@ const AdminProfilePage = () => {
         dispatch(setLogoutAction());
         dispatch(clearRoleData());
         navigate("/");
-        toast.success("Logged out successfully!");
+        toast.success(t("logoutSuccess"));
       } else {
         toast.error(response.message);
       }
     } catch (error) {
       console.error("Logout error:", error);
-      toast.error("Failed to log out. Please try again.");
+      toast.error(t("logoutFail"));
     }
   };
 
@@ -124,7 +126,7 @@ const AdminProfilePage = () => {
     <div className="p-6 min-h-screen bg-gray-100">
       {/* Header */}
       <div className="flex justify-between bg-white px-6 py-4 rounded-lg shadow-md items-center mb-6">
-        <h1 className="text-4xl font-bold text-gray-700">Settings</h1>
+        <h1 className="text-4xl font-bold text-gray-700">{t("settings")}</h1>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -137,7 +139,7 @@ const AdminProfilePage = () => {
             >
               <img
                 src={avatarPreview}
-                alt="Profile"
+                alt={t("profileImageAlt")}
                 className="w-32 h-32 rounded-full object-cover"
               />
               <button
@@ -166,18 +168,18 @@ const AdminProfilePage = () => {
             onClick={handleLogOut}
             className="mt-6 w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 shadow-md"
           >
-            Log Out
+            {t("logout")}
           </button>
         </div>
 
         {/* Profile Details */}
         <div className="md:col-span-2 bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-bold text-gray-700 mb-6">
-            My Profile Details
+            {t("myProfileDetails")}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="col-span-1 md:col-span-2">
-              <label className="block text-gray-700">Name</label>
+              <label className="block text-gray-700">{t("name")}</label>
               <input
                 type="text"
                 name="usr_name"
@@ -187,7 +189,7 @@ const AdminProfilePage = () => {
               />
             </div>
             <div className="col-span-1 md:col-span-2">
-              <label className="block text-gray-700">Email</label>
+              <label className="block text-gray-700">{t("email")}</label>
               <input
                 type="email"
                 name="usr_email"
@@ -197,7 +199,7 @@ const AdminProfilePage = () => {
               />
             </div>
             <div>
-              <label className="block text-gray-700">Phone Number</label>
+              <label className="block text-gray-700">{t("phoneNumber")}</label>
               <input
                 type="text"
                 name="usr_phone"
@@ -207,7 +209,7 @@ const AdminProfilePage = () => {
               />
             </div>
             <div>
-              <label className="block text-gray-700">Date of Birth</label>
+              <label className="block text-gray-700">{t("dateOfBirth")}</label>
               <input
                 type="date"
                 name="usr_date_of_birth"
@@ -217,7 +219,7 @@ const AdminProfilePage = () => {
               />
             </div>
             <div className="col-span-1 md:col-span-2">
-              <label className="block text-gray-700">Gender</label>
+              <label className="block text-gray-700">{t("gender")}</label>
               <div className="mt-2 flex gap-6">
                 {["Nam", "Nữ"].map((gender) => (
                   <label key={gender} className="flex items-center">
@@ -229,7 +231,7 @@ const AdminProfilePage = () => {
                       onChange={handleInputChange}
                       className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                     />
-                    <span className="ml-2 text-gray-700">{gender}</span>
+                    <span className="ml-2 text-gray-700">{t(gender)}</span>
                   </label>
                 ))}
               </div>
@@ -239,7 +241,7 @@ const AdminProfilePage = () => {
             onClick={handleUpdateProfile}
             className="mt-6 bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 shadow-md"
           >
-            Update Profile
+            {t("updateProfile")}
           </button>
         </div>
       </div>

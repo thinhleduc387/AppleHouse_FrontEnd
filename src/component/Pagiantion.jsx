@@ -34,7 +34,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   };
 
   return (
-    <nav className="flex justify-center items-center mt-8 select-none">
+    <nav className="flex justify-center items-center mt-8 select-none bg-[#f3f4f6] dark:bg-gray-900">
       <ul className="flex items-center gap-1">
         <li>
           <button
@@ -43,8 +43,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             className={`flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 
               ${
                 currentPage === 1
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-white text-gray-700 hover:bg-blue-50 hover:text-blue-600 border border-gray-200"
+                  ? "bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed"
+                  : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-100 hover:bg-blue-50 dark:hover:bg-blue-900/50 hover:text-blue-600 dark:hover:text-blue-400 border border-gray-200 dark:border-gray-700"
               }`}
           >
             <svg
@@ -74,10 +74,10 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
               className={`min-w-[40px] h-10 flex items-center justify-center px-3 text-sm font-medium rounded-lg transition-colors duration-200
                 ${
                   pageNum === currentPage
-                    ? "bg-blue-600 text-white shadow-sm"
+                    ? "bg-blue-600 dark:bg-blue-500 text-white shadow-sm"
                     : pageNum === "..."
-                    ? "text-gray-500 cursor-default"
-                    : "text-gray-700 hover:bg-blue-50 hover:text-blue-600 border border-gray-200"
+                    ? "text-gray-500 dark:text-gray-400 cursor-default"
+                    : "text-gray-700 dark:text-gray-100 hover:bg-blue-50 dark:hover:bg-blue-900/50 hover:text-blue-600 dark:hover:text-blue-400 border border-gray-200 dark:border-gray-700"
                 }`}
             >
               {pageNum}
@@ -92,8 +92,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             className={`flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200
               ${
                 currentPage === totalPages
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-white text-gray-700 hover:bg-blue-50 hover:text-blue-600 border border-gray-200"
+                  ? "bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed"
+                  : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-100 hover:bg-blue-50 dark:hover:bg-blue-900/50 hover:text-blue-600 dark:hover:text-blue-400 border border-gray-200 dark:border-gray-700"
               }`}
           >
             Next

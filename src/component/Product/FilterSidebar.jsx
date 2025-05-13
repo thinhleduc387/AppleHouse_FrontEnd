@@ -80,20 +80,22 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
   };
 
   return (
-    <aside className="hidden lg:block w-1/4 p-4 rounded-lg shadow-md bg-white sticky top-16 h-max my-14">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+    <aside className="hidden lg:block w-1/4 p-4 rounded-lg shadow-md bg-white dark:bg-gray-800 sticky top-16 h-max my-14">
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
         Bộ lọc tìm kiếm
       </h3>
       <div className="space-y-6">
         {/* Price Filter */}
         <div>
-          <h4 className="font-semibold text-sm text-gray-700 mb-2">Mức giá</h4>
+          <h4 className="font-semibold text-sm text-gray-700 dark:text-gray-300 mb-2">
+            Mức giá
+          </h4>
           <div className="flex flex-col space-y-1 mb-4">
             <label onClick={handleOnClick1}>
               <input
                 type="checkbox"
                 checked={selectedPriceRange === null}
-                className="mr-2"
+                className="mr-2 text-blue-500 focus:ring-blue-500 dark:text-blue-400 dark:focus:ring-blue-400"
               />
               Tất cả
             </label>
@@ -101,7 +103,7 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
               <input
                 type="checkbox"
                 checked={selectedPriceRange === "20-25"}
-                className="mr-2"
+                className="mr-2 text-blue-500 focus:ring-blue-500 dark:text-blue-400 dark:focus:ring-blue-400"
               />
               Từ 20 - 25 triệu
             </label>
@@ -109,7 +111,7 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
               <input
                 type="checkbox"
                 checked={selectedPriceRange === "25-30"}
-                className="mr-2"
+                className="mr-2 text-blue-500 focus:ring-blue-500 dark:text-blue-400 dark:focus:ring-blue-400"
               />
               Từ 25 - 30 triệu
             </label>
@@ -117,12 +119,12 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
               <input
                 type="checkbox"
                 checked={selectedPriceRange === "above-30"}
-                className="mr-2"
+                className="mr-2 text-blue-500 focus:ring-blue-500 dark:text-blue-400 dark:focus:ring-blue-400"
               />
               Trên 30 triệu
             </label>
           </div>
-          <p className="text-sm text-gray-700 mb-2">
+          <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
             Hoặc nhập khoảng giá phù hợp với bạn:
           </p>
           <div className="flex items-center space-x-2 mb-4">
@@ -130,22 +132,22 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
               type="text"
               value={`${Math.round(minPrice).toLocaleString()}đ`}
               readOnly
-              className="w-1/2 border rounded px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-600"
+              className="w-1/2 border border-gray-300 dark:border-gray-700 rounded px-2 py-1 text-sm text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
             />
-            <span>~</span>
+            <span className="text-gray-700 dark:text-gray-300">~</span>
             <input
               type="text"
               value={`${Math.round(maxPrice).toLocaleString()}đ`}
               readOnly
-              className="w-1/2 border rounded px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-600"
+              className="w-1/2 border border-gray-300 dark:border-gray-700 rounded px-2 py-1 text-sm text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
             />
           </div>
           <div
             ref={trackRef}
-            className="relative w-full h-2 mt-6 bg-gray-300 rounded"
+            className="relative w-full h-2 mt-6 bg-gray-300 dark:bg-gray-700 rounded"
           >
             <div
-              className="absolute h-2 bg-blue-500 rounded"
+              className="absolute h-2 bg-blue-500 dark:bg-blue-400 rounded"
               style={{
                 left: `${((minPrice - MIN) / (MAX - MIN)) * 100}%`,
                 right: `${100 - ((maxPrice - MIN) / (MAX - MIN)) * 100}%`,
@@ -154,7 +156,7 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
 
             {/* Thumb Min */}
             <div
-              className="absolute w-5 h-5 bg-white border-2 border-blue-500 rounded-full cursor-pointer transform -translate-x-1/2 -translate-y-1/2"
+              className="absolute w-5 h-5 bg-white dark:bg-gray-800 border-2 border-blue-500 dark:border-blue-400 rounded-full cursor-pointer transform -translate-x-1/2 -translate-y-1/2"
               style={{
                 left: `${((minPrice - MIN) / (MAX - MIN)) * 100}%`,
                 top: "50%",
@@ -165,7 +167,7 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
 
             {/* Thumb Max */}
             <div
-              className="absolute w-5 h-5 bg-white border-2 border-blue-500 rounded-full cursor-pointer transform -translate-x-1/2 -translate-y-1/2"
+              className="absolute w-5 h-5 bg-white dark:bg-gray-800 border-2 border-blue-500 dark:border-blue-400 rounded-full cursor-pointer transform -translate-x-1/2 -translate-y-1/2"
               style={{
                 left: `${((maxPrice - MIN) / (MAX - MIN)) * 100}%`,
                 top: "50%",

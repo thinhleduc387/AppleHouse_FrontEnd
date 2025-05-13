@@ -6,13 +6,13 @@ import { CgAppleWatch } from "react-icons/cg";
 import { TbDeviceIpad } from "react-icons/tb";
 import { RiBattery2ChargeLine } from "react-icons/ri";
 import { getAllCategory } from "../../../../config/api"; // Đảm bảo API đã được import
-
+import { useTranslation } from "react-i18next";
 const DropdownMenu = ({ headerHeight }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [categoryList, setCategoryList] = useState([]);
   const dropdownRef = useRef(null);
-
+  const { t } = useTranslation("header");
   const handleMouseEnter = () => {
     setDropdownOpen(true);
   };
@@ -97,7 +97,7 @@ const DropdownMenu = ({ headerHeight }) => {
       >
         {/* Nút dropdown */}
         <button className="flex items-center text-gray-700 font-bold justify-center px-4 py-2 h-full bg-gray-200 rounded-full hover:bg-gray-300 w-36">
-          Danh mục
+          {t("category")}
           <MdArrowDropDown />
         </button>
 

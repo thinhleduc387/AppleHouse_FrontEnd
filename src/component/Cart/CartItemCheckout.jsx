@@ -11,14 +11,13 @@ const CartItemCheckout = ({ cartItem }) => {
     loyalPoint: cartItem.loyalPoint,
     quantity: cartItem.quantity,
   };
-  console.log("🚀 ~ product:", product);
 
   const [quantity, setQuantity] = useState(product.quantity);
 
   return (
-    <div className="grid grid-cols-3 items-center gap-4">
+    <div className="grid grid-cols-3 items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-md">
       <div className="col-span-2 flex items-center gap-4">
-        <div className="w-24 h-24 shrink-0 bg-white p-2 rounded-md border border-gray-300">
+        <div className="w-24 h-24 shrink-0 bg-white dark:bg-gray-900 p-2 rounded-md border border-gray-300 dark:border-gray-700">
           <img
             src={product.imageUrl}
             className="w-full h-full object-contain"
@@ -27,7 +26,7 @@ const CartItemCheckout = ({ cartItem }) => {
         </div>
 
         <div className="flex flex-col justify-between">
-          <h3 className="lg:text-base md:text-sm text-xs font-bold text-gray-800">
+          <h3 className="lg:text-base md:text-sm text-xs font-bold text-gray-800 dark:text-gray-100">
             {product.name}
           </h3>
         </div>
@@ -35,7 +34,7 @@ const CartItemCheckout = ({ cartItem }) => {
 
       <div className="ml-auto flex flex-col md:flex-row items-center justify-between w-full md:w-auto space-y-4 md:space-y-0 md:space-x-7">
         <div className="flex flex-col items-end">
-          <span className="text-base font-bold text-gray-800">
+          <span className="text-base font-bold text-gray-800 dark:text-gray-100">
             {product.price.toLocaleString("vi-VN", {
               style: "currency",
               currency: "VND",
@@ -43,7 +42,7 @@ const CartItemCheckout = ({ cartItem }) => {
           </span>
 
           {product?.discountPrice && (
-            <span className="text-xs text-gray-500 line-through">
+            <span className="text-xs text-gray-500 dark:text-gray-400 line-through">
               {product.discountPrice.toLocaleString("vi-VN", {
                 style: "currency",
                 currency: "VND",
@@ -54,7 +53,7 @@ const CartItemCheckout = ({ cartItem }) => {
 
         <div className="flex items-center pr-2">
           <div className="flex items-center space-x-4 pr-2">
-            <span className="text-base font-semibold text-gray-800 w-6 text-center">
+            <span className="text-base font-semibold text-gray-800 dark:text-gray-100 w-6 text-center">
               x{quantity}
             </span>
           </div>

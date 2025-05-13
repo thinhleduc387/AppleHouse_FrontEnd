@@ -1,0 +1,15 @@
+{
+  "orderManagement": "Quản lý đơn hàng",
+  "confirmed": "Đã xác nhận",
+  "processing": "Đang xử lý",
+  "shipping": "Đang giao hàng",
+  "canceled": "Đã hủy",
+  "delivered": "Đã giao hàng",
+  "orderID": "Mã đơn hàng",
+  "customer": "Khách hàng",
+  "payment": "Thanh toán",
+  "status": "Trạng thái",
+  "totalAmount": "Tổng số tiền",
+  "actions": "Hành động",
+  "details": "Chi tiết"
+}

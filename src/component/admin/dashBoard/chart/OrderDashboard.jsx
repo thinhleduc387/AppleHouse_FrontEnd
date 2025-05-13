@@ -21,14 +21,15 @@ import {
 } from "lucide-react";
 import { getOrderStatistic } from "../../../../config/api";
 import { formatVND } from "../../../../utils";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const OrderDashboard = () => {
+  const { t } = useTranslation("dashBoard"); // Use the "dashBoard" namespace
   const [timeRange, setTimeRange] = useState("month");
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulated data - replace with actual API call
     const fetchData = async () => {
       try {
         setIsLoading(true);
@@ -57,16 +58,17 @@ const OrderDashboard = () => {
     <div className="p-6 bg-gray-50 min-h-screen shadow-lg mt-10">
       {/* Header */}
       <div className="mb-8">
+        <h1 className="text-2xl font-bold">{t("dailyOrdersTrend")}</h1>
         <div className="mt-4">
           <select
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
             className="px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="today">Today</option>
-            <option value="week">This Week</option>
-            <option value="month">This Month</option>
-            <option value="year">This Year</option>
+            <option value="today">{t("timeRange.today")}</option>
+            <option value="week">{t("timeRange.week")}</option>
+            <option value="month">{t("timeRange.month")}</option>
+            <option value="year">{t("timeRange.year")}</option>
           </select>
         </div>
       </div>
@@ -78,7 +80,7 @@ const OrderDashboard = () => {
             <Package className="h-6 w-6 text-blue-600" />
           </div>
           <div>
-            <p className="text-sm text-gray-600">Total Orders</p>
+            <p className="text-sm text-gray-600">{t("totalOrders")}</p>
             <p className="text-xl font-bold">{data.summary.totalOrders}</p>
           </div>
         </div>
@@ -88,7 +90,7 @@ const OrderDashboard = () => {
             <DollarSign className="h-6 w-6 text-green-600" />
           </div>
           <div>
-            <p className="text-sm text-gray-600">Total Revenue</p>
+            <p className="text-sm text-gray-600">{t("totalRevenue")}</p>
             <p className="text-xl font-bold">
               {formatVND(data.summary.totalRevenue)}
             </p>
@@ -100,7 +102,7 @@ const OrderDashboard = () => {
             <TrendingUp className="h-6 w-6 text-purple-600" />
           </div>
           <div>
-            <p className="text-sm text-gray-600">Avg Order Value</p>
+            <p className="text-sm text-gray-600">{t("avgOrderValue")}</p>
             <p className="text-xl font-bold">
               {formatVND(data.summary.averageOrderValue)}
             </p>
@@ -112,7 +114,7 @@ const OrderDashboard = () => {
             <Truck className="h-6 w-6 text-yellow-600" />
           </div>
           <div>
-            <p className="text-sm text-gray-600">Shipping Fees</p>
+            <p className="text-sm text-gray-600">{t("shippingFees")}</p>
             <p className="text-xl font-bold">
               {formatVND(data.summary.totalShipping)}
             </p>
@@ -124,7 +126,7 @@ const OrderDashboard = () => {
             <Tag className="h-6 w-6 text-red-600" />
           </div>
           <div>
-            <p className="text-sm text-gray-600">Total Discount</p>
+            <p className="text-sm text-gray-600">{t("totalDiscount")}</p>
             <p className="text-xl font-bold">
               {formatVND(data.summary.totalDiscount)}
             </p>
@@ -136,7 +138,9 @@ const OrderDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Daily Orders Trend */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Daily Orders Trend</h2>
+          <h2 className="text-lg font-semibold mb-4">
+            {t("dailyOrdersTrend")}
+          </h2>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={data.dailyOrders}>
@@ -151,14 +155,14 @@ const OrderDashboard = () => {
                   type="monotone"
                   dataKey="orders"
                   stroke="#2563eb"
-                  name="Orders"
+                  name={t("orders")}
                 />
                 <Line
                   yAxisId="right"
                   type="monotone"
                   dataKey="revenue"
                   stroke="#16a34a"
-                  name="Revenue"
+                  name={t("revenue")}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -167,7 +171,7 @@ const OrderDashboard = () => {
 
         {/* Orders by Status */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Orders by Status</h2>
+          <h2 className="text-lg font-semibold mb-4">{t("ordersByStatus")}</h2>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data.ordersByStatus}>
@@ -176,7 +180,7 @@ const OrderDashboard = () => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="count" fill="#3b82f6" name="Orders" />
+                <Bar dataKey="count" fill="#3b82f6" name={t("orders")} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -187,7 +191,7 @@ const OrderDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Payment Methods */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Payment Methods</h2>
+          <h2 className="text-lg font-semibold mb-4">{t("paymentMethods")}</h2>
           <div className="space-y-4">
             {data.ordersByPaymentMethod.map((method) => (
               <div
@@ -199,7 +203,9 @@ const OrderDashboard = () => {
                   <span className="font-medium">{method._id}</span>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-600">{method.count} orders</p>
+                  <p className="text-sm text-gray-600">
+                    {method.count} {t("orders")}
+                  </p>
                   <p className="font-medium">{formatVND(method.revenue)}</p>
                 </div>
               </div>
@@ -209,7 +215,7 @@ const OrderDashboard = () => {
 
         {/* Top Products */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Top Products</h2>
+          <h2 className="text-lg font-semibold mb-4">{t("topProducts")}</h2>
           <div className="space-y-4">
             {data.topProducts.map((product, index) => (
               <div
@@ -226,7 +232,7 @@ const OrderDashboard = () => {
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-600">
-                    {product.totalQuantity} sold
+                    {product.totalQuantity} {t("sold")}
                   </p>
                   <p className="font-medium">
                     {formatVND(product.totalRevenue)}

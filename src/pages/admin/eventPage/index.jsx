@@ -6,14 +6,19 @@ import { getListFlashSale, toggleFlashSale } from "../../../config/api";
 import { FaEdit } from "react-icons/fa"; // Import FaEdit icon
 import Pagination from "../../../component/Pagiantion";
 import { FcStatistics } from "react-icons/fc";
+import { useTranslation } from "react-i18next"; // Import useTranslation từ react-i18next
+
 const ITEMS_PER_PAGE = 5;
+
 const EventPage = () => {
-  const [activeTab, setActiveTab] = useState("Tất cả");
+  const { t } = useTranslation("flashsale"); // Sử dụng hook useTranslation để lấy hàm t
+  const [activeTab, setActiveTab] = useState(t("all")); // Khởi tạo với giá trị đã dịch
   const [dateRange, setDateRange] = useState([null, null]);
   const [flashSales, setFlashSales] = useState([]);
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const location = useLocation();
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -22,7 +27,6 @@ const EventPage = () => {
   const formatDateRange = (dateRange) => {
     if (!dateRange[0] || !dateRange[1]) return [null, null];
 
-    // Với ngày bắt đầu
     const startDate = new Date(dateRange[0]);
     const utcStartDate = new Date(
       Date.UTC(
@@ -36,7 +40,6 @@ const EventPage = () => {
       )
     );
 
-    // Với ngày kết thúc
     const endDate = new Date(dateRange[1]);
     const utcEndDate = new Date(
       Date.UTC(
@@ -73,7 +76,7 @@ const EventPage = () => {
 
   const formatTimeRange = (startTime, endTime) => {
     const formatTime = (time) => {
-      const date = new Date(time); // Sử dụng đúng giá trị gốc
+      const date = new Date(time);
       const day = String(date.getUTCDate()).padStart(2, "0");
       const month = String(date.getUTCMonth() + 1).padStart(2, "0");
       const year = date.getUTCFullYear();
@@ -95,9 +98,9 @@ const EventPage = () => {
 
       const response = await getListFlashSale({
         eventType: "Custom",
-        status: activeTab === "Tất cả" ? null : activeTab,
+        status: activeTab === t("all") ? null : activeTab, // Sử dụng giá trị đã dịch
         page: currentPage,
-        dateRange: formattedDateRange, // Đã là ISO string rồi, không cần map lại
+        dateRange: formattedDateRange,
         limit: ITEMS_PER_PAGE,
       });
 
@@ -111,55 +114,51 @@ const EventPage = () => {
   const handleEditFlashSale = (id) => {
     navigate(`/admin/event/edit/${id}`);
   };
+
   const handleStaticPage = (id) => {
     navigate(`/admin/event/statistic/${id}`);
   };
 
   useEffect(() => {
     handleGetAllFlashSale();
-  }, []);
-
-  const location = useLocation();
-
-  useEffect(() => {
-    handleGetAllFlashSale();
-  }, [location, activeTab, currentPage, dateRange]);
+  }, [location, activeTab, currentPage, dateRange]); // Gộp useEffect lại
 
   return (
     <div className="min-h-screen bg-gray-100 p-5">
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-bold">Danh sách chương trình</h2>
+          <h2 className="text-lg font-bold">{t("programList")}</h2>{" "}
+          {/* Dịch "Danh sách chương trình" */}
           <Link
             to="/admin/event/create"
             className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
           >
-            + Tạo
+            + {t("create")} {/* Dịch "Tạo" */}
           </Link>
         </div>
 
         {/* Tabs */}
         <div className="flex space-x-4 border-b border-gray-200 mb-4">
-          {["Tất cả", "Đang diễn ra", "Sắp diễn ra", "Đã kết thúc"].map(
-            (tab) => (
-              <button
-                key={tab}
-                onClick={() => handleTabClick(tab)}
-                className={`px-4 py-2 ${
-                  activeTab === tab
-                    ? "border-b-2 border-blue-500 text-blue-500 font-bold"
-                    : "text-gray-500 hover:text-blue-500"
-                }`}
-              >
-                {tab}
-              </button>
-            )
-          )}
+          {[t("all"), t("ongoing"), t("upcoming"), t("ended")].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => handleTabClick(tab)}
+              className={`px-4 py-2 ${
+                activeTab === tab
+                  ? "border-b-2 border-blue-500 text-blue-500 font-bold"
+                  : "text-gray-500 hover:text-blue-500"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
 
         {/* Date Picker Section */}
         <div className="flex items-center mb-4 space-x-4">
-          <label className="text-lg font-semibold">Khung giờ:</label>
+          <label className="text-lg font-semibold">
+            {t("timeSlot")}: {/* Dịch "Khung giờ" */}
+          </label>
           <Flatpickr
             className="border-2 border-gray-300 rounded px-3 py-2 w-56"
             options={{
@@ -168,10 +167,10 @@ const EventPage = () => {
             }}
             value={dateRange}
             onChange={(selectedDates) => setDateRange(selectedDates)}
-            placeholder="Chọn khung giờ"
+            placeholder={t("selectTimeSlot")}
           />
           <button className="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">
-            Lọc
+            {t("filter")} {/* Dịch "Lọc" */}
           </button>
         </div>
 
@@ -179,23 +178,33 @@ const EventPage = () => {
         <table className="min-w-full border border-gray-300 rounded-lg">
           <thead>
             <tr className="bg-gray-100">
-              <th className="text-left px-4 py-2 border-b">Khung giờ</th>
-              <th className="text-left px-4 py-2 border-b">Sản phẩm</th>
-              <th className="text-left px-4 py-2 border-b">Trạng thái</th>
-              <th className="text-left px-4 py-2 border-b">Bật/Tắt</th>
-              <th className="text-left px-4 py-2 border-b">Hành động</th>
+              <th className="text-left px-4 py-2 border-b">
+                {t("timeSlot")} {/* Dịch "Khung giờ" */}
+              </th>
+              <th className="text-left px-4 py-2 border-b">
+                {t("product")} {/* Dịch "Sản phẩm" */}
+              </th>
+              <th className="text-left px-4 py-2 border-b">
+                {t("status")} {/* Dịch "Trạng thái" */}
+              </th>
+              <th className="text-left px-4 py-2 border-b">
+                {t("toggle")} {/* Dịch "Bật/Tắt" */}
+              </th>
+              <th className="text-left px-4 py-2 border-b">
+                {t("action")} {/* Dịch "Hành động" */}
+              </th>
             </tr>
           </thead>
           <tbody>
             {flashSales.length === 0 ? (
               <tr>
                 <td colSpan="5" className="text-center py-4 text-gray-500">
-                  Chưa có dữ liệu
+                  {t("noData")} {/* Dịch "Chưa có dữ liệu" */}
                 </td>
               </tr>
             ) : (
               flashSales.map((sale) => {
-                const isEnded = sale.status === "Đã kết thúc";
+                const isEnded = sale.status === "Đã kết thúc"; // So sánh với giá trị đã dịch
                 return (
                   <tr
                     key={sale._id}
@@ -235,14 +244,13 @@ const EventPage = () => {
                     <td className="px-4 py-2 border-b flex gap-2">
                       <button
                         className={`text-blue-500 opacity-100 ${
-                          isEnded ? " cursor-not-allowed" : " cursor-pointer"
+                          isEnded ? "cursor-not-allowed" : "cursor-pointer"
                         }`}
                         disabled={isEnded}
                         onClick={() => handleEditFlashSale(sale._id)}
                       >
                         <FaEdit size={18} />
                       </button>
-                      {/* Statistics icon remains clickable */}
                       <button
                         className="text-blue-500 hover:text-blue-700 cursor-pointer"
                         onClick={() => handleStaticPage(sale._id)}

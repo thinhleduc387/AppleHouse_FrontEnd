@@ -1,0 +1,32 @@
+{
+  "totalOrders": "Tổng số đơn hàng",
+  "totalRevenue": "Tổng doanh thu",
+  "avgOrderValue": "Giá trị đơn hàng trung bình",
+  "shippingFees": "Phí vận chuyển",
+  "totalDiscount": "Tổng giảm giá",
+  "dailyOrdersTrend": "Xu hướng đơn hàng hàng ngày",
+  "ordersByStatus": "Đơn hàng theo trạng thái",
+  "orders": "Đơn hàng",
+  "revenue": "Doanh thu",
+  "paymentMethods": "Phương thức thanh toán",
+  "topProducts": "Sản phẩm hàng đầu",
+  "totalUsers": "Tổng số người dùng",
+  "activeUsers": "Người dùng đang hoạt động",
+  "blockedUsers": "Người dùng bị chặn",
+  "googleUsers": "Người dùng Google",
+  "monthlyRegistrations": "Đăng ký hàng tháng",
+  "genderDistribution": "Phân bố giới tính",
+  "topLoyalUsers": "Người dùng trung thành hàng đầu",
+  "usersByCity": "Người dùng theo thành phố",
+  "user": "Người dùng",
+  "points": "Điểm",
+  "email": "Email",
+  "users": "Người dùng",
+  "newUsers": "Người dùng mới",
+  "timeRange": {
+    "today": "Hôm nay",
+    "month": "Tháng",
+    "week": "Tuần",
+    "year": "Năm"
+  }
+}

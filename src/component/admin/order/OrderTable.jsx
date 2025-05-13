@@ -3,9 +3,12 @@ import { formatVND } from "../../../utils/format";
 import { changeOrderStatus } from "../../../config/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const OrderTable = ({ listOrder, setListOrder }) => {
-  const navigate = useNavigate(); // Hook for navigation
+  console.log("🚀 ~ OrderTable ~ listOrder:", listOrder);
+  const { t } = useTranslation("order");
+  const navigate = useNavigate();
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -25,11 +28,11 @@ const OrderTable = ({ listOrder, setListOrder }) => {
   };
 
   const statusOptions = [
-    { value: "confirmed", label: "Confirmed", color: "bg-green-500" },
-    { value: "processing", label: "Processing", color: "bg-yellow-500" },
-    { value: "shipped", label: "Shipped", color: "bg-blue-500" },
-    { value: "cancelled", label: "Cancelled", color: "bg-red-500" },
-    { value: "delivered", label: "Delivered", color: "bg-purple-500" },
+    { value: "confirmed", label: t("confirmed"), color: "bg-green-500" },
+    { value: "processing", label: t("processing"), color: "bg-yellow-500" },
+    { value: "shipped", label: t("shipping"), color: "bg-blue-500" },
+    { value: "cancelled", label: t("canceled"), color: "bg-red-500" },
+    { value: "delivered", label: t("delivered"), color: "bg-purple-500" },
   ];
 
   const handleStatusChange = async (orderId, newStatus) => {
@@ -39,7 +42,6 @@ const OrderTable = ({ listOrder, setListOrder }) => {
       if (response.status === 200) {
         toast.success("Status updated successfully!");
 
-        // Update order status in listOrder
         setListOrder((prevOrders) =>
           prevOrders.map((order) =>
             order._id === orderId
@@ -55,7 +57,7 @@ const OrderTable = ({ listOrder, setListOrder }) => {
   };
 
   const handleViewDetails = (orderId) => {
-    navigate(`/admin/orders/detail/${orderId}`); // Navigate to detail page
+    navigate(`/admin/orders/detail/${orderId}`);
   };
 
   return (
@@ -63,12 +65,12 @@ const OrderTable = ({ listOrder, setListOrder }) => {
       <table className="w-full bg-white table-auto shadow-md rounded-lg">
         <thead className="rounded-t-lg">
           <tr className="bg-white">
-            <th className="p-5 text-left rounded-tl-lg">Order ID</th>
-            <th className="p-5 text-left">Người đặt</th>
-            <th className="p-5 text-left">Payment</th>
-            <th className="p-5 text-left">Status</th>
-            <th className="p-5 text-left">Total Amount</th>
-            <th className="p-5 text-center rounded-tr-lg">Actions</th>
+            <th className="p-5 text-left rounded-tl-lg">{t("orderID")}</th>
+            <th className="p-5 text-left">{t("customer")}</th>
+            <th className="p-5 text-left">{t("payment")}</th>
+            <th className="p-5 text-left">{t("status")}</th>
+            <th className="p-5 text-left">{t("totalAmount")}</th>
+            <th className="p-5 text-center rounded-tr-lg">{t("actions")}</th>
           </tr>
         </thead>
         <tbody>
@@ -108,8 +110,8 @@ const OrderTable = ({ listOrder, setListOrder }) => {
                       key={option.value}
                       value={option.value}
                       style={{
-                        backgroundColor: "white", // Dropdown background color
-                        color: "black", // Dropdown text color
+                        backgroundColor: "white",
+                        color: "black",
                       }}
                     >
                       {option.label}
@@ -122,10 +124,10 @@ const OrderTable = ({ listOrder, setListOrder }) => {
               </td>
               <td className="p-5 border-b text-center">
                 <div
-                  onClick={() => handleViewDetails(order._id)} // Handle click to navigate
+                  onClick={() => handleViewDetails(order._id)}
                   className="flex border cursor-pointer border-mainColor text-mainColor hover:bg-blue-100 rounded-full justify-center items-center gap-x-2 px-3 py-2"
                 >
-                  Chi tiết
+                  {t("details")}
                 </div>
               </td>
             </tr>

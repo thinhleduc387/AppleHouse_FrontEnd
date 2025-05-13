@@ -9,6 +9,8 @@ const RecommendSectionForProfile = ({ title = "Có thể bạn sẽ thích" }) =
   const [visibleProducts, setVisibleProducts] = useState(4);
   const [listProduct, setListProduct] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
 
   // Fetch products
   useEffect(() => {
@@ -79,8 +81,30 @@ const RecommendSectionForProfile = ({ title = "Có thể bạn sẽ thích" }) =
     }
   };
 
+  // Check scroll position for enabling/disabling navigation buttons
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  };
+
+  useEffect(() => {
+    const scrollElement = scrollRef.current;
+    if (scrollElement) {
+      scrollElement.addEventListener("scroll", checkScroll);
+      checkScroll();
+      return () => scrollElement.removeEventListener("scroll", checkScroll);
+    }
+  }, [listProduct]);
+
   if (isLoading) {
-    return <div className="p-6 bg-white rounded-lg">Loading...</div>;
+    return (
+      <div className="p-6 bg-white dark:bg-gray-800 rounded-lg text-gray-800 dark:text-gray-100">
+        Loading...
+      </div>
+    );
   }
 
   if (listProduct.length === 0) {
@@ -88,13 +112,19 @@ const RecommendSectionForProfile = ({ title = "Có thể bạn sẽ thích" }) =
   }
 
   return (
-    <div className="p-6 relative shadow-2xl bg-white rounded-lg z-1">
-      <h2 className="text-2xl font-bold mb-6 text-black">{title}</h2>
+    <div className="p-6 relative shadow-2xl bg-white dark:bg-gray-800 rounded-lg z-1">
+      <h2 className="text-2xl font-bold mb-6 text-black dark:text-gray-100">
+        {title}
+      </h2>
 
       <button
         onClick={() => scroll(-1)}
-        className="absolute left-0 top-1/2 -translate-y-1/2 p-2 text-2xl 
-                   hover:bg-gray-100 rounded-full transition-colors"
+        disabled={!canScrollLeft}
+        className={`absolute left-0 top-1/2 -translate-y-1/2 p-2 text-2xl rounded-full transition-all duration-200 ${
+          canScrollLeft
+            ? "opacity-100 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+            : "opacity-50 text-gray-400 dark:text-gray-500 cursor-not-allowed"
+        }`}
         aria-label="Scroll left"
       >
         <FaChevronLeft />
@@ -117,8 +147,12 @@ const RecommendSectionForProfile = ({ title = "Có thể bạn sẽ thích" }) =
 
       <button
         onClick={() => scroll(1)}
-        className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-2xl 
-                   hover:bg-gray-100 rounded-full transition-colors"
+        disabled={!canScrollRight}
+        className={`absolute right-0 top-1/2 -translate-y-1/2 p-2 text-2xl rounded-full transition-all duration-200 ${
+          canScrollRight
+            ? "opacity-100 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+            : "opacity-50 text-gray-400 dark:text-gray-500 cursor-not-allowed"
+        }`}
         aria-label="Scroll right"
       >
         <FaChevronRight />

@@ -1,0 +1,15 @@
+{
+  "orderManagement": "Order Management",
+  "confirmed": "Confirmed",
+  "processing": "Processing",
+  "shipping": "Shipping",
+  "canceled": "Canceled",
+  "delivered": "Delivered",
+  "orderID": "Order ID",
+  "customer": "Customer",
+  "payment": "Payment",
+  "status": "Status",
+  "totalAmount": "Total Amount",
+  "actions": "Actions",
+  "details": "Details"
+}

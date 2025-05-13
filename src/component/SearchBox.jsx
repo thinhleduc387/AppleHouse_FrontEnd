@@ -3,12 +3,12 @@ import { FaSearch } from "react-icons/fa";
 import debounce from "lodash.debounce"; // Import debounce
 import { suggestionSearchProduct } from "../config/api";
 import { Link, useNavigate } from "react-router-dom";
-
+import { useTranslation } from "react-i18next";
 const Search = ({ className }) => {
   const [textSearch, setTextSearch] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
-
+  const { t } = useTranslation("header");
   const dropdownRef = useRef(null); // Sử dụng ref để theo dõi dropdown
   const inputRef = useRef(null); // Sử dụng ref để theo dõi input
 
@@ -86,7 +86,7 @@ const Search = ({ className }) => {
           type="text"
           value={textSearch}
           onChange={handleChange}
-          placeholder="Nhập vào tên thiết bị cần tìm"
+          placeholder={t("Enter the name of product you want to find")}
           onFocus={handleFocus}
           onKeyDown={handleKeyDown}
           className="w-full pl-10 px-4 py-2 border rounded-md focus:outline-none"

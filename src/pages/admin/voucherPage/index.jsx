@@ -4,10 +4,12 @@ import { formatVND } from "../../../utils/format";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import Pagination from "../../../component/Pagiantion";
+import { useTranslation } from "react-i18next"; // Import useTranslation từ react-i18next
 
 const ITEMS_PER_PAGE = 7;
 
 const VoucherPage = () => {
+  const { t } = useTranslation("voucher"); // Sử dụng hook useTranslation để lấy hàm t
   const [voucherList, setVoucherList] = useState([]);
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,11 +23,7 @@ const VoucherPage = () => {
 
   useEffect(() => {
     handleGetAllVoucher();
-  }, []);
-
-  useEffect(() => {
-    handleGetAllVoucher();
-  }, [currentPage]);
+  }, [currentPage]); // Gộp useEffect để chỉ chạy khi currentPage thay đổi
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -62,38 +60,41 @@ const VoucherPage = () => {
     <div className="flex flex-col w-full p-4 gap-8">
       {/* Phần Tạo Voucher */}
       <div className="bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-xl font-bold mb-4">Tạo Voucher</h1>
+        <h1 className="text-xl font-bold mb-4">{t("createVoucher")}</h1>{" "}
+        {/* Dịch "Tạo Voucher" */}
         <p className="text-gray-600 mb-6 text-sm md:text-base">
-          Tạo Mã giảm giá toàn shop hoặc Mã giảm giá sản phẩm ngay bây giờ để
-          thu hút người mua.
+          {t("createDiscountCode")}{" "}
+          {/* Dịch "Tạo Mã giảm giá toàn shop hoặc..." */}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="border rounded-lg p-4 shadow-md hover:shadow-lg transition">
             <h2 className="font-bold text-base md:text-lg mb-2">
-              Voucher sản phẩm
+              {t("productVoucher")} {/* Dịch "Voucher sản phẩm" */}
             </h2>
             <p className="text-gray-500 text-sm mb-4">
-              Voucher áp dụng cho tất cả sản phẩm trong Shop của bạn.
+              {t("shopWideVoucherDescription")}{" "}
+              {/* Dịch "Voucher áp dụng cho tất cả sản phẩm..." */}
             </p>
             <Link
               to="/admin/voucher/create/specific"
               className="bg-mainColor text-white px-4 py-2 rounded text-sm hover:bg-blue-700"
             >
-              Tạo
+              {t("create")} {/* Dịch "Tạo" */}
             </Link>
           </div>
           <div className="border rounded-lg p-4 shadow-md hover:shadow-lg transition">
             <h2 className="font-bold text-base md:text-lg mb-2">
-              Voucher toàn shop
+              {t("shopWideVoucher")} {/* Dịch "Voucher toàn shop" */}
             </h2>
             <p className="text-gray-500 text-sm mb-4">
-              Voucher chỉ áp dụng cho những sản phẩm nhất định mà Shop chọn.
+              {t("specificProductVoucherDescription")}{" "}
+              {/* Dịch "Voucher chỉ áp dụng cho..." */}
             </p>
             <Link
               to="/admin/voucher/create/all"
               className="bg-mainColor text-white px-4 py-2 rounded text-sm hover:bg-blue-700"
             >
-              Tạo
+              {t("create")} {/* Dịch "Tạo" */}
             </Link>
           </div>
         </div>
@@ -101,9 +102,9 @@ const VoucherPage = () => {
 
       {/* Phần Danh sách mã giảm giá */}
       <div className="bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-xl font-bold mb-4">Danh sách mã giảm giá</h1>
-
-        {/* Tabs */}
+        <h1 className="text-xl font-bold mb-4">
+          {t("discountCodeList")} {/* Dịch "Danh sách mã giảm giá" */}
+        </h1>
 
         {/* Bảng */}
         <div className="overflow-x-auto">
@@ -111,19 +112,33 @@ const VoucherPage = () => {
             <thead>
               <tr className="bg-gray-100 text-left text-gray-700 font-medium">
                 <th className="px-4 py-2 border-b sticky left-0 bg-gray-100 z-10 w-48">
-                  Tên Voucher | Mã voucher
+                  {t("voucherName")} | {t("voucherCode")}{" "}
+                  {/* Dịch "Tên Voucher | Mã voucher" */}
                 </th>
-                <th className="px-4 py-2 border-b w-32">Loại mã</th>
-                <th className="px-4 py-2 border-b w-48">Sản phẩm áp dụng</th>
-                <th className="px-4 py-2 border-b w-32">Giảm giá</th>
-                <th className="px-4 py-2 border-b w-40">Lượt sử dụng tối đa</th>
-                <th className="px-4 py-2 border-b w-32">Đã dùng</th>
-                <th className="px-4 py-2 border-b w-32">Hiển thị</th>
+                <th className="px-4 py-2 border-b w-32">
+                  {t("codeType")} {/* Dịch "Loại mã" */}
+                </th>
+                <th className="px-4 py-2 border-b w-48">
+                  {t("applicableProducts")} {/* Dịch "Sản phẩm áp dụng" */}
+                </th>
+                <th className="px-4 py-2 border-b w-32">
+                  {t("discount")} {/* Dịch "Giảm giá" */}
+                </th>
+                <th className="px-4 py-2 border-b w-40">
+                  {t("maxUsage")} {/* Dịch "Lượt sử dụng tối đa" */}
+                </th>
+                <th className="px-4 py-2 border-b w-32">
+                  {t("used")} {/* Dịch "Đã dùng" */}
+                </th>
+                <th className="px-4 py-2 border-b w-32">
+                  {t("display")} {/* Dịch "Hiển thị" */}
+                </th>
                 <th className="px-4 py-2 border-b w-56">
-                  Thời gian lưu mã giảm giá
+                  {t("discountCodeDuration")}{" "}
+                  {/* Dịch "Thời gian lưu mã giảm giá" */}
                 </th>
                 <th className="px-4 py-2 border-b sticky right-0 bg-gray-100 z-10 w-28 text-center">
-                  Thao tác
+                  {t("actions")} {/* Dịch "Thao tác" */}
                 </th>
               </tr>
             </thead>
@@ -149,13 +164,15 @@ const VoucherPage = () => {
                     </td>
                     <td className="px-4 py-2 border-b">
                       {voucher.discount_type === "fixed_amount"
-                        ? "Giảm giá cụ thể"
-                        : "Giảm giá theo phần trăm"}
+                        ? t("fixedDiscount") // Thêm key mới nếu cần
+                        : t("percentageDiscount")}{" "}
+                      {/* Dịch "Giảm giá theo phần trăm" */}
                     </td>
                     <td className="px-4 py-2 border-b">
                       {voucher.discount_applies_to === "specific"
-                        ? "Sản phẩm cụ thể"
-                        : "Tất cả sản phẩm"}
+                        ? t("specificProducts") // Thêm key mới nếu cần
+                        : t("allProducts")}{" "}
+                      {/* Dịch "Tất cả sản phẩm" */}
                     </td>
                     <td className="px-4 py-2 border-b">
                       {voucher.discount_type === "percentage"
@@ -170,8 +187,9 @@ const VoucherPage = () => {
                     </td>
                     <td className="px-4 py-2 border-b">
                       {voucher.discount_isPublic
-                        ? "Công khai"
-                        : "Không công khai"}
+                        ? t("public") // Thêm key mới nếu cần
+                        : t("notPublic")}{" "}
+                      {/* Dịch "Không công khai" */}
                     </td>
                     <td className="px-4 py-2 border-b">
                       {formatDateRange(
@@ -197,7 +215,8 @@ const VoucherPage = () => {
                     className="px-4 py-2 text-gray-500 text-center"
                     colSpan="9"
                   >
-                    Không có Voucher nào.
+                    {t("noVouchers")}{" "}
+                    {/* Thêm key mới cho "Không có Voucher nào" */}
                   </td>
                 </tr>
               )}

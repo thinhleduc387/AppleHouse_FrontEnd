@@ -53,10 +53,21 @@ import ChangePass from "./component/Profile/ChangePass";
 import StatictisPage from "./pages/admin/StatisticPromotions";
 import ReviewPage from "./pages/admin/reviewPage";
 import StorageVoucher from "./component/Profile/StorageVoucher";
+import { setTheme } from "./redux/slice/themeSlice";
+import OrderGuest from "./pages/user/orderGuest";
+import OrderGuestDetails from "./pages/user/oderGuestDetails";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
   const account = useSelector((state) => state.account);
+  const { theme } = useSelector((state) => state.theme);
+
+  useEffect(() => {
+    // Áp dụng theme từ localStorage khi tải ứng dụng
+    const savedTheme = localStorage.getItem("theme") || "light";
+    dispatch(setTheme(savedTheme));
+  }, [dispatch]);
+
   useEffect(() => {
     if (!account || !account.id) {
       dispatch(fetchAccount());
@@ -99,6 +110,11 @@ const RouterCustom = () => {
             element={<DetailProduct />}
           />
           <Route path={"/promotion/:id"} element={<PromotionPage />} />
+          <Route path="/order-guest" element={<OrderGuest />} />
+          <Route
+            path="/order-guest/tracking/:trackingNumber"
+            element={<OrderGuestDetails />}
+          />
         </Route>
 
         {/* Admin Routes */}
