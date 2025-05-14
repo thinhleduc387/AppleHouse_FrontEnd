@@ -63,13 +63,13 @@ const CartPage = () => {
   };
 
   return (
-    <div className="py-4 bg-[#f3f4f6] dark:bg-gray-900">
+    <div className="py-4 bg-[#f3f4f6] dark:bg-gray-900 ">
       {loading ? (
         <div className="flex items-center justify-center h-[50vh]">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 dark:border-blue-400 border-solid"></div>
         </div>
       ) : cartItems.length > 0 ? (
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-3 gap-4 mx-[100px]">
           <div className="md:col-span-2">
             <div className=" p-4 flex justify-between gap-4 bg-white rounded-md font-bold overflow-y-auto">
               {!isCheckout ? (

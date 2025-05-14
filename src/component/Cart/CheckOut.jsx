@@ -156,10 +156,7 @@ const CheckOut = ({
           <div className="flex items-center gap-3">
             <BsCoin size={24} color="#E5A624" />
             <span className="text-gray-600 dark:text-gray-300 text-sm font-medium">
-              {t("usePoints", {
-                points: accLoyalPoint,
-                amount: formatVND(accLoyalPoint),
-              })}
+              Sủ dụng {accLoyalPoint} điểm ~( {formatVND(accLoyalPoint)} )
             </span>
           </div>
           <div
