@@ -13,7 +13,7 @@ const MasterLayout = ({ ...props }) => {
         <Header />
       </div>
 
-      <main className="flex-grow w-full mt-[90px]">
+      <main className="flex-grow w-full mt-[90px] bg-[#f3f4f6]">
         <Outlet />
       </main>
       <ChatBox />

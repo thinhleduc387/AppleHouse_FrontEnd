@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Banner from "../../../component/Banner";
 
@@ -79,8 +79,19 @@ const HomePage = () => {
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 150]);
 
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const userId = queryParams.get("user");
+    const accessToken = queryParams.get("token");
+
+    if (userId && accessToken) {
+      localStorage.setItem("access_token", accessToken);
+      localStorage.setItem("user_id", userId);
+    }
+  }, []);
+
   return (
-    <div>
+    <div className="bg-white">
       {/* Banner với parallax */}
       <motion.div style={{ y }} className="relative">
         <Banner />

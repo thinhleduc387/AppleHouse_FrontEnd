@@ -4,7 +4,7 @@ import Sidebar from "../../../component/Profile/SideBar";
 
 const ProfilePage = () => {
   return (
-    <div className="bg-[#f3f4f6] dark:bg-gray-900">
+    <div className="bg-[#f3f4f6] dark:bg-gray-900 mx-[100px]">
       <div className="block md:hidden">
         <Sidebar />
       </div>
