@@ -2,7 +2,6 @@ import { FaMoneyBillWaveAlt, FaCreditCard } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { setOrderMethodPayment } from "../../redux/slices/checkoutSlice";
 import { useState } from "react";
-import { FaMoneyBillWaveAlt } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
 const PaymentMethod = () => {

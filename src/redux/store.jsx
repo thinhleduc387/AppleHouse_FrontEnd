@@ -6,12 +6,7 @@ import flashSaleReducer from "./slices/flashSaleSlice";
 import rbacReducer from "./slices/rbacSlice";
 import chatBotReducer from "./slices/chatBotSlice";
 import checkoutReducer from "./slices/checkoutSlice";
-import accountReducer from "./slice/accountSlice";
-import productReducer from "./slice/productSlice";
-import cartReducer from "./slice/cartSlice";
-import flashSaleReducer from "./slice/flashSaleSlice";
-import rbacReducer from "./slice/rbacSlice";
-import themeReducer from "./slice/themeSlice";
+import themeReducer from "./slices/themeSlice";
 
 const store = configureStore({
   reducer: {

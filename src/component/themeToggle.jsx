@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { toggleTheme } from "../redux/slice/themeSlice";
+import { toggleTheme } from "../redux/slices/themeSlice";
 
 const ThemeToggle = () => {
   const { theme } = useSelector((state) => state.theme);

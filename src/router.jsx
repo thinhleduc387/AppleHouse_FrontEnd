@@ -53,7 +53,7 @@ import ChangePass from "./component/Profile/ChangePass";
 import StatictisPage from "./pages/admin/StatisticPromotions";
 import ReviewPage from "./pages/admin/reviewPage";
 import StorageVoucher from "./component/Profile/StorageVoucher";
-import { setTheme } from "./redux/slice/themeSlice";
+import { setTheme } from "./redux/slices/themeSlice";
 import OrderGuest from "./pages/user/orderGuest";
 import OrderGuestDetails from "./pages/user/oderGuestDetails";
 

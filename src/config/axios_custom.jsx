@@ -71,44 +71,44 @@ instance.interceptors.response.use(
         window.location.href = "/access-denied";
         break;
 
-      case 401:
-        try {
-          if (
-            !originalRequest._retry &&
-            originalRequest.url !== "/auth/sign-in" &&
-            !originalRequest.headers[NO_RETRY_HEADER]
-          ) {
-            originalRequest._retry = true;
+      // case 401:
+      //   try {
+      //     if (
+      //       !originalRequest._retry &&
+      //       originalRequest.url !== "/auth/sign-in" &&
+      //       !originalRequest.headers[NO_RETRY_HEADER]
+      //     ) {
+      //       originalRequest._retry = true;
 
-            // Gọi refresh token bằng instance riêng không có interceptor
-            const response = await refreshTokenInstance.get(
-              "/auth/handleRefreshToken",
-              {
-                headers: {
-                  refreshToken: getCookie("refresh_token"),
-                },
-              }
-            );
+      //       // Gọi refresh token bằng instance riêng không có interceptor
+      //       const response = await refreshTokenInstance.get(
+      //         "/auth/handleRefreshToken",
+      //         {
+      //           headers: {
+      //             refreshToken: getCookie("refresh_token"),
+      //           },
+      //         }
+      //       );
 
-            const newToken = response?.data?.metadata?.accessToken;
-            const userId = response?.data?.metadata?.user?._id;
+      //       const newToken = response?.data?.metadata?.accessToken;
+      //       const userId = response?.data?.metadata?.user?._id;
 
-            if (newToken) {
-              // Cập nhật localStorage
-              localStorage.setItem("access_token", newToken);
-              localStorage.setItem("user_id", userId);
+      //       if (newToken) {
+      //         // Cập nhật localStorage
+      //         localStorage.setItem("access_token", newToken);
+      //         localStorage.setItem("user_id", userId);
 
-              // Cập nhật header cho request cũ và gửi lại
-              originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
-              return instance.request(originalRequest);
-            }
-          }
-        } catch (e) {
-          console.log("Refresh Token Error:", e);
-          // nếu refresh fail → logout hoặc redirect login
-          window.location.href = "/sign-in";
-        }
-        break;
+      //         // Cập nhật header cho request cũ và gửi lại
+      //         originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+      //         return instance.request(originalRequest);
+      //       }
+      //     }
+      //   } catch (e) {
+      //     console.log("Refresh Token Error:", e);
+      //     // nếu refresh fail → logout hoặc redirect login
+      //     window.location.href = "/sign-in";
+      //   }
+      //   break;
 
       case 404:
         // có thể xử lý 404 ở đây
