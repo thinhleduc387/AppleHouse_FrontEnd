@@ -8,7 +8,7 @@ import LanguageSwitcher from "../../component/LanguageSwitcher";
 
 const MasterLayout = ({ ...props }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <div className="w-full fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-800 shadow-md">
         <Header />
       </div>

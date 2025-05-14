@@ -16,19 +16,6 @@ import { toast } from "react-toastify";
 import ViewDetailsModal from "../../../component/admin/review/ViewDetailsModal";
 import Pagination from "../../../component/Pagiantion";
 
-// Placeholder for fetching product details (replace with actual API)
-const getProductById = async (productId) => {
-  // Simulated API call - replace with real implementation
-  return {
-    metadata: {
-      _id: productId,
-      name: "Sample Product",
-      image: "https://via.placeholder.com/150",
-      description: "This is a sample product description.",
-    },
-  };
-};
-
 const ITEMS_PER_PAGE = 7;
 
 const ReviewPage = () => {
@@ -50,7 +37,6 @@ const ReviewPage = () => {
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const [isLoadingReply, setIsLoadingReply] = useState(false);
   const [statisticReview, setStatisticReview] = useState();
-  console.log("🚀 ~ ReviewPage ~ statisticReview:", statisticReview);
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -74,14 +60,12 @@ const ReviewPage = () => {
 
   const openViewDetailsPopup = (review, productData) => {
     setSelectedReview(review);
-    setProductDetails(productData);
     setIsViewDetailsOpen(true);
   };
 
   const closeViewDetailsPopup = () => {
     setIsViewDetailsOpen(false);
     setSelectedReview(null);
-    setProductDetails(null);
   };
 
   const openReplyAllPopup = () => {

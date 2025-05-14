@@ -56,7 +56,7 @@ const Banner = () => {
   };
 
   return (
-    <div className="relative w-full max-w-screen-2xl mx-auto mb-8">
+    <div className="relative w-full mb-2">
       <div className="relative h-48 sm:h-64 md:h-80 lg:h-96 overflow-hidden rounded-lg">
         {promotions.map((promotion, index) => (
           <div

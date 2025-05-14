@@ -12,7 +12,7 @@ const AnimatedSection = ({ children, backgroundImage, className }) => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       viewport={{ once: true, amount: 0.3 }}
-      className={`relative min-h-screen bg-cover bg-center ${className}`}
+      className={`relative min-h-[70vh] bg-cover bg-center mb-2 border-transparent border-2 ${className}`}
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
       <div className="max-w-md mx-auto relative z-10 text-black pt-4 top-0">
@@ -86,6 +86,26 @@ const HomePage = () => {
         <Banner />
       </motion.div>
 
+      <AnimatedSection
+        backgroundImage="https://www.apple.com/v/home/ce/images/heroes/apple-watch-pride/hero_apple_watch_pride__ghqvc4dlapaq_medium_2x.jpg"
+        className="bg-gray-100 text-center py-8 px-4"
+      >
+        <h2 className="font-sans text-3xl font-black mb-1">Apple Watch</h2>
+        <p className="text-xl mb-4">
+          Thể hiện bản sắc của bạn với <br />
+          Dây Đeo Thể Thao Pride Edition mới.{" "}
+        </p>
+        <div className="flex justify-center gap-3 mb-6">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="bg-blue-600 text-white text-base font-semibold rounded-full px-6 py-2 hover:bg-blue-700 transition"
+          >
+            Tìm hiểu thêm
+          </motion.button>
+        </div>
+      </AnimatedSection>
+
       {/* Apple Watch Section */}
       <AnimatedSection
         backgroundImage="https://www.apple.com/vn/home/images/heroes/iphone-family/hero_iphone_family__fuz5j2v5xx6y_medium_2x.jpg"
@@ -139,25 +159,6 @@ const HomePage = () => {
       </AnimatedSection>
 
       {/* iPhone Section */}
-      <AnimatedSection
-        backgroundImage="https://www.apple.com/v/home/ce/images/heroes/apple-watch-pride/hero_apple_watch_pride__ghqvc4dlapaq_medium_2x.jpg"
-        className="bg-gray-100 text-center py-8 px-4"
-      >
-        <h2 className="font-sans text-3xl font-black mb-1">Apple Watch</h2>
-        <p className="text-xl mb-4">
-          Thể hiện bản sắc của bạn với <br />
-          Dây Đeo Thể Thao Pride Edition mới.{" "}
-        </p>
-        <div className="flex justify-center gap-3 mb-6">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            className="bg-blue-600 text-white text-base font-semibold rounded-full px-6 py-2 hover:bg-blue-700 transition"
-          >
-            Tìm hiểu thêm
-          </motion.button>
-        </div>
-      </AnimatedSection>
 
       {/* Grid Section với hiệu ứng stagger và cạnh chéo, nằm cùng hàng */}
       <motion.section
