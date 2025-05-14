@@ -10,8 +10,6 @@ import {
 import { getCategoryById } from "../../../config/api";
 
 const AddAttributesInfo = ({ category, productData, onUpdateAttributes }) => {
-  console.log("🚀 ~ AddAttributesInfo ~ productData:", productData)
-  console.log("🚀 ~ AddAttributesInfo ~ category:", category);
   const [attributes, setAttributes] = useState([]); // Danh sách bộ attributes
   const [expandedGroups, setExpandedGroups] = useState([]); // Nhóm đang mở
   const [defaultLength, setDefaultLength] = useState(0); // Số nhóm cố định
@@ -32,40 +30,42 @@ const AddAttributesInfo = ({ category, productData, onUpdateAttributes }) => {
   // Lấy thông tin category và cập nhật attributes dựa trên category_name
   const handleGetCategory = async () => {
     try {
-      const response = await getCategoryById(category[0]); // category là id
-      console.log(123);
-      if (response && response.status === 200 && response.metadata) {
-        const categoryName = response.metadata.category_name.toLowerCase(); // Chuyển thành chữ thường
+      if (category[0]) {
+        const response = await getCategoryById(category[0]);
 
-        let initialAttributes = [];
-        if (categoryName.includes("iphone")) {
-          initialAttributes = iphoneAttributes;
-        } else if (categoryName.includes("ipad")) {
-          initialAttributes = ipadAttributes;
-        } else if (categoryName.includes("mac")) {
-          initialAttributes = macbookAttributes;
-        } else if (categoryName.includes("watch")) {
-          initialAttributes = applewatchAttributes;
-        } else if (
-          categoryName.includes("tai nghe") ||
-          categoryName.includes("earphone")
-        ) {
-          initialAttributes = earphonesAttributes;
-        } else {
-          initialAttributes = []; // Không khớp với danh mục nào
+        if (response && response.status === 200 && response.metadata) {
+          const categoryName = response.metadata.category_name.toLowerCase(); // Chuyển thành chữ thường
+
+          let initialAttributes = [];
+          if (categoryName.includes("iphone")) {
+            initialAttributes = iphoneAttributes;
+          } else if (categoryName.includes("ipad")) {
+            initialAttributes = ipadAttributes;
+          } else if (categoryName.includes("mac")) {
+            initialAttributes = macbookAttributes;
+          } else if (categoryName.includes("watch")) {
+            initialAttributes = applewatchAttributes;
+          } else if (
+            categoryName.includes("tai nghe") ||
+            categoryName.includes("earphone")
+          ) {
+            initialAttributes = earphonesAttributes;
+          } else {
+            initialAttributes = []; // Không khớp với danh mục nào
+          }
+
+          // Chuyển đổi structure attributes
+          const updatedAttributes = initialAttributes.map((group) => ({
+            groupName: group.groupName,
+            attributes: group.propertiesName.map((property) => ({
+              displayName: property,
+              value: "",
+            })),
+          }));
+
+          setAttributesWithCallback(updatedAttributes);
+          setDefaultLength(updatedAttributes.length);
         }
-
-        // Chuyển đổi structure attributes
-        const updatedAttributes = initialAttributes.map((group) => ({
-          groupName: group.groupName,
-          attributes: group.propertiesName.map((property) => ({
-            displayName: property,
-            value: "",
-          })),
-        }));
-
-        setAttributesWithCallback(updatedAttributes);
-        setDefaultLength(updatedAttributes.length);
       }
     } catch (error) {
       console.error("🚀 ~ Lỗi khi lấy danh mục:", error);

@@ -138,6 +138,7 @@ const AddProductPage = () => {
 
   const handleEdit = async () => {
     try {
+      console.log("🚀 ~ handleEdit ~ productData:", productData);
       const response = await editNewProduct(productData, id);
       if (response && response.status === 200) {
         toast.success("Sản phẩm đã được cập nhật thành công!");

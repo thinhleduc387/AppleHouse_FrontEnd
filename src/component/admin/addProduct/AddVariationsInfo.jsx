@@ -25,7 +25,7 @@ const AddVariationsInfo = ({
 
   const setVariationsListAndUpdate = (newVariationsList) => {
     setVariationsList(newVariationsList);
-    onUpdateVariations(newVariationsList); // Cập nhật dữ liệu lên component cha
+    onUpdateVariations(newVariationsList);
     generateSkuList(newVariationsList);
   };
 
@@ -37,7 +37,7 @@ const AddVariationsInfo = ({
   const addNewVariation = () => {
     const newVariations = [
       ...variationsList,
-      { name: "", options: [""], images: [] }, // Thêm trường images rỗng
+      { name: "", options: [""], images: [""] },
     ];
     setVariationsListAndUpdate(newVariations);
   };
@@ -59,13 +59,10 @@ const AddVariationsInfo = ({
       if (i === variationIndex) {
         const updatedOptions = [...variation.options];
         updatedOptions[optionIndex] = value;
-
-        // Đảm bảo images khớp với options
         const updatedImages = [...(variation.images || [])];
         while (updatedImages.length < updatedOptions.length) {
-          updatedImages.push(""); // Thêm giá trị rỗng cho ảnh
+          updatedImages.push("");
         }
-
         return { ...variation, options: updatedOptions, images: updatedImages };
       }
       return variation;
@@ -77,11 +74,8 @@ const AddVariationsInfo = ({
     const updatedVariations = variationsList.map((variation, i) => {
       if (i === variationIndex) {
         const updatedOptions = [...variation.options, ""];
-
-        // Đảm bảo images khớp với options
         const updatedImages = [...(variation.images || [])];
-        updatedImages.push(""); // Thêm giá trị rỗng cho ảnh
-
+        updatedImages.push("");
         return { ...variation, options: updatedOptions, images: updatedImages };
       }
       return variation;
@@ -95,12 +89,9 @@ const AddVariationsInfo = ({
         const updatedOptions = variation.options.filter(
           (_, idx) => idx !== optionIndex
         );
-
-        // Loại bỏ hình ảnh tương ứng
         const updatedImages = variation.images.filter(
           (_, idx) => idx !== optionIndex
         );
-
         return { ...variation, options: updatedOptions, images: updatedImages };
       }
       return variation;
@@ -123,7 +114,6 @@ const AddVariationsInfo = ({
   };
 
   const generateSkuList = (variations = variationsList) => {
-    const skuList = [];
     const optionsCount = variations.map(
       (variation) => variation.options.length
     );
@@ -132,11 +122,12 @@ const AddVariationsInfo = ({
       1
     );
 
+    const newSkuList = [];
     for (let i = 0; i < totalCombinations; i++) {
       const skuIndex = [];
       let combinationIndex = i;
 
-      variations.forEach((variation) => {
+      variations.forEach((variation, varIndex) => {
         const optionIndex = combinationIndex % variation.options.length;
         skuIndex.push(optionIndex);
         combinationIndex = Math.floor(
@@ -144,14 +135,23 @@ const AddVariationsInfo = ({
         );
       });
 
-      skuList.push({
+      // Tìm SKU cũ tương ứng (nếu có) để giữ dữ liệu
+      const existingSku = sku_list.find((sku) => {
+        // So sánh sku_index với độ dài phù hợp
+        return (
+          sku.sku_index.length <= skuIndex.length &&
+          sku.sku_index.every((val, idx) => val === skuIndex[idx])
+        );
+      });
+
+      newSkuList.push({
         sku_index: skuIndex,
-        sku_price: "",
-        sku_stock: 0,
+        sku_price: existingSku ? existingSku.sku_price : "",
+        sku_stock: existingSku ? existingSku.sku_stock : 0,
       });
     }
 
-    setSkuListAndUpdate(skuList);
+    setSkuListAndUpdate(newSkuList);
   };
 
   const applyToAll = () => {
@@ -168,6 +168,7 @@ const AddVariationsInfo = ({
       generateSkuList();
     }
   }, [variationsList]);
+
   const handleImageUpload = async (
     variationIndex,
     optionIndex,
@@ -176,7 +177,6 @@ const AddVariationsInfo = ({
   ) => {
     try {
       let uploadedImageUrl;
-
       if (isUrl) {
         uploadedImageUrl = fileOrUrl;
       } else {
@@ -201,6 +201,7 @@ const AddVariationsInfo = ({
       toast.error("Failed to upload image. Please try again.");
     }
   };
+
   const handleRemoveImage = (variationIndex, optionIndex) => {
     const updatedVariations = variationsList.map((variation, i) => {
       if (i === variationIndex) {
@@ -235,7 +236,7 @@ const AddVariationsInfo = ({
                       onAddOption={addOption}
                       onRemoveOption={removeOption}
                       onImageUpload={handleImageUpload}
-                      onRemoveImage={handleRemoveImage} // Truyền hàm xử lý xóa ảnh
+                      onRemoveImage={handleRemoveImage}
                     />
                   ))}
                 </div>
@@ -296,7 +297,6 @@ const AddVariationsInfo = ({
         {variationsList.length === 0 && (
           <>
             <div className="mt-4 flex flex-col gap-y-6">
-              {/* Giá */}
               <div className="flex flex-col md:flex-row md:items-center gap-y-2 md:gap-y-0">
                 <label className="font-medium w-32">Giá</label>
                 <input
@@ -309,8 +309,6 @@ const AddVariationsInfo = ({
                   className="md:ml-4 w-full md:w-1/3 p-2 border rounded"
                 />
               </div>
-
-              {/* Kho hàng */}
               <div className="flex flex-col md:flex-row md:items-center gap-y-2 md:gap-y-0">
                 <label className="font-medium w-32">Kho hàng</label>
                 <input
