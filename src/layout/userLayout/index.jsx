@@ -3,8 +3,6 @@ import Header from "../../component/theme/header";
 import Footer from "../../component/theme/footer";
 import { Outlet } from "react-router-dom";
 import ChatBox from "../../component/Chat/ChatBox";
-import ThemeToggle from "../../component/themeToggle";
-import LanguageSwitcher from "../../component/LanguageSwitcher";
 
 const MasterLayout = ({ ...props }) => {
   return (
@@ -12,16 +10,11 @@ const MasterLayout = ({ ...props }) => {
       <div className="w-full fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-800 shadow-md">
         <Header />
       </div>
-
       <main className="flex-grow w-full mt-[90px] bg-[#f3f4f6]">
         <Outlet />
       </main>
       <ChatBox />
       <Footer />
-
-      {/* ThemeToggle và LanguageSwitcher sẽ tự định vị qua fixed trong component riêng */}
-      <ThemeToggle />
-      <LanguageSwitcher />
     </div>
   );
 };

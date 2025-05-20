@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { Bars3BottomRightIcon } from "@heroicons/react/24/solid";
 import SideBar from "./component/SideBar";
 import Search from "../../SearchBox";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiOutlineSetting } from "react-icons/ai";
 import { IoCartOutline } from "react-icons/io5";
-import { FaTruck } from "react-icons/fa"; // Thêm icon FaTruck
+import { FaTruck } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { PiBellSimpleRinging } from "react-icons/pi";
 import ProfileNavBar from "../../../component/ProfileNav";
@@ -15,6 +15,9 @@ import { fetchCart } from "../../../redux/slices/cartSlice";
 import socket, { registerUser } from "../../../socket";
 import { getListNotification } from "../../../config/api";
 import { useTranslation } from "react-i18next";
+import Settings from "../../Settings"; // Thêm import Settings
+import { motion, AnimatePresence } from "framer-motion"; // Thêm Framer Motion
+
 const Header = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -31,13 +34,13 @@ const Header = () => {
   const localCartItems = useSelector((state) => state.cart.localCartItems);
 
   const [notifications, setNotifications] = useState([]);
-  console.log("🚀 ~ Header ~ notifications:", notifications);
   const unReadNotifications = notifications.filter(
     (value) => value.isRead === false
   );
   const [isOpen, setIsOpen] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
   const [notifyIsOpen, setNotifyIsOpen] = useState(false);
+  const [settingsIsOpen, setSettingsIsOpen] = useState(false); // Thêm state cho Settings
   const headerRef = useRef(null);
 
   const handleResize = () => {
@@ -49,15 +52,14 @@ const Header = () => {
   const handleGetListNotification = async () => {
     try {
       const response = await getListNotification({ userId });
-
       if (response && response?.metadata && response?.metadata.length > 0) {
         setNotifications(response?.metadata);
       }
     } catch (error) {}
   };
+
   useEffect(() => {
     handleGetListNotification();
-
     if (headerRef.current) {
       setHeaderHeight(headerRef.current.offsetHeight);
     }
@@ -80,10 +82,10 @@ const Header = () => {
       );
     });
 
-    // Xử lý lỗi từ server
     socket.on("error", (error) => {
       console.error("Socket error:", error.message);
     });
+
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -111,7 +113,6 @@ const Header = () => {
             <a href="/" className="font-bold text-3xl dark:text-white">
               AppleHouse
             </a>
-
             <div className="hidden lg:block">
               <DropdownMenu headerHeight={headerHeight} />
             </div>
@@ -127,10 +128,8 @@ const Header = () => {
             <Search />
           </div>
 
-          {/* Desktop Search */}
           <Search className="hidden lg:flex lg:ml-10" />
 
-          {/* Desktop Navigation */}
           <ul className="hidden lg:flex pl-9 lg:pl-0 justify-end items-center space-x-8 ml-4">
             <li className="font-extrabold text-3xl my-7 lg:my-0 relative dark:text-white">
               <Link to="/order-guest" title="Tra cứu đơn hàng">
@@ -151,18 +150,14 @@ const Header = () => {
               <li
                 onMouseEnter={() => setNotifyIsOpen(true)}
                 onMouseLeave={() => setNotifyIsOpen(false)}
-                className=" my-7 lg:my-0 relative"
+                className="my-7 lg:my-0 relative"
               >
                 <PiBellSimpleRinging className="cursor-pointer font-extrabold text-3xl" />
                 {unReadNotifications?.length > 0 && (
-                  <>
-                    {" "}
-                    <span className="absolute top-0 right-0 text-[0.6rem] bg-red-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center">
-                      {unReadNotifications?.length}
-                    </span>
-                  </>
+                  <span className="absolute top-0 right-0 text-[0.6rem] bg-red-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center">
+                    {unReadNotifications?.length}
+                  </span>
                 )}
-
                 {notifyIsOpen && (
                   <NotificationMenu
                     notifications={notifications}
@@ -171,15 +166,32 @@ const Header = () => {
                 )}
               </li>
             )}
-            {/* Profile Section with Dropdown */}
+            <li
+              onMouseEnter={() => setSettingsIsOpen(true)}
+              onMouseLeave={() => setSettingsIsOpen(false)}
+              className="my-7 lg:my-0 relative"
+            >
+              <AiOutlineSetting className="cursor-pointer font-extrabold text-3xl dark:text-white" />
+              <AnimatePresence>
+                {settingsIsOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute mt-2"
+                  >
+                    <Settings />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </li>
             <li className="my-7 lg:my-0">
               <ProfileNavBar userAvatar={userAvatar} userName={userName} />
             </li>
           </ul>
         </div>
       </div>
-
-      {/* Mobile Sidebar */}
       {isOpen && <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />}
     </>
   );

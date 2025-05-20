@@ -12,7 +12,7 @@ function LanguageSwitcher() {
   return (
     <button
       onClick={changeLanguage}
-      className="w-12 h-12 rounded-full hover:scale-110 transition-transform overflow-hidden fixed bottom-28 left-6"
+      className="w-10 h-10 rounded-full hover:scale-110 transition-transform overflow-hidden bg-gray-100 dark:bg-gray-700"
       title={isVietnamese ? "Switch to English" : "Chuyển sang Tiếng Việt"}
       aria-label={isVietnamese ? "Switch to English" : "Switch to Vietnamese"}
     >
