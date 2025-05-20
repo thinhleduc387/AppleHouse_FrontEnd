@@ -15,7 +15,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { fetchCart, addToLocalCart } from "../../../redux/slices/cartSlice";
 import RatingStar from "../../../component/Product/Feedback/RatingStar";
-import RecommendSectionForDetailPage from "../../../component/RecommendSection/RecommendSectionDetailProruct";
 import { useTranslation } from "react-i18next";
 
 const DetailProduct = () => {
@@ -399,9 +398,7 @@ const DetailProduct = () => {
           </div>
         </div>
       )}
-      <div className="py-10 bg-[#f3f4f6] dark:bg-gray-900">
-        <RecommendSectionForDetailPage productId={productId} />
-      </div>
+      <div className="py-10 bg-[#f3f4f6] dark:bg-gray-900"></div>
     </>
   );
 };

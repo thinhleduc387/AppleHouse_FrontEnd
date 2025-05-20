@@ -169,9 +169,6 @@ const HomePage = () => {
         </div>
       </AnimatedSection>
 
-      {/* iPhone Section */}
-
-      {/* Grid Section với hiệu ứng stagger và cạnh chéo, nằm cùng hàng */}
       <motion.section
         initial="hidden"
         whileInView="visible"
@@ -216,6 +213,7 @@ const HomePage = () => {
           position="end"
         />
       </motion.section>
+      <div></div>
     </div>
   );
 };

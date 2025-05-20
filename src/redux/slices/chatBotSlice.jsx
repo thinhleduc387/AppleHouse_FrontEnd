@@ -12,6 +12,7 @@ const initialState = {
     },
   ],
   isLoading: false,
+  productIds: [],
 };
 
 const chatBotSlice = createSlice({
@@ -25,7 +26,6 @@ const chatBotSlice = createSlice({
       state.isExpanded = !state.isExpanded;
     },
     setHiddenChatBot: (state, action) => {
-      console.log("🚀 ~ action.payload:", action.payload);
       state.isHidden = action.payload;
     },
     closeChat: (state) => {
@@ -38,6 +38,9 @@ const chatBotSlice = createSlice({
     setLoading: (state, action) => {
       state.isLoading = action.payload;
     },
+    setProductIds: (state, action) => {
+      state.productIds = action.payload;
+    },
   },
 });
 
@@ -48,5 +51,7 @@ export const {
   addMessage,
   setLoading,
   setHiddenChatBot,
+  setProductIds,
 } = chatBotSlice.actions;
+
 export default chatBotSlice.reducer;

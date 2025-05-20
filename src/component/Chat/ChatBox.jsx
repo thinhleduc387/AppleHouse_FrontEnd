@@ -10,18 +10,18 @@ import {
   closeChat,
   addMessage,
   setLoading,
+  setProductIds,
 } from "../../redux/slices/chatBotSlice";
 
 const ChatBox = () => {
   const dispatch = useDispatch();
-  const { isChatOpen, isExpanded, messages, isLoading, isHidden } = useSelector(
-    (state) => state.chatBot
-  );
+  const { isChatOpen, isExpanded, messages, isLoading, isHidden, productIds } =
+    useSelector((state) => state.chatBot);
+  console.log("🚀 ~ ChatBox ~ productIds:", productIds);
 
   const callApiChat = async (message) => {
     try {
       const response = await getChatBotResponse(message);
-      console.log("🚀 ~ callApiChat ~ response?.metedata:", response?.metadata);
       return response?.metadata;
     } catch (error) {
       console.error("Chat error:", error);
@@ -36,6 +36,11 @@ const ChatBox = () => {
 
       const response = await callApiChat(message);
       dispatch(addMessage({ role: "model", content: response?.reply }));
+      if (response?.productIds.length > 0) {
+        dispatch(setProductIds(response?.productIds));
+      } else {
+        dispatch(setProductIds([]));
+      }
     } catch (error) {
       console.error("Error sending message:", error);
       dispatch(
