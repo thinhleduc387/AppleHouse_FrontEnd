@@ -625,24 +625,12 @@ export const lockUser = async (userId, status) => {
 };
 
 //recommentd
-export const getRecommendForDetailProductPage = async ({ productId }) => {
+export const getRecommendCBF = async ({ productId }) => {
   return axios.get(`/product/recommendations/detail-product/${productId}`);
 };
 
-export const getRecommendTrending = async () => {
-  return axios.get(`/product/recommendations/trending`);
-};
-
-export const getRecommendForHomePage = async () => {
+export const getRecommendNCF = async () => {
   return axios.get(`/product/recommendations/home-page`);
-};
-
-export const getRecommendForCartPage = async () => {
-  return axios.get(`/product/recommendations/cart`);
-};
-
-export const getRecommendForProfilePage = async () => {
-  return axios.get(`/product/recommendations/profile`);
 };
 
 export const getStatisticPromotion = async (promotionId) => {

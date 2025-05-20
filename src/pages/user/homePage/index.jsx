@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import Banner from "../../../component/Banner";
 
 import "./style.css";
+import ProductSection from "../../../component/RecommendSection/RecommendSection";
 
 // Component cho section với hiệu ứng scroll
 const AnimatedSection = ({ children, backgroundImage, className }) => {
@@ -22,7 +23,6 @@ const AnimatedSection = ({ children, backgroundImage, className }) => {
   );
 };
 
-// Component cho grid item với hiệu ứng stagger và cạnh chéo
 const GridItem = ({
   title,
   description,
@@ -213,7 +213,9 @@ const HomePage = () => {
           position="end"
         />
       </motion.section>
-      <div></div>
+      <div>
+        <ProductSection />
+      </div>
     </div>
   );
 };
