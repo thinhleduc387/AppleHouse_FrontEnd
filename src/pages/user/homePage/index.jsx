@@ -181,7 +181,10 @@ const HomePage = () => {
         <p className="text-xl mb-4">Vẫn còn kịp để tìm món quà ưng ý cho Mẹ.</p>
       </AnimatedSection>
 
+<<<<<<< HEAD
       {/* Grid Section với hiệu ứng stagger và cạnh chéo, nằm cùng hàng */}
+=======
+>>>>>>> 8a67df4575c4e9606d80fd046178a0c6fde133d0
       <motion.section
         initial="hidden"
         whileInView="visible"
@@ -230,6 +233,7 @@ const HomePage = () => {
           link="/phu-kien-11223" // Thêm link
         />
       </motion.section>
+      <div></div>
     </div>
   );
 };
