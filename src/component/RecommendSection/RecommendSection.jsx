@@ -1,17 +1,19 @@
 import { useRef, useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import ProductItem from "../Product/ProductItem";
-import { getRecommendForHomePage } from "../../config/api";
+import { getRecommendNCF } from "../../config/api";
 
 const ProductSection = ({ title = "Gợi ý hôm nay" }) => {
   const scrollRef = useRef(null);
   const [cardWidth, setCardWidth] = useState(0);
-  const [totalProductsToShow, setTotalProductsToShow] = useState(4); // Mặc định 4 sản phẩm trên md
+  const [totalProductsToShow, setTotalProductsToShow] = useState(4);
   const [listProduct, setListProduct] = useState([]);
+  const [isLeftVisible, setIsLeftVisible] = useState(false);
+  const [isRightVisible, setIsRightVisible] = useState(true);
 
   useEffect(() => {
     const handleGetLsitProduct = async () => {
-      const response = await getRecommendForHomePage();
+      const response = await getRecommendNCF();
       if (response.status === 200) {
         const productsMap = response.metadata.map((product) => {
           return {
@@ -46,13 +48,13 @@ const ProductSection = ({ title = "Gợi ý hôm nay" }) => {
 
     const handleResize = () => {
       if (window.innerWidth < 640) {
-        setTotalProductsToShow(1); // Hiển thị 1 sản phẩm
+        setTotalProductsToShow(1);
       } else if (window.innerWidth < 800) {
-        setTotalProductsToShow(2); // Hiển thị 2 sản phẩm
+        setTotalProductsToShow(2);
       } else if (window.innerWidth < 1180) {
-        setTotalProductsToShow(3); // Hiển thị 3 sản phẩm
+        setTotalProductsToShow(3);
       } else {
-        setTotalProductsToShow(4); // Hiển thị 4 sản phẩm
+        setTotalProductsToShow(4);
       }
       updateCardWidth();
     };
@@ -63,6 +65,22 @@ const ProductSection = ({ title = "Gợi ý hôm nay" }) => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
+  }, []);
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setIsLeftVisible(scrollLeft > 0);
+      setIsRightVisible(scrollLeft < scrollWidth - clientWidth - 5);
+    }
+  };
+
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener("scroll", handleScroll);
+      return () => scrollContainer.removeEventListener("scroll", handleScroll);
+    }
   }, []);
 
   const scrollLeft = () => {
@@ -80,21 +98,52 @@ const ProductSection = ({ title = "Gợi ý hôm nay" }) => {
   };
 
   return (
-    <div className="p-6 relative shadow-2xl bg-white dark:bg-gray-800 rounded-lg">
-      <h2 className="text-2xl font-bold mb-6 text-black dark:text-gray-100">
-        {title}
-      </h2>
-      <button
-        onClick={scrollLeft}
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 text-2xl pl-2 z-10 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
+    <div className="p-8 relative bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-lg">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h2 className="text-3xl font-bold text-gray-800 dark:text-white">
+            {title}
+          </h2>
+          <div className="h-1 w-20 bg-blue-600 mt-2 rounded-full"></div>
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={scrollLeft}
+            className={`p-3 rounded-full transition-all duration-300 ${
+              isLeftVisible
+                ? "bg-blue-600 text-white hover:bg-blue-700"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            }`}
+            disabled={!isLeftVisible}
+          >
+            <FaChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={scrollRight}
+            className={`p-3 rounded-full transition-all duration-300 ${
+              isRightVisible
+                ? "bg-blue-600 text-white hover:bg-blue-700"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            }`}
+            disabled={!isRightVisible}
+          >
+            <FaChevronRight className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
+      <div
+        className="flex space-x-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
+        ref={scrollRef}
+        style={{
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+        }}
       >
-        <FaChevronLeft />
-      </button>
-      <div className="flex space-x-4 overflow-hidden px-4" ref={scrollRef}>
         {listProduct.map((product, index) => (
           <div
-            key={index}
-            className="flex-none"
+            key={product.id}
+            className="flex-none transition-transform duration-300 hover:scale-105"
             style={{
               width: `calc((100% - ${
                 16 * (totalProductsToShow - 1)
@@ -105,12 +154,6 @@ const ProductSection = ({ title = "Gợi ý hôm nay" }) => {
           </div>
         ))}
       </div>
-      <button
-        onClick={scrollRight}
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 text-2xl pr-2 z-10 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
-      >
-        <FaChevronRight />
-      </button>
     </div>
   );
 };

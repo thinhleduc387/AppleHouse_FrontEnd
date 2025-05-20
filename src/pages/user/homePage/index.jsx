@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"; // Thêm useNavigate
 import Banner from "../../../component/Banner";
 import "./style.css";
 import { getAllCategory } from "../../../config/api";
+import ProductSection from "../../../component/RecommendSection/RecommendSection";
 
 // Component cho section với hiệu ứng scroll
 const AnimatedSection = ({ children, backgroundImage, className, link }) => {
@@ -41,7 +42,6 @@ const AnimatedSection = ({ children, backgroundImage, className, link }) => {
   );
 };
 
-// Component cho grid item với hiệu ứng stagger và cạnh chéo
 const GridItem = ({
   title,
   description,
@@ -230,7 +230,9 @@ const HomePage = () => {
           link="/phu-kien-11223" // Thêm link
         />
       </motion.section>
-      <div></div>
+      <div>
+        <ProductSection />
+      </div>
     </div>
   );
 };
