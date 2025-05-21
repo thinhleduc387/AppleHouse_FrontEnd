@@ -7,7 +7,6 @@ const SkuTable = ({
   onPriceChange,
   onStockChange,
 }) => {
-  console.log("🚀 ~ skuList:", skuList);
   return (
     <>
       <table className="table-auto w-full mt-6 border">

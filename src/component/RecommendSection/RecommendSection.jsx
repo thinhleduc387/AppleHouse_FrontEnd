@@ -1,9 +1,9 @@
 import { useRef, useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import ProductItem from "../Product/ProductItem";
-import { getRecommendNCF } from "../../config/api";
+import { getRecommendCBF, getRecommendNCF } from "../../config/api";
 
-const ProductSection = ({ title = "Gợi ý hôm nay" }) => {
+const ProductSection = ({ title = "Gợi ý hôm nay", productId }) => {
   const scrollRef = useRef(null);
   const [cardWidth, setCardWidth] = useState(0);
   const [totalProductsToShow, setTotalProductsToShow] = useState(4);
@@ -13,7 +13,13 @@ const ProductSection = ({ title = "Gợi ý hôm nay" }) => {
 
   useEffect(() => {
     const handleGetLsitProduct = async () => {
-      const response = await getRecommendNCF();
+      let response;
+      if (productId) {
+        response = await getRecommendCBF({ productId });
+      } else {
+        response = await getRecommendNCF();
+      }
+
       if (response.status === 200) {
         const productsMap = response.metadata.map((product) => {
           return {

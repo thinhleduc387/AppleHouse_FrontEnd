@@ -82,7 +82,7 @@ const CartPage = () => {
                       className="w-4 h-4 cursor-pointer"
                     />
                     {t("selectAll")} ({selectedProducts.length}/
-                    {cartItems.length}
+                    {cartItems.length})
                   </div>
                   <button className="text-gray-600 hover:text-red-600">
                     <RiDeleteBin6Line className="w-6 h-6" />

@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { fetchCart, addToLocalCart } from "../../../redux/slices/cartSlice";
 import RatingStar from "../../../component/Product/Feedback/RatingStar";
 import { useTranslation } from "react-i18next";
+import ProductSection from "../../../component/RecommendSection/RecommendSection";
 
 const DetailProduct = () => {
   const { t } = useTranslation("detailProduct");
@@ -373,7 +374,7 @@ const DetailProduct = () => {
               onClickThongSo={() => setSidebarOpen(true)}
             />
 
-            <div className="mt-16 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-lg p-6 space-y-10">
+            <div className="mt-4 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-lg p-6 space-y-10">
               <div ref={ratingStatRef}>
                 <RatingStar
                   numberOfRating={totalreviews.numberOfRating}
@@ -389,16 +390,19 @@ const DetailProduct = () => {
                 />
               </div>
             </div>
-
-            <ProductSideBar
-              productAttributes={spu?.product_attributes}
-              isOpen={isSidebarOpen}
-              setIsOpen={setSidebarOpen}
-            />
+            <div className="bg-white">
+              <ProductSideBar
+                productAttributes={spu?.product_attributes}
+                isOpen={isSidebarOpen}
+                setIsOpen={setSidebarOpen}
+              />
+            </div>
           </div>
         </div>
       )}
-      <div className="py-10 bg-[#f3f4f6] dark:bg-gray-900"></div>
+      <div className=" lg:max-w-7xl max-w-4xl mx-auto">
+        <ProductSection title="Các sản phẩm tương tự" productId={productId} />
+      </div>
     </>
   );
 };
