@@ -5,7 +5,6 @@ import { getRecommendCBF, getRecommendNCF } from "../../config/api";
 
 const ProductSection = ({ title = "Gợi ý hôm nay", productId }) => {
   const scrollRef = useRef(null);
-  const [cardWidth, setCardWidth] = useState(0);
   const [totalProductsToShow, setTotalProductsToShow] = useState(4);
   const [listProduct, setListProduct] = useState([]);
   const [isLeftVisible, setIsLeftVisible] = useState(false);
@@ -43,15 +42,6 @@ const ProductSection = ({ title = "Gợi ý hôm nay", productId }) => {
   }, []);
 
   useEffect(() => {
-    const updateCardWidth = () => {
-      if (scrollRef.current) {
-        const firstCard = scrollRef.current.firstChild;
-        if (firstCard) {
-          setCardWidth(firstCard.offsetWidth + 16);
-        }
-      }
-    };
-
     const handleResize = () => {
       if (window.innerWidth < 640) {
         setTotalProductsToShow(1);
@@ -62,7 +52,6 @@ const ProductSection = ({ title = "Gợi ý hôm nay", productId }) => {
       } else {
         setTotalProductsToShow(4);
       }
-      updateCardWidth();
     };
 
     handleResize();
@@ -76,8 +65,8 @@ const ProductSection = ({ title = "Gợi ý hôm nay", productId }) => {
   const handleScroll = () => {
     if (scrollRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      setIsLeftVisible(scrollLeft > 0);
-      setIsRightVisible(scrollLeft < scrollWidth - clientWidth - 5);
+      setIsLeftVisible(scrollLeft > 10);
+      setIsRightVisible(scrollLeft < scrollWidth - clientWidth - 10);
     }
   };
 
@@ -85,22 +74,29 @@ const ProductSection = ({ title = "Gợi ý hôm nay", productId }) => {
     const scrollContainer = scrollRef.current;
     if (scrollContainer) {
       scrollContainer.addEventListener("scroll", handleScroll);
+      handleScroll(); // Gọi ngay để cập nhật trạng thái ban đầu
       return () => scrollContainer.removeEventListener("scroll", handleScroll);
     }
-  }, []);
+  }, [listProduct]); // Thêm listProduct vào dependency
 
   const scrollLeft = () => {
-    scrollRef.current.scrollBy({
-      left: -cardWidth * totalProductsToShow,
-      behavior: "smooth",
-    });
+    if (scrollRef.current) {
+      const scrollAmount = scrollRef.current.clientWidth;
+      scrollRef.current.scrollBy({
+        left: -scrollAmount,
+        behavior: "smooth",
+      });
+    }
   };
 
   const scrollRight = () => {
-    scrollRef.current.scrollBy({
-      left: cardWidth * totalProductsToShow,
-      behavior: "smooth",
-    });
+    if (scrollRef.current) {
+      const scrollAmount = scrollRef.current.clientWidth;
+      scrollRef.current.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
+    }
   };
 
   return (
@@ -117,7 +113,7 @@ const ProductSection = ({ title = "Gợi ý hôm nay", productId }) => {
             onClick={scrollLeft}
             className={`p-3 rounded-full transition-all duration-300 ${
               isLeftVisible
-                ? "bg-blue-600 text-white hover:bg-blue-700"
+                ? "bg-blue-600 text-white hover:bg-blue-700 shadow-lg"
                 : "bg-gray-200 text-gray-400 cursor-not-allowed"
             }`}
             disabled={!isLeftVisible}
@@ -128,7 +124,7 @@ const ProductSection = ({ title = "Gợi ý hôm nay", productId }) => {
             onClick={scrollRight}
             className={`p-3 rounded-full transition-all duration-300 ${
               isRightVisible
-                ? "bg-blue-600 text-white hover:bg-blue-700"
+                ? "bg-blue-600 text-white hover:bg-blue-700 shadow-lg"
                 : "bg-gray-200 text-gray-400 cursor-not-allowed"
             }`}
             disabled={!isRightVisible}
@@ -139,7 +135,7 @@ const ProductSection = ({ title = "Gợi ý hôm nay", productId }) => {
       </div>
 
       <div
-        className="flex space-x-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
+        className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
         ref={scrollRef}
         style={{
           scrollbarWidth: "none",
@@ -149,11 +145,12 @@ const ProductSection = ({ title = "Gợi ý hôm nay", productId }) => {
         {listProduct.map((product, index) => (
           <div
             key={product.id}
-            className="flex-none transition-transform duration-300 hover:scale-105"
+            className="flex-shrink-0 transition-transform duration-300 hover:scale-105"
             style={{
               width: `calc((100% - ${
                 16 * (totalProductsToShow - 1)
               }px) / ${totalProductsToShow})`,
+              minWidth: "250px", // Đảm bảo width tối thiểu
             }}
           >
             <ProductItem product={product} isForShow={true} />
