@@ -660,6 +660,10 @@ export const getChatBotResponse = async (message) => {
   return axios.post(`/chat-bot`, { userMessage: message });
 };
 
+export const getChatBotResponseV2 = async (payload) => {
+  return axios.post(`http://localhost:8001/chat`, payload);
+};
+
 // notification
 export const getListNotification = async ({ userId }) => {
   return axios.post(`/notification`, { userId });

@@ -6,13 +6,14 @@ const initialState = {
   isExpanded: false,
   messages: [
     {
-      role: "model",
+      role: "assistant",
       content:
         "Xin chào! Mình là trợ lý AI của shop. Mình có thể giúp gì cho bạn?",
+      suggested_products: [],
     },
   ],
   isLoading: false,
-  productIds: [],
+  current_suggested_products: [],
 };
 
 const chatBotSlice = createSlice({
@@ -25,6 +26,9 @@ const chatBotSlice = createSlice({
     toggleExpand: (state) => {
       state.isExpanded = !state.isExpanded;
     },
+    openExpand: (state) => {
+      state.isExpanded = true;
+    },
     setHiddenChatBot: (state, action) => {
       state.isHidden = action.payload;
     },
@@ -35,11 +39,14 @@ const chatBotSlice = createSlice({
     addMessage: (state, action) => {
       state.messages.push(action.payload);
     },
+    setMessages(state, action) {
+      state.messages = action.payload;
+    },
     setLoading: (state, action) => {
       state.isLoading = action.payload;
     },
-    setProductIds: (state, action) => {
-      state.productIds = action.payload;
+    setCurentSuggestedProducts: (state, action) => {
+      state.current_suggested_products = action.payload;
     },
   },
 });
@@ -51,7 +58,9 @@ export const {
   addMessage,
   setLoading,
   setHiddenChatBot,
-  setProductIds,
+  setMessages,
+  setCurentSuggestedProducts,
+  openExpand,
 } = chatBotSlice.actions;
 
 export default chatBotSlice.reducer;
