@@ -22,6 +22,7 @@ export const ROUTERS = {
     CART: "/cart",
     PROFILE: "/profile",
     ORDER_LIST: "/profile/order-list",
+    NOTIFICATIONS: "/profile/notifications",
     ORDER_DETAIL: (orderId = ":orderId") =>
       `/profile/order-list/detail/${orderId}`,
 

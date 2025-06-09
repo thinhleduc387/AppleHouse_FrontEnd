@@ -56,6 +56,7 @@ import StorageVoucher from "./component/Profile/StorageVoucher";
 import { setTheme } from "./redux/slices/themeSlice";
 import OrderGuest from "./pages/user/orderGuest";
 import OrderGuestDetails from "./pages/user/oderGuestDetails";
+import NotificationStorage from "./component/Profile/Notifications";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -100,6 +101,10 @@ const RouterCustom = () => {
             <Route index element={<Info />} />
             <Route path="" element={<Info />} />
             <Route path={ROUTERS.USER.ORDER_LIST} element={<OrderHistory />} />
+            <Route
+              path={ROUTERS.USER.NOTIFICATIONS}
+              element={<NotificationStorage />}
+            />
             <Route path={ROUTERS.USER.CHANGE_PASS} element={<ChangePass />} />
             <Route path={ROUTERS.USER.ADDRESS} element={<Address />} />
             <Route path={ROUTERS.USER.VOUCHER} element={<StorageVoucher />} />

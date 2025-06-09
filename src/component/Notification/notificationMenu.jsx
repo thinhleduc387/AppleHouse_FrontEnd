@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { vi } from "date-fns/locale";
+import { Link } from "react-router-dom";
 
 const formatNotificationDate = (dateString) => {
   try {
@@ -106,11 +107,13 @@ const NotificationMenu = ({ notifications, markAsRead }) => {
       </ul>
 
       {notifications.length > 0 && (
-        <div className="mt-4 text-center">
-          <button className="text-sm text-blue-600 hover:text-blue-800 font-medium">
-            Xem tất cả thông báo
-          </button>
-        </div>
+        <Link to={"/profile/notifications"}>
+          <div className="mt-4 text-center rounded-sm hover:bg-gray-200">
+            <button className="text-sm text-blue-600 hover:text-blue-800 font-medium">
+              Xem tất cả thông báo
+            </button>
+          </div>
+        </Link>
       )}
     </div>
   );

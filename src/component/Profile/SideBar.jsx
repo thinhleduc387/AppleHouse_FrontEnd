@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { AiOutlineHeart, AiOutlineOrderedList } from "react-icons/ai";
+import { AiOutlineOrderedList, AiTwotoneNotification } from "react-icons/ai";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileSection from "./ProfileSection";
@@ -23,6 +23,11 @@ const Sidebar = () => {
       path: "/profile/order-list",
     },
     {
+      icon: AiTwotoneNotification,
+      text: "Thông báo",
+      path: "/profile/notifications",
+    },
+    {
       icon: RiLockPasswordLine,
       text: "Đổi mật khẩu",
       path: "/profile/change-password",
@@ -37,6 +42,7 @@ const Sidebar = () => {
       text: "Kho voucher",
       path: "/profile/voucher",
     },
+
     { icon: RiLogoutBoxLine, text: "Đăng xuất", path: "/profile/order-list" }, // Giữ path là "/logout"
   ];
 

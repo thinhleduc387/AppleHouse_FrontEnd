@@ -665,8 +665,8 @@ export const getChatBotResponseV2 = async (payload) => {
 };
 
 // notification
-export const getListNotification = async ({ userId }) => {
-  return axios.post(`/notification`, { userId });
+export const getListNotification = async ({ userId, type }) => {
+  return axios.post(`/notification`, { userId, type });
 };
 
 // product view history
