@@ -669,6 +669,19 @@ export const getListNotification = async ({ userId, type }) => {
   return axios.post(`/notification`, { userId, type });
 };
 
+export const sendNotification = async ({
+  receivedId,
+  message,
+  title,
+  sendViaEmail,
+}) => {
+  return axios.post(`/notification/send`, {
+    receivedId,
+    message,
+    title,
+    sendViaEmail,
+  });
+};
 // product view history
 
 export const trackingSpuView = async ({ spu_id, user_id }) => {
