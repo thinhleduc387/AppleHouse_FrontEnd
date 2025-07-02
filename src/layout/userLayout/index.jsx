@@ -3,6 +3,7 @@ import Header from "../../component/theme/header";
 import Footer from "../../component/theme/footer";
 import { Outlet } from "react-router-dom";
 import ChatBox from "../../component/Chat/ChatBox";
+import ChatUser from "../../component/ChatUser/ChatUser";
 
 const MasterLayout = ({ ...props }) => {
   return (
@@ -13,7 +14,16 @@ const MasterLayout = ({ ...props }) => {
       <main className="flex-grow w-full mt-[90px] bg-[#f3f4f6]">
         <Outlet />
       </main>
-      <ChatBox />
+      <div className="fixed bottom-4 right-4 z-40">
+        <div className="flex flex-col items-end gap-2">
+          <div className="relative">
+            <ChatUser />
+          </div>
+          <div className="relative">
+            <ChatBox />
+          </div>
+        </div>
+      </div>
       <Footer />
     </div>
   );

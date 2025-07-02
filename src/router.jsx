@@ -57,6 +57,7 @@ import { setTheme } from "./redux/slices/themeSlice";
 import OrderGuest from "./pages/user/orderGuest";
 import OrderGuestDetails from "./pages/user/oderGuestDetails";
 import NotificationStorage from "./component/Profile/Notifications";
+import ChatPage from "./pages/admin/chatPage";
 
 const RouterCustom = () => {
   const dispatch = useDispatch();
@@ -164,6 +165,7 @@ const RouterCustom = () => {
           <Route path="/admin/review-details" element={<DetailsReviewPage />} />
           <Route path="/admin/role-permission" element={<RolePermission />} />
           <Route path="/admin/users" element={<UserPage />} />
+          <Route path="/admin/chat" element={<ChatPage />} />
         </Route>
 
         <Route

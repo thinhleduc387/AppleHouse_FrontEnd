@@ -113,7 +113,7 @@ const ChatBox = () => {
         <>
           <button
             onClick={() => dispatch(toggleChat())}
-            className="fixed bottom-6 right-6 bg-white rounded-full p-2 shadow-lg transition-all duration-300 z-50"
+            className=" bg-white rounded-full p-3 shadow-lg transition-all duration-300 z-50"
           >
             <img
               src="/chatbot.png"
@@ -124,10 +124,10 @@ const ChatBox = () => {
 
           {isChatOpen && (
             <div
-              className={`fixed transition-all duration-300 ${
+              className={`absolute transition-all duration-300 ${
                 isExpanded
                   ? "top-0 left-0 w-full h-full"
-                  : "bottom-24 right-6 w-[90%] md:w-[600px] h-[85vh] md:h-[700px] mx-auto md:mx-0"
+                  : "bottom-0 right-24 w-[90%] md:w-[600px] h-[85vh] md:h-[700px] mx-auto md:mx-0"
               } bg-white shadow-xl z-50 flex flex-col rounded-lg`}
             >
               <ChatHeader

@@ -12,6 +12,7 @@ import {
   FaHome,
   FaUser,
 } from "react-icons/fa";
+import { FaMessage } from "react-icons/fa6";
 
 export const ROUTERS = {
   USER: {
@@ -98,6 +99,15 @@ export const ROUTERS = {
       path: "/admin/users",
       permission: {
         resourceId: "user",
+        action: "read:any",
+      },
+    },
+    {
+      name: "Chat",
+      icon: <FaMessage />,
+      path: "/admin/chat",
+      permission: {
+        resourceId: "dashboard",
         action: "read:any",
       },
     },
