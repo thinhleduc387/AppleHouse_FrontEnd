@@ -1,0 +1,22 @@
+{
+  "myOrders": "Đơn hàng của tôi",
+  "notifications": "Thông báo",
+  "changePassword": "Đổi mật khẩu",
+  "shippingAddress": "Địa chỉ nhận hàng",
+  "voucherStorage": "Kho voucher",
+  "logout": "Đăng xuất",
+  "personalInformation": "Thông tin cá nhân",
+  "editProfile": "Chỉnh sửa hồ sơ",
+  "fullName": "Họ và tên",
+  "email": "Email",
+  "dateOfBirth": "Ngày sinh",
+  "phoneNumber": "Số điện thoại",
+  "gender": "Giới tính",
+  "male": "Nam",
+  "female": "Nữ",
+  "updateInformation": "Cập nhật thông tin",
+  "updateSuccess": "Cập nhật thành công",
+  "updateFailed": "Cập nhật thất bại",
+  "enterFullName": "Nhập họ và tên",
+  "enterPhoneNumber": "Nhập số điện thoại"
+}

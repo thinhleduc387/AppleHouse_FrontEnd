@@ -11,16 +11,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUserLoginInfo } from "../../../redux/slices/accountSlice";
 import { toast } from "react-toastify";
 import { clearLocalCart, fetchCart } from "../../../redux/slices/cartSlice";
+import { useTranslation } from "react-i18next"; // Thêm useTranslation
 
 const LoginPage = () => {
+  const { t } = useTranslation("auth"); // Sử dụng namespace auth
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [isSignUpDialogOpen, setSignUpDialogOpen] = useState(false);
   const localCartItems = useSelector((state) => state.cart?.localCartItems);
-  const navigate = useNavigate(); // Khai báo useNavigate
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const userId = useSelector((state) => state.account?.user?._id);
 
@@ -29,12 +29,12 @@ const LoginPage = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Ngăn chặn hành vi mặc định của form
+    e.preventDefault();
     try {
       const response = await callLogin(email, password);
 
       if (response.status === 200 && response.metadata) {
-        toast.success(response.message);
+        toast.success(t("loginSuccess"));
         const user = response.metadata.user;
         localStorage.setItem(
           "access_token",
@@ -59,28 +59,28 @@ const LoginPage = () => {
         toast.error(response.message);
       }
     } catch (error) {
-      // Bắt lỗi nếu có lỗi từ API hoặc kết nối mạng
-      toast.error("Đã xảy ra lỗi khi đăng nhập. Vui lòng thử lại sau.");
+      toast.error(t("loginError"));
       console.error("Login error:", error);
     }
   };
+
   const handleLoginGG = async () => {
     window.location.href = "http://localhost:8000/api/v1/auth/google";
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col py-8 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col py-8 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-16 text-center text-3xl font-extrabold text-gray-900">
-          Sign in to your account
+        <h2 className="mt-16 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
+          {t("signInTitle")}
         </h2>
       </div>
 
       <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 sm:rounded-lg sm:px-10">
+        <div className="bg-white dark:bg-gray-800 py-8 px-4 sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <FloatingInput
-              label="Email address"
+              label={t("emailLabel")}
               type="email"
               id="email"
               placeholder=" "
@@ -90,7 +90,7 @@ const LoginPage = () => {
             />
 
             <FloatingInput
-              label="Password"
+              label={t("passwordLabel")}
               type="password"
               id="password"
               placeholder=" "
@@ -99,52 +99,25 @@ const LoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            {/* <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember_me"
-                  name="remember_me"
-                  type="checkbox"
-                  className="h-4 w-4 text-blue-400 focus:ring-indigo-500 border-gray-300 rounded"
-                />
-                <label
-                  htmlFor="remember_me"
-                  className="ml-2 block text-sm text-gray-900"
-                >
-                  Remember me
-                </label>
-              </div>
-              {/* 
-              <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-medium text-blue-400 hover:text-blue-500"
-                >
-                  Forgot your password?
-                </a>
-              </div> */}
-            {/* </div> */}
-
             <div>
               <button
                 type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 dark:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                Sign in
+                {t("signInButton")}
               </button>
-              <p className="mt-4 text-center text-sm text-gray-600 max-w">
-                Don’t have an account yet?{" "}
+              <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-300 max-w">
+                {t("noAccountText")}{" "}
                 <a
                   href="#"
-                  onClick={() => setSignUpDialogOpen(true)} // Mở dialog khi nhấp
-                  className="font-medium text-blue-400 hover:text-blue-500"
+                  onClick={() => setSignUpDialogOpen(true)}
+                  className="font-medium text-blue-400 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
                 >
-                  Sign up here
+                  {t("signUpLink")}
                 </a>
               </p>
             </div>
           </form>
-          {/* Hiển thị dialog đăng ký */}
           <SignUpDialog
             isOpen={isSignUpDialogOpen}
             onClose={() => setSignUpDialogOpen(false)}
@@ -152,11 +125,11 @@ const LoginPage = () => {
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
+                <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-gray-100 text-gray-500">
-                  Or continue with
+                <span className="px-2 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-300">
+                  {t("orContinueWith")}
                 </span>
               </div>
             </div>
@@ -165,7 +138,7 @@ const LoginPage = () => {
               <div>
                 <button
                   onClick={handleLoginGG}
-                  className="w-full flex items-center justify-center py-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                  className="w-full flex items-center justify-center py-3 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   <img
                     className="h-5 w-5"

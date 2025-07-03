@@ -5,12 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 import ProfileSection from "./ProfileSection";
 import { FaLocationDot } from "react-icons/fa6";
 import { RiLogoutBoxLine } from "react-icons/ri";
-import { callLogout } from "../../config/api"; // Import API gọi logout
-import { setLogoutAction } from "../../redux/slices/accountSlice"; // Import action logout
+import { callLogout } from "../../config/api";
+import { setLogoutAction } from "../../redux/slices/accountSlice";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { clearRoleData } from "../../redux/slices/rbacSlice";
 import { CiDiscount1 } from "react-icons/ci";
+import { useTranslation } from "react-i18next"; // Thêm useTranslation
+
 const Sidebar = () => {
+  const { t } = useTranslation("profile"); // Sử dụng namespace profile
   const [activeItem, setActiveItem] = useState();
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,31 +22,34 @@ const Sidebar = () => {
   const items = [
     {
       icon: AiOutlineOrderedList,
-      text: "Đơn hàng của tôi",
+      text: t("myOrders"),
       path: "/profile/order-list",
     },
     {
       icon: AiTwotoneNotification,
-      text: "Thông báo",
+      text: t("notifications"),
       path: "/profile/notifications",
     },
     {
       icon: RiLockPasswordLine,
-      text: "Đổi mật khẩu",
+      text: t("changePassword"),
       path: "/profile/change-password",
     },
     {
       icon: FaLocationDot,
-      text: "Địa chỉ nhận hàng",
+      text: t("shippingAddress"),
       path: "/profile/address",
     },
     {
       icon: CiDiscount1,
-      text: "Kho voucher",
+      text: t("voucherStorage"),
       path: "/profile/voucher",
     },
-
-    { icon: RiLogoutBoxLine, text: "Đăng xuất", path: "/profile/order-list" }, // Giữ path là "/logout"
+    {
+      icon: RiLogoutBoxLine,
+      text: t("logout"),
+      path: "/profile/order-list",
+    },
   ];
 
   const userAvatar = useSelector((state) => state.account.user.avatar);
@@ -69,7 +75,7 @@ const Sidebar = () => {
     const currentPath = location.pathname;
     const active = items.find((item) => currentPath.startsWith(item.path));
     setActiveItem(active ? active.text : null);
-  }, [location]);
+  }, [location, items]);
 
   return (
     <div className="top-0 left-0 min-w-[250px] overflow-auto space-y-4 md:rounded-lg">
@@ -85,7 +91,7 @@ const Sidebar = () => {
         <ul className="space-y-3 flex-1">
           {items.map((item) => (
             <li key={item.text}>
-              {item.text === "Đăng xuất" ? (
+              {item.text === t("logout") ? (
                 <Link
                   to={item.path}
                   onClick={(e) => {

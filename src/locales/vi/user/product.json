@@ -1,0 +1,18 @@
+{
+  "noProductsFound": "Không tìm thấy sản phẩm nào",
+  "filterTitle": "Bộ lọc tìm kiếm",
+  "priceFilterLabel": "Mức giá",
+  "allPrices": "Tất cả",
+  "priceRange20to25": "Từ 20 - 25 triệu",
+  "priceRange25to30": "Từ 25 - 30 triệu",
+  "priceRangeAbove30": "Trên 30 triệu",
+  "customPriceRange": "Hoặc nhập khoảng giá phù hợp với bạn:",
+  "sortLabel": "Xếp theo: ",
+  "sortNewest": "Mới nhất",
+  "sortPriceLowToHigh": "Giá: Thấp đến Cao",
+  "sortPriceHighToLow": "Giá: Cao đến Thấp",
+  "sortRating": "Đánh giá",
+  "productNotAvailable": "Sản phẩm không có sẵn",
+  "paginationPrevious": "Trước",
+  "paginationNext": "Tiếp"
+}

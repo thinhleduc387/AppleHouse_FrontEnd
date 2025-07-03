@@ -1,6 +1,9 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  const { t } = useTranslation("product");
+
   const getPageNumbers = () => {
     const pages = [];
     const maxPagesToShow = 5;
@@ -34,7 +37,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   };
 
   return (
-    <nav className="flex justify-center items-center mt-8 select-none bg-[#f3f4f6] dark:bg-gray-900">
+    <nav className="flex justify-center items-center mt-8 select-none bg-[#f3f4f6] dark:bg-gray-900 transition-colors duration-300">
       <ul className="flex items-center gap-1">
         <li>
           <button
@@ -60,7 +63,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                 d="M15 19l-7-7 7-7"
               />
             </svg>
-            Previous
+            {t("paginationPrevious")}
           </button>
         </li>
 
@@ -74,7 +77,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
               className={`min-w-[40px] h-10 flex items-center justify-center px-3 text-sm font-medium rounded-lg transition-colors duration-200
                 ${
                   pageNum === currentPage
-                    ? "bg-blue-600 dark:bg-blue-500 text-white shadow-sm"
+                    ? "bg-blue-600 dark:bg-blue-500 text-white shadow-sm dark:shadow-gray-700"
                     : pageNum === "..."
                     ? "text-gray-500 dark:text-gray-400 cursor-default"
                     : "text-gray-700 dark:text-gray-100 hover:bg-blue-50 dark:hover:bg-blue-900/50 hover:text-blue-600 dark:hover:text-blue-400 border border-gray-200 dark:border-gray-700"
@@ -96,7 +99,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                   : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-100 hover:bg-blue-50 dark:hover:bg-blue-900/50 hover:text-blue-600 dark:hover:text-blue-400 border border-gray-200 dark:border-gray-700"
               }`}
           >
-            Next
+            {t("paginationNext")}
             <svg
               className="w-4 h-4 ml-2"
               fill="none"
@@ -117,4 +120,4 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   );
 };
 
-export default Pagination;
+export default React.memo(Pagination);

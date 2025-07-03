@@ -28,8 +28,24 @@ import enFooter from "./locales/en/user/footer.json";
 import viFooter from "./locales/vi/user/footer.json";
 import enDetailProduct from "./locales/en/user/detailProduct.json";
 import viDetailProduct from "./locales/vi/user/detailProduct.json";
-import enCart from "./locales/en/user/cart.json"; // Import English cart.json
-import viCart from "./locales/vi/user/cart.json"; // Import Vietnamese cart.json
+import enCart from "./locales/en/user/cart.json";
+import viCart from "./locales/vi/user/cart.json";
+import enHomePage from "./locales/en/user/homePage.json";
+import viHomePage from "./locales/vi/user/homePage.json";
+import enPromotion from "./locales/en/user/promotion.json";
+import viPromotion from "./locales/vi/user/promotion.json";
+import enAuth from "./locales/en/user/auth.json";
+import viAuth from "./locales/vi/user/auth.json";
+import enOrderGuest from "./locales/en/user/orderGuest.json";
+import viOrderGuest from "./locales/vi/user/orderGuest.json";
+import enOrderFailed from "./locales/en/user/orderFailed.json";
+import viOrderFailed from "./locales/vi/user/orderFailed.json";
+import enOrderSuccess from "./locales/en/user/orderSuccess.json";
+import viOrderSuccess from "./locales/vi/user/orderSuccess.json";
+import enProduct from "./locales/en/user/product.json";
+import viProduct from "./locales/vi/user/product.json";
+import enProfile from "./locales/en/user/profile.json"; // Thêm profile
+import viProfile from "./locales/vi/user/profile.json"; // Thêm profile
 
 const resources = {
   en: {
@@ -46,7 +62,15 @@ const resources = {
     flashsale: enFlashSale,
     footer: enFooter,
     detailProduct: enDetailProduct,
-    cart: enCart, // Add cart namespace
+    cart: enCart,
+    homePage: enHomePage,
+    promotion: enPromotion,
+    auth: enAuth,
+    orderGuest: enOrderGuest,
+    orderFailed: enOrderFailed,
+    orderSuccess: enOrderSuccess,
+    product: enProduct,
+    profile: enProfile, // Thêm namespace
   },
   vi: {
     header: viHeader,
@@ -62,7 +86,15 @@ const resources = {
     flashsale: viFlashSale,
     footer: viFooter,
     detailProduct: viDetailProduct,
-    cart: viCart, // Add cart namespace
+    cart: viCart,
+    homePage: viHomePage,
+    promotion: viPromotion,
+    auth: viAuth,
+    orderGuest: viOrderGuest,
+    orderFailed: viOrderFailed,
+    orderSuccess: viOrderSuccess,
+    product: viProduct,
+    profile: viProfile, // Thêm namespace
   },
 };
 
@@ -86,7 +118,15 @@ i18n
       "flashsale",
       "footer",
       "detailProduct",
-      "cart", // Add "cart" namespace
+      "cart",
+      "homePage",
+      "promotion",
+      "auth",
+      "orderGuest",
+      "orderFailed",
+      "orderSuccess",
+      "product",
+      "profile", // Thêm namespace
     ],
     defaultNS: "topProduct",
     interpolation: {

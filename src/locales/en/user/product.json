@@ -1,0 +1,18 @@
+{
+  "noProductsFound": "No products found",
+  "filterTitle": "Search Filters",
+  "priceFilterLabel": "Price Range",
+  "allPrices": "All",
+  "priceRange20to25": "20 - 25 million",
+  "priceRange25to30": "25 - 30 million",
+  "priceRangeAbove30": "Above 30 million",
+  "customPriceRange": "Or enter a suitable price range:",
+  "sortLabel": "Sort by: ",
+  "sortNewest": "Newest",
+  "sortPriceLowToHigh": "Price: Low to High",
+  "sortPriceHighToLow": "Price: High to Low",
+  "sortRating": "Rating",
+  "productNotAvailable": "Product not available",
+  "paginationPrevious": "Previous",
+  "paginationNext": "Next"
+}

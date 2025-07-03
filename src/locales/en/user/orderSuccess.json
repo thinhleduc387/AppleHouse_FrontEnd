@@ -1,0 +1,13 @@
+{
+  "orderSuccessTitle": "Order Placed Successfully!",
+  "orderSuccessMessage": "Thank you for your order. We will process your order as soon as possible.",
+  "emailNotification": "Note: Detailed order information has been sent to your email.",
+  "orderInfo": "Order Information",
+  "orderIdLabel": "Order ID #",
+  "statusLabel": "Status",
+  "statusConfirmed": "Confirmed",
+  "estimatedTimeLabel": "Estimated Delivery Time",
+  "estimatedTimeValue": "2 - 3 days",
+  "continueShopping": "Continue Shopping",
+  "viewOrderDetails": "View Order Details"
+}

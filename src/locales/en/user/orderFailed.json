@@ -1,0 +1,10 @@
+{
+  "paymentFailedTitle": "Payment Unsuccessful",
+  "paymentFailedMessage": "Sorry, your transaction could not be completed. Please try again later.",
+  "paymentErrorTitle": "Error During Payment",
+  "orderInfo": "Order Information",
+  "orderIdLabel": "Order ID",
+  "totalLabel": "Total",
+  "paymentMethodLabel": "Payment Method",
+  "backToCart": "Back to Cart"
+}

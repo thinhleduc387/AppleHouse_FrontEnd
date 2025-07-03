@@ -1,0 +1,22 @@
+{
+  "myOrders": "My Orders",
+  "notifications": "Notifications",
+  "changePassword": "Change Password",
+  "shippingAddress": "Shipping Address",
+  "voucherStorage": "Voucher Storage",
+  "logout": "Logout",
+  "personalInformation": "Personal Information",
+  "editProfile": "Edit Profile",
+  "fullName": "Full Name",
+  "email": "Email",
+  "dateOfBirth": "Date of Birth",
+  "phoneNumber": "Phone Number",
+  "gender": "Gender",
+  "male": "Male",
+  "female": "Female",
+  "updateInformation": "Update Information",
+  "updateSuccess": "Update Successful",
+  "updateFailed": "Update Failed",
+  "enterFullName": "Enter Full Name",
+  "enterPhoneNumber": "Enter Phone Number"
+}

@@ -6,22 +6,24 @@ import {
   AiOutlineStar,
 } from "react-icons/ai";
 import { FaTruck, FaTag } from "react-icons/fa";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ROUTERS } from "../../utils/router";
 import { formatVND } from "../../utils/format";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const ProductItem = ({ product, isForShow }) => {
+  const { t } = useTranslation("product");
+
   if (!product) {
     return (
       <div className="p-6 text-center text-gray-500 dark:text-gray-400">
-        Product not available
+        {t("productNotAvailable")}
       </div>
     );
   }
 
   const { id, imageSrc, link, name, productPrice, rating, tags } = product;
-
   const [showTooltipFavorites, setShowTooltipFavorites] = useState(false);
 
   const calculateDiscount = () => {
@@ -36,14 +38,12 @@ const ProductItem = ({ product, isForShow }) => {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
 
-    // Add full stars
     for (let i = 0; i < fullStars; i++) {
       stars.push(
         <AiFillStar key={`full-${i}`} className="text-yellow-400 h-4 w-4" />
       );
     }
 
-    // Add half star if needed
     if (hasHalfStar) {
       stars.push(
         <div key="half" className="relative h-4 w-4">
@@ -55,7 +55,6 @@ const ProductItem = ({ product, isForShow }) => {
       );
     }
 
-    // Add empty stars
     const emptyStars = 5 - Math.ceil(rating);
     for (let i = 0; i < emptyStars; i++) {
       stars.push(
@@ -70,7 +69,7 @@ const ProductItem = ({ product, isForShow }) => {
   };
 
   return (
-    <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4 shadow-sm h-full flex flex-col">
+    <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4 shadow-sm dark:shadow-gray-700 h-full flex flex-col transition-colors duration-300">
       <div className="h-56 w-full">
         <a href={ROUTERS.USER.PRODUCT_DETAIL(id)} className="cursor-default">
           <img
@@ -89,16 +88,12 @@ const ProductItem = ({ product, isForShow }) => {
             {name}
           </Link>
         </div>
-
-        {/* Rating display */}
         <div className="flex items-center justify-center mt-2 space-x-1">
           {renderStars(rating)}
           <span className="ml-1 text-sm text-gray-500 dark:text-gray-400">
             ({rating})
           </span>
         </div>
-
-        {/* Tags display */}
         {tags && tags.length > 0 && (
           <div className="flex flex-wrap justify-center gap-1 mt-2">
             {tags.map((tag, index) => (
@@ -111,7 +106,6 @@ const ProductItem = ({ product, isForShow }) => {
             ))}
           </div>
         )}
-
         <div className="text-center">
           {productPrice.originalPrice !== productPrice.priceAfterDiscount ? (
             <div className="mt-5">
@@ -120,7 +114,9 @@ const ProductItem = ({ product, isForShow }) => {
                   {formatVND(productPrice.originalPrice)}
                 </span>
                 <span className="font-light underline">đ</span>{" "}
-                <span className="text-red-600">-{calculateDiscount()}%</span>
+                <span className="text-red-600 dark:text-red-400">
+                  -{calculateDiscount()}%
+                </span>
               </p>
               <p className="text-2xl font-bold mt-2 text-slate-900 dark:text-gray-100">
                 {formatVND(productPrice.priceAfterDiscount)}
@@ -139,4 +135,4 @@ const ProductItem = ({ product, isForShow }) => {
   );
 };
 
-export default ProductItem;
+export default React.memo(ProductItem);

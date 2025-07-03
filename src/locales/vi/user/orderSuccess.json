@@ -1,0 +1,13 @@
+{
+  "orderSuccessTitle": "Đặt hàng thành công!",
+  "orderSuccessMessage": "Cảm ơn bạn đã đặt hàng. Chúng tôi sẽ xử lý đơn hàng của bạn trong thời gian sớm nhất.",
+  "emailNotification": "Chú ý: Thông tin chi tiết về đơn hàng đã được gửi qua mail.",
+  "orderInfo": "Thông tin đơn hàng",
+  "orderIdLabel": "Mã đơn hàng #",
+  "statusLabel": "Trạng thái",
+  "statusConfirmed": "Đã xác nhận",
+  "estimatedTimeLabel": "Thời gian dự kiến",
+  "estimatedTimeValue": "2 - 3 ngày",
+  "continueShopping": "Tiếp tục mua sắm",
+  "viewOrderDetails": "Xem chi tiết đơn hàng"
+}

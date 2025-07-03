@@ -5,12 +5,14 @@ import ProductItem from "../../../component/Product/ProductItem";
 import SortButton from "../../../component/Product/SortButton";
 import { SortOptions } from "../../../component/Product/SortButton/sortOption";
 import { filterProduct } from "../../../config/api";
-import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 import Pagination from "../../../component/Pagiantion";
 
 const ITEMS_PER_PAGE = 9;
 
 const ProductPage = () => {
+  const { t } = useTranslation("product");
   const { categorySlug } = useParams();
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(50000000);
@@ -18,37 +20,47 @@ const ProductPage = () => {
   const [productList, setProductList] = useState([]);
   const [selectedOption, setSelectedOption] = useState(SortOptions.newest);
   const [loading, setLoading] = useState(true);
-
+  const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   const handleGetListProduct = async () => {
     setLoading(true);
+    setError("");
+    try {
+      const response = await filterProduct({
+        categorySlug,
+        minPrice,
+        maxPrice,
+        sortBy: selectedOption,
+        page: currentPage,
+        limit: ITEMS_PER_PAGE,
+      });
 
-    const response = await filterProduct({
-      categorySlug,
-      minPrice,
-      maxPrice,
-      sortBy: selectedOption,
-      page: currentPage,
-      limit: ITEMS_PER_PAGE,
-    });
-
-    if (response && response.status === 200) {
-      const products = response.metadata.data.map((product) => ({
-        id: product._id,
-        name: product?.product_name,
-        imageSrc: product?.product_thumb,
-        productPrice: product?.product_price,
-        link: `/products/${product?.product_slug}`,
-        rating: product?.product_ratingAverage,
-        tags: product?.product_tags,
-      }));
-
-      setProductList(products);
-      setTotalPages(response.metadata.pagination.totalPages);
+      if (response && response.status === 200) {
+        const products = response.metadata.data.map((product) => ({
+          id: product._id,
+          name: product?.product_name,
+          imageSrc: product?.product_thumb,
+          productPrice: product?.product_price,
+          link: `/products/${product?.product_slug}`,
+          rating: product?.product_ratingAverage,
+          tags: product?.product_tags,
+        }));
+        setProductList(products);
+        setTotalPages(response.metadata.pagination.totalPages);
+      } else {
+        setProductList([]);
+        setError(response.message || t("errorFetchProducts"));
+        toast.error(response.message || t("errorFetchProducts"));
+      }
+    } catch (err) {
+      setProductList([]);
+      setError(err.response?.data?.message || t("errorGeneric"));
+      toast.error(err.response?.data?.message || t("errorGeneric"));
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const toggleSortDropdown = () => {
@@ -65,7 +77,7 @@ const ProductPage = () => {
   }, [categorySlug, minPrice, maxPrice, selectedOption, currentPage]);
 
   return (
-    <section className="bg-[#f3f4f6] dark:bg-gray-900 antialiased min-h-[800px]">
+    <section className="bg-[#f3f4f6] dark:bg-gray-900 antialiased min-h-[800px] transition-colors duration-300">
       <div className="mx-auto max-w-screen-xl">
         <div className="flex gap-6">
           <FilterSidebar
@@ -87,11 +99,15 @@ const ProductPage = () => {
 
             {loading ? (
               <div className="flex justify-center items-center h-96">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 dark:border-blue-400"></div>
+              </div>
+            ) : error ? (
+              <div className="text-center text-lg text-gray-600 dark:text-gray-300">
+                {error}
               </div>
             ) : productList.length === 0 ? (
               <div className="text-center text-lg text-gray-600 dark:text-gray-300">
-                Không tìm thấy sản phẩm nào
+                {t("noProductsFound")}
               </div>
             ) : (
               <>
@@ -119,4 +135,4 @@ const ProductPage = () => {
   );
 };
 
-export default ProductPage;
+export default React.memo(ProductPage);

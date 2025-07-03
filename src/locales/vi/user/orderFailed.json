@@ -1,0 +1,10 @@
+{
+  "paymentFailedTitle": "Thanh toán không thành công",
+  "paymentFailedMessage": "Rất tiếc, giao dịch của bạn chưa được hoàn tất. Vui lòng thử lại sau.",
+  "paymentErrorTitle": "Có lỗi trong quá trình thanh toán",
+  "orderInfo": "Thông tin đơn hàng",
+  "orderIdLabel": "Mã đơn hàng",
+  "totalLabel": "Tổng tiền",
+  "paymentMethodLabel": "Phương thức",
+  "backToCart": "Quay lại giỏ hàng"
+}

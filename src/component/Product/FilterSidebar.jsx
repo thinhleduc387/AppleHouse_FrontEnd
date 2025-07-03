@@ -1,12 +1,13 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
+  const { t } = useTranslation("product");
   const trackRef = useRef(null);
 
   const MIN = 0;
   const MAX = 50000000;
 
-  // Add a state to track which checkbox is selected
   const [selectedPriceRange, setSelectedPriceRange] = useState(null);
 
   const getPercentageFromPosition = (positionX) => {
@@ -50,17 +51,14 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
     document.addEventListener(endEvent, onEnd);
   };
 
-  // Hàm xử lý khi chọn checkbox "Tất cả"
   const handleOnClick1 = () => {
-    setMinPrice(MIN); // Reset minPrice
-    setMaxPrice(MAX); // Reset maxPrice
-    setSelectedPriceRange(null); // Deselect all checkboxes
+    setMinPrice(MIN);
+    setMaxPrice(MAX);
+    setSelectedPriceRange(null);
   };
 
-  // Hàm xử lý khi chọn các khoảng giá cụ thể
   const handleOnClick2 = (range) => {
-    setSelectedPriceRange(range); // Set the selected price range
-
+    setSelectedPriceRange(range);
     switch (range) {
       case "20-25":
         setMinPrice(20000000);
@@ -80,15 +78,14 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
   };
 
   return (
-    <aside className="hidden lg:block w-1/4 p-4 rounded-lg shadow-md bg-white dark:bg-gray-800 sticky top-16 h-max my-14">
+    <aside className="hidden lg:block w-1/4 p-4 rounded-lg shadow-md bg-white dark:bg-gray-800 dark:shadow-gray-700 sticky top-16 h-max my-14">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-        Bộ lọc tìm kiếm
+        {t("filterTitle")}
       </h3>
       <div className="space-y-6">
-        {/* Price Filter */}
         <div>
           <h4 className="font-semibold text-sm text-gray-700 dark:text-gray-300 mb-2">
-            Mức giá
+            {t("priceFilterLabel")}
           </h4>
           <div className="flex flex-col space-y-1 mb-4">
             <label onClick={handleOnClick1}>
@@ -97,7 +94,7 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
                 checked={selectedPriceRange === null}
                 className="mr-2 text-blue-500 focus:ring-blue-500 dark:text-blue-400 dark:focus:ring-blue-400"
               />
-              Tất cả
+              {t("allPrices")}
             </label>
             <label onClick={() => handleOnClick2("20-25")}>
               <input
@@ -105,7 +102,7 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
                 checked={selectedPriceRange === "20-25"}
                 className="mr-2 text-blue-500 focus:ring-blue-500 dark:text-blue-400 dark:focus:ring-blue-400"
               />
-              Từ 20 - 25 triệu
+              {t("priceRange20to25")}
             </label>
             <label onClick={() => handleOnClick2("25-30")}>
               <input
@@ -113,7 +110,7 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
                 checked={selectedPriceRange === "25-30"}
                 className="mr-2 text-blue-500 focus:ring-blue-500 dark:text-blue-400 dark:focus:ring-blue-400"
               />
-              Từ 25 - 30 triệu
+              {t("priceRange25to30")}
             </label>
             <label onClick={() => handleOnClick2("above-30")}>
               <input
@@ -121,11 +118,11 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
                 checked={selectedPriceRange === "above-30"}
                 className="mr-2 text-blue-500 focus:ring-blue-500 dark:text-blue-400 dark:focus:ring-blue-400"
               />
-              Trên 30 triệu
+              {t("priceRangeAbove30")}
             </label>
           </div>
           <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
-            Hoặc nhập khoảng giá phù hợp với bạn:
+            {t("customPriceRange")}
           </p>
           <div className="flex items-center space-x-2 mb-4">
             <input
@@ -153,8 +150,6 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
                 right: `${100 - ((maxPrice - MIN) / (MAX - MIN)) * 100}%`,
               }}
             ></div>
-
-            {/* Thumb Min */}
             <div
               className="absolute w-5 h-5 bg-white dark:bg-gray-800 border-2 border-blue-500 dark:border-blue-400 rounded-full cursor-pointer transform -translate-x-1/2 -translate-y-1/2"
               style={{
@@ -164,8 +159,6 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
               onMouseDown={(e) => handleThumbStart(e, "min")}
               onTouchStart={(e) => handleThumbStart(e, "min")}
             ></div>
-
-            {/* Thumb Max */}
             <div
               className="absolute w-5 h-5 bg-white dark:bg-gray-800 border-2 border-blue-500 dark:border-blue-400 rounded-full cursor-pointer transform -translate-x-1/2 -translate-y-1/2"
               style={{
@@ -177,11 +170,9 @@ const FilterSidebar = ({ minPrice, maxPrice, setMinPrice, setMaxPrice }) => {
             ></div>
           </div>
         </div>
-
-        {/* Other Filters */}
       </div>
     </aside>
   );
 };
 
-export default FilterSidebar;
+export default React.memo(FilterSidebar);

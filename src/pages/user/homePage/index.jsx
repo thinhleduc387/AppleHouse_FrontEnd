@@ -1,14 +1,16 @@
 import React, { memo, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useNavigate } from "react-router-dom"; // Thêm useNavigate
+import { useNavigate } from "react-router-dom";
 import Banner from "../../../component/Banner";
 import "./style.css";
 import { getAllCategory } from "../../../config/api";
 import ProductSection from "../../../component/RecommendSection/RecommendSection";
+import { useTranslation } from "react-i18next"; // Thêm useTranslation
 
 // Component cho section với hiệu ứng scroll
 const AnimatedSection = ({ children, backgroundImage, className, link }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation("homePage"); // Sử dụng namespace homePage
 
   const handleNavigate = () => {
     if (link) {
@@ -34,7 +36,7 @@ const AnimatedSection = ({ children, backgroundImage, className, link }) => {
             onClick={handleNavigate}
             className="bg-blue-600 text-white text-base font-semibold rounded-full px-6 py-2 hover:bg-blue-700 transition"
           >
-            Tìm hiểu thêm
+            {t("learnMore")}
           </motion.button>
         </div>
       </div>
@@ -48,9 +50,10 @@ const GridItem = ({
   buttonText,
   backgroundImage,
   position,
-  link, // Thêm prop link
+  link,
 }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation("homePage"); // Sử dụng namespace homePage
 
   const handleNavigate = () => {
     if (link) {
@@ -71,24 +74,23 @@ const GridItem = ({
       <div className="relative z-10 pt-8">
         {title === "iPad Pro" || title === "AirPods 4" ? (
           <>
-            <p className="text-xl text-white font-semibold mb-1">{title}</p>
-            <p className="text-base text-white mb-4">{description}</p>
+            <p className="text-xl text-white font-semibold mb-1">{t(title)}</p>
+            <p className="text-base text-white mb-4">{t(description)}</p>
           </>
         ) : (
           <>
-            <p className="text-xl text-black font-semibold mb-1">{title}</p>
-            <p className="text-base text-black mb-4">{description}</p>
+            <p className="text-xl text-black font-semibold mb-1">{t(title)}</p>
+            <p className="text-base text-black mb-4">{t(description)}</p>
           </>
         )}
-
         <div className="flex justify-center mb-6 gap-3">
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            onClick={handleNavigate} // Thêm onClick
+            onClick={handleNavigate}
             className="bg-blue-700 text-white text-base font-semibold rounded-full px-6 py-2 hover:bg-blue-800 transition"
           >
-            Tìm hiểu thêm
+            {t(buttonText)}
           </motion.button>
         </div>
       </div>
@@ -97,15 +99,12 @@ const GridItem = ({
 };
 
 const HomePage = () => {
-  // Parallax effect cho banner
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 150]);
-
-  // State để lưu response từ API
   const [categories, setCategories] = useState(null);
   const [error, setError] = useState(null);
+  const { t } = useTranslation("homePage"); // Sử dụng namespace homePage
 
-  // Gọi API getAllCategory khi component mount
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -121,7 +120,6 @@ const HomePage = () => {
     fetchCategories();
   }, []);
 
-  // Xử lý query params cho userId và accessToken
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const userId = queryParams.get("user");
@@ -135,53 +133,44 @@ const HomePage = () => {
 
   return (
     <div className="bg-white">
-      {/* Hiển thị error nếu có */}
       {error && (
         <div className="text-red-500 text-center py-4">
-          Error fetching categories: {error}
+          {t("errorFetchingCategories", { error })}
         </div>
       )}
-
-      {/* Banner với parallax */}
       <motion.div style={{ y }} className="relative">
         <Banner />
       </motion.div>
-
       <AnimatedSection
         backgroundImage="https://www.apple.com/v/home/ce/images/heroes/apple-watch-pride/hero_apple_watch_pride__ghqvc4dlapaq_medium_2x.jpg"
         className="bg-gray-100 text-center py-8 px-4"
-        link="/apple-watch-54321" // Thêm link
+        link="/apple-watch-54321"
       >
-        <h2 className="font-sans text-3xl font-black mb-1">Apple Watch</h2>
-        <p className="text-xl mb-4">
-          Thể hiện bản sắc của bạn với <br />
-          Dây Đeo Thể Thao Pride Edition mới.{" "}
-        </p>
+        <h2 className="font-sans text-3xl font-black mb-1">
+          {t("appleWatchTitle")}
+        </h2>
+        <p className="text-xl mb-4">{t("appleWatchDescription")}</p>
       </AnimatedSection>
-
-      {/* Apple Watch Section */}
       <AnimatedSection
         backgroundImage="https://www.apple.com/vn/home/images/heroes/iphone-family/hero_iphone_family__fuz5j2v5xx6y_medium_2x.jpg"
         className="bg-gray-100 text-center py-8 px-4"
-        link="/iphone-12345" // Thêm link
+        link="/iphone-12345"
       >
         <div className="mb-1 flex justify-center items-center gap-1 text-3xl font-black">
-          iPhone
+          {t("iphoneTitle")}
         </div>
-        <div className="text-xl mb-4">Giới thiệu dòng iPhone 16.</div>
+        <div className="text-xl mb-4">{t("iphoneDescription")}</div>
       </AnimatedSection>
-
-      {/* iPad Pro Section */}
       <AnimatedSection
         backgroundImage="https://www.apple.com/v/home/ce/images/heroes/mothers-day-2025/hero_md25__ca4cocy2qlv6_medium_2x.png"
         className="bg-black text-center py-8 px-4"
-        link="/phu-kien-11223" // Thêm link
+        link="/phu-kien-11223"
       >
-        <h2 className="font-sans text-3xl font-black mb-1">Ngày Của Mẹ</h2>
-        <p className="text-xl mb-4">Vẫn còn kịp để tìm món quà ưng ý cho Mẹ.</p>
+        <h2 className="font-sans text-3xl font-black mb-1">
+          {t("mothersDayTitle")}
+        </h2>
+        <p className="text-xl mb-4">{t("mothersDayDescription")}</p>
       </AnimatedSection>
-
-      {/* Grid Section với hiệu ứng stagger và cạnh chéo, nằm cùng hàng */}
       <motion.section
         initial="hidden"
         whileInView="visible"
@@ -198,36 +187,36 @@ const HomePage = () => {
         className="grid grid-cols-1 sm:grid-cols-4 gap-0 relative"
       >
         <GridItem
-          title="iPad Air"
-          description="Nay siêu mạnh mẽ với chip M3."
-          buttonText="Mua sắm"
+          title="ipadAirTitle"
+          description="ipadAirDescription"
+          buttonText="shop"
           backgroundImage="https://www.apple.com/v/home/ce/images/promos/ipad-air/promo_ipad_air__bfbxzvw65c02_large.jpg"
           position="start"
-          link="/ipad-98765" // Thêm link
+          link="/ipad-98765"
         />
         <GridItem
-          title="MacBook Air"
-          description="Mỏng hơn. Mạnh hơn. Màu vàng sang trọng tới từ M1."
-          buttonText="Tìm hiểu thêm"
+          title="macBookAirTitle"
+          description="macBookAirDescription"
+          buttonText="learnMore"
           backgroundImage="https://www.apple.com/v/home/ce/images/promos/macbook-air/promo_macbook_air_avail__e8ksaudoisey_large.jpg"
           position="middle"
-          link="/mac-67890" // Thêm link
+          link="/mac-67890"
         />
         <GridItem
-          title="iPad Pro"
-          description="Mỏng không tưởng. Mạnh không ngờ."
-          buttonText="Tìm hiểu thêm"
+          title="ipadProTitle"
+          description="ipadProDescription"
+          buttonText="learnMore"
           backgroundImage="https://www.apple.com/v/home/ce/images/promos/ipad-pro/promo_ipadpro_avail__s271j89g8kii_large.jpg"
           position="middle"
-          link="/ipad-98765" // Thêm link
+          link="/ipad-98765"
         />
         <GridItem
-          title="AirPods 4"
-          description="Đẹp biểu tượng. Hay phi thường. Nay với tính năng Chủ Động Khử Tiếng Ồn."
-          buttonText="Tìm hiểu thêm"
+          title="airPods4Title"
+          description="airPods4Description"
+          buttonText="learnMore"
           backgroundImage="https://www.apple.com/v/home/ce/images/promos/airpods-4/promo_airpods_4_avail__bl22kvpg6ez6_large.jpg"
           position="end"
-          link="/phu-kien-11223" // Thêm link
+          link="/phu-kien-11223"
         />
       </motion.section>
       <div>

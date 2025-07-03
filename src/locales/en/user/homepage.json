@@ -1,0 +1,19 @@
+{
+  "appleWatchTitle": "Apple Watch",
+  "appleWatchDescription": "Express your identity with the new Pride Edition Sport Band.",
+  "iphoneTitle": "iPhone",
+  "iphoneDescription": "Introducing the iPhone 16 lineup.",
+  "mothersDayTitle": "Mother's Day",
+  "mothersDayDescription": "Still time to find the perfect gift for Mom.",
+  "ipadAirTitle": "iPad Air",
+  "ipadAirDescription": "Now supercharged with the M3 chip.",
+  "macBookAirTitle": "MacBook Air",
+  "macBookAirDescription": "Thinner. More powerful. Luxurious gold from M1.",
+  "ipadProTitle": "iPad Pro",
+  "ipadProDescription": "Impossibly thin. Incredibly powerful.",
+  "airPods4Title": "AirPods 4",
+  "airPods4Description": "Iconic design. Extraordinary sound. Now with Active Noise Cancellation.",
+  "learnMore": "Learn More",
+  "shop": "Shop",
+  "errorFetchingCategories": "Error fetching categories: {error}"
+}
