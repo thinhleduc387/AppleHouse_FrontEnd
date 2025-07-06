@@ -124,17 +124,16 @@ const ChatBox = () => {
 
           {isChatOpen && (
             <div
-              className={`absolute transition-all duration-300 ${
+              className={`transition-all duration-300 ${
                 isExpanded
-                  ? "top-0 left-0 w-full h-full"
-                  : "bottom-0 right-24 w-[90%] md:w-[600px] h-[85vh] md:h-[700px] mx-auto md:mx-0"
-              } bg-white shadow-xl z-50 flex flex-col rounded-lg`}
+                  ? "fixed top-0 left-0 w-screen h-screen z-[100]"
+                  : "absolute bottom-0 right-24 w-[90%] md:w-[600px] h-[85vh] md:h-[700px] mx-auto md:mx-0 z-50 rounded-lg"
+              } bg-white shadow-xl flex flex-col`}
             >
               <ChatHeader
                 onExpand={() => dispatch(toggleExpand())}
                 onClose={() => dispatch(closeChat())}
               />
-
               <div className="flex flex-1 overflow-hidden">
                 <div
                   className={`flex flex-col ${
@@ -144,7 +143,6 @@ const ChatBox = () => {
                   <ChatMessages messages={messages} isLoading={isLoading} />
                   <ChatInput onSendMessage={handleSendMessage} />
                 </div>
-
                 {isExpanded && (
                   <div className="hidden md:block md:w-1/2">
                     <ProductSection />

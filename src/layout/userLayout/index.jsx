@@ -14,7 +14,7 @@ const MasterLayout = ({ ...props }) => {
       <main className="flex-grow w-full mt-[90px] bg-[#f3f4f6]">
         <Outlet />
       </main>
-      <div className="fixed bottom-4 right-4 z-40">
+      <div className="fixed bottom-4 right-4 z-[200]">
         <div className="flex flex-col items-end gap-2">
           <div className="relative">
             <ChatUser />

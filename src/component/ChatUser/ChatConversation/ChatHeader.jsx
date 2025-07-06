@@ -1,15 +1,8 @@
-import { FiArrowLeft, FiX } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 
-const ChatHeader = ({ onClose, onBack }) => {
+const ChatHeader = ({ onClose }) => {
   return (
     <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-300">
-      <button
-        aria-label="Back"
-        className="focus:outline-none text-gray-600 text-lg"
-        onClick={onBack}
-      >
-        <FiArrowLeft />
-      </button>
       <img
         alt="User profile picture, gray circle with user icon"
         className="w-8 h-8 rounded-full"
