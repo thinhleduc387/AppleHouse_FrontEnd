@@ -690,3 +690,17 @@ export const trackingSpuView = async ({ spu_id, user_id }) => {
     user_id,
   });
 };
+
+// chat admin
+
+export const getChatRoom = async ({ customerId }) => {
+  return axios.post(`/chatroom/create-or-get`, {
+    customerId,
+  });
+};
+
+// export const getAllMessage = async ({ customerId }) => {
+//   return axios.post(`/chatroom/create-or-get`, {
+//     customerId,
+//   });
+// };

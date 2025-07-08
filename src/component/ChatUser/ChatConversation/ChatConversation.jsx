@@ -3,7 +3,12 @@ import ChatHeader from "./ChatHeader";
 import ChatContent from "./ChatContent";
 import ChatSend from "./ChatSend";
 import { FiX } from "react-icons/fi";
-
+import { useSelector } from "react-redux";
+import socket, {
+  joinChatRoom,
+  sendMessage,
+  onNewMessage,
+} from "../../../socket/index.js";
 const initialMessages = [
   {
     id: 1,
@@ -30,6 +35,7 @@ const ChatConversation = ({ onClose, onBack }) => {
   const [selectedImage, setSelectedImage] = useState(null); // State cho modal ảnh
   const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const userId = useSelector((state) => state.account?.user?._id);
 
   const handleImageUpload = (event, urls = []) => {
     const files = Array.from(event.target.files || []);
@@ -57,35 +63,36 @@ const ChatConversation = ({ onClose, onBack }) => {
   };
 
   const handleSendMessage = () => {
-    const newMessages = [];
+    if (!messageInput.trim() && selectedImages.length === 0) return;
 
     if (messageInput.trim()) {
-      newMessages.push({
-        id: messages.length + newMessages.length + 1,
-        senderId: currentUserId,
+      const textMsg = {
+        roomId: userId,
+        senderId: userId,
         content: messageInput.trim(),
-        timestamp: new Date().toISOString(),
-        type: "text",
-      });
+        messageType: "text",
+        imageUrl: null,
+      };
+
+      sendMessage(textMsg);
     }
 
     if (selectedImages.length > 0) {
       selectedImages.forEach((image) => {
-        newMessages.push({
-          id: messages.length + newMessages.length + 1,
-          senderId: currentUserId,
-          content: image,
-          timestamp: new Date().toISOString(),
-          type: "image",
-        });
+        const imageMsg = {
+          roomId: userId,
+          senderId: userId,
+          content: "",
+          imageUrl: image,
+          messageType: "image",
+        };
+
+        sendMessage(imageMsg);
       });
     }
 
-    if (newMessages.length > 0) {
-      setMessages([...messages, ...newMessages]);
-      setMessageInput("");
-      setSelectedImages([]);
-    }
+    setMessageInput("");
+    setSelectedImages([]);
   };
 
   useEffect(() => {
@@ -101,6 +108,20 @@ const ChatConversation = ({ onClose, onBack }) => {
     const timer = setTimeout(scrollToBottom, 100);
     return () => clearTimeout(timer);
   }, [messages, selectedImages]);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    joinChatRoom(userId);
+
+    onNewMessage((newMsg) => {
+      setMessages((prev) => [...prev, newMsg]);
+    });
+
+    return () => {
+      socket.off("newMessage");
+    };
+  }, [userId]);
 
   return (
     <div className="flex flex-col h-full overflow-hidden">

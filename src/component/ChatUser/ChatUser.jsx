@@ -1,10 +1,14 @@
 import { FiMessageSquare } from "react-icons/fi";
 import ChatConversation from "../ChatUser/ChatConversation/ChatConversation";
 import { useState } from "react";
+import { getChatRoom } from "../../config/api";
+import { useSelector } from "react-redux";
 
+// roomId the same userId
 const ChatUser = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
-
+  const [messages, setMessages] = useState([]);
+  const userId = useSelector((state) => state.account?.user?._id);
   const defaultChat = {
     id: 1,
     userName: "her",
@@ -17,7 +21,11 @@ const ChatUser = () => {
     },
   };
 
-  const toggleChat = () => {
+  const toggleChat = async () => {
+    const responseRoomId = await getChatRoom({ customerId: userId });
+
+    console.log(responseRoomId);
+
     setIsChatOpen(!isChatOpen);
   };
 

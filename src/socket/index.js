@@ -32,5 +32,40 @@ export const registerUser = (userId, token = null) => {
     });
 };
 
-// Xuất socket để sử dụng ở nơi khác nếu cần
+export const joinChatRoom = (roomId) => {
+    if (!socket.connected) {
+        socket.connect();
+    }
+
+    socket.emit("joinRoom", {
+        roomId
+    });
+    console.log(`Joined room ${roomId}`);
+};
+
+export const sendMessage = ({
+    roomId,
+    senderId,
+    content,
+    messageType = "text",
+    imageUrl = null
+}) => {
+    if (!socket.connected) {
+        console.warn("Socket not connected");
+        return;
+    }
+
+    socket.emit("sendMessage", {
+        roomId,
+        senderId,
+        content,
+        messageType,
+        imageUrl,
+    });
+};
+
+export const onNewMessage = (callback) => {
+    socket.on("newMessage", callback);
+};
+
 export default socket;
