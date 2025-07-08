@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineOrderedList, AiTwotoneNotification } from "react-icons/ai";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,10 +10,11 @@ import { setLogoutAction } from "../../redux/slices/accountSlice";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { clearRoleData } from "../../redux/slices/rbacSlice";
 import { CiDiscount1 } from "react-icons/ci";
-import { useTranslation } from "react-i18next"; // Thêm useTranslation
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 const Sidebar = () => {
-  const { t } = useTranslation("profile"); // Sử dụng namespace profile
+  const { t } = useTranslation("profile");
   const [activeItem, setActiveItem] = useState();
   const navigate = useNavigate();
   const location = useLocation();
@@ -63,11 +64,12 @@ const Sidebar = () => {
         dispatch(setLogoutAction());
         dispatch(clearRoleData());
         navigate("/login");
+        toast.success(t("logoutSuccess"));
       } else {
-        console.error("Logout failed", response.message);
+        toast.error(response.message || t("errorLogoutFailed"));
       }
     } catch (error) {
-      console.error("Logout error:", error);
+      toast.error(error.response?.data?.message || t("errorGeneric"));
     }
   };
 
@@ -78,8 +80,8 @@ const Sidebar = () => {
   }, [location, items]);
 
   return (
-    <div className="top-0 left-0 min-w-[250px] overflow-auto space-y-4 md:rounded-lg">
-      <div className="bg-white dark:bg-gray-800 py-6 rounded-xl shadow-md">
+    <div className="top-0 left-0 min-w-[250px] overflow-auto space-y-4 bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+      <div className="bg-white dark:bg-gray-800 py-6 rounded-xl shadow-md dark:shadow-gray-700">
         <ProfileSection
           userName={userName}
           userAvatar={userAvatar}
@@ -87,7 +89,7 @@ const Sidebar = () => {
         />
       </div>
 
-      <div className="relative flex flex-col h-full bg-white dark:bg-gray-800 rounded-xl py-6 border border-gray-300 dark:border-gray-700">
+      <div className="relative flex flex-col h-full bg-white dark:bg-gray-800 rounded-xl py-6 border border-gray-300 dark:border-gray-600">
         <ul className="space-y-3 flex-1">
           {items.map((item) => (
             <li key={item.text}>
@@ -104,7 +106,13 @@ const Sidebar = () => {
                       : "text-black dark:text-gray-100 hover:text-[#007bff] dark:hover:text-blue-400 hover:border-r-[5px] hover:border-[#077bff] dark:hover:border-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700"
                   }`}
                 >
-                  <item.icon className="w-[18px] h-[18px] mr-4 text-black dark:text-gray-100" />
+                  <item.icon
+                    className={`w-[18px] h-[18px] mr-4 ${
+                      activeItem === item.text
+                        ? "text-[#007bff] dark:text-blue-400"
+                        : "text-black dark:text-gray-100"
+                    }`}
+                  />
                   <span>{item.text}</span>
                 </Link>
               ) : (
@@ -117,7 +125,13 @@ const Sidebar = () => {
                       : "text-black dark:text-gray-100 hover:text-[#007bff] dark:hover:text-blue-400 hover:border-r-[5px] hover:border-[#077bff] dark:hover:border-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700"
                   }`}
                 >
-                  <item.icon className="w-[18px] h-[18px] mr-4 text-black dark:text-gray-100" />
+                  <item.icon
+                    className={`w-[18px] h-[18px] mr-4 ${
+                      activeItem === item.text
+                        ? "text-[#007bff] dark:text-blue-400"
+                        : "text-black dark:text-gray-100"
+                    }`}
+                  />
                   <span>{item.text}</span>
                 </Link>
               )}
@@ -129,4 +143,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default React.memo(Sidebar);

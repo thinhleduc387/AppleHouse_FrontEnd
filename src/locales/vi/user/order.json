@@ -1,0 +1,18 @@
+{
+  "myOrders": "Đơn hàng của tôi",
+  "manageOrders": "Quản lý và theo dõi đơn hàng của bạn",
+  "searchOrders": "Tìm kiếm đơn hàng...",
+  "all": "Tất cả",
+  "confirmed": "Đã xác nhận",
+  "processing": "Đang xử lý",
+  "shipped": "Đang giao",
+  "delivered": "Hoàn tất",
+  "cancelled": "Đã hủy",
+  "noOrdersFound": "Không tìm thấy đơn hàng nào",
+  "noOrdersMatchingSearch": "Không tìm thấy đơn hàng phù hợp với tìm kiếm của bạn",
+  "noOrdersInStatus": "Bạn chưa có đơn hàng nào trong trạng thái {status}",
+  "quantity": "Số lượng",
+  "totalAmount": "Thành tiền",
+  "viewDetails": "Xem chi tiết",
+  "products": "sản phẩm"
+}

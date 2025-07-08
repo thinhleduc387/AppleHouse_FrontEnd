@@ -7,11 +7,11 @@ import ChatUser from "../../component/ChatUser/ChatUser";
 
 const MasterLayout = ({ ...props }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      <div className="w-full fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-800 shadow-md">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+      <div className="w-full fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-700">
         <Header />
       </div>
-      <main className="flex-grow w-full mt-[90px] bg-[#f3f4f6]">
+      <main className="flex-grow w-full mt-[90px] bg-[#f3f4f6] dark:bg-gray-900 transition-colors duration-300">
         <Outlet />
       </main>
       <div className="fixed bottom-4 right-4 z-[200]">

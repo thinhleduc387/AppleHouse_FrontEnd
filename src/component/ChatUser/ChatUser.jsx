@@ -22,9 +22,9 @@ const ChatUser = () => {
   };
 
   const toggleChat = async () => {
-    const responseRoomId = await getChatRoom({ customerId: userId });
+    // const responseRoomId = await getChatRoom({ customerId: userId });
 
-    console.log(responseRoomId);
+    // console.log(responseRoomId);
 
     setIsChatOpen(!isChatOpen);
   };

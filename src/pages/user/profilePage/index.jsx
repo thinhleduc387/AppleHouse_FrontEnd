@@ -4,13 +4,13 @@ import Sidebar from "../../../component/Profile/SideBar";
 
 const ProfilePage = () => {
   return (
-    <div className="bg-[#f3f4f6] dark:bg-gray-900 mx-[100px] transition-colors duration-300">
+    <div className="bg-[#f3f4f6] dark:bg-gray-900 mx-[100px] min-h-screen transition-colors duration-300">
       <div className="block md:hidden">
         <Sidebar />
       </div>
 
       <div className="flex overflow-hidden mt-6">
-        <div className="hidden md:block w-64 bg-gray-800 dark:bg-gray-800 text-white dark:text-gray-100 h-fit z-1 sticky top-0">
+        <div className="hidden md:block w-64 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 h-fit z-1 sticky top-0 shadow-md dark:shadow-gray-700">
           <Sidebar />
         </div>
 

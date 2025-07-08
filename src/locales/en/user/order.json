@@ -1,0 +1,18 @@
+{
+  "myOrders": "My Orders",
+  "manageOrders": "Manage and track your orders",
+  "searchOrders": "Search orders...",
+  "all": "All",
+  "confirmed": "Confirmed",
+  "processing": "Processing",
+  "shipped": "Shipped",
+  "delivered": "Delivered",
+  "cancelled": "Cancelled",
+  "noOrdersFound": "No orders found",
+  "noOrdersMatchingSearch": "No orders matching your search",
+  "noOrdersInStatus": "You have no orders in the {status} status",
+  "quantity": "Quantity",
+  "totalAmount": "Total Amount",
+  "viewDetails": "View Details",
+  "products": "products"
+}

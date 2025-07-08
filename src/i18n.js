@@ -44,8 +44,12 @@ import enOrderSuccess from "./locales/en/user/orderSuccess.json";
 import viOrderSuccess from "./locales/vi/user/orderSuccess.json";
 import enProduct from "./locales/en/user/product.json";
 import viProduct from "./locales/vi/user/product.json";
-import enProfile from "./locales/en/user/profile.json"; // Thêm profile
-import viProfile from "./locales/vi/user/profile.json"; // Thêm profile
+import enProfile from "./locales/en/user/profile.json";
+import viProfile from "./locales/vi/user/profile.json";
+import enOrderUser from "./locales/en/user/order.json";
+import viOrderUser from "./locales/vi/user/order.json";
+import enNotification from "./locales/en/user/notification.json"; // Thêm notification
+import viNotification from "./locales/vi/user/notification.json"; // Thêm notification
 
 const resources = {
   en: {
@@ -70,7 +74,9 @@ const resources = {
     orderFailed: enOrderFailed,
     orderSuccess: enOrderSuccess,
     product: enProduct,
-    profile: enProfile, // Thêm namespace
+    profile: enProfile,
+    orderUser: enOrderUser,
+    notification: enNotification, // Thêm namespace
   },
   vi: {
     header: viHeader,
@@ -94,7 +100,9 @@ const resources = {
     orderFailed: viOrderFailed,
     orderSuccess: viOrderSuccess,
     product: viProduct,
-    profile: viProfile, // Thêm namespace
+    profile: viProfile,
+    orderUser: viOrderUser,
+    notification: viNotification, // Thêm namespace
   },
 };
 
@@ -126,7 +134,9 @@ i18n
       "orderFailed",
       "orderSuccess",
       "product",
-      "profile", // Thêm namespace
+      "profile",
+      "orderUser",
+      "notification", // Thêm namespace
     ],
     defaultNS: "topProduct",
     interpolation: {

@@ -107,7 +107,7 @@ const ProfileNavBar = ({ userAvatar, userName }) => {
                 {/* Show Admin Page link only for admin or staff */}
                 {roleId !== "6704099fb8583f3dc7342d12" && (
                   <Link
-                    to="/admin/profile"
+                    to="/admin/dashboard"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-500 transition duration-150"
                   >
                     Trang quản trị

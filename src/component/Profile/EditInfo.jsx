@@ -1,13 +1,16 @@
 import React, { useState, useRef } from "react";
-import { Camera } from "lucide-react"; // Xóa X, Upload, Pencil
+import { Camera } from "lucide-react";
 import { getImageLink, updateProfile } from "../../config/api";
 import { toast } from "react-toastify";
 import { fetchAccount } from "../../redux/slices/accountSlice";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import FloatingInput from "../FloatingInput";
 
 const formatDate = (dateString) => {
+  if (!dateString || isNaN(new Date(dateString))) {
+    console.warn("Invalid dateString:", dateString);
+    return "";
+  }
   const date = new Date(dateString);
   return date.toISOString().split("T")[0];
 };
@@ -24,12 +27,23 @@ const EditInfo = ({
 }) => {
   const { t } = useTranslation("profile");
   const fileInputRef = useRef(null);
-  const [avatarPreview, setAvatarPreview] = useState(userAvatar || "");
+  const [avatarPreview, setAvatarPreview] = useState(
+    userAvatar || "/default-avatar.png"
+  );
   const [isHoveringAvatar, setIsHoveringAvatar] = useState(false);
+
+  // Chuẩn hóa userGender
+  const normalizedGender =
+    userGender === t("female")
+      ? "female"
+      : userGender === t("male")
+      ? "male"
+      : "male";
+
   const [formData, setFormData] = useState({
     usr_name: userName || "",
     usr_phone: userPhone || "",
-    usr_sex: userGender || "male", // Chuẩn hóa giá trị mặc định
+    usr_sex: normalizedGender,
     usr_date_of_birth: userDOB ? formatDate(userDOB) : "",
     usr_email: userEmail || "",
     usr_img: userAvatar || "",
@@ -37,9 +51,25 @@ const EditInfo = ({
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
+  // Log props và formData để debug
+  console.log("Props from Info:", {
+    userName,
+    userEmail,
+    userAvatar,
+    userPhone,
+    userGender,
+    userDOB,
+  });
+  console.log("Initial formData:", formData);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    console.log("handleChange:", { name, value });
+    setFormData((prev) => {
+      const newData = { ...prev, [name]: value };
+      console.log("Updated formData:", newData);
+      return newData;
+    });
   };
 
   const handleAvatarClick = () => {
@@ -80,7 +110,7 @@ const EditInfo = ({
     }
     if (formData.usr_date_of_birth) {
       const dob = new Date(formData.usr_date_of_birth);
-      if (dob > new Date()) {
+      if (isNaN(dob) || dob > new Date()) {
         toast.error(t("errorInvalidDOB"));
         return false;
       }
@@ -120,7 +150,7 @@ const EditInfo = ({
         >
           <div className="relative h-32 w-32">
             <img
-              src={avatarPreview || "/default-avatar.png"}
+              src={avatarPreview}
               alt="Profile"
               className="h-full w-full rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-600"
             />
@@ -143,26 +173,41 @@ const EditInfo = ({
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <FloatingInput
-          label={t("fullName")}
-          type="text"
-          id="usr_name"
-          name="usr_name"
-          value={formData.usr_name}
-          onChange={handleChange}
-          placeholder={t("enterFullName")}
-          required
-        />
+        <div>
+          <label
+            htmlFor="usr_name"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            {t("fullName")}
+          </label>
+          <input
+            type="text"
+            id="usr_name"
+            name="usr_name"
+            value={formData.usr_name}
+            onChange={handleChange}
+            placeholder={t("enterFullName")}
+            required
+            className="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400 focus:outline-none transition-colors duration-300"
+          />
+        </div>
 
-        <FloatingInput
-          label={t("email")}
-          type="email"
-          id="usr_email"
-          name="usr_email"
-          value={formData.usr_email}
-          disabled
-          className="cursor-not-allowed bg-gray-50 dark:bg-gray-700"
-        />
+        <div>
+          <label
+            htmlFor="usr_email"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            {t("email")}
+          </label>
+          <input
+            type="email"
+            id="usr_email"
+            name="usr_email"
+            value={formData.usr_email}
+            disabled
+            className="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-2 text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-700 cursor-not-allowed focus:outline-none transition-colors duration-300"
+          />
+        </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -187,28 +232,41 @@ const EditInfo = ({
           </div>
         </div>
 
-        <FloatingInput
-          label={t("dateOfBirth")}
-          type="date"
-          id="usr_date_of_birth"
-          name="usr_date_of_birth"
-          value={
-            formData.usr_date_of_birth
-              ? formatDate(formData.usr_date_of_birth)
-              : ""
-          }
-          onChange={handleChange}
-        />
+        <div>
+          <label
+            htmlFor="usr_date_of_birth"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            {t("dateOfBirth")}
+          </label>
+          <input
+            type="date"
+            id="usr_date_of_birth"
+            name="usr_date_of_birth"
+            value={formData.usr_date_of_birth}
+            onChange={handleChange}
+            placeholder={t("enterDateOfBirth")}
+            className="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400 focus:outline-none transition-colors duration-300"
+          />
+        </div>
 
-        <FloatingInput
-          label={t("phoneNumber")}
-          type="tel"
-          id="usr_phone"
-          name="usr_phone"
-          value={formData.usr_phone}
-          onChange={handleChange}
-          placeholder={t("enterPhoneNumber")}
-        />
+        <div>
+          <label
+            htmlFor="usr_phone"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            {t("phoneNumber")}
+          </label>
+          <input
+            type="tel"
+            id="usr_phone"
+            name="usr_phone"
+            value={formData.usr_phone}
+            onChange={handleChange}
+            placeholder={t("enterPhoneNumber")}
+            className="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400 focus:outline-none transition-colors duration-300"
+          />
+        </div>
 
         <button
           type="submit"

@@ -1,8 +1,11 @@
 import React from "react";
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import { formatDate } from "../../utils";
+import { useTranslation } from "react-i18next";
 
 const OrderItem = ({ order, statusMap }) => {
+  const { t } = useTranslation("orderUser");
   const {
     order_checkout,
     order_payment,
@@ -11,25 +14,26 @@ const OrderItem = ({ order, statusMap }) => {
     order_shipping,
     createdAt,
   } = order;
+
   return (
-    <div className="bg-white rounded-md p-4 shadow-md">
+    <div className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-md dark:shadow-gray-700 transition-colors duration-300">
       {/* Header Section */}
-      <div className="flex justify-between items-center border-b border-gray-200 pb-3 mb-3">
+      <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-600 pb-3 mb-3">
         <div className="flex items-center">
           <div>
-            <p className="text-sm text-gray-800 font-bold">
+            <p className="text-sm text-gray-800 dark:text-gray-100 font-bold">
               {formatDate(createdAt)}
             </p>
-            <p className="text-sm text-gray-600 font-medium">
-              {order_products.length} sản phẩm
+            <p className="text-sm text-gray-600 dark:text-gray-300 font-medium">
+              {order_products.length} {t("products")}
             </p>
           </div>
         </div>
         <div>
-          <span className="w-2 h-2 text-center font-extrabold text-green-600 mr-2">
+          <span className="w-2 h-2 text-center font-extrabold text-green-600 dark:text-green-400 mr-2">
             •
           </span>
-          <span className="text-sm text-green-600 font-bold">
+          <span className="text-sm text-green-600 dark:text-green-400 font-bold">
             {statusMap[order_status]}
           </span>
         </div>
@@ -42,15 +46,18 @@ const OrderItem = ({ order, statusMap }) => {
             <img
               src={item.thumb}
               alt={item.name}
-              className="w-16 h-16 rounded-md border border-gray-300"
+              className="w-16 h-16 rounded-md border border-gray-300 dark:border-gray-600"
             />
             <div className="ml-3">
-              <p className="text-sm font-semibold text-gray-800">{item.name}</p>
-              <p className="text-sm text-gray-600">
-                Số lượng: <span className="font-medium">{item.quantity}</span>
+              <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+                {item.name}
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                {t("quantity")}:{" "}
+                <span className="font-medium">{item.quantity}</span>
               </p>
             </div>
-            <div className="ml-auto text-sm font-semibold text-gray-800">
+            <div className="ml-auto text-sm font-semibold text-gray-800 dark:text-gray-100">
               {item.priceAfterDiscount.toLocaleString("vi-VN", {
                 style: "currency",
                 currency: "VND",
@@ -61,26 +68,25 @@ const OrderItem = ({ order, statusMap }) => {
       </div>
 
       {/* Footer Section */}
-      <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-200">
-        <p className="text-sm text-gray-600">
-          Thành tiền:{" "}
-          <span className="text-lg font-bold text-red-500">
+      <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+        <p className="text-sm text-gray-600 dark:text-gray-300">
+          {t("totalAmount")}:{" "}
+          <span className="text-lg font-bold text-red-500 dark:text-red-400">
             {order_checkout.totalCheckOut.toLocaleString("vi-VN", {
               style: "currency",
               currency: "VND",
             })}
           </span>
         </p>
-        {/* Button "Xem chi tiết" */}
         <Link
           to={`/profile/order-list/${order._id}`}
-          className="text-blue-600 text-sm font-semibold hover:underline"
+          className="text-blue-600 dark:text-blue-400 text-sm font-semibold hover:underline dark:hover:text-blue-300"
         >
-          Xem chi tiết
+          {t("viewDetails")}
         </Link>
       </div>
     </div>
   );
 };
 
-export default OrderItem;
+export default memo(OrderItem);
