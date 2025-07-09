@@ -43,7 +43,7 @@ const ChatUser = () => {
       </button>
 
       {isChatOpen && (
-        <div className="absolute bottom-0 right-24 w-[320px] h-[480px] bg-white dark:bg-gray-800 shadow-xl z-10 flex flex-col rounded-lg transition-all duration-300 overflow-hidden">
+        <div className="absolute bottom-0 right-24 w-[320px] h-[480px] bg-white  shadow-xl z-10 flex flex-col rounded-lg transition-all duration-300 overflow-hidden">
           <ChatConversation chat={defaultChat} onClose={handleCloseChat} />
         </div>
       )}

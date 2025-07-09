@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FiSearch, FiArrowLeft, FiX, FiImage, FiSend } from "react-icons/fi";
 import { useOutletContext } from "react-router-dom";
-
+import { getImageLink } from "../../../config/api";
+import Loading from "../../../component/Loading";
+import { useSelector } from "react-redux";
 // Sample data
 const chatListData = [
   {
@@ -40,8 +42,8 @@ const chatListData = [
 ];
 
 const ChatPage = () => {
-  const { headerHeight } = useOutletContext(); // Lấy chiều cao Header từ AdminLayout
-  const currentUserId = "user1";
+  const { headerHeight } = useOutletContext();
+  const currentUserId = useSelector((state) => state.account?.user?._id);
   const [selectedChatId, setSelectedChatId] = useState(1);
   const [messageInput, setMessageInput] = useState("");
   const [messages, setMessages] = useState([
@@ -50,49 +52,49 @@ const ChatPage = () => {
       senderId: "user1",
       content: "He về chơi thú vị bên đi",
       timestamp: "2025-06-17T22:01:00+07:00",
-      type: "text",
+      messageType: "text", // Đổi type thành messageType
     },
     {
       id: 2,
       senderId: "user1",
       content: "Tối nay có đi chơi không?",
       timestamp: "2025-06-17T22:02:00+07:00",
-      type: "text",
+      messageType: "text",
     },
     {
       id: 3,
       senderId: "user1",
       content: "Vui hơn năm ngoái rồi",
       timestamp: "2025-06-17T22:03:00+07:00",
-      type: "text",
+      messageType: "text",
     },
     {
       id: 4,
       senderId: "user2",
       content: "siêu vui!",
       timestamp: "2025-06-17T22:04:00+07:00",
-      type: "text",
+      messageType: "text",
     },
     {
       id: 5,
       senderId: "user1",
       content: "Cảm ơn bạn đã tặng quà cho mình!",
       timestamp: "2025-06-17T22:05:00+07:00",
-      type: "text",
+      messageType: "text",
     },
     {
       id: 6,
       senderId: "user1",
       content: "Cảm ơn bạn lần nữa nhé!",
       timestamp: "2025-06-17T22:06:00+07:00",
-      type: "text",
+      messageType: "text",
     },
     {
       id: 7,
       senderId: "user2",
       content: "ok",
       timestamp: "2025-06-17T22:07:00+07:00",
-      type: "text",
+      messageType: "text",
     },
   ]);
   const fileInputRef = useRef(null);
@@ -107,6 +109,7 @@ const ChatPage = () => {
   const [urlError, setUrlError] = useState("");
   const [invalidUrls, setInvalidUrls] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Đo chiều cao Header và Input Area
   const [chatHeaderHeight, setChatHeaderHeight] = useState(72);
@@ -189,6 +192,44 @@ const ChatPage = () => {
     setInvalidUrls([]);
   };
 
+  // Xử lý upload ảnh với getImageLink
+  const handleImageUpload = async (e, urlList = []) => {
+    setIsLoading(true);
+    let newImages = [...selectedImages];
+
+    try {
+      // Xử lý file từ máy tính
+      if (e.target.files && e.target.files.length > 0) {
+        const files = Array.from(e.target.files);
+        const responses = await Promise.all(
+          files.map(async (file) => {
+            const formData = new FormData();
+            formData.append("file", file);
+            const response = await getImageLink(formData);
+            return response.metadata.image_url;
+          })
+        );
+        newImages = [...newImages, ...responses];
+      }
+
+      // Xử lý URL trực tiếp
+      if (urlList.length > 0) {
+        newImages = [...newImages, ...urlList];
+      }
+
+      // Cập nhật selectedImages
+      setSelectedImages(newImages);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    } catch (error) {
+      console.error("Error uploading images:", error);
+      setUrlError("Không thể tải ảnh lên, vui lòng thử lại!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const formatTime = (timestamp) => {
     const now = new Date();
     const messageTime = new Date(timestamp);
@@ -207,61 +248,24 @@ const ChatPage = () => {
     setSelectedChatId(chatId);
   };
 
-  const handleImageUpload = (event, urls = []) => {
-    const files = Array.from(event.target.files || []);
-    const imagePromises = files
-      .filter((file) => file.type.startsWith("image/"))
-      .map((file) => {
-        return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.readAsDataURL(file);
-        });
-      });
-
-    Promise.all(imagePromises).then((fileUrls) => {
-      setSelectedImages((prev) => [...prev, ...fileUrls, ...urls]);
-    });
-
-    fileInputRef.current.value = "";
-  };
-
-  const handleDeleteImage = (indexToRemove) => {
-    setSelectedImages((prev) =>
-      prev.filter((_, index) => index !== indexToRemove)
-    );
-  };
-
   const handleSendMessage = () => {
-    const newMessages = [];
+    if (!messageInput.trim() && selectedImages.length === 0) return;
 
-    if (messageInput.trim()) {
-      newMessages.push({
-        id: messages.length + newMessages.length + 1,
-        senderId: currentUserId,
-        content: messageInput.trim(),
-        timestamp: new Date().toISOString(),
-        type: "text",
-      });
-    }
+    const message = {
+      id: messages.length + 1,
+      senderId: currentUserId,
+      content: messageInput.trim() || "",
+      messageType: selectedImages.length > 0 ? "image" : "text",
+      imageUrl: selectedImages.length > 0 ? selectedImages : null,
+      timestamp: new Date().toISOString(),
+    };
 
-    if (selectedImages.length > 0) {
-      selectedImages.forEach((image) => {
-        newMessages.push({
-          id: messages.length + newMessages.length + 1,
-          senderId: currentUserId,
-          content: image,
-          timestamp: new Date().toISOString(),
-          type: "image",
-        });
-      });
-    }
+    // Log nội dung tin nhắn
+    console.log("Tin nhắn được gửi:", message);
 
-    if (newMessages.length > 0) {
-      setMessages([...messages, ...newMessages]);
-      setMessageInput("");
-      setSelectedImages([]);
-    }
+    setMessages((prev) => [...prev, message]);
+    setMessageInput("");
+    setSelectedImages([]);
   };
 
   const selectedChat = chatListData.find((chat) => chat.id === selectedChatId);
@@ -270,7 +274,7 @@ const ChatPage = () => {
     <div
       className="flex h-full bg-gray-100 overflow-hidden"
       style={{
-        maxHeight: `calc(100vh - ${headerHeight}px - 2rem)`, // Trừ chiều cao Header và padding của main (p-4)
+        maxHeight: `calc(100vh - ${headerHeight}px - 4rem)`,
       }}
     >
       {/* Chat List */}
@@ -319,244 +323,256 @@ const ChatPage = () => {
       </div>
 
       {/* Chat Conversation */}
-      <div className="flex-1 flex flex-col bg-white">
-        {/* Header */}
-        <div
-          ref={headerRef}
-          className="flex items-center gap-4 px-4 py-4 border-b border-gray-200 shrink-0"
-        >
-          <button aria-label="Back" className="text-gray-500 md:hidden">
-            <FiArrowLeft size={24} />
-          </button>
-          <img
-            alt="User profile picture"
-            className="w-12 h-12 rounded-full"
-            src={selectedChat.avatar}
-            width="48"
-            height="48"
-          />
-          <div className="flex flex-col">
-            <span className="text-gray-800 text-base font-medium">
-              {selectedChat.userName}
-            </span>
-          </div>
+      {isLoading ? (
+        <div className="flex-1 flex justify-center items-center">
+          <Loading />
         </div>
-
-        {/* Messages */}
-        <div
-          className="flex-1 overflow-y-auto px-4 py-4 space-y-3"
-          style={{
-            maxHeight: `calc(100% - ${chatHeaderHeight}px - ${inputAreaHeight}px)`,
-          }}
-        >
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex ${
-                message.senderId === currentUserId
-                  ? "justify-end"
-                  : "justify-start"
-              }`}
-            >
-              {message.type === "text" ? (
-                <div
-                  className={`max-w-[70%] break-words ${
-                    message.senderId === currentUserId
-                      ? "bg-blue-500 rounded-2xl rounded-br-none ml-4 text-white"
-                      : "bg-gray-200 rounded-2xl mr-4"
-                  } p-3`}
-                  style={
-                    message.senderId !== currentUserId
-                      ? { width: "fit-content", minWidth: "56px" }
-                      : {}
-                  }
-                >
-                  <div className="text-base">{message.content}</div>
-                </div>
-              ) : (
-                <img
-                  src={message.content}
-                  alt="Uploaded image"
-                  className={`max-w-[50%] h-auto rounded-xl cursor-pointer ${
-                    message.senderId === currentUserId ? "ml-4" : "mr-4"
-                  }`}
-                  style={{ maxHeight: "160px" }}
-                  onClick={() => setSelectedImage(message.content)}
-                  onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/160?text=Error";
-                  }}
-                />
-              )}
+      ) : (
+        <div className="flex-1 flex flex-col bg-white">
+          {/* Header */}
+          <div
+            ref={headerRef}
+            className="flex items-center gap-4 px-4 py-4 border-b border-gray-200 shrink-0"
+          >
+            <button aria-label="Back" className="text-gray-500 md:hidden">
+              <FiArrowLeft size={24} />
+            </button>
+            <img
+              alt="User profile picture"
+              className="w-12 h-12 rounded-full"
+              src={selectedChat.avatar}
+              width="48"
+              height="48"
+            />
+            <div className="flex flex-col">
+              <span className="text-gray-800 text-base font-medium">
+                {selectedChat.userName}
+              </span>
             </div>
-          ))}
-          <div ref={messagesEndRef} />
-        </div>
+          </div>
 
-        {/* Bottom Section (Upload Area + Preview Area + Input) */}
-        <div className="sticky bottom-0 bg-white shrink-0">
-          {/* Upload Area */}
-          {showUploadArea && (
-            <div
-              className="px-4 py-3 bg-gray-50 border-t border-gray-200"
-              ref={uploadAreaRef}
-            >
-              <div className="max-w-full bg-blue-100 rounded-2xl rounded-br-none p-3">
-                <div className="flex flex-col gap-3">
-                  <label
-                    className="flex items-center gap-2 hover:bg-gray-50 cursor-pointer text-sm text-gray-600 p-2 rounded-md"
-                    onClick={() => {
-                      fileInputRef.current.click();
-                      setShowUploadArea(false);
-                    }}
+          {/* Messages */}
+          <div
+            className="flex-1 overflow-y-auto px-4 py-4 space-y-3"
+            style={{
+              maxHeight: `calc(100% - ${chatHeaderHeight}px - ${inputAreaHeight}px)`,
+            }}
+          >
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${
+                  message.senderId === currentUserId
+                    ? "justify-end"
+                    : "justify-start"
+                }`}
+              >
+                {message.messageType === "text" ? (
+                  <div
+                    className={`max-w-[70%] break-words ${
+                      message.senderId === currentUserId
+                        ? "bg-blue-500 rounded-2xl rounded-br-none ml-4 text-white"
+                        : "bg-gray-200 rounded-2xl mr-4"
+                    } p-3`}
+                    style={
+                      message.senderId !== currentUserId
+                        ? { width: "fit-content", minWidth: "56px" }
+                        : {}
+                    }
                   >
-                    <FiImage className="text-gray-600" />
-                    <span>Upload from Computer</span>
-                  </label>
+                    <div className="text-base">{message.content}</div>
+                  </div>
+                ) : (
                   <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2">
+                    {message.imageUrl.map((url, index) => (
+                      <img
+                        key={index}
+                        src={url}
+                        alt={`Uploaded image ${index + 1}`}
+                        className={`h-auto rounded-xl cursor-pointer ${
+                          message.senderId === currentUserId ? "ml-4" : "mr-4"
+                        }`}
+                        style={{ maxHeight: "160px" }}
+                        onClick={() => setSelectedImage(url)}
+                        onError={(e) => {
+                          e.target.src =
+                            "https://via.placeholder.com/160?text=Error";
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Bottom Section (Upload Area + Preview Area + Input) */}
+          <div className="sticky bottom-0 bg-white shrink-0">
+            {/* Upload Area */}
+            {showUploadArea && (
+              <div
+                className="px-4 py-3 bg-gray-50 border-t border-gray-200"
+                ref={uploadAreaRef}
+              >
+                <div className="max-w-full bg-blue-100 rounded-2xl rounded-br-none p-3">
+                  <div className="flex flex-col gap-3">
+                    <label
+                      className="flex items-center gap-2 hover:bg-gray-50 cursor-pointer text-sm text-gray-600 p-2 rounded-md"
+                      onClick={() => {
+                        fileInputRef.current.click();
+                        setShowUploadArea(false);
+                      }}
+                    >
                       <FiImage className="text-gray-600" />
-                      <span className="text-sm">Upload from URLs</span>
-                    </div>
-                    {urlError && (
-                      <div className="text-red-500 text-xs mb-2">
-                        <p>{urlError}</p>
-                        {invalidUrls.length > 0 && (
-                          <div className="pl-4 text-xs">
-                            {invalidUrls.map((url, index) => (
-                              <div
-                                key={index}
-                                className="flex items-center gap-1"
-                              >
-                                <span className="w-1 h-1 rounded-full bg-red-500"></span>
-                                <span>{url}</span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
+                      <span>Upload from Computer</span>
+                    </label>
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-center gap-2">
+                        <FiImage className="text-gray-600" />
+                        <span className="text-sm">Upload from URLs</span>
                       </div>
-                    )}
-                    <textarea
-                      placeholder="Enter image URLs (one per line)"
-                      value={imageUrls}
-                      onChange={(e) => setImageUrls(e.target.value)}
-                      className="w-full h-16 px-2 py-1 text-xs bg-gray-100 rounded-[16px] text-black placeholder-gray-500 focus:outline-none resize-none"
-                    />
-                    <div className="flex justify-end gap-1">
-                      <button
-                        className="px-2 py-1 bg-gray-300 text-black rounded-md text-xs hover:bg-gray-400"
-                        onClick={() => setShowUploadArea(false)}
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        className="px-2 py-1 bg-blue-500 text-white rounded-md text-xs hover:bg-blue-600"
-                        onClick={handleUrlUpload}
-                      >
-                        Add URLs
-                      </button>
+                      {urlError && (
+                        <div className="text-red-500 text-xs mb-2">
+                          <p>{urlError}</p>
+                          {invalidUrls.length > 0 && (
+                            <div className="pl-4 text-xs">
+                              {invalidUrls.map((url, index) => (
+                                <div
+                                  key={index}
+                                  className="flex items-center gap-1"
+                                >
+                                  <span className="w-1 h-1 rounded-full bg-red-500"></span>
+                                  <span>{url}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      <textarea
+                        placeholder="Enter image URLs (one per line)"
+                        value={imageUrls}
+                        onChange={(e) => setImageUrls(e.target.value)}
+                        className="w-full h-16 px-2 py-1 text-xs bg-gray-100 rounded-[16px] text-black placeholder-gray-500 focus:outline-none resize-none"
+                      />
+                      <div className="flex justify-end gap-1">
+                        <button
+                          className="px-2 py-1 bg-gray-300 text-black rounded-md text-xs hover:bg-gray-400"
+                          onClick={() => setShowUploadArea(false)}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="px-2 py-1 bg-blue-500 text-white rounded-md text-xs hover:bg-blue-600"
+                          onClick={handleUrlUpload}
+                        >
+                          Add URLs
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Preview Area */}
-          {selectedImages.length > 0 && (
-            <div className="px-4 py-3 bg-gray-50 border-t border-gray-200">
-              <div className="max-w-full bg-blue-100 rounded-2xl rounded-br-none p-3">
-                <div className="flex gap-3 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-100">
-                  {selectedImages.map((image, index) => (
-                    <div key={index} className="relative">
-                      <img
-                        src={image}
-                        alt={`Preview image ${index + 1}`}
-                        className="h-20 w-auto rounded-lg object-cover"
-                        style={{ minWidth: "80px" }}
-                        onError={(e) => {
-                          e.target.src =
-                            "https://via.placeholder.com/80?text=Error";
-                        }}
-                      />
-                      <button
-                        aria-label={`Remove image ${index + 1}`}
-                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1.5 text-sm hover:bg-red-600"
-                        onClick={() => handleDeleteImage(index)}
-                      >
-                        <FiX size={14} />
-                      </button>
-                    </div>
-                  ))}
+            {/* Preview Area */}
+            {selectedImages.length > 0 && (
+              <div className="px-4 py-3 bg-gray-50 border-t border-gray-200">
+                <div className="max-w-full bg-blue-100 rounded-2xl rounded-br-none p-3">
+                  <div className="flex gap-3 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-100">
+                    {selectedImages.map((image, index) => (
+                      <div key={index} className="relative">
+                        <img
+                          src={image}
+                          alt={`Preview image ${index + 1}`}
+                          className="h-20 w-auto rounded-lg object-cover"
+                          style={{ minWidth: "80px" }}
+                          onError={(e) => {
+                            e.target.src =
+                              "https://via.placeholder.com/80?text=Error";
+                          }}
+                        />
+                        <button
+                          aria-label={`Remove image ${index + 1}`}
+                          className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1.5 text-sm hover:bg-red-600"
+                          onClick={() => handleDeleteImage(index)}
+                        >
+                          <FiX size={14} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Input */}
-          <div
-            ref={inputAreaRef}
-            className="flex items-center gap-4 px-4 py-4 border-t border-gray-200"
-          >
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              ref={fileInputRef}
-              className="hidden"
-              onChange={handleImageUpload}
-            />
-            <button
-              aria-label="Image upload"
-              className="text-gray-500"
-              onClick={() => setShowUploadArea(!showUploadArea)}
+            {/* Input */}
+            <div
+              ref={inputAreaRef}
+              className="flex items-center gap-4 px-4 py-4 border-t border-gray-200"
             >
-              <FiImage size={24} />
-            </button>
-            <textarea
-              ref={textareaRef}
-              className="flex-1 min-w-0 bg-gray-100 rounded-xl px-4 py-3 text-base text-gray-800 placeholder-gray-400 focus:outline-none resize-none"
-              placeholder="Aa"
-              rows="1"
-              style={{ minHeight: "48px", maxHeight: "144px" }}
-              value={messageInput}
-              onChange={(e) => setMessageInput(e.target.value)}
-            ></textarea>
-            <button
-              aria-label="Send"
-              className="text-gray-500"
-              onClick={handleSendMessage}
-            >
-              <FiSend size={24} />
-            </button>
-          </div>
-        </div>
-
-        {/* Image Modal */}
-        {selectedImage && (
-          <div
-            className="fixed inset-0 bg-black/80 flex items-center justify-center z-[200]"
-            onClick={() => setSelectedImage(null)}
-          >
-            <div className="relative max-w-full max-h-full">
-              <img
-                src={selectedImage}
-                alt="Full-size image"
-                className="max-w-full max-h-full object-contain rounded-xl"
-                onError={(e) => {
-                  e.target.src = "https://via.placeholder.com/240?text=Error";
-                }}
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                ref={fileInputRef}
+                className="hidden"
+                onChange={handleImageUpload}
               />
               <button
-                aria-label="Close image"
-                className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 hover:bg-red-600"
-                onClick={() => setSelectedImage(null)}
+                aria-label="Image upload"
+                className="text-gray-500"
+                onClick={() => setShowUploadArea(!showUploadArea)}
               >
-                <FiX size={20} />
+                <FiImage size={24} />
+              </button>
+              <textarea
+                ref={textareaRef}
+                className="flex-1 min-w-0 bg-gray-100 rounded-xl px-4 py-3 text-base text-gray-800 placeholder-gray-400 focus:outline-none resize-none"
+                placeholder="Aa"
+                rows="1"
+                style={{ minHeight: "48px", maxHeight: "144px" }}
+                value={messageInput}
+                onChange={(e) => setMessageInput(e.target.value)}
+              ></textarea>
+              <button
+                aria-label="Send"
+                className="text-gray-500"
+                onClick={handleSendMessage}
+              >
+                <FiSend size={24} />
               </button>
             </div>
           </div>
-        )}
-      </div>
+
+          {/* Image Modal */}
+          {selectedImage && (
+            <div
+              className="fixed inset-0 bg-black/80 flex items-center justify-center z-[200]"
+              onClick={() => setSelectedImage(null)}
+            >
+              <div className="relative max-w-full max-h-full">
+                <img
+                  src={selectedImage}
+                  alt="Full-size image"
+                  className="max-w-full max-h-full object-contain rounded-xl"
+                  onError={(e) => {
+                    e.target.src = "https://via.placeholder.com/240?text=Error";
+                  }}
+                />
+                <button
+                  aria-label="Close image"
+                  className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 hover:bg-red-600"
+                  onClick={() => setSelectedImage(null)}
+                >
+                  <FiX size={20} />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

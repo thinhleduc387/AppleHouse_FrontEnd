@@ -9,6 +9,7 @@ import socket, {
   sendMessage,
   onNewMessage,
 } from "../../../socket/index.js";
+
 const initialMessages = [
   {
     id: 1,
@@ -17,7 +18,6 @@ const initialMessages = [
     timestamp: "2025-06-17T22:01:00+07:00",
     type: "text",
   },
-  // Giả sử có 50 tin nhắn, chỉ giữ ví dụ đầu và cuối
   {
     id: 50,
     senderId: "user2",
@@ -37,23 +37,9 @@ const ChatConversation = ({ onClose, onBack }) => {
   const messagesEndRef = useRef(null);
   const userId = useSelector((state) => state.account?.user?._id);
 
-  const handleImageUpload = (event, urls = []) => {
-    const files = Array.from(event.target.files || []);
-    const imagePromises = files
-      .filter((file) => file.type.startsWith("image/"))
-      .map((file) => {
-        return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.readAsDataURL(file);
-        });
-      });
-
-    Promise.all(imagePromises).then((fileUrls) => {
-      setSelectedImages((prev) => [...prev, ...fileUrls, ...urls]);
-    });
-
-    fileInputRef.current.value = "";
+  // Xử lý upload ảnh, nhận trực tiếp mảng URL từ ChatSend
+  const handleImageUpload = (urls = []) => {
+    setSelectedImages((prev) => [...prev, ...urls]);
   };
 
   const handleDeleteImage = (indexToRemove) => {
@@ -65,31 +51,24 @@ const ChatConversation = ({ onClose, onBack }) => {
   const handleSendMessage = () => {
     if (!messageInput.trim() && selectedImages.length === 0) return;
 
-    if (messageInput.trim()) {
-      const textMsg = {
-        roomId: userId,
-        senderId: userId,
-        content: messageInput.trim(),
-        messageType: "text",
-        imageUrl: null,
-      };
+    const message = {
+      roomId: userId,
+      senderId: userId,
+      content: messageInput.trim(),
+      messageType: selectedImages.length > 0 ? "image" : "text",
+      imageUrl: selectedImages.length > 0 ? selectedImages : null,
+    };
 
-      sendMessage(textMsg);
-    }
+    // Log nội dung tin nhắn
+    console.log("Tin nhắn được gửi:", {
+      content: message.content,
+      imageUrl: message.imageUrl,
+      messageType: message.messageType,
+      roomId: message.roomId,
+      senderId: message.senderId,
+    });
 
-    if (selectedImages.length > 0) {
-      selectedImages.forEach((image) => {
-        const imageMsg = {
-          roomId: userId,
-          senderId: userId,
-          content: "",
-          imageUrl: image,
-          messageType: "image",
-        };
-
-        sendMessage(imageMsg);
-      });
-    }
+    sendMessage(message);
 
     setMessageInput("");
     setSelectedImages([]);

@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { FiImage, FiX, FiSend } from "react-icons/fi";
 import { FaCloudUploadAlt, FaLink } from "react-icons/fa";
+import { getImageLink } from "../../../config/api";
+import Loading from "../../../component/Loading";
 
 const ChatSend = ({
   messageInput,
@@ -17,12 +19,13 @@ const ChatSend = ({
   const [imageUrls, setImageUrls] = useState("");
   const [urlError, setUrlError] = useState("");
   const [invalidUrls, setInvalidUrls] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Điều chỉnh chiều cao textarea tin nhắn
   useEffect(() => {
     const textarea = textareaRef.current;
     const adjustHeight = () => {
-      textarea.style.height = "auto"; // Reset về auto để tính lại scrollHeight
+      textarea.style.height = "auto";
       textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`;
     };
     textarea.addEventListener("input", adjustHeight);
@@ -57,6 +60,44 @@ const ChatSend = ({
     }
   };
 
+  // Hàm xử lý upload ảnh (tích hợp getImageLink)
+  const updatedHandleImageUpload = async (e, urlList = []) => {
+    setIsLoading(true);
+    let newImages = [...selectedImages];
+
+    try {
+      // Xử lý file từ máy tính
+      if (e.target.files && e.target.files.length > 0) {
+        const files = Array.from(e.target.files);
+        const responses = await Promise.all(
+          files.map(async (file) => {
+            const formData = new FormData();
+            formData.append("file", file);
+            const response = await getImageLink(formData);
+            return response.metadata.image_url;
+          })
+        );
+        newImages = [...newImages, ...responses];
+      }
+
+      // Xử lý URL trực tiếp
+      if (urlList.length > 0) {
+        newImages = [...newImages, ...urlList];
+      }
+
+      // Gọi callback với danh sách URL mới
+      handleImageUpload(newImages);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""; // Reset input file
+      }
+    } catch (error) {
+      console.error("Error uploading images:", error);
+      setUrlError("Không thể tải ảnh lên, vui lòng thử lại!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Xử lý thêm URL ảnh
   const handleUrlUpload = () => {
     if (!imageUrls.trim()) {
@@ -74,12 +115,20 @@ const ChatSend = ({
       return;
     }
 
-    handleImageUpload({ target: { files: [] } }, urls);
+    updatedHandleImageUpload({ target: { files: [] } }, urls);
     setImageUrls("");
     setShowUploadArea(false);
     setUrlError("");
     setInvalidUrls([]);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[100px]">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col shrink-0">
@@ -190,7 +239,7 @@ const ChatSend = ({
           multiple
           ref={fileInputRef}
           className="hidden"
-          onChange={(e) => handleImageUpload(e)}
+          onChange={(e) => updatedHandleImageUpload(e)}
         />
         <div className="relative">
           <button
