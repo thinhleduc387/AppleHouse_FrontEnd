@@ -9,35 +9,17 @@ import socket, {
   sendMessage,
   onNewMessage,
 } from "../../../socket/index.js";
-
-const initialMessages = [
-  {
-    id: 1,
-    senderId: "user1",
-    content: "He về chơi toi bên đi",
-    timestamp: "2025-06-17T22:01:00+07:00",
-    type: "text",
-  },
-  {
-    id: 50,
-    senderId: "user2",
-    content: "Hẹn gặp tối nay, vui lắm đây!",
-    timestamp: "2025-06-17T22:50:00+07:00",
-    type: "text",
-  },
-];
+import { getAllMessage } from "../../../config/api.jsx";
 
 const ChatConversation = ({ onClose, onBack }) => {
-  const currentUserId = "user1";
-  const [messages, setMessages] = useState(initialMessages);
+  const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
   const [selectedImages, setSelectedImages] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null); // State cho modal ảnh
+  const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
   const userId = useSelector((state) => state.account?.user?._id);
 
-  // Xử lý upload ảnh, nhận trực tiếp mảng URL từ ChatSend
   const handleImageUpload = (urls = []) => {
     setSelectedImages((prev) => [...prev, ...urls]);
   };
@@ -59,7 +41,6 @@ const ChatConversation = ({ onClose, onBack }) => {
       imageUrl: selectedImages.length > 0 ? selectedImages : null,
     };
 
-    // Log nội dung tin nhắn
     console.log("Tin nhắn được gửi:", {
       content: message.content,
       imageUrl: message.imageUrl,
@@ -72,6 +53,11 @@ const ChatConversation = ({ onClose, onBack }) => {
 
     setMessageInput("");
     setSelectedImages([]);
+  };
+
+  const handleFetchMessages = async () => {
+    const response = await getAllMessage({ roomId: userId });
+    setMessages(response.metadata);
   };
 
   useEffect(() => {
@@ -92,6 +78,7 @@ const ChatConversation = ({ onClose, onBack }) => {
     if (!userId) return;
 
     joinChatRoom(userId);
+    handleFetchMessages();
 
     onNewMessage((newMsg) => {
       setMessages((prev) => [...prev, newMsg]);
@@ -107,7 +94,6 @@ const ChatConversation = ({ onClose, onBack }) => {
       <ChatHeader onClose={onClose} onBack={onBack} />
       <ChatContent
         messages={messages}
-        currentUserId={currentUserId}
         messagesEndRef={messagesEndRef}
         onImageClick={setSelectedImage}
       />
@@ -120,7 +106,6 @@ const ChatConversation = ({ onClose, onBack }) => {
         handleSendMessage={handleSendMessage}
         fileInputRef={fileInputRef}
       />
-      {/* Image Modal */}
       {selectedImage && (
         <div
           className="fixed inset-0 bg-black/80 flex items-center justify-center z-[200]"

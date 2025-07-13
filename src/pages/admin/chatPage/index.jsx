@@ -1,50 +1,22 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FiSearch, FiArrowLeft, FiX, FiImage, FiSend } from "react-icons/fi";
 import { useOutletContext } from "react-router-dom";
-import { getImageLink } from "../../../config/api";
+import {
+  getAllChatRoom,
+  getAllMessage,
+  getImageLink,
+} from "../../../config/api";
 import Loading from "../../../component/Loading";
 import { useSelector } from "react-redux";
-// Sample data
-const chatListData = [
-  {
-    id: 1,
-    userName: "her",
-    avatar:
-      "https://storage.googleapis.com/a1aa/image/46f1a736-5879-459c-05a1-98da2d7fedb9.jpg",
-    lastMessage: {
-      content: "ok",
-      senderId: "user2",
-      timestamp: "2025-06-17T22:07:00+07:00",
-    },
-  },
-  {
-    id: 2,
-    userName: "John",
-    avatar:
-      "https://storage.googleapis.com/a1aa/image/46f1a736-5879-459c-05a1-98da2d7fedb9.jpg",
-    lastMessage: {
-      content: "Cảm ơn bạn đã tặng quà cho mình",
-      senderId: "user1",
-      timestamp: "2025-06-17T22:06:00+07:00",
-    },
-  },
-  {
-    id: 3,
-    userName: "Alice",
-    avatar:
-      "https://storage.googleapis.com/a1aa/image/46f1a736-5879-459c-05a1-98da2d7fedb9.jpg",
-    lastMessage: {
-      content: "Hẹn gặp tối nay nhé!",
-      senderId: "user2",
-      timestamp: "2025-06-17T21:30:00+07:00",
-    },
-  },
-];
+import socket, {
+  joinChatRoom,
+  onNewMessage,
+  sendMessage,
+} from "../../../socket";
 
 const ChatPage = () => {
   const { headerHeight } = useOutletContext();
   const currentUserId = useSelector((state) => state.account?.user?._id);
-  const [selectedChatId, setSelectedChatId] = useState(1);
   const [messageInput, setMessageInput] = useState("");
   const [messages, setMessages] = useState([
     {
@@ -52,7 +24,7 @@ const ChatPage = () => {
       senderId: "user1",
       content: "He về chơi thú vị bên đi",
       timestamp: "2025-06-17T22:01:00+07:00",
-      messageType: "text", // Đổi type thành messageType
+      messageType: "text",
     },
     {
       id: 2,
@@ -110,7 +82,8 @@ const ChatPage = () => {
   const [invalidUrls, setInvalidUrls] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [chatRooms, setChatRooms] = useState([]);
+  const [selectedChatRoom, SetSelectedChatRoom] = useState({});
   // Đo chiều cao Header và Input Area
   const [chatHeaderHeight, setChatHeaderHeight] = useState(72);
   const [inputAreaHeight, setInputAreaHeight] = useState(56);
@@ -244,32 +217,66 @@ const ChatPage = () => {
     return `${diffDays} ngày trước`;
   };
 
-  const handleSelectChat = (chatId) => {
-    setSelectedChatId(chatId);
+  const handleSelectChat = (chat) => {
+    SetSelectedChatRoom(chat);
+    joinChatRoom(chat?.customer?._id);
   };
 
   const handleSendMessage = () => {
     if (!messageInput.trim() && selectedImages.length === 0) return;
 
     const message = {
-      id: messages.length + 1,
+      roomId: selectedChatRoom?.customer?._id,
       senderId: currentUserId,
-      content: messageInput.trim() || "",
+      content: messageInput.trim(),
       messageType: selectedImages.length > 0 ? "image" : "text",
       imageUrl: selectedImages.length > 0 ? selectedImages : null,
-      timestamp: new Date().toISOString(),
     };
 
-    // Log nội dung tin nhắn
-    console.log("Tin nhắn được gửi:", message);
+    console.log("Tin nhắn được gửi:", {
+      content: message.content,
+      imageUrl: message.imageUrl,
+      messageType: message.messageType,
+      roomId: message.roomId,
+      senderId: message.senderId,
+    });
 
-    setMessages((prev) => [...prev, message]);
+    sendMessage(message);
+
     setMessageInput("");
     setSelectedImages([]);
   };
 
-  const selectedChat = chatListData.find((chat) => chat.id === selectedChatId);
+  const handleFetchAllChatRoom = async () => {
+    const response = await getAllChatRoom();
+    setChatRooms(response.metadata);
+  };
 
+  useEffect(() => {
+    handleFetchAllChatRoom();
+  }, []);
+
+  const getAllMessagesInChatRoom = async () => {
+    const response = await getAllMessage({
+      roomId: selectedChatRoom?.customer?._id,
+    });
+
+    setMessages(response.metadata);
+  };
+
+  useEffect(() => {
+    getAllMessagesInChatRoom();
+  }, [selectedChatRoom]);
+
+  useEffect(() => {
+    onNewMessage((message) => {
+      setMessages((prev) => [...prev, message]);
+    });
+
+    return () => {
+      socket.off("newMessage");
+    };
+  }, [selectedChatRoom]);
   return (
     <div
       className="flex h-full bg-gray-100 overflow-hidden"
@@ -290,32 +297,34 @@ const ChatPage = () => {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto px-3 py-3 space-y-2 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-100">
-          {chatListData.map((chat) => (
+          {chatRooms.map((chat) => (
             <div
-              key={chat.id}
+              key={chat._id}
               className={`flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-gray-50 ${
-                selectedChatId === chat.id ? "bg-gray-100" : ""
+                selectedChatRoom._id === chat._id ? "bg-gray-100" : ""
               }`}
-              onClick={() => handleSelectChat(chat.id)}
+              onClick={() => handleSelectChat(chat)}
             >
               <img
-                alt={`Avatar of ${chat.userName}`}
+                alt={`Avatar of ${chat.customer.usr_name}`}
                 className="w-12 h-12 rounded-full"
-                src={chat.avatar}
+                src={chat.customer.usr_avatar}
                 width="48"
                 height="48"
               />
               <div className="flex-1 flex flex-col max-w-[calc(100%-104px)]">
                 <div className="text-gray-800 text-base font-medium truncate">
-                  {chat.userName}
+                  {chat.customer.usr_name}
                 </div>
                 <div className="text-gray-500 text-sm truncate">
-                  {chat.lastMessage.senderId === currentUserId ? "Bạn: " : ""}
-                  {chat.lastMessage.content}
+                  {chat?.lastMessage?.sender === currentUserId ? "Bạn: " : ""}
+                  {chat?.lastMessage?.content
+                    ? chat?.lastMessage?.content
+                    : "Đã gửi một ảnh"}
                 </div>
               </div>
               <div className="text-gray-400 text-sm">
-                {formatTime(chat.lastMessage.timestamp)}
+                {formatTime(chat?.lastMessage?.createdAt)}
               </div>
             </div>
           ))}
@@ -340,18 +349,17 @@ const ChatPage = () => {
             <img
               alt="User profile picture"
               className="w-12 h-12 rounded-full"
-              src={selectedChat.avatar}
+              src={selectedChatRoom?.customer?.usr_avatar}
               width="48"
               height="48"
             />
             <div className="flex flex-col">
               <span className="text-gray-800 text-base font-medium">
-                {selectedChat.userName}
+                {selectedChatRoom?.customer?.usr_name}
               </span>
             </div>
           </div>
 
-          {/* Messages */}
           <div
             className="flex-1 overflow-y-auto px-4 py-4 space-y-3"
             style={{
@@ -362,7 +370,7 @@ const ChatPage = () => {
               <div
                 key={message.id}
                 className={`flex ${
-                  message.senderId === currentUserId
+                  message.sender === currentUserId
                     ? "justify-end"
                     : "justify-start"
                 }`}
@@ -370,12 +378,12 @@ const ChatPage = () => {
                 {message.messageType === "text" ? (
                   <div
                     className={`max-w-[70%] break-words ${
-                      message.senderId === currentUserId
+                      message.sender === currentUserId
                         ? "bg-blue-500 rounded-2xl rounded-br-none ml-4 text-white"
                         : "bg-gray-200 rounded-2xl mr-4"
                     } p-3`}
                     style={
-                      message.senderId !== currentUserId
+                      message.sender !== currentUserId
                         ? { width: "fit-content", minWidth: "56px" }
                         : {}
                     }
@@ -384,22 +392,23 @@ const ChatPage = () => {
                   </div>
                 ) : (
                   <div className="flex flex-col gap-2">
-                    {message.imageUrl.map((url, index) => (
-                      <img
-                        key={index}
-                        src={url}
-                        alt={`Uploaded image ${index + 1}`}
-                        className={`h-auto rounded-xl cursor-pointer ${
-                          message.senderId === currentUserId ? "ml-4" : "mr-4"
-                        }`}
-                        style={{ maxHeight: "160px" }}
-                        onClick={() => setSelectedImage(url)}
-                        onError={(e) => {
-                          e.target.src =
-                            "https://via.placeholder.com/160?text=Error";
-                        }}
-                      />
-                    ))}
+                    {message.imageUrl.length > 0 &&
+                      message.imageUrl.map((url, index) => (
+                        <img
+                          key={index}
+                          src={url}
+                          alt={`Uploaded image ${index + 1}`}
+                          className={`h-auto rounded-xl cursor-pointer ${
+                            message.sender === currentUserId ? "ml-4" : "mr-4"
+                          }`}
+                          style={{ maxHeight: "160px" }}
+                          onClick={() => setSelectedImage(url)}
+                          onError={(e) => {
+                            e.target.src =
+                              "https://via.placeholder.com/160?text=Error";
+                          }}
+                        />
+                      ))}
                   </div>
                 )}
               </div>
@@ -476,7 +485,6 @@ const ChatPage = () => {
               </div>
             )}
 
-            {/* Preview Area */}
             {selectedImages.length > 0 && (
               <div className="px-4 py-3 bg-gray-50 border-t border-gray-200">
                 <div className="max-w-full bg-blue-100 rounded-2xl rounded-br-none p-3">

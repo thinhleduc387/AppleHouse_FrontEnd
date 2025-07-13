@@ -699,8 +699,12 @@ export const getChatRoom = async ({ customerId }) => {
   });
 };
 
-// export const getAllMessage = async ({ customerId }) => {
-//   return axios.post(`/chatroom/create-or-get`, {
-//     customerId,
-//   });
-// };
+export const getAllMessage = async ({ roomId }) => {
+  return axios.post(`/chatroom/get-all-messages`, {
+    roomId,
+  });
+};
+
+export const getAllChatRoom = async () => {
+  return axios.get(`/chatroom/get-all-chat-rooms`);
+};

@@ -85,7 +85,6 @@ const ChatSend = ({
         newImages = [...newImages, ...urlList];
       }
 
-      // Gọi callback với danh sách URL mới
       handleImageUpload(newImages);
       if (fileInputRef.current) {
         fileInputRef.current.value = ""; // Reset input file
