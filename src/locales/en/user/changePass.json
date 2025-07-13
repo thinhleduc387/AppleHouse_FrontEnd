@@ -1,0 +1,17 @@
+{
+  "changePassword": "Change Password",
+  "updatePasswordDescription": "Update your account password",
+  "securityNotice": "To secure your account, please create a strong password and do not share it with others",
+  "currentPasswordLabel": "Current Password",
+  "currentPasswordPlaceholder": "Enter current password",
+  "newPasswordLabel": "New Password",
+  "newPasswordPlaceholder": "Enter new password",
+  "reNewPasswordLabel": "Confirm New Password",
+  "reNewPasswordPlaceholder": "Confirm new password",
+  "updatePasswordButton": "Update Password",
+  "cancelButton": "Cancel",
+  "passwordMismatchError": "New password and confirm password do not match!",
+  "updateSuccess": "Password updated successfully!",
+  "updateError": "An error occurred while updating the password.",
+  "processingError": "An error occurred during processing."
+}

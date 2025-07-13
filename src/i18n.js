@@ -48,8 +48,18 @@ import enProfile from "./locales/en/user/profile.json";
 import viProfile from "./locales/vi/user/profile.json";
 import enOrderUser from "./locales/en/user/order.json";
 import viOrderUser from "./locales/vi/user/order.json";
-import enNotification from "./locales/en/user/notification.json"; // Thêm notification
-import viNotification from "./locales/vi/user/notification.json"; // Thêm notification
+import enNotification from "./locales/en/user/notification.json";
+import viNotification from "./locales/vi/user/notification.json";
+import enChangePass from "./locales/en/user/changePass.json";
+import viChangePass from "./locales/vi/user/changePass.json";
+import enAddress from "./locales/en/user/address.json";
+import viAddress from "./locales/vi/user/address.json";
+import enVoucherUser from "./locales/en/user/voucher.json";
+import viVoucherUser from "./locales/vi/user/voucher.json";
+import enSearchPage from "./locales/en/user/searchPage.json";
+import viSearchPage from "./locales/vi/user/searchPage.json";
+import enChatBot from "./locales/en/user/chatBot.json"; // Thêm chatBot
+import viChatBot from "./locales/vi/user/chatBot.json"; // Thêm chatBot
 
 const resources = {
   en: {
@@ -76,7 +86,12 @@ const resources = {
     product: enProduct,
     profile: enProfile,
     orderUser: enOrderUser,
-    notification: enNotification, // Thêm namespace
+    notification: enNotification,
+    changePass: enChangePass,
+    address: enAddress,
+    voucherUser: enVoucherUser,
+    searchPage: enSearchPage,
+    chatBot: enChatBot, // Thêm namespace
   },
   vi: {
     header: viHeader,
@@ -102,7 +117,12 @@ const resources = {
     product: viProduct,
     profile: viProfile,
     orderUser: viOrderUser,
-    notification: viNotification, // Thêm namespace
+    notification: viNotification,
+    changePass: viChangePass,
+    address: viAddress,
+    voucherUser: viVoucherUser,
+    searchPage: viSearchPage,
+    chatBot: viChatBot, // Thêm namespace
   },
 };
 
@@ -136,7 +156,12 @@ i18n
       "product",
       "profile",
       "orderUser",
-      "notification", // Thêm namespace
+      "notification",
+      "changePass",
+      "address",
+      "voucherUser",
+      "searchPage",
+      "chatBot", // Thêm namespace
     ],
     defaultNS: "topProduct",
     interpolation: {

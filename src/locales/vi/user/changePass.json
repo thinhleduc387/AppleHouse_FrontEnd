@@ -1,0 +1,17 @@
+{
+  "changePassword": "Đổi mật khẩu",
+  "updatePasswordDescription": "Cập nhật mật khẩu tài khoản của bạn",
+  "securityNotice": "Để bảo mật tài khoản, vui lòng tạo mật khẩu mạnh và không chia sẻ mật khẩu cho người khác",
+  "currentPasswordLabel": "Mật khẩu hiện tại",
+  "currentPasswordPlaceholder": "Nhập mật khẩu hiện tại",
+  "newPasswordLabel": "Mật khẩu mới",
+  "newPasswordPlaceholder": "Nhập mật khẩu mới",
+  "reNewPasswordLabel": "Xác nhận mật khẩu mới",
+  "reNewPasswordPlaceholder": "Xác nhận mật khẩu mới",
+  "updatePasswordButton": "Cập nhật mật khẩu",
+  "cancelButton": "Hủy",
+  "passwordMismatchError": "Mật khẩu mới và xác nhận mật khẩu không khớp!",
+  "updateSuccess": "Mật khẩu đã được cập nhật thành công!",
+  "updateError": "Đã xảy ra lỗi khi cập nhật mật khẩu.",
+  "processingError": "Đã xảy ra lỗi trong quá trình xử lý."
+}

@@ -1,9 +1,10 @@
-import { useSelector } from "react-redux";
+import { useSelector, memo } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const ProductSection = () => {
+  const { t } = useTranslation("chatBot");
   const { current_suggested_products } = useSelector((state) => state.chatBot);
 
-  // Hàm render sao đánh giá
   const renderRating = (rating) => {
     const ratingNum = parseInt(rating);
     return (
@@ -12,7 +13,9 @@ const ProductSection = () => {
           <svg
             key={index}
             className={`w-4 h-4 ${
-              index < ratingNum ? "text-yellow-400" : "text-gray-300"
+              index < ratingNum
+                ? "text-yellow-400 dark:text-yellow-300"
+                : "text-gray-300 dark:text-gray-500"
             }`}
             fill="currentColor"
             viewBox="0 0 20 20"
@@ -25,32 +28,34 @@ const ProductSection = () => {
   };
 
   return (
-    <div className="w-full border-l flex flex-col">
-      <div className="p-4 border-b">
-        <h3 className="font-semibold text-lg">Sản phẩm liên quan</h3>
+    <div className="w-full border-l border-gray-200 dark:border-gray-600 flex flex-col transition-colors duration-300">
+      <div className="p-4 border-b border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800">
+        <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100">
+          {t("relatedProducts")}
+        </h3>
       </div>
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-4 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
         {current_suggested_products && current_suggested_products.length > 0 ? (
           <div className="flex flex-wrap gap-4">
             {current_suggested_products.map((product) => (
               <div
                 key={product.id}
-                className="flex-none w-64 p-4 border rounded-lg hover:shadow-md transition-shadow"
+                className="flex-none w-64 p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md dark:hover:shadow-gray-700 bg-white dark:bg-gray-800 transition-colors duration-300"
               >
                 <img
                   src={product.thumbnail}
                   alt={product.name}
                   className="w-full h-32 object-contain rounded-md mb-2"
                   onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/150"; // Hình ảnh thay thế nếu lỗi
+                    e.target.src = "https://via.placeholder.com/150";
                   }}
                 />
                 <div>
-                  <h4 className="font-medium text-gray-800 truncate">
+                  <h4 className="font-medium text-gray-800 dark:text-gray-100 truncate">
                     {product.name}
                   </h4>
                   <div className="mt-1">{renderRating(product.rating)}</div>
-                  <p className="mt-1 text-red-600 font-semibold">
+                  <p className="mt-1 text-red-600 dark:text-red-400 font-semibold">
                     {product.price}
                   </p>
                 </div>
@@ -59,8 +64,8 @@ const ProductSection = () => {
           </div>
         ) : (
           <div className="flex items-center justify-center h-full">
-            <p className="text-gray-500 text-center">
-              Các sản phẩm sẽ hiển thị ở đây khi được tìm thấy...
+            <p className="text-gray-500 dark:text-gray-400 text-center">
+              {t("noProductsFound")}
             </p>
           </div>
         )}
@@ -69,4 +74,4 @@ const ProductSection = () => {
   );
 };
 
-export default ProductSection;
+export default memo(ProductSection);

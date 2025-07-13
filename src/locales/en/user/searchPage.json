@@ -1,0 +1,5 @@
+{
+  "searchResultsFound": "Found <strong>{{count}}</strong> results for keyword <strong>{{searchTerm}}</strong>",
+  "noProductsFound": "No products found",
+  "foundResults": "Found Results"
+}

@@ -1,0 +1,20 @@
+{
+  "voucherStorageTitle": "Kho Voucher",
+  "manageVouchersDescription": "Quản lý voucher của bạn",
+  "noVouchersFound": "Không tìm thấy voucher nào",
+  "availableTab": "Có thể sử dụng",
+  "upcomingTab": "Sắp tới",
+  "expiredTab": "Đã hết hạn",
+  "historyTab": "Đã dùng",
+  "viewDetailsTooltip": "Xem chi tiết",
+  "discountLabel": "Giảm",
+  "minOrderLabel": "Đơn tối thiểu",
+  "expiresLabel": "HSD",
+  "remainingUsesLabel": "Còn lại",
+  "useNowButton": "Sử dụng ngay",
+  "usageHistoryTitle": "Lịch sử sử dụng",
+  "noUsageHistory": "Chưa có lịch sử sử dụng",
+  "voucherDetailsTitle": "Chi tiết Voucher",
+  "closeButton": "Đóng",
+  "useNowButtonModal": "Sử dụng ngay"
+}

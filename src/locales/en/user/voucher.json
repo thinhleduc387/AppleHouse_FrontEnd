@@ -1,0 +1,20 @@
+{
+  "voucherStorageTitle": "Voucher Storage",
+  "manageVouchersDescription": "Manage your vouchers",
+  "noVouchersFound": "No vouchers found",
+  "availableTab": "Available",
+  "upcomingTab": "Upcoming",
+  "expiredTab": "Expired",
+  "historyTab": "Used",
+  "viewDetailsTooltip": "View details",
+  "discountLabel": "Discount",
+  "minOrderLabel": "Minimum order",
+  "expiresLabel": "Expires",
+  "remainingUsesLabel": "Remaining uses",
+  "useNowButton": "Use Now",
+  "usageHistoryTitle": "Usage History",
+  "noUsageHistory": "No usage history",
+  "voucherDetailsTitle": "Voucher Details",
+  "closeButton": "Close",
+  "useNowButtonModal": "Use Now"
+}

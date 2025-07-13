@@ -1,0 +1,11 @@
+{
+  "aiAssistant": "AI Assistant",
+  "inputPlaceholder": "Enter chat content",
+  "sendButton": "Send",
+  "aiDisclaimer": "Integrated with artificial intelligence, information is for reference only",
+  "aiProcessing": "AI is processing...",
+  "viewProducts": "View products",
+  "relatedProducts": "Related Products",
+  "noProductsFound": "Products will be displayed here when found...",
+  "errorMessage": "Sorry, an error occurred. Please try again later."
+}

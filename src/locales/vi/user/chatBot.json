@@ -1,0 +1,11 @@
+{
+  "aiAssistant": "Trợ lý AI",
+  "inputPlaceholder": "Nhập nội dung chat",
+  "sendButton": "Gửi",
+  "aiDisclaimer": "Tích hợp trí tuệ nhân tạo, thông tin mang tính tham khảo",
+  "aiProcessing": "AI đang xử lý...",
+  "viewProducts": "Xem sản phẩm",
+  "relatedProducts": "Sản phẩm liên quan",
+  "noProductsFound": "Các sản phẩm sẽ hiển thị ở đây khi được tìm thấy...",
+  "errorMessage": "Xin lỗi, có lỗi xảy ra. Vui lòng thử lại sau."
+}

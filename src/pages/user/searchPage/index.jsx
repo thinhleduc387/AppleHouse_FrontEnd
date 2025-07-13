@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { useLocation } from "react-router-dom";
 import FilterSidebar from "../../../component/Product/FilterSidebar";
 import ProductItem from "../../../component/Product/ProductItem";
@@ -6,10 +6,13 @@ import { getAllProductByCategory, searchProduct } from "../../../config/api";
 import SortButton from "../../../component/Product/SortButton";
 import { SortOptions } from "../../../component/Product/SortButton/sortOption";
 import Pagination from "../../../component/Pagiantion";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const ITEMS_PER_PAGE = 9;
 
 const SearchPage = () => {
+  const { t } = useTranslation("searchPage");
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
@@ -26,37 +29,51 @@ const SearchPage = () => {
 
   const handleGetListSearchProduct = async () => {
     setLoading(true);
-    const response = await searchProduct({
-      textSearch: searchTerm,
-      minPrice,
-      maxPrice,
-      sortBy: selectedOption,
-      page: currentPage,
-      limit: ITEMS_PER_PAGE,
-    });
+    try {
+      const response = await searchProduct({
+        textSearch: searchTerm,
+        minPrice,
+        maxPrice,
+        sortBy: selectedOption,
+        page: currentPage,
+        limit: ITEMS_PER_PAGE,
+      });
 
-    if (response && response.status === 200) {
-      setNumberResult(response.metadata.pagination.totalResult);
-      setTotalPages(response.metadata.pagination.totalPages);
+      if (response && response.status === 200) {
+        setNumberResult(response.metadata.pagination.totalResult);
+        setTotalPages(response.metadata.pagination.totalPages);
 
-      const products = response.metadata.products.map((product) => ({
-        id: product._id,
-        name: product?.product_name,
-        imageSrc: product?.product_thumb,
-        productPrice: product?.product_price,
-        link: `/products/${product?.product_slug}`,
-        rating: product?.product_ratingAverage,
-        tags: product?.product_tags,
-      }));
+        const products = response.metadata.products.map((product) => ({
+          id: product._id,
+          name: product?.product_name,
+          imageSrc: product?.product_thumb,
+          productPrice: product?.product_price,
+          link: `/products/${product?.product_slug}`,
+          rating: product?.product_ratingAverage,
+          tags: product?.product_tags,
+        }));
 
-      setProductList(products);
+        setProductList(products);
+      } else {
+        setProductList([]);
+      }
+    } catch (error) {
+      setProductList([]);
+      if (
+        error.response?.status === 401 &&
+        error.response?.data?.message?.includes("Unauthorized")
+      ) {
+        toast.error(t("sessionExpired"));
+      } else {
+      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
     handleGetListSearchProduct();
-  }, [searchTerm, currentPage]);
+  }, [searchTerm, currentPage, t]);
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -70,11 +87,11 @@ const SearchPage = () => {
   useEffect(() => {
     setCurrentPage(1); // Reset to first page when filters change
     handleGetListSearchProduct();
-  }, [minPrice, maxPrice, selectedOption]);
+  }, [minPrice, maxPrice, selectedOption, t]);
 
   return (
-    <section className="bg-[#f3f4f6] antialiased min-h-[90vh]">
-      <div className="mx-auto max-w-screen-xl">
+    <section className="bg-[#f3f4f6] dark:bg-gray-900 antialiased min-h-[90vh] transition-colors duration-300">
+      <div className="mx-auto max-w-screen-xl px-4">
         <div className="flex gap-6">
           <FilterSidebar
             minPrice={minPrice}
@@ -84,9 +101,8 @@ const SearchPage = () => {
           />
           <div className="flex-1">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Tìm thấy <strong>{numberResult}</strong> kết quả với từ khoá{" "}
-                <strong>{searchTerm}</strong>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                {t("foundResults", { count: numberResult, term: searchTerm })}
               </h3>
               <SortButton
                 isSortDropdownOpen={isSortDropdownOpen}
@@ -98,11 +114,11 @@ const SearchPage = () => {
 
             {loading ? (
               <div className="flex justify-center items-center h-96">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 dark:border-blue-400"></div>
               </div>
             ) : productList.length === 0 ? (
-              <div className="text-center text-lg text-gray-600">
-                Không tìm thấy sản phẩm nào
+              <div className="text-center text-lg text-gray-600 dark:text-gray-300">
+                {t("noProductsFound")}
               </div>
             ) : (
               <>
@@ -131,4 +147,4 @@ const SearchPage = () => {
   );
 };
 
-export default SearchPage;
+export default memo(SearchPage);
