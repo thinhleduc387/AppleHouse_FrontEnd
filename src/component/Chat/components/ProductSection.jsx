@@ -1,4 +1,5 @@
-import { useSelector, memo } from "react-redux";
+import { useSelector } from "react-redux"; // Import useSelector from react-redux
+import { memo } from "react"; // Import memo from react
 import { useTranslation } from "react-i18next";
 
 const ProductSection = () => {

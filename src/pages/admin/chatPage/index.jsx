@@ -15,7 +15,13 @@ import socket, {
 } from "../../../socket";
 
 const ChatPage = () => {
-  const { headerHeight } = useOutletContext();
+  const { headerHeight, mainPadding } = useOutletContext();
+  const padding =
+    window.innerWidth >= 1536
+      ? mainPadding["2xl"]
+      : window.innerWidth >= 768
+      ? mainPadding.md
+      : mainPadding.sm;
   const currentUserId = useSelector((state) => state.account?.user?._id);
   const [messageInput, setMessageInput] = useState("");
   const [messages, setMessages] = useState([
@@ -281,7 +287,7 @@ const ChatPage = () => {
     <div
       className="flex h-full bg-gray-100 overflow-hidden"
       style={{
-        maxHeight: `calc(100vh - ${headerHeight}px - 4rem)`,
+        height: `calc(100vh - ${headerHeight}px - ${padding * 2}px)`, // Trừ headerHeight và padding trên/dưới
       }}
     >
       {/* Chat List */}

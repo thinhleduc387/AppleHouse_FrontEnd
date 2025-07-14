@@ -8,12 +8,10 @@ const AdminLayout = ({ children }) => {
   const headerRef = useRef(null);
   const [headerHeight, setHeaderHeight] = useState(0);
 
-  // Đo chiều cao Header
   useEffect(() => {
     if (headerRef.current) {
       setHeaderHeight(headerRef.current.offsetHeight);
     }
-    // Theo dõi thay đổi kích thước cửa sổ
     const handleResize = () => {
       if (headerRef.current) {
         setHeaderHeight(headerRef.current.offsetHeight);
@@ -30,8 +28,15 @@ const AdminLayout = ({ children }) => {
         <div ref={headerRef} className="sticky top-0 z-20 bg-white shadow-md">
           <Header setIsSidebarOpen={setIsSidebarOpen} />
         </div>
-        <main className="p-4 md:p-8 2xl:p-10">
-          <Outlet context={{ headerHeight }} />
+        <main className="flex-1 p-4 md:p-8 2xl:p-10">
+          <div className="h-full">
+            <Outlet
+              context={{
+                headerHeight,
+                mainPadding: { sm: 16, md: 32, "2xl": 40 },
+              }}
+            />
+          </div>
         </main>
       </div>
     </div>
