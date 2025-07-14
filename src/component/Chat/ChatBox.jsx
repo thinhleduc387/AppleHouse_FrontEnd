@@ -116,7 +116,7 @@ const ChatBox = () => {
         <>
           <button
             onClick={() => dispatch(toggleChat())}
-            className="bg-white dark:bg-gray-800 rounded-full p-3 shadow-lg dark:shadow-gray-700 transition-colors duration-300 z-50"
+            className="bg-white  rounded-full p-3 shadow-lg  transition-colors duration-300 z-50"
           >
             <img
               src="/chatbot.png"
