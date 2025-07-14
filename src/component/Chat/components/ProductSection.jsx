@@ -1,7 +1,7 @@
-import { useSelector } from "react-redux"; // Import useSelector from react-redux
-import { memo } from "react"; // Import memo from react
+import { useSelector } from "react-redux";
+import { memo } from "react";
 import { useTranslation } from "react-i18next";
-
+import { Link } from "react-router-dom";
 const ProductSection = () => {
   const { t } = useTranslation("chatBot");
   const { current_suggested_products } = useSelector((state) => state.chatBot);
@@ -39,28 +39,30 @@ const ProductSection = () => {
         {current_suggested_products && current_suggested_products.length > 0 ? (
           <div className="flex flex-wrap gap-4">
             {current_suggested_products.map((product) => (
-              <div
-                key={product.id}
-                className="flex-none w-64 p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md dark:hover:shadow-gray-700 bg-white dark:bg-gray-800 transition-colors duration-300"
-              >
-                <img
-                  src={product.thumbnail}
-                  alt={product.name}
-                  className="w-full h-32 object-contain rounded-md mb-2"
-                  onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/150";
-                  }}
-                />
-                <div>
-                  <h4 className="font-medium text-gray-800 dark:text-gray-100 truncate">
-                    {product.name}
-                  </h4>
-                  <div className="mt-1">{renderRating(product.rating)}</div>
-                  <p className="mt-1 text-red-600 dark:text-red-400 font-semibold">
-                    {product.price}
-                  </p>
+              <a href={`/products/${product.id}`}>
+                <div
+                  key={product.id}
+                  className="flex-none w-64 p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md dark:hover:shadow-gray-700 bg-white dark:bg-gray-800 transition-colors duration-300"
+                >
+                  <img
+                    src={product.thumbnail}
+                    alt={product.name}
+                    className="w-full h-32 object-contain rounded-md mb-2"
+                    onError={(e) => {
+                      e.target.src = "https://via.placeholder.com/150";
+                    }}
+                  />
+                  <div>
+                    <h4 className="font-medium text-gray-800 dark:text-gray-100 truncate">
+                      {product.name}
+                    </h4>
+                    <div className="mt-1">{renderRating(product.rating)}</div>
+                    <p className="mt-1 text-red-600 dark:text-red-400 font-semibold">
+                      {product.price}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         ) : (
