@@ -16,5 +16,6 @@
   "noUsageHistory": "No usage history",
   "voucherDetailsTitle": "Voucher Details",
   "closeButton": "Close",
-  "useNowButtonModal": "Use Now"
+  "useNowButtonModal": "Use Now",
+  "searchPlaceholder": "Search vouchers by code ..."
 }

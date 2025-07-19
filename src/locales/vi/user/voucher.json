@@ -16,5 +16,6 @@
   "noUsageHistory": "Chưa có lịch sử sử dụng",
   "voucherDetailsTitle": "Chi tiết Voucher",
   "closeButton": "Đóng",
-  "useNowButtonModal": "Sử dụng ngay"
+  "useNowButtonModal": "Sử dụng ngay",
+  "searchPlaceholder": "Tìm kiếm theo mã voucher..."
 }
