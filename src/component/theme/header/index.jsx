@@ -131,11 +131,13 @@ const Header = () => {
           <Search className="hidden lg:flex lg:ml-10" />
 
           <ul className="hidden lg:flex pl-9 lg:pl-0 justify-end items-center space-x-8 ml-4">
-            <li className="font-extrabold text-3xl my-7 lg:my-0 relative dark:text-white">
-              <Link to="/order-guest" title="Tra cứu đơn hàng">
-                <FaTruck />
-              </Link>
-            </li>
+            {!isAuthenticated && (
+              <li className="font-extrabold text-3xl my-7 lg:my-0 relative dark:text-white">
+                <Link to="/order-guest" title="Tra cứu đơn hàng">
+                  <FaTruck />
+                </Link>
+              </li>
+            )}
             <li className="font-extrabold text-3xl my-7 lg:my-0 relative dark:text-white">
               <Link to="/cart">
                 <IoCartOutline />
